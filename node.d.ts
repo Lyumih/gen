@@ -1054,6 +1054,56 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_engine extends $mol_view {
+        hero(): any;
+        reward(): any;
+        make_win(next?: any): any;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_engine extends $.$gen_engine {
+        hero(): {
+            name: string;
+            level: number;
+            skills: {
+                name: string;
+            }[];
+        };
+        reward(): {
+            name: string;
+        };
+        make_win(next?: any): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_page extends $mol_view {
+        dom_name(): string;
+        field(): Record<string, any>;
+        sub(): readonly any[];
+        tabindex(): number;
+        Logo(): any;
+        title_content(): readonly any[];
+        Title(): $mol_view;
+        tools(): readonly $mol_view_content[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        body(): readonly $mol_view[];
+        Body_content(): $mol_view;
+        body_content(): readonly any[];
+        body_scroll_top(next?: any): number;
+        Body(): $$.$mol_scroll;
+        foot(): readonly $mol_view[];
+        Foot(): $mol_view;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
     class $mol_list extends $mol_view {
         render_visible_only(): boolean;
         render_over(): number;
@@ -2444,57 +2494,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_page extends $mol_view {
-        dom_name(): string;
-        field(): Record<string, any>;
-        sub(): readonly any[];
-        tabindex(): number;
-        Logo(): any;
-        title_content(): readonly any[];
-        Title(): $mol_view;
-        tools(): readonly $mol_view_content[];
-        Tools(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        body(): readonly $mol_view[];
-        Body_content(): $mol_view;
-        body_content(): readonly any[];
-        body_scroll_top(next?: any): number;
-        Body(): $$.$mol_scroll;
-        foot(): readonly $mol_view[];
-        Foot(): $mol_view;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $mol_button_major extends $mol_button_typed {
-        attr(): Record<string, any>;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app extends $mol_book2 {
-        title(): string;
-        pages(): readonly any[];
-        Gen_app(): $$.$mol_text;
-        Hero_page(): $mol_page;
-        Game(): $$.$mol_text;
-        Reward(): $$.$mol_text;
-        Reward_item(): $$.$mol_text;
-        Game_page(): $mol_page;
-        Win(): $mol_button_major;
-        Add_skill(): $mol_button_minor;
-        Hack_page(): $mol_page;
-    }
-}
-
-declare namespace $ {
     class $mol_text_list extends $mol_text {
         auto_scroll(): any;
         attr(): Record<string, any>;
@@ -2508,6 +2507,82 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_hero extends $mol_page {
+        title(): string;
+        engine(): $$.$gen_engine;
+        body(): readonly any[];
+        name(): string;
+        Name(): $$.$mol_text;
+        Level(): $$.$mol_text;
+        skills(): string;
+        Skills(): $$.$mol_text;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_hero extends $.$gen_app_hero {
+        name(): string;
+        skills(): string;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_game extends $mol_page {
+        title(): string;
+        engine(): $$.$gen_engine;
+        body(): readonly any[];
+        Game(): $$.$mol_text;
+        Start_buttle(): $mol_button_minor;
+        Reward(): $$.$mol_text;
+        reward(): string;
+        Reward_item(): $$.$mol_text;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_game extends $.$gen_app_game {
+        reward(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_major extends $mol_button_typed {
+        attr(): Record<string, any>;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_admin extends $mol_page {
+        title(): string;
+        engine(): $$.$gen_engine;
+        body(): readonly any[];
+        make_win(next?: any): any;
+        Win(): $mol_button_major;
+        Add_skill(): $mol_button_minor;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_admin extends $.$gen_app_admin {
+        make_win(next?: any): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_app extends $mol_book2 {
+        title(): string;
+        engine(): $$.$gen_engine;
+        pages(): readonly any[];
+        Hero_page(): $$.$gen_app_hero;
+        Game_page(): $$.$gen_app_game;
+        Hack_page(): $$.$gen_app_admin;
+    }
 }
 
 export = $;

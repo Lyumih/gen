@@ -15,6 +15,37 @@ $mol_book2 $mol_scroll
 	Placeholder $mol_view
 	Gap* $mol_view title \
 
+$gen_engine $mol_view
+	hero null
+	reward null
+	make_win? null
+
+$mol_page $mol_view
+	dom_name \article
+	field *
+		^
+		tabIndex <= tabindex -1
+	sub /
+		<= Head $mol_view
+			minimal_height 64
+			dom_name \header
+			sub <= head /
+				<= Title $mol_view
+					dom_name \h1
+					sub <= title_content /
+						<= Logo null
+						<= title
+				<= Tools $mol_view
+					sub <= tools /$mol_view_content
+		<= Body $mol_scroll
+			scroll_top? => body_scroll_top?
+			sub <= body_content /
+				<= Body_content $mol_view
+					sub <= body /$mol_view
+		<= Foot $mol_view
+			dom_name \footer
+			sub <= foot /$mol_view
+
 $mol_list $mol_view
 	render_visible_only true
 	render_over 0
@@ -469,37 +500,6 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
-$mol_page $mol_view
-	dom_name \article
-	field *
-		^
-		tabIndex <= tabindex -1
-	sub /
-		<= Head $mol_view
-			minimal_height 64
-			dom_name \header
-			sub <= head /
-				<= Title $mol_view
-					dom_name \h1
-					sub <= title_content /
-						<= Logo null
-						<= title
-				<= Tools $mol_view
-					sub <= tools /$mol_view_content
-		<= Body $mol_scroll
-			scroll_top? => body_scroll_top?
-			sub <= body_content /
-				<= Body_content $mol_view
-					sub <= body /$mol_view
-		<= Foot $mol_view
-			dom_name \footer
-			sub <= foot /$mol_view
-
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
-
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -514,21 +514,41 @@ $mol_text_list_item $mol_paragraph
 		^
 		mol_text_list_item_index <= index 0
 
+$gen_app_hero $mol_page
+	title \Персонаж
+	engine $gen_engine
+	body /
+		<= Name $mol_text text <= name \Имя:
+		<= Level $mol_text text \Уровень: 5
+		<= Skills $mol_text text <= skills \Умения: 
+
+$gen_app_game $mol_page
+	title \Игра
+	engine $gen_engine
+	body /
+		<= Game $mol_text text \Игра
+		<= Start_buttle $mol_button_minor title \Начать битву
+		<= Reward $mol_text text \Награда
+		<= Reward_item $mol_text text <= reward \
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$gen_app_admin $mol_page 
+	title \Хак панель3
+	engine $gen_engine
+	body /
+		<= Win $mol_button_major
+			title \Победить (хак)
+			click? <=> make_win? null
+		<= Add_skill $mol_button_minor title \Добавить уменее
+
 $gen_app $mol_book2
 	title \Игра Gen
+	engine $gen_engine
 	pages /
-		<= Hero_page $mol_page
-			title \Игрок
-			body /
-				<= Gen_app $mol_text text \Игрок
-		<= Game_page $mol_page
-			title \Игра
-			body /
-				<= Game $mol_text text \Игра
-				<= Reward $mol_text text \Награда
-				<= Reward_item $mol_text text \Умение, Предмет, Опыт
-		<= Hack_page $mol_page 
-			title \Хак панель
-			body /
-				<= Win $mol_button_major title \Победить (хак)
-				<= Add_skill $mol_button_minor title \Добавить уменее
+		<= Hero_page $gen_app_hero
+		<= Game_page $gen_app_game
+		<= Hack_page $gen_app_admin
