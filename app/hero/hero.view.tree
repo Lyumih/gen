@@ -1,0 +1,7 @@
+$gen_app_hero $mol_page
+	title \Персонаж
+	engine $gen_engine
+	body /
+		<= Name $mol_text text <= name \Имя:
+		<= Level $mol_text text \Уровень: 5
+		<= Skills $mol_text text <= skills \Умения: 

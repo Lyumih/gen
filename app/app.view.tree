@@ -1,18 +1,7 @@
 $gen_app $mol_book2
 	title \Игра Gen
+	engine $gen_engine
 	pages /
-		<= Hero_page $mol_page
-			title \Игрок
-			body /
-				<= Gen_app $mol_text text \Игрок
-		<= Game_page $mol_page
-			title \Игра
-			body /
-				<= Game $mol_text text \Игра
-				<= Reward $mol_text text \Награда
-				<= Reward_item $mol_text text \Умение, Предмет, Опыт
-		<= Hack_page $mol_page 
-			title \Хак панель
-			body /
-				<= Win $mol_button_major title \Победить (хак)
-				<= Add_skill $mol_button_minor title \Добавить уменее
+		<= Hero_page $gen_app_hero
+		<= Game_page $gen_app_game
+		<= Hack_page $gen_app_admin

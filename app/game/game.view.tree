@@ -1,0 +1,8 @@
+$gen_app_game $mol_page
+	title \Игра
+	engine $gen_engine
+	body /
+		<= Game $mol_text text \Игра
+		<= Start_buttle $mol_button_minor title \Начать битву
+		<= Reward $mol_text text \Награда
+		<= Reward_item $mol_text text <= reward \

@@ -1,9 +1,5 @@
-# Game of Story
+# Game of Gen
 
-Игра "История"
-
-Diagram: 
-
-Site: https://lyumih.github.io/story/
-Front: https://github.com/Lyumih/story-back
-Back: https://github.com/Lyumih/story-back
+Игра "Gen"
+https://github.com/Lyumih/gen
+https://lyumih.github.io/gen/
