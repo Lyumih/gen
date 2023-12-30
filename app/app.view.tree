@@ -1,0 +1,4 @@
+$gen_app $mol_page
+	title \Gen
+	body /
+		<= Gen_app $mol_button_major
