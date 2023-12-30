@@ -2,6 +2,6 @@ $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
 	pages /
-		<= Hero_page $gen_app_hero
-		<= Game_page $gen_app_game
-		<= Hack_page $gen_app_admin
+		<= Hero_page $gen_app_hero engine <= engine
+		<= Game_page $gen_app_game engine <= engine
+		<= Hack_page $gen_app_admin engine <= engine

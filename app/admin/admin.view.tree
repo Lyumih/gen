@@ -1,8 +1,10 @@
 $gen_app_admin $mol_page 
-	title \Хак панель3
+	title \Хак панель
 	engine $gen_engine
 	body /
 		<= Win $mol_button_major
 			title \Победить (хак)
 			click? <=> make_win? null
-		<= Add_skill $mol_button_minor title \Добавить уменее
+		<= Add_skill $mol_button_minor 
+			title \Добавить уменее
+			click? <=> add_hero_skill? null
