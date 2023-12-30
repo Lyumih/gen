@@ -1054,26 +1054,24 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine extends $mol_view {
-        hero(): any;
-        reward(): any;
-        make_win(next?: any): any;
-    }
+    function $mol_array_lottery<Value>(list: readonly Value[]): Value;
 }
 
 declare namespace $.$$ {
-    class $gen_engine extends $.$gen_engine {
-        hero(): {
-            name: string;
-            level: number;
-            skills: {
-                name: string;
-            }[];
-        };
-        reward(): {
-            name: string;
-        };
+    class $gen_engine extends $.$mol_object {
+        seed(): string;
+        hero(next?: any): any;
+        reward(next?: any): any;
         make_win(next?: any): any;
+        all_skills(): {
+            id: string;
+            name: string;
+        }[];
+        get_random_skill(next?: any): {
+            id: string;
+            name: string;
+        };
+        add_hero_skill(): void;
     }
 }
 
@@ -2564,6 +2562,7 @@ declare namespace $ {
         body(): readonly any[];
         make_win(next?: any): any;
         Win(): $mol_button_major;
+        add_hero_skill(next?: any): any;
         Add_skill(): $mol_button_minor;
     }
 }
@@ -2571,6 +2570,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_admin extends $.$gen_app_admin {
         make_win(next?: any): void;
+        add_hero_skill(next?: any): void;
     }
 }
 

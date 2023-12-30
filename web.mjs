@@ -2997,51 +2997,77 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine extends $mol_view {
-        hero() {
-            return null;
-        }
-        reward() {
-            return null;
-        }
-        make_win(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
+    function $mol_array_lottery(list) {
+        return list[Math.floor(Math.random() * list.length)];
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine.prototype, "make_win", null);
-    $.$gen_engine = $gen_engine;
+    $.$mol_array_lottery = $mol_array_lottery;
 })($ || ($ = {}));
-//gen/engine/-view.tree/engine.view.tree.ts
+//mol/array/lottery/lottery.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $gen_engine extends $.$gen_engine {
-            hero() {
-                return {
+        class $gen_engine extends $.$mol_object {
+            seed() {
+                return '1';
+            }
+            hero(next) {
+                return next ?? {
                     name: 'Milis',
                     level: 5,
                     skills: [{ name: 'Атака' }, { name: 'Защита' }]
                 };
             }
-            reward() {
-                return ({ name: 'хил' });
+            reward(next) {
+                console.log('reward', next);
+                return next ?? this.get_random_skill(true);
             }
             make_win(next) {
                 console.log('make win', next);
+                this.reward(1);
+                this.get_random_skill(true);
                 return next ?? false;
             }
+            all_skills() {
+                return [{
+                        id: '1',
+                        name: 'Атака'
+                    }, {
+                        id: '2',
+                        name: 'Защита'
+                    }, {
+                        id: '3',
+                        name: 'Хил'
+                    }];
+            }
+            get_random_skill(next) {
+                console.log('get_random_skill');
+                return this.$.$mol_array_lottery(this.all_skills());
+            }
+            add_hero_skill() {
+                console.log('add_hero_skill', this.hero());
+                const skills = [...this.hero().skills, this.get_random_skill()];
+                this.hero({ ...this.hero(), skills });
+            }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "reward", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "all_skills", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "get_random_skill", null);
         $$.$gen_engine = $gen_engine;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//gen/engine/engine.view.ts
+//gen/engine/engine.ts
 ;
 "use strict";
 var $;
@@ -8376,7 +8402,7 @@ var $;
 (function ($) {
     class $gen_app_admin extends $mol_page {
         title() {
-            return "Хак панель3";
+            return "Хак панель";
         }
         engine() {
             const obj = new this.$.$gen_engine();
@@ -8399,9 +8425,15 @@ var $;
             obj.click = (next) => this.make_win(next);
             return obj;
         }
+        add_hero_skill(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Add_skill() {
             const obj = new this.$.$mol_button_minor();
             obj.title = () => "Добавить уменее";
+            obj.click = (next) => this.add_hero_skill(next);
             return obj;
         }
     }
@@ -8416,6 +8448,9 @@ var $;
     ], $gen_app_admin.prototype, "Win", null);
     __decorate([
         $mol_mem
+    ], $gen_app_admin.prototype, "add_hero_skill", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_admin.prototype, "Add_skill", null);
     $.$gen_app_admin = $gen_app_admin;
 })($ || ($ = {}));
@@ -8428,7 +8463,11 @@ var $;
     (function ($$) {
         class $gen_app_admin extends $.$gen_app_admin {
             make_win(next) {
-                this.engine().make_win();
+                this.engine().make_win(true);
+            }
+            add_hero_skill(next) {
+                this.engine().add_hero_skill();
+                console.log(this.engine());
             }
         }
         $$.$gen_app_admin = $gen_app_admin;
@@ -8456,14 +8495,17 @@ var $;
         }
         Hero_page() {
             const obj = new this.$.$gen_app_hero();
+            obj.engine = () => this.engine();
             return obj;
         }
         Game_page() {
             const obj = new this.$.$gen_app_game();
+            obj.engine = () => this.engine();
             return obj;
         }
         Hack_page() {
             const obj = new this.$.$gen_app_admin();
+            obj.engine = () => this.engine();
             return obj;
         }
     }

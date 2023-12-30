@@ -118,6 +118,8 @@
     "$mol_style_sheet",
     "$mol_mem_cached",
     "$gen_engine",
+    "$mol_array_lottery",
+    "$mol_array",
     "$gen_app_hero",
     "$mol_page",
     "$mol_text_text",

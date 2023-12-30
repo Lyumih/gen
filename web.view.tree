@@ -15,11 +15,6 @@ $mol_book2 $mol_scroll
 	Placeholder $mol_view
 	Gap* $mol_view title \
 
-$gen_engine $mol_view
-	hero null
-	reward null
-	make_win? null
-
 $mol_page $mol_view
 	dom_name \article
 	field *
@@ -537,18 +532,20 @@ $mol_button_major $mol_button_typed
 		mol_theme \$mol_theme_accent
 
 $gen_app_admin $mol_page 
-	title \Хак панель3
+	title \Хак панель
 	engine $gen_engine
 	body /
 		<= Win $mol_button_major
 			title \Победить (хак)
 			click? <=> make_win? null
-		<= Add_skill $mol_button_minor title \Добавить уменее
+		<= Add_skill $mol_button_minor 
+			title \Добавить уменее
+			click? <=> add_hero_skill? null
 
 $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
 	pages /
-		<= Hero_page $gen_app_hero
-		<= Game_page $gen_app_game
-		<= Hack_page $gen_app_admin
+		<= Hero_page $gen_app_hero engine <= engine
+		<= Game_page $gen_app_game engine <= engine
+		<= Hack_page $gen_app_admin engine <= engine
