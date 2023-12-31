@@ -1,8 +1,15 @@
 $gen_app_game $mol_page
-	title \Игра
+	title \Генератор битвы
 	engine $gen_engine
 	body /
-		<= Game $mol_text text \Игра
-		<= Start_buttle $mol_button_minor title \Начать битву
-		<= Reward $mol_text text \Награда
-		<= Reward_item $mol_text text <= reward \
+		<= Hero_level $mol_labeler
+			title \Ваш уровень героев
+			content / 
+				<= Hero_level_value $mol_number
+					value? <=> hero_level? 20
+		<= Generate $mol_button_major
+			title \Сгенерировать
+			click? <=> generate? null
+		<= Result $mol_text
+			code_sidebar_showed false
+			text <= result \

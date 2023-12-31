@@ -3,5 +3,12 @@ $gen_app_hero $mol_page
 	engine $gen_engine
 	body /
 		<= Name $mol_text text <= name \Имя:
-		<= Level $mol_text text \Уровень: 5
-		<= Skills $mol_text text <= skills \Умения: 
+		<= Level $mol_text text <= level \ Уровень 5
+		<= Points $mol_text text <= skill_points \Очков умений: 10
+		<= Skills $mol_list rows <= skill_list /
+			<= Skill*0 $mol_row sub /
+				<= Skill_name* $mol_text text <= skill_name* \
+				<= Skill_level* $mol_text text <= skill_level* \
+				<= Skill_level_up* $mol_button_major
+					title \+
+					click? <=> skill_level_up*? null

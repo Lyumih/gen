@@ -1,11 +1,13 @@
 namespace $.$$ {
 	export class $gen_app_game extends $.$gen_app_game {
-		
-		reward(): string {
-			return JSON.stringify(this.engine().reward())
+
+		@$mol_mem
+		result( next?: any ): string {
+			return new this.$.$gen_generator().start( this.hero_level() )
 		}
 
-		
-		
+		generate( next?: any ) {
+			return this.result( true )
+		}
 	}
 }

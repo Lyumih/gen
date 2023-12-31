@@ -4,4 +4,4 @@ $gen_app $mol_book2
 	pages /
 		<= Hero_page $gen_app_hero engine <= engine
 		<= Game_page $gen_app_game engine <= engine
-		<= Hack_page $gen_app_admin engine <= engine
+		- <= Hack_page $gen_app_admin engine <= engine
