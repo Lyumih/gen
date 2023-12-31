@@ -240,6 +240,75 @@ var $;
 ;
 "use strict";
 var $;
+(function ($) {
+    class $mol_after_tick extends $mol_object2 {
+        task;
+        promise;
+        cancelled = false;
+        constructor(task) {
+            super();
+            this.task = task;
+            this.promise = Promise.resolve().then(() => {
+                if (this.cancelled)
+                    return;
+                task();
+            });
+        }
+        destructor() {
+            this.cancelled = true;
+        }
+    }
+    $.$mol_after_tick = $mol_after_tick;
+})($ || ($ = {}));
+//mol/after/tick/tick.ts
+;
+"use strict";
+var $;
+(function ($) {
+})($ || ($ = {}));
+//mol/dom/context/context.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_dom_context = self;
+})($ || ($ = {}));
+//mol/dom/context/context.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let all = [];
+    let el = null;
+    let timer = null;
+    function $mol_style_attach_force() {
+        if (all.length) {
+            el.innerHTML += '\n' + all.join('\n\n');
+            all = [];
+        }
+        timer = null;
+        return el;
+    }
+    $.$mol_style_attach_force = $mol_style_attach_force;
+    function $mol_style_attach(id, text) {
+        all.push(`/* ${id} */\n\n${text}`);
+        if (timer)
+            return el;
+        const doc = $mol_dom_context.document;
+        if (!doc)
+            return null;
+        el = doc.createElement('style');
+        el.id = `$mol_style_attach`;
+        doc.head.appendChild(el);
+        timer = new $mol_after_tick($mol_style_attach_force);
+        return el;
+    }
+    $.$mol_style_attach = $mol_style_attach;
+})($ || ($ = {}));
+//mol/style/attach/attach.ts
+;
+"use strict";
+var $;
 (function ($_1) {
     let $$;
     (function ($$) {
@@ -1489,43 +1558,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-})($ || ($ = {}));
-//mol/dom/context/context.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_dom_context = self;
-})($ || ($ = {}));
-//mol/dom/context/context.web.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_tick extends $mol_object2 {
-        task;
-        promise;
-        cancelled = false;
-        constructor(task) {
-            super();
-            this.task = task;
-            this.promise = Promise.resolve().then(() => {
-                if (this.cancelled)
-                    return;
-                task();
-            });
-        }
-        destructor() {
-            this.cancelled = true;
-        }
-    }
-    $.$mol_after_tick = $mol_after_tick;
-})($ || ($ = {}));
-//mol/after/tick/tick.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_view_selection extends $mol_object {
         static focused(next, notify) {
             const parents = [];
@@ -1869,38 +1901,6 @@ var $;
 ;
 "use strict";
 //mol/type/pick/pick.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let all = [];
-    let el = null;
-    let timer = null;
-    function $mol_style_attach_force() {
-        if (all.length) {
-            el.innerHTML += '\n' + all.join('\n\n');
-            all = [];
-        }
-        timer = null;
-        return el;
-    }
-    $.$mol_style_attach_force = $mol_style_attach_force;
-    function $mol_style_attach(id, text) {
-        all.push(`/* ${id} */\n\n${text}`);
-        if (timer)
-            return el;
-        const doc = $mol_dom_context.document;
-        if (!doc)
-            return null;
-        el = doc.createElement('style');
-        el.id = `$mol_style_attach`;
-        doc.head.appendChild(el);
-        timer = new $mol_after_tick($mol_style_attach_force);
-        return el;
-    }
-    $.$mol_style_attach = $mol_style_attach;
-})($ || ($ = {}));
-//mol/style/attach/attach.ts
 ;
 "use strict";
 var $;
@@ -3017,17 +3017,23 @@ var $;
                 return next ?? {
                     name: 'Milis',
                     level: 5,
-                    skills: [{ name: 'Атака' }, { name: 'Защита' }]
+                    skills: this.hero_skills(),
+                    point: {
+                        skill: 4,
+                    }
                 };
+            }
+            hero_skills(next) {
+                return next ?? [{ id: '1', name: 'Атака', level: 1 }, { id: '2', name: 'Защита', level: 1 }];
             }
             reward(next) {
                 console.log('reward', next);
-                return next ?? this.get_random_skill(true);
+                return next ?? this.get_random_skill();
             }
             make_win(next) {
                 console.log('make win', next);
-                this.reward(1);
-                this.get_random_skill(true);
+                this.reward();
+                this.get_random_skill();
                 return next ?? false;
             }
             all_skills() {
@@ -3044,17 +3050,28 @@ var $;
             }
             get_random_skill(next) {
                 console.log('get_random_skill');
-                return this.$.$mol_array_lottery(this.all_skills());
+                return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
             }
             add_hero_skill() {
                 console.log('add_hero_skill', this.hero());
-                const skills = [...this.hero().skills, this.get_random_skill()];
-                this.hero({ ...this.hero(), skills });
+                this.hero_skills([...this.hero_skills(), this.get_random_skill()]);
+            }
+            skill_level_up(id) {
+                const skills = this.hero_skills();
+                const skill = skills.find(skill => skill.id === id);
+                if (skill && skills) {
+                    skills.find(skill => skill.id === id).level = skill.level + 1;
+                    console.log(skills);
+                    this.hero_skills(skills);
+                }
             }
         }
         __decorate([
             $mol_mem
         ], $gen_engine.prototype, "hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "hero_skills", null);
         __decorate([
             $mol_mem
         ], $gen_engine.prototype, "reward", null);
@@ -4675,7 +4692,7 @@ var $;
                     this.status([null]);
                 }
                 catch (error) {
-                    this.status([error]);
+                    Promise.resolve().then(() => this.status([error]));
                     $mol_fail_hidden(error);
                 }
             }
@@ -8178,6 +8195,44 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_button_major extends $mol_button_typed {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_theme: "$mol_theme_accent"
+            };
+        }
+    }
+    $.$mol_button_major = $mol_button_major;
+})($ || ($ = {}));
+//mol/button/major/-view.tree/major.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
+})($ || ($ = {}));
+//mol/button/major/-css/major.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_row extends $mol_view {
+    }
+    $.$mol_row = $mol_row;
+})($ || ($ = {}));
+//mol/row/-view.tree/row.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
+})($ || ($ = {}));
+//mol/row/-css/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_text_list extends $mol_text {
         auto_scroll() {
             return null;
@@ -8239,6 +8294,7 @@ var $;
             return [
                 this.Name(),
                 this.Level(),
+                this.Points(),
                 this.Skills()
             ];
         }
@@ -8250,17 +8306,66 @@ var $;
             obj.text = () => this.name();
             return obj;
         }
+        level() {
+            return " Уровень 5";
+        }
         Level() {
             const obj = new this.$.$mol_text();
-            obj.text = () => "Уровень: 5";
+            obj.text = () => this.level();
             return obj;
         }
-        skills() {
-            return "Умения: ";
+        skill_points() {
+            return "Очков умений: 10";
+        }
+        Points() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_points();
+            return obj;
+        }
+        skill_name(id) {
+            return "";
+        }
+        Skill_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_name(id);
+            return obj;
+        }
+        skill_level(id) {
+            return "";
+        }
+        Skill_level(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_level(id);
+            return obj;
+        }
+        skill_level_up(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Skill_level_up(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "+";
+            obj.click = (next) => this.skill_level_up(id, next);
+            return obj;
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Skill_name(id),
+                this.Skill_level(id),
+                this.Skill_level_up(id)
+            ];
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
         }
         Skills() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.skills();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.skill_list();
             return obj;
         }
     }
@@ -8273,6 +8378,24 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Points", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_level", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "skill_level_up", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_level_up", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill", null);
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Skills", null);
@@ -8289,8 +8412,27 @@ var $;
             name() {
                 return `Имя: ${this.engine().hero().name}`;
             }
+            skill_points() {
+                return `Очков умений: ${this.engine().hero().point.skill}`;
+            }
             skills() {
-                return `Умения: ${JSON.stringify(this.engine().hero().skills)}`;
+                return `Умения: ${JSON.stringify(this.engine().hero_skills, null, 2)}`;
+            }
+            skill_list() {
+                return this.engine().hero_skills().map(skill => this.Skill(skill.id));
+            }
+            get_skill(id) {
+                return this.engine().hero_skills().find(skill => skill.id === id);
+            }
+            skill_name(id) {
+                return `Умение: ${this.get_skill(id)?.name}`;
+            }
+            skill_level(id) {
+                return `Уровень: ${this.get_skill(id)?.level}`;
+            }
+            skill_level_up(id, next) {
+                console.log(id, next);
+                this.engine().skill_level_up(id);
             }
         }
         $$.$gen_app_hero = $gen_app_hero;
@@ -8301,9 +8443,609 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_hotkey extends $mol_plugin {
+        event() {
+            return {
+                ...super.event(),
+                keydown: (event) => this.keydown(event)
+            };
+        }
+        key() {
+            return {};
+        }
+        mod_ctrl() {
+            return false;
+        }
+        mod_alt() {
+            return false;
+        }
+        mod_shift() {
+            return false;
+        }
+        keydown(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_hotkey.prototype, "keydown", null);
+    $.$mol_hotkey = $mol_hotkey;
+})($ || ($ = {}));
+//mol/hotkey/-view.tree/hotkey.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_hotkey extends $.$mol_hotkey {
+            key() {
+                return super.key();
+            }
+            keydown(event) {
+                if (!event)
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                let name = $mol_keyboard_code[event.keyCode];
+                if (this.mod_ctrl() !== (event.ctrlKey || event.metaKey))
+                    return;
+                if (this.mod_alt() !== event.altKey)
+                    return;
+                if (this.mod_shift() !== event.shiftKey)
+                    return;
+                const handle = this.key()[name];
+                if (handle)
+                    handle(event);
+            }
+        }
+        $$.$mol_hotkey = $mol_hotkey;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/hotkey/hotkey.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_string extends $mol_view {
+        dom_name() {
+            return "input";
+        }
+        enabled() {
+            return true;
+        }
+        minimal_height() {
+            return 40;
+        }
+        autocomplete() {
+            return false;
+        }
+        selection(next) {
+            if (next !== undefined)
+                return next;
+            return [
+                0,
+                0
+            ];
+        }
+        auto() {
+            return [
+                this.selection_watcher(),
+                this.error_report()
+            ];
+        }
+        field() {
+            return {
+                ...super.field(),
+                disabled: this.disabled(),
+                value: this.value_changed(),
+                placeholder: this.hint_visible(),
+                spellcheck: this.spellcheck(),
+                autocomplete: this.autocomplete_native(),
+                selectionEnd: this.selection_end(),
+                selectionStart: this.selection_start(),
+                inputMode: this.keyboard(),
+                enterkeyhint: this.enter()
+            };
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                maxlength: this.length_max(),
+                type: this.type()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                input: (event) => this.event_change(event)
+            };
+        }
+        plugins() {
+            return [
+                this.Submit()
+            ];
+        }
+        selection_watcher() {
+            return null;
+        }
+        error_report() {
+            return null;
+        }
+        disabled() {
+            return false;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        value_changed(next) {
+            return this.value(next);
+        }
+        hint() {
+            return "";
+        }
+        hint_visible() {
+            return this.hint();
+        }
+        spellcheck() {
+            return true;
+        }
+        autocomplete_native() {
+            return "";
+        }
+        selection_end() {
+            return 0;
+        }
+        selection_start() {
+            return 0;
+        }
+        keyboard() {
+            return "text";
+        }
+        enter() {
+            return "go";
+        }
+        length_max() {
+            return +Infinity;
+        }
+        type(next) {
+            if (next !== undefined)
+                return next;
+            return "text";
+        }
+        event_change(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        submit_with_ctrl() {
+            return false;
+        }
+        submit(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        Submit() {
+            const obj = new this.$.$mol_hotkey();
+            obj.mod_ctrl = () => this.submit_with_ctrl();
+            obj.key = () => ({
+                enter: (event) => this.submit(event)
+            });
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "selection", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "event_change", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "Submit", null);
+    $.$mol_string = $mol_string;
+})($ || ($ = {}));
+//mol/string/-view.tree/string.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_string extends $.$mol_string {
+            event_change(next) {
+                if (!next)
+                    return;
+                const el = next.target;
+                const from = el.selectionStart;
+                const to = el.selectionEnd;
+                try {
+                    el.value = this.value_changed(el.value);
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                    $mol_fail_hidden(error);
+                }
+                if (to === null)
+                    return;
+                el.selectionEnd = to;
+                el.selectionStart = from;
+                this.selection_change(next);
+            }
+            error_report() {
+                try {
+                    if (this.focused())
+                        this.value();
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                }
+            }
+            hint_visible() {
+                return (this.enabled() ? this.hint() : '') || ' ';
+            }
+            disabled() {
+                return !this.enabled();
+            }
+            autocomplete_native() {
+                return this.autocomplete() ? 'on' : 'off';
+            }
+            selection_watcher() {
+                return new $mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', $mol_wire_async(event => this.selection_change(event)));
+            }
+            selection_change(event) {
+                const el = this.dom_node();
+                if (el !== this.$.$mol_dom_context.document.activeElement)
+                    return;
+                const [from, to] = this.selection([
+                    el.selectionStart,
+                    el.selectionEnd,
+                ]);
+                el.selectionEnd = to;
+                el.selectionStart = from;
+                if (to !== from && el.selectionEnd === el.selectionStart) {
+                    el.selectionEnd = to;
+                }
+            }
+            selection_start() {
+                const el = this.dom_node();
+                if (el.selectionStart === null)
+                    return undefined;
+                return this.selection()[0];
+            }
+            selection_end() {
+                const el = this.dom_node();
+                if (el.selectionEnd === null)
+                    return undefined;
+                return this.selection()[1];
+            }
+        }
+        __decorate([
+            $mol_action
+        ], $mol_string.prototype, "event_change", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "error_report", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "selection_watcher", null);
+        $$.$mol_string = $mol_string;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/string/string.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/string/-css/string.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_minus extends $mol_icon {
+        path() {
+            return "M19,13H5V11H19V13Z";
+        }
+    }
+    $.$mol_icon_minus = $mol_icon_minus;
+})($ || ($ = {}));
+//mol/icon/minus/-view.tree/minus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_plus extends $mol_icon {
+        path() {
+            return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+        }
+    }
+    $.$mol_icon_plus = $mol_icon_plus;
+})($ || ($ = {}));
+//mol/icon/plus/-view.tree/plus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_number extends $mol_view {
+        precision_view() {
+            return this.precision();
+        }
+        precision_change() {
+            return this.precision();
+        }
+        value_min() {
+            return -Infinity;
+        }
+        value_max() {
+            return +Infinity;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return +NaN;
+        }
+        enabled() {
+            return true;
+        }
+        sub() {
+            return [
+                this.String(),
+                this.Dec(),
+                this.Inc()
+            ];
+        }
+        precision() {
+            return 1;
+        }
+        type() {
+            return "tel";
+        }
+        value_string(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        hint() {
+            return " ";
+        }
+        string_enabled() {
+            return this.enabled();
+        }
+        submit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        String() {
+            const obj = new this.$.$mol_string();
+            obj.type = () => this.type();
+            obj.value = (next) => this.value_string(next);
+            obj.hint = () => this.hint();
+            obj.enabled = () => this.string_enabled();
+            obj.submit = (next) => this.submit(next);
+            return obj;
+        }
+        event_dec(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        dec_enabled() {
+            return this.enabled();
+        }
+        dec_icon() {
+            const obj = new this.$.$mol_icon_minus();
+            return obj;
+        }
+        Dec() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_dec(next);
+            obj.enabled = () => this.dec_enabled();
+            obj.sub = () => [
+                this.dec_icon()
+            ];
+            return obj;
+        }
+        event_inc(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        inc_enabled() {
+            return this.enabled();
+        }
+        inc_icon() {
+            const obj = new this.$.$mol_icon_plus();
+            return obj;
+        }
+        Inc() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_inc(next);
+            obj.enabled = () => this.inc_enabled();
+            obj.sub = () => [
+                this.inc_icon()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value_string", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "String", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "dec_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_inc", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "inc_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Inc", null);
+    $.$mol_number = $mol_number;
+})($ || ($ = {}));
+//mol/number/-view.tree/number.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/number/number.css", "[mol_number] {\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tposition: relative;\n\talign-items: stretch;\n\tmax-width: 100%;\n}\n\n[mol_number_string] {\n\tappearance: textfield;\n\tflex: 1 1 7rem;\n\twidth: 7rem;\n}\n\n[mol_number_string]::-webkit-inner-spin-button {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/number/-css/number.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_number extends $.$mol_number {
+            value_limited(next) {
+                if (next === undefined)
+                    return this.value();
+                if (next === '')
+                    return this.value(Number.NaN);
+                const min = this.value_min();
+                const max = this.value_max();
+                const val = Number(next);
+                if (val < min)
+                    return this.value(min);
+                if (val > max)
+                    return this.value(max);
+                return this.value(val);
+            }
+            event_dec(next) {
+                this.value_limited((this.value_limited() || 0) - this.precision_change());
+            }
+            event_inc(next) {
+                this.value_limited((this.value_limited() || 0) + this.precision_change());
+            }
+            value_string(next) {
+                const next_num = this.value_limited(next);
+                const precisionView = this.precision_view();
+                if (next_num === 0)
+                    return '0';
+                if (!next_num)
+                    return '';
+                if (precisionView >= 1) {
+                    return (next_num / precisionView).toFixed();
+                }
+                else {
+                    const fixedNumber = Math.log10(1 / precisionView);
+                    return next_num.toFixed(Math.ceil(fixedNumber));
+                }
+            }
+            dec_enabled() {
+                return this.enabled() && (!((this.value() || 0) <= this.value_min()));
+            }
+            inc_enabled() {
+                return this.enabled() && (!((this.value() || 0) >= this.value_max()));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "dec_enabled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "inc_enabled", null);
+        $$.$mol_number = $mol_number;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/number/number.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_labeler extends $mol_list {
+        rows() {
+            return [
+                this.Label(),
+                this.Content()
+            ];
+        }
+        label() {
+            return [
+                this.title()
+            ];
+        }
+        Label() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 32;
+            obj.sub = () => this.label();
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 24;
+            obj.sub = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_labeler.prototype, "Label", null);
+    __decorate([
+        $mol_mem
+    ], $mol_labeler.prototype, "Content", null);
+    $.$mol_labeler = $mol_labeler;
+})($ || ($ = {}));
+//mol/labeler/-view.tree/labeler.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tmin-height: 2rem;\n\tcolor: var(--mol_theme_shade);\n\tpadding: .5rem .75rem 0;\n\tgap: 0 var(--mol_gap_block);\n\tflex-wrap: wrap;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n\tpadding: var(--mol_gap_text);\n}\n");
+})($ || ($ = {}));
+//mol/labeler/-css/labeler.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app_game extends $mol_page {
         title() {
-            return "Игра";
+            return "Генератор битвы";
         }
         engine() {
             const obj = new this.$.$gen_engine();
@@ -8311,33 +9053,47 @@ var $;
         }
         body() {
             return [
-                this.Game(),
-                this.Start_buttle(),
-                this.Reward(),
-                this.Reward_item()
+                this.Hero_level(),
+                this.Generate(),
+                this.Result()
             ];
         }
-        Game() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "Игра";
+        hero_level(next) {
+            if (next !== undefined)
+                return next;
+            return 20;
+        }
+        Hero_level_value() {
+            const obj = new this.$.$mol_number();
+            obj.value = (next) => this.hero_level(next);
             return obj;
         }
-        Start_buttle() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Начать битву";
+        Hero_level() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Ваш уровень героев";
+            obj.content = () => [
+                this.Hero_level_value()
+            ];
             return obj;
         }
-        Reward() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "Награда";
+        generate(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Generate() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Сгенерировать";
+            obj.click = (next) => this.generate(next);
             return obj;
         }
-        reward() {
+        result() {
             return "";
         }
-        Reward_item() {
+        Result() {
             const obj = new this.$.$mol_text();
-            obj.text = () => this.reward();
+            obj.code_sidebar_showed = () => false;
+            obj.text = () => this.result();
             return obj;
         }
     }
@@ -8346,16 +9102,22 @@ var $;
     ], $gen_app_game.prototype, "engine", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Game", null);
+    ], $gen_app_game.prototype, "hero_level", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Start_buttle", null);
+    ], $gen_app_game.prototype, "Hero_level_value", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Reward", null);
+    ], $gen_app_game.prototype, "Hero_level", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Reward_item", null);
+    ], $gen_app_game.prototype, "generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Result", null);
     $.$gen_app_game = $gen_app_game;
 })($ || ($ = {}));
 //gen/app/game/-view.tree/game.view.tree.ts
@@ -8365,115 +9127,80 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $gen_app_game extends $.$gen_app_game {
-            reward() {
-                return JSON.stringify(this.engine().reward());
+        class $gen_generator extends $.$mol_object {
+            seed() {
+                return '1';
+            }
+            start(level) {
+                const enemies = this.get_enemies(level);
+                const format_enemies = enemies.map((enemy, index) => {
+                    return `\n**Враг ${index + 1}**\nХарактеристики: ${enemy.point.stats}\nУмения: ${enemy.point.skill}\nПредметы: ${enemy.point.equip}\n`;
+                });
+                return `
+			Местность: ${this.get_terrain()}
+			Режим: ${this.get_mode()}
+			Врагов: ${enemies.length}
+			${format_enemies.join('\n')}
+			`;
+            }
+            get_enemies(level) {
+                const count = $mol_array_lottery([1, 2, 3, 4]);
+                const enemies = [];
+                for (let i = 0; i < count; i++) {
+                    enemies.push(this.get_enemy(level));
+                }
+                return enemies;
+            }
+            get_enemy(level) {
+                const stats = level - this.random(level - 2);
+                const skill = this.random(level - stats);
+                const equip = level - stats - skill;
+                return {
+                    name: 'Враг',
+                    level: level,
+                    skills: [],
+                    point: {
+                        stats,
+                        skill,
+                        equip,
+                    }
+                };
+            }
+            random(max) {
+                return Math.floor(Math.random() * max);
+            }
+            get_mode() {
+                return $mol_array_lottery(['битва', 'все против всех', 'предательство']);
+            }
+            get_terrain() {
+                return $mol_array_lottery(['обычная', 'горы', 'низины', 'горы и низины']);
             }
         }
-        $$.$gen_app_game = $gen_app_game;
+        $$.$gen_generator = $gen_generator;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//gen/app/game/game.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_button_major extends $mol_button_typed {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_theme: "$mol_theme_accent"
-            };
-        }
-    }
-    $.$mol_button_major = $mol_button_major;
-})($ || ($ = {}));
-//mol/button/major/-view.tree/major.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
-})($ || ($ = {}));
-//mol/button/major/-css/major.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_admin extends $mol_page {
-        title() {
-            return "Хак панель";
-        }
-        engine() {
-            const obj = new this.$.$gen_engine();
-            return obj;
-        }
-        body() {
-            return [
-                this.Win(),
-                this.Add_skill()
-            ];
-        }
-        make_win(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Win() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Победить (хак)";
-            obj.click = (next) => this.make_win(next);
-            return obj;
-        }
-        add_hero_skill(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Add_skill() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Добавить уменее";
-            obj.click = (next) => this.add_hero_skill(next);
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "make_win", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "Win", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "add_hero_skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "Add_skill", null);
-    $.$gen_app_admin = $gen_app_admin;
-})($ || ($ = {}));
-//gen/app/admin/-view.tree/admin.view.tree.ts
+//gen/generator/generator.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $gen_app_admin extends $.$gen_app_admin {
-            make_win(next) {
-                this.engine().make_win(true);
+        class $gen_app_game extends $.$gen_app_game {
+            result(next) {
+                return new this.$.$gen_generator().start(this.hero_level());
             }
-            add_hero_skill(next) {
-                this.engine().add_hero_skill();
-                console.log(this.engine());
+            generate(next) {
+                return this.result(true);
             }
         }
-        $$.$gen_app_admin = $gen_app_admin;
+        __decorate([
+            $mol_mem
+        ], $gen_app_game.prototype, "result", null);
+        $$.$gen_app_game = $gen_app_game;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//gen/app/admin/admin.view.ts
+//gen/app/game/game.view.ts
 ;
 "use strict";
 var $;
@@ -8489,8 +9216,7 @@ var $;
         pages() {
             return [
                 this.Hero_page(),
-                this.Game_page(),
-                this.Hack_page()
+                this.Game_page()
             ];
         }
         Hero_page() {
@@ -8500,11 +9226,6 @@ var $;
         }
         Game_page() {
             const obj = new this.$.$gen_app_game();
-            obj.engine = () => this.engine();
-            return obj;
-        }
-        Hack_page() {
-            const obj = new this.$.$gen_app_admin();
             obj.engine = () => this.engine();
             return obj;
         }
@@ -8518,11 +9239,15 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Game_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app.prototype, "Hack_page", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 20rem;\n}");
+})($ || ($ = {}));
+//gen/app/-css/app.view.css.ts
 
 //# sourceMappingURL=web.js.map

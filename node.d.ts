@@ -75,6 +75,179 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_after_tick extends $mol_object2 {
+        task: () => void;
+        promise: any;
+        cancelled: boolean;
+        constructor(task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
+    var $mol_dom_context: typeof globalThis;
+}
+
+interface $node {
+    [key: string]: any;
+}
+declare var $node: $node;
+
+declare namespace $ {
+    type $mol_log3_event<Fields> = {
+        [key in string]: unknown;
+    } & {
+        time?: string;
+        place: unknown;
+        message: string;
+    } & Fields;
+    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
+    let $mol_log3_come: $mol_log3_logger<{}>;
+    let $mol_log3_done: $mol_log3_logger<{}>;
+    let $mol_log3_fail: $mol_log3_logger<{}>;
+    let $mol_log3_warn: $mol_log3_logger<{
+        hint: string;
+    }>;
+    let $mol_log3_rise: $mol_log3_logger<{}>;
+    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
+    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
+    let $mol_log3_stack: (() => void)[];
+}
+
+declare namespace $ {
+    class $mol_span extends $mol_object2 {
+        readonly uri: string;
+        readonly source: string;
+        readonly row: number;
+        readonly col: number;
+        readonly length: number;
+        constructor(uri: string, source: string, row: number, col: number, length: number);
+        static unknown: $mol_span;
+        static begin(uri: string, source?: string): $mol_span;
+        static end(uri: string, source: string): $mol_span;
+        static entire(uri: string, source: string): $mol_span;
+        toString(): string;
+        toJSON(): {
+            uri: string;
+            row: number;
+            col: number;
+            length: number;
+        };
+        error(message: string, Class?: ErrorConstructor): Error;
+        span(row: number, col: number, length: number): $mol_span;
+        after(length?: number): $mol_span;
+        slice(begin: number, end?: number): $mol_span;
+    }
+}
+
+declare namespace $ {
+    function $mol_tree2_to_string(this: $, tree: $mol_tree2): string;
+}
+
+declare namespace $ {
+    type $mol_tree2_path = Array<string | number | null>;
+    type $mol_tree2_hack<Context> = (input: $mol_tree2, belt: $mol_tree2_belt<Context>, context: Context) => readonly $mol_tree2[];
+    type $mol_tree2_belt<Context> = Record<string, $mol_tree2_hack<Context>>;
+    class $mol_tree2 extends Object {
+        readonly type: string;
+        readonly value: string;
+        readonly kids: readonly $mol_tree2[];
+        readonly span: $mol_span;
+        constructor(type: string, value: string, kids: readonly $mol_tree2[], span: $mol_span);
+        static list(kids: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
+        list(kids: readonly $mol_tree2[]): $mol_tree2;
+        static data(value: string, kids?: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
+        data(value: string, kids?: readonly $mol_tree2[]): $mol_tree2;
+        static struct(type: string, kids?: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
+        struct(type: string, kids?: readonly $mol_tree2[]): $mol_tree2;
+        clone(kids: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
+        text(): string;
+        static fromString(str: string, uri?: string): $mol_tree2;
+        toString(): string;
+        insert(value: $mol_tree2 | null, ...path: $mol_tree2_path): $mol_tree2;
+        select(...path: $mol_tree2_path): $mol_tree2;
+        filter(path: string[], value?: string): $mol_tree2;
+        hack<Context extends {
+            span?: $mol_span;
+            [key: string]: unknown;
+        } = {}>(belt: $mol_tree2_belt<Context>, context?: Context): $mol_tree2[];
+        error(message: string, Class?: ErrorConstructor): Error;
+    }
+    class $mol_tree2_empty extends $mol_tree2 {
+        constructor();
+    }
+}
+
+declare namespace $ {
+    class $mol_error_syntax extends SyntaxError {
+        reason: string;
+        line: string;
+        span: $mol_span;
+        constructor(reason: string, line: string, span: $mol_span);
+    }
+}
+
+declare namespace $ {
+    function $mol_tree2_from_string(this: $, str: string, uri?: string): $mol_tree2;
+}
+
+declare namespace $ {
+    function $mol_tree2_from_json(json: any, span?: $mol_span): $mol_tree2;
+}
+
+declare namespace $ {
+    class $mol_term_color {
+        static reset: (str: string) => string;
+        static bold: (str: string) => string;
+        static italic: (str: string) => string;
+        static underline: (str: string) => string;
+        static inverse: (str: string) => string;
+        static hidden: (str: string) => string;
+        static strike: (str: string) => string;
+        static gray: (str: string) => string;
+        static red: (str: string) => string;
+        static green: (str: string) => string;
+        static yellow: (str: string) => string;
+        static blue: (str: string) => string;
+        static magenta: (str: string) => string;
+        static cyan: (str: string) => string;
+        static Gray: (str: string) => string;
+        static Red: (str: string) => string;
+        static Green: (str: string) => string;
+        static Yellow: (str: string) => string;
+        static Blue: (str: string) => string;
+        static Magenta: (str: string) => string;
+        static Cyan: (str: string) => string;
+        static ansi(open: number, close: number): (str: string) => string;
+    }
+}
+
+declare namespace $ {
+    function $mol_log3_node_make(level: keyof Console, output: 'stdout' | 'stderr', type: string, color: (str: string) => string): (this: $, event: $mol_log3_event<{}>) => () => void;
+}
+
+declare namespace $ {
+    function $mol_env(): Record<string, string | undefined>;
+}
+
+declare namespace $ {
+}
+
+/// <reference types="node" />
+/// <reference types="node" />
+declare namespace $ {
+    function $mol_exec(this: $, dir: string, command: string, ...args: string[]): import("child_process").SpawnSyncReturns<Buffer>;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    function $mol_style_attach_force(): HTMLStyleElement;
+    function $mol_style_attach(id: string, text: string): HTMLStyleElement | null;
+}
+
+declare namespace $ {
     namespace $$ { }
     const $mol_object_field: unique symbol;
     class $mol_object extends $mol_object2 {
@@ -257,139 +430,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_log3_event<Fields> = {
-        [key in string]: unknown;
-    } & {
-        time?: string;
-        place: unknown;
-        message: string;
-    } & Fields;
-    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
-    let $mol_log3_come: $mol_log3_logger<{}>;
-    let $mol_log3_done: $mol_log3_logger<{}>;
-    let $mol_log3_fail: $mol_log3_logger<{}>;
-    let $mol_log3_warn: $mol_log3_logger<{
-        hint: string;
-    }>;
-    let $mol_log3_rise: $mol_log3_logger<{}>;
-    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
-    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
-    let $mol_log3_stack: (() => void)[];
-}
-
-declare namespace $ {
-    class $mol_span extends $mol_object2 {
-        readonly uri: string;
-        readonly source: string;
-        readonly row: number;
-        readonly col: number;
-        readonly length: number;
-        constructor(uri: string, source: string, row: number, col: number, length: number);
-        static unknown: $mol_span;
-        static begin(uri: string, source?: string): $mol_span;
-        static end(uri: string, source: string): $mol_span;
-        static entire(uri: string, source: string): $mol_span;
-        toString(): string;
-        toJSON(): {
-            uri: string;
-            row: number;
-            col: number;
-            length: number;
-        };
-        error(message: string, Class?: ErrorConstructor): Error;
-        span(row: number, col: number, length: number): $mol_span;
-        after(length?: number): $mol_span;
-        slice(begin: number, end?: number): $mol_span;
-    }
-}
-
-declare namespace $ {
-    function $mol_tree2_to_string(this: $, tree: $mol_tree2): string;
-}
-
-declare namespace $ {
-    type $mol_tree2_path = Array<string | number | null>;
-    type $mol_tree2_hack<Context> = (input: $mol_tree2, belt: $mol_tree2_belt<Context>, context: Context) => readonly $mol_tree2[];
-    type $mol_tree2_belt<Context> = Record<string, $mol_tree2_hack<Context>>;
-    class $mol_tree2 extends Object {
-        readonly type: string;
-        readonly value: string;
-        readonly kids: readonly $mol_tree2[];
-        readonly span: $mol_span;
-        constructor(type: string, value: string, kids: readonly $mol_tree2[], span: $mol_span);
-        static list(kids: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
-        list(kids: readonly $mol_tree2[]): $mol_tree2;
-        static data(value: string, kids?: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
-        data(value: string, kids?: readonly $mol_tree2[]): $mol_tree2;
-        static struct(type: string, kids?: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
-        struct(type: string, kids?: readonly $mol_tree2[]): $mol_tree2;
-        clone(kids: readonly $mol_tree2[], span?: $mol_span): $mol_tree2;
-        text(): string;
-        static fromString(str: string, uri?: string): $mol_tree2;
-        toString(): string;
-        insert(value: $mol_tree2 | null, ...path: $mol_tree2_path): $mol_tree2;
-        select(...path: $mol_tree2_path): $mol_tree2;
-        filter(path: string[], value?: string): $mol_tree2;
-        hack<Context extends {
-            span?: $mol_span;
-            [key: string]: unknown;
-        } = {}>(belt: $mol_tree2_belt<Context>, context?: Context): $mol_tree2[];
-        error(message: string, Class?: ErrorConstructor): Error;
-    }
-    class $mol_tree2_empty extends $mol_tree2 {
-        constructor();
-    }
-}
-
-declare namespace $ {
-    class $mol_error_syntax extends SyntaxError {
-        reason: string;
-        line: string;
-        span: $mol_span;
-        constructor(reason: string, line: string, span: $mol_span);
-    }
-}
-
-declare namespace $ {
-    function $mol_tree2_from_string(this: $, str: string, uri?: string): $mol_tree2;
-}
-
-declare namespace $ {
-    function $mol_tree2_from_json(json: any, span?: $mol_span): $mol_tree2;
-}
-
-declare namespace $ {
-    class $mol_term_color {
-        static reset: (str: string) => string;
-        static bold: (str: string) => string;
-        static italic: (str: string) => string;
-        static underline: (str: string) => string;
-        static inverse: (str: string) => string;
-        static hidden: (str: string) => string;
-        static strike: (str: string) => string;
-        static gray: (str: string) => string;
-        static red: (str: string) => string;
-        static green: (str: string) => string;
-        static yellow: (str: string) => string;
-        static blue: (str: string) => string;
-        static magenta: (str: string) => string;
-        static cyan: (str: string) => string;
-        static Gray: (str: string) => string;
-        static Red: (str: string) => string;
-        static Green: (str: string) => string;
-        static Yellow: (str: string) => string;
-        static Blue: (str: string) => string;
-        static Magenta: (str: string) => string;
-        static Cyan: (str: string) => string;
-        static ansi(open: number, close: number): (str: string) => string;
-    }
-}
-
-declare namespace $ {
-    function $mol_log3_node_make(level: keyof Console, output: 'stdout' | 'stderr', type: string, color: (str: string) => string): (this: $, event: $mol_log3_event<{}>) => () => void;
-}
-
-declare namespace $ {
     class $mol_wire_task<Host, Args extends readonly unknown[], Result> extends $mol_wire_fiber<Host, Args, Result> {
         static getter<Host, Args extends readonly unknown[], Result>(task: (this: Host, ...args: Args) => Result): (host: Host, args: Args) => $mol_wire_task<Host, Args, Result>;
         get temp(): boolean;
@@ -463,41 +503,6 @@ declare namespace $ {
 declare namespace $ {
     let $mol_mem: typeof $mol_wire_solo;
     let $mol_mem_key: typeof $mol_wire_plex;
-}
-
-declare namespace $ {
-    var $mol_dom_context: typeof globalThis;
-}
-
-interface $node {
-    [key: string]: any;
-}
-declare var $node: $node;
-
-declare namespace $ {
-    function $mol_env(): Record<string, string | undefined>;
-}
-
-declare namespace $ {
-}
-
-/// <reference types="node" />
-/// <reference types="node" />
-declare namespace $ {
-    function $mol_exec(this: $, dir: string, command: string, ...args: string[]): import("child_process").SpawnSyncReturns<Buffer>;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_after_tick extends $mol_object2 {
-        task: () => void;
-        promise: any;
-        cancelled: boolean;
-        constructor(task: () => void);
-        destructor(): void;
-    }
 }
 
 declare namespace $ {
@@ -594,11 +599,6 @@ declare namespace $ {
 
 declare namespace $ {
     type $mol_type_pick<Input, Upper> = Pick<Input, $mol_type_keys_extract<Input, Upper>>;
-}
-
-declare namespace $ {
-    function $mol_style_attach_force(): HTMLStyleElement;
-    function $mol_style_attach(id: string, text: string): HTMLStyleElement | null;
 }
 
 declare namespace $ {
@@ -1058,9 +1058,15 @@ declare namespace $ {
 }
 
 declare namespace $.$$ {
-    class $gen_engine extends $.$mol_object {
+    type Skill = {
+        id: string;
+        name: string;
+        level: number;
+    };
+    export class $gen_engine extends $.$mol_object {
         seed(): string;
         hero(next?: any): any;
+        hero_skills(next?: any): Skill[];
         reward(next?: any): any;
         make_win(next?: any): any;
         all_skills(): {
@@ -1068,11 +1074,14 @@ declare namespace $.$$ {
             name: string;
         }[];
         get_random_skill(next?: any): {
+            level: number;
             id: string;
             name: string;
         };
         add_hero_skill(): void;
+        skill_level_up(id: string): void;
     }
+    export {};
 }
 
 declare namespace $ {
@@ -2050,7 +2059,7 @@ declare namespace $.$$ {
         col_head_content(colId: string): readonly string[];
         rows(): readonly $mol_view[];
         cells(row_id: string[]): readonly $mol_view[];
-        col_type(col_id: string): "number" | "text" | "branch";
+        col_type(col_id: string): "text" | "number" | "branch";
         Cell(id: {
             row: string[];
             col: string;
@@ -2492,6 +2501,23 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_button_major extends $mol_button_typed {
+        attr(): Record<string, any>;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_row extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_text_list extends $mol_text {
         auto_scroll(): any;
         attr(): Record<string, any>;
@@ -2514,17 +2540,274 @@ declare namespace $ {
         body(): readonly any[];
         name(): string;
         Name(): $$.$mol_text;
+        level(): string;
         Level(): $$.$mol_text;
-        skills(): string;
-        Skills(): $$.$mol_text;
+        skill_points(): string;
+        Points(): $$.$mol_text;
+        skill_name(id: any): string;
+        Skill_name(id: any): $$.$mol_text;
+        skill_level(id: any): string;
+        Skill_level(id: any): $$.$mol_text;
+        skill_level_up(id: any, next?: any): any;
+        Skill_level_up(id: any): $mol_button_major;
+        Skill(id: any): $mol_row;
+        skill_list(): readonly any[];
+        Skills(): $$.$mol_list;
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         name(): string;
+        skill_points(): string;
         skills(): string;
+        skill_list(): readonly any[];
+        get_skill(id: string): {
+            id: string;
+            name: string;
+            level: number;
+        } | undefined;
+        skill_name(id: string): string;
+        skill_level(id: any): string;
+        skill_level_up(id: string, next?: any): void;
     }
+}
+
+declare namespace $ {
+    class $mol_hotkey extends $mol_plugin {
+        event(): Record<string, any>;
+        key(): Record<string, any>;
+        mod_ctrl(): boolean;
+        mod_alt(): boolean;
+        mod_shift(): boolean;
+        keydown(event?: any): any;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_hotkey extends $.$mol_hotkey {
+        key(): {
+            readonly [x: number]: ((event: KeyboardEvent) => void) | undefined;
+            readonly backspace?: ((event: KeyboardEvent) => void) | undefined;
+            readonly tab?: ((event: KeyboardEvent) => void) | undefined;
+            readonly enter?: ((event: KeyboardEvent) => void) | undefined;
+            readonly shift?: ((event: KeyboardEvent) => void) | undefined;
+            readonly ctrl?: ((event: KeyboardEvent) => void) | undefined;
+            readonly alt?: ((event: KeyboardEvent) => void) | undefined;
+            readonly pause?: ((event: KeyboardEvent) => void) | undefined;
+            readonly capsLock?: ((event: KeyboardEvent) => void) | undefined;
+            readonly escape?: ((event: KeyboardEvent) => void) | undefined;
+            readonly space?: ((event: KeyboardEvent) => void) | undefined;
+            readonly pageUp?: ((event: KeyboardEvent) => void) | undefined;
+            readonly pageDown?: ((event: KeyboardEvent) => void) | undefined;
+            readonly end?: ((event: KeyboardEvent) => void) | undefined;
+            readonly home?: ((event: KeyboardEvent) => void) | undefined;
+            readonly left?: ((event: KeyboardEvent) => void) | undefined;
+            readonly up?: ((event: KeyboardEvent) => void) | undefined;
+            readonly right?: ((event: KeyboardEvent) => void) | undefined;
+            readonly down?: ((event: KeyboardEvent) => void) | undefined;
+            readonly insert?: ((event: KeyboardEvent) => void) | undefined;
+            readonly delete?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key0?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key1?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key2?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key3?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key4?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key5?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key6?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key7?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key8?: ((event: KeyboardEvent) => void) | undefined;
+            readonly key9?: ((event: KeyboardEvent) => void) | undefined;
+            readonly A?: ((event: KeyboardEvent) => void) | undefined;
+            readonly B?: ((event: KeyboardEvent) => void) | undefined;
+            readonly C?: ((event: KeyboardEvent) => void) | undefined;
+            readonly D?: ((event: KeyboardEvent) => void) | undefined;
+            readonly E?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F?: ((event: KeyboardEvent) => void) | undefined;
+            readonly G?: ((event: KeyboardEvent) => void) | undefined;
+            readonly H?: ((event: KeyboardEvent) => void) | undefined;
+            readonly I?: ((event: KeyboardEvent) => void) | undefined;
+            readonly J?: ((event: KeyboardEvent) => void) | undefined;
+            readonly K?: ((event: KeyboardEvent) => void) | undefined;
+            readonly L?: ((event: KeyboardEvent) => void) | undefined;
+            readonly M?: ((event: KeyboardEvent) => void) | undefined;
+            readonly N?: ((event: KeyboardEvent) => void) | undefined;
+            readonly O?: ((event: KeyboardEvent) => void) | undefined;
+            readonly P?: ((event: KeyboardEvent) => void) | undefined;
+            readonly Q?: ((event: KeyboardEvent) => void) | undefined;
+            readonly R?: ((event: KeyboardEvent) => void) | undefined;
+            readonly S?: ((event: KeyboardEvent) => void) | undefined;
+            readonly T?: ((event: KeyboardEvent) => void) | undefined;
+            readonly U?: ((event: KeyboardEvent) => void) | undefined;
+            readonly V?: ((event: KeyboardEvent) => void) | undefined;
+            readonly W?: ((event: KeyboardEvent) => void) | undefined;
+            readonly X?: ((event: KeyboardEvent) => void) | undefined;
+            readonly Y?: ((event: KeyboardEvent) => void) | undefined;
+            readonly Z?: ((event: KeyboardEvent) => void) | undefined;
+            readonly metaLeft?: ((event: KeyboardEvent) => void) | undefined;
+            readonly metaRight?: ((event: KeyboardEvent) => void) | undefined;
+            readonly select?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad0?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad1?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad2?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad3?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad4?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad5?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad6?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad7?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad8?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numpad9?: ((event: KeyboardEvent) => void) | undefined;
+            readonly multiply?: ((event: KeyboardEvent) => void) | undefined;
+            readonly add?: ((event: KeyboardEvent) => void) | undefined;
+            readonly subtract?: ((event: KeyboardEvent) => void) | undefined;
+            readonly decimal?: ((event: KeyboardEvent) => void) | undefined;
+            readonly divide?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F1?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F2?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F3?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F4?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F5?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F6?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F7?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F8?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F9?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F10?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F11?: ((event: KeyboardEvent) => void) | undefined;
+            readonly F12?: ((event: KeyboardEvent) => void) | undefined;
+            readonly numLock?: ((event: KeyboardEvent) => void) | undefined;
+            readonly scrollLock?: ((event: KeyboardEvent) => void) | undefined;
+            readonly semicolon?: ((event: KeyboardEvent) => void) | undefined;
+            readonly equals?: ((event: KeyboardEvent) => void) | undefined;
+            readonly comma?: ((event: KeyboardEvent) => void) | undefined;
+            readonly dash?: ((event: KeyboardEvent) => void) | undefined;
+            readonly period?: ((event: KeyboardEvent) => void) | undefined;
+            readonly forwardSlash?: ((event: KeyboardEvent) => void) | undefined;
+            readonly graveAccent?: ((event: KeyboardEvent) => void) | undefined;
+            readonly bracketOpen?: ((event: KeyboardEvent) => void) | undefined;
+            readonly slashBack?: ((event: KeyboardEvent) => void) | undefined;
+            readonly slashBackLeft?: ((event: KeyboardEvent) => void) | undefined;
+            readonly bracketClose?: ((event: KeyboardEvent) => void) | undefined;
+            readonly quoteSingle?: ((event: KeyboardEvent) => void) | undefined;
+        };
+        keydown(event?: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_string extends $mol_view {
+        dom_name(): string;
+        enabled(): boolean;
+        minimal_height(): number;
+        autocomplete(): boolean;
+        selection(next?: any): readonly number[];
+        auto(): readonly any[];
+        field(): Record<string, any>;
+        attr(): Record<string, any>;
+        event(): Record<string, any>;
+        plugins(): readonly any[];
+        selection_watcher(): any;
+        error_report(): any;
+        disabled(): boolean;
+        value(next?: any): string;
+        value_changed(next?: any): string;
+        hint(): string;
+        hint_visible(): string;
+        spellcheck(): boolean;
+        autocomplete_native(): string;
+        selection_end(): number;
+        selection_start(): number;
+        keyboard(): string;
+        enter(): string;
+        length_max(): number;
+        type(next?: any): string;
+        event_change(event?: any): any;
+        submit_with_ctrl(): boolean;
+        submit(event?: any): any;
+        Submit(): $$.$mol_hotkey;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_string extends $.$mol_string {
+        event_change(next?: Event): void;
+        error_report(): void;
+        hint_visible(): string;
+        disabled(): boolean;
+        autocomplete_native(): "on" | "off";
+        selection_watcher(): $mol_dom_listener;
+        selection_change(event: Event): void;
+        selection_start(): number;
+        selection_end(): number;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_minus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_plus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_number extends $mol_view {
+        precision_view(): number;
+        precision_change(): number;
+        value_min(): number;
+        value_max(): number;
+        value(next?: any): number;
+        enabled(): boolean;
+        sub(): readonly any[];
+        precision(): number;
+        type(): string;
+        value_string(next?: any): string;
+        hint(): string;
+        string_enabled(): boolean;
+        submit(next?: any): any;
+        String(): $$.$mol_string;
+        event_dec(next?: any): any;
+        dec_enabled(): boolean;
+        dec_icon(): $mol_icon_minus;
+        Dec(): $mol_button_minor;
+        event_inc(next?: any): any;
+        inc_enabled(): boolean;
+        inc_icon(): $mol_icon_plus;
+        Inc(): $mol_button_minor;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_number extends $.$mol_number {
+        value_limited(next?: any): number;
+        event_dec(next?: Event): void;
+        event_inc(next?: Event): void;
+        value_string(next?: string): string;
+        dec_enabled(): boolean;
+        inc_enabled(): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_labeler extends $mol_list {
+        rows(): readonly any[];
+        label(): readonly $mol_view_content[];
+        Label(): $mol_view;
+        content(): readonly any[];
+        Content(): $mol_view;
+    }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -2532,45 +2815,50 @@ declare namespace $ {
         title(): string;
         engine(): $$.$gen_engine;
         body(): readonly any[];
-        Game(): $$.$mol_text;
-        Start_buttle(): $mol_button_minor;
-        Reward(): $$.$mol_text;
-        reward(): string;
-        Reward_item(): $$.$mol_text;
+        hero_level(next?: any): number;
+        Hero_level_value(): $$.$mol_number;
+        Hero_level(): $mol_labeler;
+        generate(next?: any): any;
+        Generate(): $mol_button_major;
+        result(): string;
+        Result(): $$.$mol_text;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_generator extends $.$mol_object {
+        seed(): string;
+        start(level: number): string;
+        get_enemies(level: number): {
+            name: string;
+            level: number;
+            skills: never[];
+            point: {
+                stats: number;
+                skill: number;
+                equip: number;
+            };
+        }[];
+        get_enemy(level: number): {
+            name: string;
+            level: number;
+            skills: never[];
+            point: {
+                stats: number;
+                skill: number;
+                equip: number;
+            };
+        };
+        random(max: number): number;
+        get_mode(): string;
+        get_terrain(): string;
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_game extends $.$gen_app_game {
-        reward(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_button_major extends $mol_button_typed {
-        attr(): Record<string, any>;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app_admin extends $mol_page {
-        title(): string;
-        engine(): $$.$gen_engine;
-        body(): readonly any[];
-        make_win(next?: any): any;
-        Win(): $mol_button_major;
-        add_hero_skill(next?: any): any;
-        Add_skill(): $mol_button_minor;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_admin extends $.$gen_app_admin {
-        make_win(next?: any): void;
-        add_hero_skill(next?: any): void;
+        result(next?: any): string;
+        generate(next?: any): string;
     }
 }
 
@@ -2581,8 +2869,10 @@ declare namespace $ {
         pages(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
         Game_page(): $$.$gen_app_game;
-        Hack_page(): $$.$gen_app_admin;
     }
+}
+
+declare namespace $ {
 }
 
 export = $;

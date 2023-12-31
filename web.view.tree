@@ -495,6 +495,13 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$mol_row $mol_view
+
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -514,33 +521,113 @@ $gen_app_hero $mol_page
 	engine $gen_engine
 	body /
 		<= Name $mol_text text <= name \Имя:
-		<= Level $mol_text text \Уровень: 5
-		<= Skills $mol_text text <= skills \Умения: 
+		<= Level $mol_text text <= level \ Уровень 5
+		<= Points $mol_text text <= skill_points \Очков умений: 10
+		<= Skills $mol_list rows <= skill_list /
+			<= Skill*0 $mol_row sub /
+				<= Skill_name* $mol_text text <= skill_name* \
+				<= Skill_level* $mol_text text <= skill_level* \
+				<= Skill_level_up* $mol_button_major
+					title \+
+					click? <=> skill_level_up*? null
 
-$gen_app_game $mol_page
-	title \Игра
-	engine $gen_engine
-	body /
-		<= Game $mol_text text \Игра
-		<= Start_buttle $mol_button_minor title \Начать битву
-		<= Reward $mol_text text \Награда
-		<= Reward_item $mol_text text <= reward \
+$mol_hotkey $mol_plugin
+	event *
+		^
+		keydown?event <=> keydown?event null
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
 
-$mol_button_major $mol_button_typed
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection? /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+		<= error_report null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed? <=> value? \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+		enterkeyhint <= enter \go
 	attr *
 		^
-		mol_theme \$mol_theme_accent
+		maxlength <= length_max +Infinity
+		type <= type? \text
+	event *
+		^
+		input?event <=> event_change?event null
+	plugins /
+		<= Submit $mol_hotkey
+			mod_ctrl <= submit_with_ctrl false
+			key * enter?event <=> submit?event null
 
-$gen_app_admin $mol_page 
-	title \Хак панель
+$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_number $mol_view
+	precision_view <= precision 1
+	precision_change <= precision 1
+	value_min -Infinity
+	value_max +Infinity
+	value? +NaN
+	enabled true
+	sub /
+		<= String $mol_string
+			- \ we don't want native number controls in mobile devices
+			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
+			type <= type \tel
+			value? <=> value_string? \
+			hint <= hint \ 
+			enabled <= string_enabled <= enabled
+			submit? <=> submit? null
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_minus
+		<= Inc $mol_button_minor
+			event_click? <=> event_inc? null
+			enabled <= inc_enabled <= enabled
+			sub / <= inc_icon $mol_icon_plus
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
+$gen_app_game $mol_page
+	title \Генератор битвы
 	engine $gen_engine
 	body /
-		<= Win $mol_button_major
-			title \Победить (хак)
-			click? <=> make_win? null
-		<= Add_skill $mol_button_minor 
-			title \Добавить уменее
-			click? <=> add_hero_skill? null
+		<= Hero_level $mol_labeler
+			title \Ваш уровень героев
+			content / 
+				<= Hero_level_value $mol_number
+					value? <=> hero_level? 20
+		<= Generate $mol_button_major
+			title \Сгенерировать
+			click? <=> generate? null
+		<= Result $mol_text
+			code_sidebar_showed false
+			text <= result \
 
 $gen_app $mol_book2
 	title \Игра Gen
@@ -548,4 +635,4 @@ $gen_app $mol_book2
 	pages /
 		<= Hero_page $gen_app_hero engine <= engine
 		<= Game_page $gen_app_game engine <= engine
-		<= Hack_page $gen_app_admin engine <= engine
+		- <= Hack_page $gen_app_admin engine <= engine

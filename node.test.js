@@ -232,6 +232,678 @@ var $;
 ;
 "use strict";
 var $;
+(function ($) {
+    class $mol_after_tick extends $mol_object2 {
+        task;
+        promise;
+        cancelled = false;
+        constructor(task) {
+            super();
+            this.task = task;
+            this.promise = Promise.resolve().then(() => {
+                if (this.cancelled)
+                    return;
+                task();
+            });
+        }
+        destructor() {
+            this.cancelled = true;
+        }
+    }
+    $.$mol_after_tick = $mol_after_tick;
+})($ || ($ = {}));
+//mol/after/tick/tick.ts
+;
+"use strict";
+var $;
+(function ($) {
+})($ || ($ = {}));
+//mol/dom/context/context.ts
+;
+"use strict";
+//node/node.ts
+;
+"use strict";
+var $node = new Proxy({ require }, {
+    get(target, name, wrapper) {
+        if (target[name])
+            return target[name];
+        const mod = target.require('module');
+        if (mod.builtinModules.indexOf(name) >= 0)
+            return target.require(name);
+        if (name[0] === '.')
+            return target.require(name);
+        const path = target.require('path');
+        const fs = target.require('fs');
+        let dir = path.resolve('.');
+        const suffix = `./node_modules/${name}`;
+        const $$ = $;
+        while (!fs.existsSync(path.join(dir, suffix))) {
+            const parent = path.resolve(dir, '..');
+            if (parent === dir) {
+                $$.$mol_exec('.', 'npm', 'install', '--omit=dev', name);
+                try {
+                    $$.$mol_exec('.', 'npm', 'install', '--omit=dev', '@types/' + name);
+                }
+                catch { }
+                break;
+            }
+            else {
+                dir = parent;
+            }
+        }
+        return target.require(name);
+    },
+    set(target, name, value) {
+        target[name] = value;
+        return true;
+    },
+});
+require = (req => Object.assign(function require(name) {
+    return $node[name];
+}, req))(require);
+//node/node.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_log3_area_lazy(event) {
+        const self = this;
+        const stack = self.$mol_log3_stack;
+        const deep = stack.length;
+        let logged = false;
+        stack.push(() => {
+            logged = true;
+            self.$mol_log3_area.call(self, event);
+        });
+        return () => {
+            if (logged)
+                self.console.groupEnd();
+            if (stack.length > deep)
+                stack.length = deep;
+        };
+    }
+    $.$mol_log3_area_lazy = $mol_log3_area_lazy;
+    $.$mol_log3_stack = [];
+})($ || ($ = {}));
+//mol/log3/log3.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_span extends $mol_object2 {
+        uri;
+        source;
+        row;
+        col;
+        length;
+        constructor(uri, source, row, col, length) {
+            super();
+            this.uri = uri;
+            this.source = source;
+            this.row = row;
+            this.col = col;
+            this.length = length;
+            this[Symbol.toStringTag] = `${this.uri}#${this.row}:${this.col}/${this.length}`;
+        }
+        static unknown = $mol_span.begin('?');
+        static begin(uri, source = '') {
+            return new $mol_span(uri, source, 1, 1, 0);
+        }
+        static end(uri, source) {
+            return new $mol_span(uri, source, 1, source.length + 1, 0);
+        }
+        static entire(uri, source) {
+            return new $mol_span(uri, source, 1, 1, source.length);
+        }
+        toString() {
+            return this[Symbol.toStringTag];
+        }
+        toJSON() {
+            return {
+                uri: this.uri,
+                row: this.row,
+                col: this.col,
+                length: this.length
+            };
+        }
+        error(message, Class = Error) {
+            return new Class(`${message} (${this})`);
+        }
+        span(row, col, length) {
+            return new $mol_span(this.uri, this.source, row, col, length);
+        }
+        after(length = 0) {
+            return new $mol_span(this.uri, this.source, this.row, this.col + this.length, length);
+        }
+        slice(begin, end = -1) {
+            let len = this.length;
+            if (begin < 0)
+                begin += len;
+            if (end < 0)
+                end += len;
+            if (begin < 0 || begin > len)
+                this.$.$mol_fail(this.error(`Begin value '${begin}' out of range`, RangeError));
+            if (end < 0 || end > len)
+                this.$.$mol_fail(this.error(`End value '${end}' out of range`, RangeError));
+            if (end < begin)
+                this.$.$mol_fail(this.error(`End value '${end}' can't be less than begin value`, RangeError));
+            return this.span(this.row, this.col + begin, end - begin);
+        }
+    }
+    $.$mol_span = $mol_span;
+})($ || ($ = {}));
+//mol/span/span.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_tree2_to_string(tree) {
+        let output = [];
+        function dump(tree, prefix = '') {
+            if (tree.type.length) {
+                if (!prefix.length) {
+                    prefix = "\t";
+                }
+                output.push(tree.type);
+                if (tree.kids.length == 1) {
+                    output.push(' ');
+                    dump(tree.kids[0], prefix);
+                    return;
+                }
+                output.push("\n");
+            }
+            else if (tree.value.length || prefix.length) {
+                output.push("\\" + tree.value + "\n");
+            }
+            for (const kid of tree.kids) {
+                output.push(prefix);
+                dump(kid, prefix + "\t");
+            }
+        }
+        dump(tree);
+        return output.join('');
+    }
+    $.$mol_tree2_to_string = $mol_tree2_to_string;
+})($ || ($ = {}));
+//mol/tree2/to/string/string.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_tree2 extends Object {
+        type;
+        value;
+        kids;
+        span;
+        constructor(type, value, kids, span) {
+            super();
+            this.type = type;
+            this.value = value;
+            this.kids = kids;
+            this.span = span;
+            this[Symbol.toStringTag] = type || '\\' + value;
+        }
+        static list(kids, span = $mol_span.unknown) {
+            return new $mol_tree2('', '', kids, span);
+        }
+        list(kids) {
+            return $mol_tree2.list(kids, this.span);
+        }
+        static data(value, kids = [], span = $mol_span.unknown) {
+            const chunks = value.split('\n');
+            if (chunks.length > 1) {
+                let kid_span = span.span(span.row, span.col, 0);
+                const data = chunks.map(chunk => {
+                    kid_span = kid_span.after(chunk.length);
+                    return new $mol_tree2('', chunk, [], kid_span);
+                });
+                kids = [...data, ...kids];
+                value = '';
+            }
+            return new $mol_tree2('', value, kids, span);
+        }
+        data(value, kids = []) {
+            return $mol_tree2.data(value, kids, this.span);
+        }
+        static struct(type, kids = [], span = $mol_span.unknown) {
+            if (/[ \n\t\\]/.test(type)) {
+                $$.$mol_fail(span.error(`Wrong type ${JSON.stringify(type)}`));
+            }
+            return new $mol_tree2(type, '', kids, span);
+        }
+        struct(type, kids = []) {
+            return $mol_tree2.struct(type, kids, this.span);
+        }
+        clone(kids, span = this.span) {
+            return new $mol_tree2(this.type, this.value, kids, span);
+        }
+        text() {
+            var values = [];
+            for (var kid of this.kids) {
+                if (kid.type)
+                    continue;
+                values.push(kid.value);
+            }
+            return this.value + values.join('\n');
+        }
+        static fromString(str, uri = 'unknown') {
+            return $$.$mol_tree2_from_string(str, uri);
+        }
+        toString() {
+            return $$.$mol_tree2_to_string(this);
+        }
+        insert(value, ...path) {
+            if (path.length === 0)
+                return value;
+            const type = path[0];
+            if (typeof type === 'string') {
+                let replaced = false;
+                const sub = this.kids.map((item, index) => {
+                    if (item.type !== type)
+                        return item;
+                    replaced = true;
+                    return item.insert(value, ...path.slice(1));
+                }).filter(Boolean);
+                if (!replaced && value) {
+                    sub.push(this.struct(type, []).insert(value, ...path.slice(1)));
+                }
+                return this.clone(sub);
+            }
+            else if (typeof type === 'number') {
+                const sub = this.kids.slice();
+                sub[type] = (sub[type] || this.list([]))
+                    .insert(value, ...path.slice(1));
+                return this.clone(sub.filter(Boolean));
+            }
+            else {
+                const kids = ((this.kids.length === 0) ? [this.list([])] : this.kids)
+                    .map(item => item.insert(value, ...path.slice(1)))
+                    .filter(Boolean);
+                return this.clone(kids);
+            }
+        }
+        select(...path) {
+            let next = [this];
+            for (const type of path) {
+                if (!next.length)
+                    break;
+                const prev = next;
+                next = [];
+                for (var item of prev) {
+                    switch (typeof (type)) {
+                        case 'string':
+                            for (var child of item.kids) {
+                                if (child.type == type) {
+                                    next.push(child);
+                                }
+                            }
+                            break;
+                        case 'number':
+                            if (type < item.kids.length)
+                                next.push(item.kids[type]);
+                            break;
+                        default: next.push(...item.kids);
+                    }
+                }
+            }
+            return this.list(next);
+        }
+        filter(path, value) {
+            const sub = this.kids.filter(item => {
+                var found = item.select(...path);
+                if (value === undefined) {
+                    return Boolean(found.kids.length);
+                }
+                else {
+                    return found.kids.some(child => child.value == value);
+                }
+            });
+            return this.clone(sub);
+        }
+        hack(belt, context = {}) {
+            return [].concat(...this.kids.map(child => {
+                let handle = belt[child.type] || belt[''];
+                if (!handle || handle === Object.prototype[child.type]) {
+                    handle = (input, belt, context) => [
+                        input.clone(input.hack(belt, context), context.span)
+                    ];
+                }
+                try {
+                    return handle(child, belt, context);
+                }
+                catch (error) {
+                    error.message += `\n${child.clone([])}${child.span}`;
+                    $mol_fail_hidden(error);
+                }
+            }));
+        }
+        error(message, Class = Error) {
+            return this.span.error(`${message}\n${this.clone([])}`, Class);
+        }
+    }
+    $.$mol_tree2 = $mol_tree2;
+    class $mol_tree2_empty extends $mol_tree2 {
+        constructor() {
+            super('', '', [], $mol_span.unknown);
+        }
+    }
+    $.$mol_tree2_empty = $mol_tree2_empty;
+})($ || ($ = {}));
+//mol/tree2/tree2.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_error_syntax extends SyntaxError {
+        reason;
+        line;
+        span;
+        constructor(reason, line, span) {
+            super(`${reason}\n${span}\n${line.substring(0, span.col - 1).replace(/\S/g, ' ')}${''.padEnd(span.length, '!')}\n${line}`);
+            this.reason = reason;
+            this.line = line;
+            this.span = span;
+        }
+    }
+    $.$mol_error_syntax = $mol_error_syntax;
+})($ || ($ = {}));
+//mol/error/syntax/syntax.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_tree2_from_string(str, uri = '?') {
+        const span = $mol_span.entire(uri, str);
+        var root = $mol_tree2.list([], span);
+        var stack = [root];
+        var pos = 0, row = 0, min_indent = 0;
+        while (str.length > pos) {
+            var indent = 0;
+            var line_start = pos;
+            row++;
+            while (str.length > pos && str[pos] == '\t') {
+                indent++;
+                pos++;
+            }
+            if (!root.kids.length) {
+                min_indent = indent;
+            }
+            indent -= min_indent;
+            if (indent < 0 || indent >= stack.length) {
+                const sp = span.span(row, 1, pos - line_start);
+                while (str.length > pos && str[pos] != '\n') {
+                    pos++;
+                }
+                if (indent < 0) {
+                    if (str.length > pos) {
+                        this.$mol_fail(new this.$mol_error_syntax(`Too few tabs`, str.substring(line_start, pos), sp));
+                    }
+                }
+                else {
+                    this.$mol_fail(new this.$mol_error_syntax(`Too many tabs`, str.substring(line_start, pos), sp));
+                }
+            }
+            stack.length = indent + 1;
+            var parent = stack[indent];
+            while (str.length > pos && str[pos] != '\\' && str[pos] != '\n') {
+                var error_start = pos;
+                while (str.length > pos && (str[pos] == ' ' || str[pos] == '\t')) {
+                    pos++;
+                }
+                if (pos > error_start) {
+                    let line_end = str.indexOf('\n', pos);
+                    if (line_end === -1)
+                        line_end = str.length;
+                    const sp = span.span(row, error_start - line_start + 1, pos - error_start);
+                    this.$mol_fail(new this.$mol_error_syntax(`Wrong nodes separator`, str.substring(line_start, line_end), sp));
+                }
+                var type_start = pos;
+                while (str.length > pos &&
+                    str[pos] != '\\' &&
+                    str[pos] != ' ' &&
+                    str[pos] != '\t' &&
+                    str[pos] != '\n') {
+                    pos++;
+                }
+                if (pos > type_start) {
+                    let next = new $mol_tree2(str.slice(type_start, pos), '', [], span.span(row, type_start - line_start + 1, pos - type_start));
+                    const parent_kids = parent.kids;
+                    parent_kids.push(next);
+                    parent = next;
+                }
+                if (str.length > pos && str[pos] == ' ') {
+                    pos++;
+                }
+            }
+            if (str.length > pos && str[pos] == '\\') {
+                var data_start = pos;
+                while (str.length > pos && str[pos] != '\n') {
+                    pos++;
+                }
+                let next = new $mol_tree2('', str.slice(data_start + 1, pos), [], span.span(row, data_start - line_start + 2, pos - data_start - 1));
+                const parent_kids = parent.kids;
+                parent_kids.push(next);
+                parent = next;
+            }
+            if (str.length === pos && stack.length > 0) {
+                const sp = span.span(row, pos - line_start + 1, 1);
+                this.$mol_fail(new this.$mol_error_syntax(`Unexpected EOF, LF required`, str.substring(line_start, str.length), sp));
+            }
+            stack.push(parent);
+            pos++;
+        }
+        return root;
+    }
+    $.$mol_tree2_from_string = $mol_tree2_from_string;
+})($ || ($ = {}));
+//mol/tree2/from/string/string.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_tree2_from_json(json, span = $mol_span.unknown) {
+        if (typeof json === 'boolean' || typeof json === 'number' || json === null) {
+            return new $mol_tree2(String(json), '', [], span);
+        }
+        if (typeof json === 'string') {
+            return $mol_tree2.data(json, [], span);
+        }
+        if (Array.isArray(json)) {
+            const sub = json.map(json => $mol_tree2_from_json(json, span));
+            return new $mol_tree2('/', '', sub, span);
+        }
+        if (ArrayBuffer.isView(json)) {
+            const buf = new Uint8Array(json.buffer, json.byteOffset, json.byteLength);
+            return $mol_tree2.data(String.fromCharCode(...buf), [], span);
+        }
+        if (json instanceof Date) {
+            return new $mol_tree2('', json.toISOString(), [], span);
+        }
+        if (typeof json.toJSON === 'function') {
+            return $mol_tree2_from_json(json.toJSON());
+        }
+        if (json instanceof Error) {
+            const { name, message, stack } = json;
+            json = { ...json, name, message, stack };
+        }
+        const sub = [];
+        for (var key in json) {
+            const val = json[key];
+            if (val === undefined)
+                continue;
+            const subsub = $mol_tree2_from_json(val, span);
+            if (/^[^\n\t\\ ]+$/.test(key)) {
+                sub.push(new $mol_tree2(key, '', [subsub], span));
+            }
+            else {
+                sub.push($mol_tree2.data(key, [subsub], span));
+            }
+        }
+        return new $mol_tree2('*', '', sub, span);
+    }
+    $.$mol_tree2_from_json = $mol_tree2_from_json;
+})($ || ($ = {}));
+//mol/tree2/from/json/json.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_term_color {
+        static reset = this.ansi(0, 0);
+        static bold = this.ansi(1, 22);
+        static italic = this.ansi(3, 23);
+        static underline = this.ansi(4, 24);
+        static inverse = this.ansi(7, 27);
+        static hidden = this.ansi(8, 28);
+        static strike = this.ansi(9, 29);
+        static gray = this.ansi(90, 39);
+        static red = this.ansi(91, 39);
+        static green = this.ansi(92, 39);
+        static yellow = this.ansi(93, 39);
+        static blue = this.ansi(94, 39);
+        static magenta = this.ansi(95, 39);
+        static cyan = this.ansi(96, 39);
+        static Gray = (str) => this.inverse(this.gray(str));
+        static Red = (str) => this.inverse(this.red(str));
+        static Green = (str) => this.inverse(this.green(str));
+        static Yellow = (str) => this.inverse(this.yellow(str));
+        static Blue = (str) => this.inverse(this.blue(str));
+        static Magenta = (str) => this.inverse(this.magenta(str));
+        static Cyan = (str) => this.inverse(this.cyan(str));
+        static ansi(open, close) {
+            if (typeof process === 'undefined')
+                return String;
+            if (!process.stdout.isTTY)
+                return String;
+            const prefix = `\x1b[${open}m`;
+            const postfix = `\x1b[${close}m`;
+            const suffix_regexp = new RegExp(postfix.replace('[', '\\['), 'g');
+            return function colorer(str) {
+                str = String(str);
+                if (str === '')
+                    return str;
+                const suffix = str.replace(suffix_regexp, prefix);
+                return prefix + suffix + postfix;
+            };
+        }
+    }
+    $.$mol_term_color = $mol_term_color;
+})($ || ($ = {}));
+//mol/term/color/color.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_log3_node_make(level, output, type, color) {
+        return function $mol_log3_logger(event) {
+            if (!event.time)
+                event = { time: new Date().toISOString(), ...event };
+            let tree = this.$mol_tree2_from_json(event);
+            tree = tree.struct(type, tree.kids);
+            let str = color(tree.toString());
+            this.console[level](str);
+            const self = this;
+            return () => self.console.groupEnd();
+        };
+    }
+    $.$mol_log3_node_make = $mol_log3_node_make;
+    $.$mol_log3_come = $mol_log3_node_make('info', 'stdout', 'come', $mol_term_color.blue);
+    $.$mol_log3_done = $mol_log3_node_make('info', 'stdout', 'done', $mol_term_color.green);
+    $.$mol_log3_fail = $mol_log3_node_make('error', 'stderr', 'fail', $mol_term_color.red);
+    $.$mol_log3_warn = $mol_log3_node_make('warn', 'stderr', 'warn', $mol_term_color.yellow);
+    $.$mol_log3_rise = $mol_log3_node_make('log', 'stdout', 'rise', $mol_term_color.magenta);
+    $.$mol_log3_area = $mol_log3_node_make('log', 'stdout', 'area', $mol_term_color.cyan);
+})($ || ($ = {}));
+//mol/log3/log3.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_env() {
+        return {};
+    }
+    $.$mol_env = $mol_env;
+})($ || ($ = {}));
+//mol/env/env.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_env = function $mol_env() {
+        return this.process.env;
+    };
+})($ || ($ = {}));
+//mol/env/env.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_exec(dir, command, ...args) {
+        let [app, ...args0] = command.split(' ');
+        args = [...args0, ...args];
+        this.$mol_log3_come({
+            place: '$mol_exec',
+            dir: $node.path.relative('', dir),
+            message: 'Run',
+            command: `${app} ${args.join(' ')}`,
+        });
+        var res = $node['child_process'].spawnSync(app, args, {
+            cwd: $node.path.resolve(dir),
+            shell: true,
+            env: this.$mol_env(),
+        });
+        if (res.status || res.error)
+            return $mol_fail(res.error || new Error(res.stderr.toString()));
+        if (!res.stdout)
+            res.stdout = Buffer.from([]);
+        return res;
+    }
+    $.$mol_exec = $mol_exec;
+})($ || ($ = {}));
+//mol/exec/exec.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_dom_context = new $node.jsdom.JSDOM('', { url: 'https://localhost/' }).window;
+})($ || ($ = {}));
+//mol/dom/context/context.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let all = [];
+    let el = null;
+    let timer = null;
+    function $mol_style_attach_force() {
+        if (all.length) {
+            el.innerHTML += '\n' + all.join('\n\n');
+            all = [];
+        }
+        timer = null;
+        return el;
+    }
+    $.$mol_style_attach_force = $mol_style_attach_force;
+    function $mol_style_attach(id, text) {
+        all.push(`/* ${id} */\n\n${text}`);
+        if (timer)
+            return el;
+        const doc = $mol_dom_context.document;
+        if (!doc)
+            return null;
+        el = doc.createElement('style');
+        el.id = `$mol_style_attach`;
+        doc.head.appendChild(el);
+        timer = new $mol_after_tick($mol_style_attach_force);
+        return el;
+    }
+    $.$mol_style_attach = $mol_style_attach;
+})($ || ($ = {}));
+//mol/style/attach/attach.ts
+;
+"use strict";
+var $;
 (function ($_1) {
     let $$;
     (function ($$) {
@@ -1071,519 +1743,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_log3_area_lazy(event) {
-        const self = this;
-        const stack = self.$mol_log3_stack;
-        const deep = stack.length;
-        let logged = false;
-        stack.push(() => {
-            logged = true;
-            self.$mol_log3_area.call(self, event);
-        });
-        return () => {
-            if (logged)
-                self.console.groupEnd();
-            if (stack.length > deep)
-                stack.length = deep;
-        };
-    }
-    $.$mol_log3_area_lazy = $mol_log3_area_lazy;
-    $.$mol_log3_stack = [];
-})($ || ($ = {}));
-//mol/log3/log3.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_span extends $mol_object2 {
-        uri;
-        source;
-        row;
-        col;
-        length;
-        constructor(uri, source, row, col, length) {
-            super();
-            this.uri = uri;
-            this.source = source;
-            this.row = row;
-            this.col = col;
-            this.length = length;
-            this[Symbol.toStringTag] = `${this.uri}#${this.row}:${this.col}/${this.length}`;
-        }
-        static unknown = $mol_span.begin('?');
-        static begin(uri, source = '') {
-            return new $mol_span(uri, source, 1, 1, 0);
-        }
-        static end(uri, source) {
-            return new $mol_span(uri, source, 1, source.length + 1, 0);
-        }
-        static entire(uri, source) {
-            return new $mol_span(uri, source, 1, 1, source.length);
-        }
-        toString() {
-            return this[Symbol.toStringTag];
-        }
-        toJSON() {
-            return {
-                uri: this.uri,
-                row: this.row,
-                col: this.col,
-                length: this.length
-            };
-        }
-        error(message, Class = Error) {
-            return new Class(`${message} (${this})`);
-        }
-        span(row, col, length) {
-            return new $mol_span(this.uri, this.source, row, col, length);
-        }
-        after(length = 0) {
-            return new $mol_span(this.uri, this.source, this.row, this.col + this.length, length);
-        }
-        slice(begin, end = -1) {
-            let len = this.length;
-            if (begin < 0)
-                begin += len;
-            if (end < 0)
-                end += len;
-            if (begin < 0 || begin > len)
-                this.$.$mol_fail(this.error(`Begin value '${begin}' out of range`, RangeError));
-            if (end < 0 || end > len)
-                this.$.$mol_fail(this.error(`End value '${end}' out of range`, RangeError));
-            if (end < begin)
-                this.$.$mol_fail(this.error(`End value '${end}' can't be less than begin value`, RangeError));
-            return this.span(this.row, this.col + begin, end - begin);
-        }
-    }
-    $.$mol_span = $mol_span;
-})($ || ($ = {}));
-//mol/span/span.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_tree2_to_string(tree) {
-        let output = [];
-        function dump(tree, prefix = '') {
-            if (tree.type.length) {
-                if (!prefix.length) {
-                    prefix = "\t";
-                }
-                output.push(tree.type);
-                if (tree.kids.length == 1) {
-                    output.push(' ');
-                    dump(tree.kids[0], prefix);
-                    return;
-                }
-                output.push("\n");
-            }
-            else if (tree.value.length || prefix.length) {
-                output.push("\\" + tree.value + "\n");
-            }
-            for (const kid of tree.kids) {
-                output.push(prefix);
-                dump(kid, prefix + "\t");
-            }
-        }
-        dump(tree);
-        return output.join('');
-    }
-    $.$mol_tree2_to_string = $mol_tree2_to_string;
-})($ || ($ = {}));
-//mol/tree2/to/string/string.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_tree2 extends Object {
-        type;
-        value;
-        kids;
-        span;
-        constructor(type, value, kids, span) {
-            super();
-            this.type = type;
-            this.value = value;
-            this.kids = kids;
-            this.span = span;
-            this[Symbol.toStringTag] = type || '\\' + value;
-        }
-        static list(kids, span = $mol_span.unknown) {
-            return new $mol_tree2('', '', kids, span);
-        }
-        list(kids) {
-            return $mol_tree2.list(kids, this.span);
-        }
-        static data(value, kids = [], span = $mol_span.unknown) {
-            const chunks = value.split('\n');
-            if (chunks.length > 1) {
-                let kid_span = span.span(span.row, span.col, 0);
-                const data = chunks.map(chunk => {
-                    kid_span = kid_span.after(chunk.length);
-                    return new $mol_tree2('', chunk, [], kid_span);
-                });
-                kids = [...data, ...kids];
-                value = '';
-            }
-            return new $mol_tree2('', value, kids, span);
-        }
-        data(value, kids = []) {
-            return $mol_tree2.data(value, kids, this.span);
-        }
-        static struct(type, kids = [], span = $mol_span.unknown) {
-            if (/[ \n\t\\]/.test(type)) {
-                $$.$mol_fail(span.error(`Wrong type ${JSON.stringify(type)}`));
-            }
-            return new $mol_tree2(type, '', kids, span);
-        }
-        struct(type, kids = []) {
-            return $mol_tree2.struct(type, kids, this.span);
-        }
-        clone(kids, span = this.span) {
-            return new $mol_tree2(this.type, this.value, kids, span);
-        }
-        text() {
-            var values = [];
-            for (var kid of this.kids) {
-                if (kid.type)
-                    continue;
-                values.push(kid.value);
-            }
-            return this.value + values.join('\n');
-        }
-        static fromString(str, uri = 'unknown') {
-            return $$.$mol_tree2_from_string(str, uri);
-        }
-        toString() {
-            return $$.$mol_tree2_to_string(this);
-        }
-        insert(value, ...path) {
-            if (path.length === 0)
-                return value;
-            const type = path[0];
-            if (typeof type === 'string') {
-                let replaced = false;
-                const sub = this.kids.map((item, index) => {
-                    if (item.type !== type)
-                        return item;
-                    replaced = true;
-                    return item.insert(value, ...path.slice(1));
-                }).filter(Boolean);
-                if (!replaced && value) {
-                    sub.push(this.struct(type, []).insert(value, ...path.slice(1)));
-                }
-                return this.clone(sub);
-            }
-            else if (typeof type === 'number') {
-                const sub = this.kids.slice();
-                sub[type] = (sub[type] || this.list([]))
-                    .insert(value, ...path.slice(1));
-                return this.clone(sub.filter(Boolean));
-            }
-            else {
-                const kids = ((this.kids.length === 0) ? [this.list([])] : this.kids)
-                    .map(item => item.insert(value, ...path.slice(1)))
-                    .filter(Boolean);
-                return this.clone(kids);
-            }
-        }
-        select(...path) {
-            let next = [this];
-            for (const type of path) {
-                if (!next.length)
-                    break;
-                const prev = next;
-                next = [];
-                for (var item of prev) {
-                    switch (typeof (type)) {
-                        case 'string':
-                            for (var child of item.kids) {
-                                if (child.type == type) {
-                                    next.push(child);
-                                }
-                            }
-                            break;
-                        case 'number':
-                            if (type < item.kids.length)
-                                next.push(item.kids[type]);
-                            break;
-                        default: next.push(...item.kids);
-                    }
-                }
-            }
-            return this.list(next);
-        }
-        filter(path, value) {
-            const sub = this.kids.filter(item => {
-                var found = item.select(...path);
-                if (value === undefined) {
-                    return Boolean(found.kids.length);
-                }
-                else {
-                    return found.kids.some(child => child.value == value);
-                }
-            });
-            return this.clone(sub);
-        }
-        hack(belt, context = {}) {
-            return [].concat(...this.kids.map(child => {
-                let handle = belt[child.type] || belt[''];
-                if (!handle || handle === Object.prototype[child.type]) {
-                    handle = (input, belt, context) => [
-                        input.clone(input.hack(belt, context), context.span)
-                    ];
-                }
-                try {
-                    return handle(child, belt, context);
-                }
-                catch (error) {
-                    error.message += `\n${child.clone([])}${child.span}`;
-                    $mol_fail_hidden(error);
-                }
-            }));
-        }
-        error(message, Class = Error) {
-            return this.span.error(`${message}\n${this.clone([])}`, Class);
-        }
-    }
-    $.$mol_tree2 = $mol_tree2;
-    class $mol_tree2_empty extends $mol_tree2 {
-        constructor() {
-            super('', '', [], $mol_span.unknown);
-        }
-    }
-    $.$mol_tree2_empty = $mol_tree2_empty;
-})($ || ($ = {}));
-//mol/tree2/tree2.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_error_syntax extends SyntaxError {
-        reason;
-        line;
-        span;
-        constructor(reason, line, span) {
-            super(`${reason}\n${span}\n${line.substring(0, span.col - 1).replace(/\S/g, ' ')}${''.padEnd(span.length, '!')}\n${line}`);
-            this.reason = reason;
-            this.line = line;
-            this.span = span;
-        }
-    }
-    $.$mol_error_syntax = $mol_error_syntax;
-})($ || ($ = {}));
-//mol/error/syntax/syntax.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_tree2_from_string(str, uri = '?') {
-        const span = $mol_span.entire(uri, str);
-        var root = $mol_tree2.list([], span);
-        var stack = [root];
-        var pos = 0, row = 0, min_indent = 0;
-        while (str.length > pos) {
-            var indent = 0;
-            var line_start = pos;
-            row++;
-            while (str.length > pos && str[pos] == '\t') {
-                indent++;
-                pos++;
-            }
-            if (!root.kids.length) {
-                min_indent = indent;
-            }
-            indent -= min_indent;
-            if (indent < 0 || indent >= stack.length) {
-                const sp = span.span(row, 1, pos - line_start);
-                while (str.length > pos && str[pos] != '\n') {
-                    pos++;
-                }
-                if (indent < 0) {
-                    if (str.length > pos) {
-                        this.$mol_fail(new this.$mol_error_syntax(`Too few tabs`, str.substring(line_start, pos), sp));
-                    }
-                }
-                else {
-                    this.$mol_fail(new this.$mol_error_syntax(`Too many tabs`, str.substring(line_start, pos), sp));
-                }
-            }
-            stack.length = indent + 1;
-            var parent = stack[indent];
-            while (str.length > pos && str[pos] != '\\' && str[pos] != '\n') {
-                var error_start = pos;
-                while (str.length > pos && (str[pos] == ' ' || str[pos] == '\t')) {
-                    pos++;
-                }
-                if (pos > error_start) {
-                    let line_end = str.indexOf('\n', pos);
-                    if (line_end === -1)
-                        line_end = str.length;
-                    const sp = span.span(row, error_start - line_start + 1, pos - error_start);
-                    this.$mol_fail(new this.$mol_error_syntax(`Wrong nodes separator`, str.substring(line_start, line_end), sp));
-                }
-                var type_start = pos;
-                while (str.length > pos &&
-                    str[pos] != '\\' &&
-                    str[pos] != ' ' &&
-                    str[pos] != '\t' &&
-                    str[pos] != '\n') {
-                    pos++;
-                }
-                if (pos > type_start) {
-                    let next = new $mol_tree2(str.slice(type_start, pos), '', [], span.span(row, type_start - line_start + 1, pos - type_start));
-                    const parent_kids = parent.kids;
-                    parent_kids.push(next);
-                    parent = next;
-                }
-                if (str.length > pos && str[pos] == ' ') {
-                    pos++;
-                }
-            }
-            if (str.length > pos && str[pos] == '\\') {
-                var data_start = pos;
-                while (str.length > pos && str[pos] != '\n') {
-                    pos++;
-                }
-                let next = new $mol_tree2('', str.slice(data_start + 1, pos), [], span.span(row, data_start - line_start + 2, pos - data_start - 1));
-                const parent_kids = parent.kids;
-                parent_kids.push(next);
-                parent = next;
-            }
-            if (str.length === pos && stack.length > 0) {
-                const sp = span.span(row, pos - line_start + 1, 1);
-                this.$mol_fail(new this.$mol_error_syntax(`Unexpected EOF, LF required`, str.substring(line_start, str.length), sp));
-            }
-            stack.push(parent);
-            pos++;
-        }
-        return root;
-    }
-    $.$mol_tree2_from_string = $mol_tree2_from_string;
-})($ || ($ = {}));
-//mol/tree2/from/string/string.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_tree2_from_json(json, span = $mol_span.unknown) {
-        if (typeof json === 'boolean' || typeof json === 'number' || json === null) {
-            return new $mol_tree2(String(json), '', [], span);
-        }
-        if (typeof json === 'string') {
-            return $mol_tree2.data(json, [], span);
-        }
-        if (Array.isArray(json)) {
-            const sub = json.map(json => $mol_tree2_from_json(json, span));
-            return new $mol_tree2('/', '', sub, span);
-        }
-        if (ArrayBuffer.isView(json)) {
-            const buf = new Uint8Array(json.buffer, json.byteOffset, json.byteLength);
-            return $mol_tree2.data(String.fromCharCode(...buf), [], span);
-        }
-        if (json instanceof Date) {
-            return new $mol_tree2('', json.toISOString(), [], span);
-        }
-        if (typeof json.toJSON === 'function') {
-            return $mol_tree2_from_json(json.toJSON());
-        }
-        if (json instanceof Error) {
-            const { name, message, stack } = json;
-            json = { ...json, name, message, stack };
-        }
-        const sub = [];
-        for (var key in json) {
-            const val = json[key];
-            if (val === undefined)
-                continue;
-            const subsub = $mol_tree2_from_json(val, span);
-            if (/^[^\n\t\\ ]+$/.test(key)) {
-                sub.push(new $mol_tree2(key, '', [subsub], span));
-            }
-            else {
-                sub.push($mol_tree2.data(key, [subsub], span));
-            }
-        }
-        return new $mol_tree2('*', '', sub, span);
-    }
-    $.$mol_tree2_from_json = $mol_tree2_from_json;
-})($ || ($ = {}));
-//mol/tree2/from/json/json.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_term_color {
-        static reset = this.ansi(0, 0);
-        static bold = this.ansi(1, 22);
-        static italic = this.ansi(3, 23);
-        static underline = this.ansi(4, 24);
-        static inverse = this.ansi(7, 27);
-        static hidden = this.ansi(8, 28);
-        static strike = this.ansi(9, 29);
-        static gray = this.ansi(90, 39);
-        static red = this.ansi(91, 39);
-        static green = this.ansi(92, 39);
-        static yellow = this.ansi(93, 39);
-        static blue = this.ansi(94, 39);
-        static magenta = this.ansi(95, 39);
-        static cyan = this.ansi(96, 39);
-        static Gray = (str) => this.inverse(this.gray(str));
-        static Red = (str) => this.inverse(this.red(str));
-        static Green = (str) => this.inverse(this.green(str));
-        static Yellow = (str) => this.inverse(this.yellow(str));
-        static Blue = (str) => this.inverse(this.blue(str));
-        static Magenta = (str) => this.inverse(this.magenta(str));
-        static Cyan = (str) => this.inverse(this.cyan(str));
-        static ansi(open, close) {
-            if (typeof process === 'undefined')
-                return String;
-            if (!process.stdout.isTTY)
-                return String;
-            const prefix = `\x1b[${open}m`;
-            const postfix = `\x1b[${close}m`;
-            const suffix_regexp = new RegExp(postfix.replace('[', '\\['), 'g');
-            return function colorer(str) {
-                str = String(str);
-                if (str === '')
-                    return str;
-                const suffix = str.replace(suffix_regexp, prefix);
-                return prefix + suffix + postfix;
-            };
-        }
-    }
-    $.$mol_term_color = $mol_term_color;
-})($ || ($ = {}));
-//mol/term/color/color.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_log3_node_make(level, output, type, color) {
-        return function $mol_log3_logger(event) {
-            if (!event.time)
-                event = { time: new Date().toISOString(), ...event };
-            let tree = this.$mol_tree2_from_json(event);
-            tree = tree.struct(type, tree.kids);
-            let str = color(tree.toString());
-            this.console[level](str);
-            const self = this;
-            return () => self.console.groupEnd();
-        };
-    }
-    $.$mol_log3_node_make = $mol_log3_node_make;
-    $.$mol_log3_come = $mol_log3_node_make('info', 'stdout', 'come', $mol_term_color.blue);
-    $.$mol_log3_done = $mol_log3_node_make('info', 'stdout', 'done', $mol_term_color.green);
-    $.$mol_log3_fail = $mol_log3_node_make('error', 'stderr', 'fail', $mol_term_color.red);
-    $.$mol_log3_warn = $mol_log3_node_make('warn', 'stderr', 'warn', $mol_term_color.yellow);
-    $.$mol_log3_rise = $mol_log3_node_make('log', 'stdout', 'rise', $mol_term_color.magenta);
-    $.$mol_log3_area = $mol_log3_node_make('log', 'stdout', 'area', $mol_term_color.cyan);
-})($ || ($ = {}));
-//mol/log3/log3.node.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_wire_task extends $mol_wire_fiber {
         static getter(task) {
             return function $mol_wire_task_get(host, args) {
@@ -1923,133 +2082,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-})($ || ($ = {}));
-//mol/dom/context/context.ts
-;
-"use strict";
-//node/node.ts
-;
-"use strict";
-var $node = new Proxy({ require }, {
-    get(target, name, wrapper) {
-        if (target[name])
-            return target[name];
-        const mod = target.require('module');
-        if (mod.builtinModules.indexOf(name) >= 0)
-            return target.require(name);
-        if (name[0] === '.')
-            return target.require(name);
-        const path = target.require('path');
-        const fs = target.require('fs');
-        let dir = path.resolve('.');
-        const suffix = `./node_modules/${name}`;
-        const $$ = $;
-        while (!fs.existsSync(path.join(dir, suffix))) {
-            const parent = path.resolve(dir, '..');
-            if (parent === dir) {
-                $$.$mol_exec('.', 'npm', 'install', '--omit=dev', name);
-                try {
-                    $$.$mol_exec('.', 'npm', 'install', '--omit=dev', '@types/' + name);
-                }
-                catch { }
-                break;
-            }
-            else {
-                dir = parent;
-            }
-        }
-        return target.require(name);
-    },
-    set(target, name, value) {
-        target[name] = value;
-        return true;
-    },
-});
-require = (req => Object.assign(function require(name) {
-    return $node[name];
-}, req))(require);
-//node/node.node.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_env() {
-        return {};
-    }
-    $.$mol_env = $mol_env;
-})($ || ($ = {}));
-//mol/env/env.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_env = function $mol_env() {
-        return this.process.env;
-    };
-})($ || ($ = {}));
-//mol/env/env.node.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_exec(dir, command, ...args) {
-        let [app, ...args0] = command.split(' ');
-        args = [...args0, ...args];
-        this.$mol_log3_come({
-            place: '$mol_exec',
-            dir: $node.path.relative('', dir),
-            message: 'Run',
-            command: `${app} ${args.join(' ')}`,
-        });
-        var res = $node['child_process'].spawnSync(app, args, {
-            cwd: $node.path.resolve(dir),
-            shell: true,
-            env: this.$mol_env(),
-        });
-        if (res.status || res.error)
-            return $mol_fail(res.error || new Error(res.stderr.toString()));
-        if (!res.stdout)
-            res.stdout = Buffer.from([]);
-        return res;
-    }
-    $.$mol_exec = $mol_exec;
-})($ || ($ = {}));
-//mol/exec/exec.node.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_dom_context = new $node.jsdom.JSDOM('', { url: 'https://localhost/' }).window;
-})($ || ($ = {}));
-//mol/dom/context/context.node.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_tick extends $mol_object2 {
-        task;
-        promise;
-        cancelled = false;
-        constructor(task) {
-            super();
-            this.task = task;
-            this.promise = Promise.resolve().then(() => {
-                if (this.cancelled)
-                    return;
-                task();
-            });
-        }
-        destructor() {
-            this.cancelled = true;
-        }
-    }
-    $.$mol_after_tick = $mol_after_tick;
-})($ || ($ = {}));
-//mol/after/tick/tick.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_view_selection extends $mol_object {
         static focused(next, notify) {
             const parents = [];
@@ -2375,38 +2407,6 @@ var $;
 ;
 "use strict";
 //mol/type/pick/pick.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let all = [];
-    let el = null;
-    let timer = null;
-    function $mol_style_attach_force() {
-        if (all.length) {
-            el.innerHTML += '\n' + all.join('\n\n');
-            all = [];
-        }
-        timer = null;
-        return el;
-    }
-    $.$mol_style_attach_force = $mol_style_attach_force;
-    function $mol_style_attach(id, text) {
-        all.push(`/* ${id} */\n\n${text}`);
-        if (timer)
-            return el;
-        const doc = $mol_dom_context.document;
-        if (!doc)
-            return null;
-        el = doc.createElement('style');
-        el.id = `$mol_style_attach`;
-        doc.head.appendChild(el);
-        timer = new $mol_after_tick($mol_style_attach_force);
-        return el;
-    }
-    $.$mol_style_attach = $mol_style_attach;
-})($ || ($ = {}));
-//mol/style/attach/attach.ts
 ;
 "use strict";
 var $;
@@ -3516,17 +3516,23 @@ var $;
                 return next ?? {
                     name: 'Milis',
                     level: 5,
-                    skills: [{ name: 'Атака' }, { name: 'Защита' }]
+                    skills: this.hero_skills(),
+                    point: {
+                        skill: 4,
+                    }
                 };
+            }
+            hero_skills(next) {
+                return next ?? [{ id: '1', name: 'Атака', level: 1 }, { id: '2', name: 'Защита', level: 1 }];
             }
             reward(next) {
                 console.log('reward', next);
-                return next ?? this.get_random_skill(true);
+                return next ?? this.get_random_skill();
             }
             make_win(next) {
                 console.log('make win', next);
-                this.reward(1);
-                this.get_random_skill(true);
+                this.reward();
+                this.get_random_skill();
                 return next ?? false;
             }
             all_skills() {
@@ -3543,17 +3549,28 @@ var $;
             }
             get_random_skill(next) {
                 console.log('get_random_skill');
-                return this.$.$mol_array_lottery(this.all_skills());
+                return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
             }
             add_hero_skill() {
                 console.log('add_hero_skill', this.hero());
-                const skills = [...this.hero().skills, this.get_random_skill()];
-                this.hero({ ...this.hero(), skills });
+                this.hero_skills([...this.hero_skills(), this.get_random_skill()]);
+            }
+            skill_level_up(id) {
+                const skills = this.hero_skills();
+                const skill = skills.find(skill => skill.id === id);
+                if (skill && skills) {
+                    skills.find(skill => skill.id === id).level = skill.level + 1;
+                    console.log(skills);
+                    this.hero_skills(skills);
+                }
             }
         }
         __decorate([
             $mol_mem
         ], $gen_engine.prototype, "hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "hero_skills", null);
         __decorate([
             $mol_mem
         ], $gen_engine.prototype, "reward", null);
@@ -5174,7 +5191,7 @@ var $;
                     this.status([null]);
                 }
                 catch (error) {
-                    this.status([error]);
+                    Promise.resolve().then(() => this.status([error]));
                     $mol_fail_hidden(error);
                 }
             }
@@ -8575,6 +8592,44 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_button_major extends $mol_button_typed {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_theme: "$mol_theme_accent"
+            };
+        }
+    }
+    $.$mol_button_major = $mol_button_major;
+})($ || ($ = {}));
+//mol/button/major/-view.tree/major.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
+})($ || ($ = {}));
+//mol/button/major/-css/major.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_row extends $mol_view {
+    }
+    $.$mol_row = $mol_row;
+})($ || ($ = {}));
+//mol/row/-view.tree/row.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
+})($ || ($ = {}));
+//mol/row/-css/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_text_list extends $mol_text {
         auto_scroll() {
             return null;
@@ -8636,6 +8691,7 @@ var $;
             return [
                 this.Name(),
                 this.Level(),
+                this.Points(),
                 this.Skills()
             ];
         }
@@ -8647,17 +8703,66 @@ var $;
             obj.text = () => this.name();
             return obj;
         }
+        level() {
+            return " Уровень 5";
+        }
         Level() {
             const obj = new this.$.$mol_text();
-            obj.text = () => "Уровень: 5";
+            obj.text = () => this.level();
             return obj;
         }
-        skills() {
-            return "Умения: ";
+        skill_points() {
+            return "Очков умений: 10";
+        }
+        Points() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_points();
+            return obj;
+        }
+        skill_name(id) {
+            return "";
+        }
+        Skill_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_name(id);
+            return obj;
+        }
+        skill_level(id) {
+            return "";
+        }
+        Skill_level(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_level(id);
+            return obj;
+        }
+        skill_level_up(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Skill_level_up(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "+";
+            obj.click = (next) => this.skill_level_up(id, next);
+            return obj;
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Skill_name(id),
+                this.Skill_level(id),
+                this.Skill_level_up(id)
+            ];
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
         }
         Skills() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.skills();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.skill_list();
             return obj;
         }
     }
@@ -8670,6 +8775,24 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Points", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_level", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "skill_level_up", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_level_up", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill", null);
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Skills", null);
@@ -8686,8 +8809,27 @@ var $;
             name() {
                 return `Имя: ${this.engine().hero().name}`;
             }
+            skill_points() {
+                return `Очков умений: ${this.engine().hero().point.skill}`;
+            }
             skills() {
-                return `Умения: ${JSON.stringify(this.engine().hero().skills)}`;
+                return `Умения: ${JSON.stringify(this.engine().hero_skills, null, 2)}`;
+            }
+            skill_list() {
+                return this.engine().hero_skills().map(skill => this.Skill(skill.id));
+            }
+            get_skill(id) {
+                return this.engine().hero_skills().find(skill => skill.id === id);
+            }
+            skill_name(id) {
+                return `Умение: ${this.get_skill(id)?.name}`;
+            }
+            skill_level(id) {
+                return `Уровень: ${this.get_skill(id)?.level}`;
+            }
+            skill_level_up(id, next) {
+                console.log(id, next);
+                this.engine().skill_level_up(id);
             }
         }
         $$.$gen_app_hero = $gen_app_hero;
@@ -8698,9 +8840,609 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_hotkey extends $mol_plugin {
+        event() {
+            return {
+                ...super.event(),
+                keydown: (event) => this.keydown(event)
+            };
+        }
+        key() {
+            return {};
+        }
+        mod_ctrl() {
+            return false;
+        }
+        mod_alt() {
+            return false;
+        }
+        mod_shift() {
+            return false;
+        }
+        keydown(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_hotkey.prototype, "keydown", null);
+    $.$mol_hotkey = $mol_hotkey;
+})($ || ($ = {}));
+//mol/hotkey/-view.tree/hotkey.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_hotkey extends $.$mol_hotkey {
+            key() {
+                return super.key();
+            }
+            keydown(event) {
+                if (!event)
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                let name = $mol_keyboard_code[event.keyCode];
+                if (this.mod_ctrl() !== (event.ctrlKey || event.metaKey))
+                    return;
+                if (this.mod_alt() !== event.altKey)
+                    return;
+                if (this.mod_shift() !== event.shiftKey)
+                    return;
+                const handle = this.key()[name];
+                if (handle)
+                    handle(event);
+            }
+        }
+        $$.$mol_hotkey = $mol_hotkey;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/hotkey/hotkey.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_string extends $mol_view {
+        dom_name() {
+            return "input";
+        }
+        enabled() {
+            return true;
+        }
+        minimal_height() {
+            return 40;
+        }
+        autocomplete() {
+            return false;
+        }
+        selection(next) {
+            if (next !== undefined)
+                return next;
+            return [
+                0,
+                0
+            ];
+        }
+        auto() {
+            return [
+                this.selection_watcher(),
+                this.error_report()
+            ];
+        }
+        field() {
+            return {
+                ...super.field(),
+                disabled: this.disabled(),
+                value: this.value_changed(),
+                placeholder: this.hint_visible(),
+                spellcheck: this.spellcheck(),
+                autocomplete: this.autocomplete_native(),
+                selectionEnd: this.selection_end(),
+                selectionStart: this.selection_start(),
+                inputMode: this.keyboard(),
+                enterkeyhint: this.enter()
+            };
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                maxlength: this.length_max(),
+                type: this.type()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                input: (event) => this.event_change(event)
+            };
+        }
+        plugins() {
+            return [
+                this.Submit()
+            ];
+        }
+        selection_watcher() {
+            return null;
+        }
+        error_report() {
+            return null;
+        }
+        disabled() {
+            return false;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        value_changed(next) {
+            return this.value(next);
+        }
+        hint() {
+            return "";
+        }
+        hint_visible() {
+            return this.hint();
+        }
+        spellcheck() {
+            return true;
+        }
+        autocomplete_native() {
+            return "";
+        }
+        selection_end() {
+            return 0;
+        }
+        selection_start() {
+            return 0;
+        }
+        keyboard() {
+            return "text";
+        }
+        enter() {
+            return "go";
+        }
+        length_max() {
+            return +Infinity;
+        }
+        type(next) {
+            if (next !== undefined)
+                return next;
+            return "text";
+        }
+        event_change(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        submit_with_ctrl() {
+            return false;
+        }
+        submit(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        Submit() {
+            const obj = new this.$.$mol_hotkey();
+            obj.mod_ctrl = () => this.submit_with_ctrl();
+            obj.key = () => ({
+                enter: (event) => this.submit(event)
+            });
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "selection", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "event_change", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_string.prototype, "Submit", null);
+    $.$mol_string = $mol_string;
+})($ || ($ = {}));
+//mol/string/-view.tree/string.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_string extends $.$mol_string {
+            event_change(next) {
+                if (!next)
+                    return;
+                const el = next.target;
+                const from = el.selectionStart;
+                const to = el.selectionEnd;
+                try {
+                    el.value = this.value_changed(el.value);
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                    $mol_fail_hidden(error);
+                }
+                if (to === null)
+                    return;
+                el.selectionEnd = to;
+                el.selectionStart = from;
+                this.selection_change(next);
+            }
+            error_report() {
+                try {
+                    if (this.focused())
+                        this.value();
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                }
+            }
+            hint_visible() {
+                return (this.enabled() ? this.hint() : '') || ' ';
+            }
+            disabled() {
+                return !this.enabled();
+            }
+            autocomplete_native() {
+                return this.autocomplete() ? 'on' : 'off';
+            }
+            selection_watcher() {
+                return new $mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', $mol_wire_async(event => this.selection_change(event)));
+            }
+            selection_change(event) {
+                const el = this.dom_node();
+                if (el !== this.$.$mol_dom_context.document.activeElement)
+                    return;
+                const [from, to] = this.selection([
+                    el.selectionStart,
+                    el.selectionEnd,
+                ]);
+                el.selectionEnd = to;
+                el.selectionStart = from;
+                if (to !== from && el.selectionEnd === el.selectionStart) {
+                    el.selectionEnd = to;
+                }
+            }
+            selection_start() {
+                const el = this.dom_node();
+                if (el.selectionStart === null)
+                    return undefined;
+                return this.selection()[0];
+            }
+            selection_end() {
+                const el = this.dom_node();
+                if (el.selectionEnd === null)
+                    return undefined;
+                return this.selection()[1];
+            }
+        }
+        __decorate([
+            $mol_action
+        ], $mol_string.prototype, "event_change", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "error_report", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "selection_watcher", null);
+        $$.$mol_string = $mol_string;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/string/string.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/string/-css/string.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_minus extends $mol_icon {
+        path() {
+            return "M19,13H5V11H19V13Z";
+        }
+    }
+    $.$mol_icon_minus = $mol_icon_minus;
+})($ || ($ = {}));
+//mol/icon/minus/-view.tree/minus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_plus extends $mol_icon {
+        path() {
+            return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+        }
+    }
+    $.$mol_icon_plus = $mol_icon_plus;
+})($ || ($ = {}));
+//mol/icon/plus/-view.tree/plus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_number extends $mol_view {
+        precision_view() {
+            return this.precision();
+        }
+        precision_change() {
+            return this.precision();
+        }
+        value_min() {
+            return -Infinity;
+        }
+        value_max() {
+            return +Infinity;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return +NaN;
+        }
+        enabled() {
+            return true;
+        }
+        sub() {
+            return [
+                this.String(),
+                this.Dec(),
+                this.Inc()
+            ];
+        }
+        precision() {
+            return 1;
+        }
+        type() {
+            return "tel";
+        }
+        value_string(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        hint() {
+            return " ";
+        }
+        string_enabled() {
+            return this.enabled();
+        }
+        submit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        String() {
+            const obj = new this.$.$mol_string();
+            obj.type = () => this.type();
+            obj.value = (next) => this.value_string(next);
+            obj.hint = () => this.hint();
+            obj.enabled = () => this.string_enabled();
+            obj.submit = (next) => this.submit(next);
+            return obj;
+        }
+        event_dec(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        dec_enabled() {
+            return this.enabled();
+        }
+        dec_icon() {
+            const obj = new this.$.$mol_icon_minus();
+            return obj;
+        }
+        Dec() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_dec(next);
+            obj.enabled = () => this.dec_enabled();
+            obj.sub = () => [
+                this.dec_icon()
+            ];
+            return obj;
+        }
+        event_inc(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        inc_enabled() {
+            return this.enabled();
+        }
+        inc_icon() {
+            const obj = new this.$.$mol_icon_plus();
+            return obj;
+        }
+        Inc() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_inc(next);
+            obj.enabled = () => this.inc_enabled();
+            obj.sub = () => [
+                this.inc_icon()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value_string", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "String", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "dec_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_inc", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "inc_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Inc", null);
+    $.$mol_number = $mol_number;
+})($ || ($ = {}));
+//mol/number/-view.tree/number.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/number/number.css", "[mol_number] {\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tposition: relative;\n\talign-items: stretch;\n\tmax-width: 100%;\n}\n\n[mol_number_string] {\n\tappearance: textfield;\n\tflex: 1 1 7rem;\n\twidth: 7rem;\n}\n\n[mol_number_string]::-webkit-inner-spin-button {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/number/-css/number.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_number extends $.$mol_number {
+            value_limited(next) {
+                if (next === undefined)
+                    return this.value();
+                if (next === '')
+                    return this.value(Number.NaN);
+                const min = this.value_min();
+                const max = this.value_max();
+                const val = Number(next);
+                if (val < min)
+                    return this.value(min);
+                if (val > max)
+                    return this.value(max);
+                return this.value(val);
+            }
+            event_dec(next) {
+                this.value_limited((this.value_limited() || 0) - this.precision_change());
+            }
+            event_inc(next) {
+                this.value_limited((this.value_limited() || 0) + this.precision_change());
+            }
+            value_string(next) {
+                const next_num = this.value_limited(next);
+                const precisionView = this.precision_view();
+                if (next_num === 0)
+                    return '0';
+                if (!next_num)
+                    return '';
+                if (precisionView >= 1) {
+                    return (next_num / precisionView).toFixed();
+                }
+                else {
+                    const fixedNumber = Math.log10(1 / precisionView);
+                    return next_num.toFixed(Math.ceil(fixedNumber));
+                }
+            }
+            dec_enabled() {
+                return this.enabled() && (!((this.value() || 0) <= this.value_min()));
+            }
+            inc_enabled() {
+                return this.enabled() && (!((this.value() || 0) >= this.value_max()));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "dec_enabled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "inc_enabled", null);
+        $$.$mol_number = $mol_number;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/number/number.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_labeler extends $mol_list {
+        rows() {
+            return [
+                this.Label(),
+                this.Content()
+            ];
+        }
+        label() {
+            return [
+                this.title()
+            ];
+        }
+        Label() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 32;
+            obj.sub = () => this.label();
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 24;
+            obj.sub = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_labeler.prototype, "Label", null);
+    __decorate([
+        $mol_mem
+    ], $mol_labeler.prototype, "Content", null);
+    $.$mol_labeler = $mol_labeler;
+})($ || ($ = {}));
+//mol/labeler/-view.tree/labeler.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/labeler/labeler.view.css", "[mol_labeler] {\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: stretch;\n\tcursor: inherit;\n}\n\n[mol_labeler_label] {\n\tmin-height: 2rem;\n\tcolor: var(--mol_theme_shade);\n\tpadding: .5rem .75rem 0;\n\tgap: 0 var(--mol_gap_block);\n\tflex-wrap: wrap;\n}\n\n[mol_labeler_content] {\n\tdisplay: flex;\n\tpadding: var(--mol_gap_text);\n}\n");
+})($ || ($ = {}));
+//mol/labeler/-css/labeler.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app_game extends $mol_page {
         title() {
-            return "Игра";
+            return "Генератор битвы";
         }
         engine() {
             const obj = new this.$.$gen_engine();
@@ -8708,33 +9450,47 @@ var $;
         }
         body() {
             return [
-                this.Game(),
-                this.Start_buttle(),
-                this.Reward(),
-                this.Reward_item()
+                this.Hero_level(),
+                this.Generate(),
+                this.Result()
             ];
         }
-        Game() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "Игра";
+        hero_level(next) {
+            if (next !== undefined)
+                return next;
+            return 20;
+        }
+        Hero_level_value() {
+            const obj = new this.$.$mol_number();
+            obj.value = (next) => this.hero_level(next);
             return obj;
         }
-        Start_buttle() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Начать битву";
+        Hero_level() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Ваш уровень героев";
+            obj.content = () => [
+                this.Hero_level_value()
+            ];
             return obj;
         }
-        Reward() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "Награда";
+        generate(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Generate() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Сгенерировать";
+            obj.click = (next) => this.generate(next);
             return obj;
         }
-        reward() {
+        result() {
             return "";
         }
-        Reward_item() {
+        Result() {
             const obj = new this.$.$mol_text();
-            obj.text = () => this.reward();
+            obj.code_sidebar_showed = () => false;
+            obj.text = () => this.result();
             return obj;
         }
     }
@@ -8743,16 +9499,22 @@ var $;
     ], $gen_app_game.prototype, "engine", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Game", null);
+    ], $gen_app_game.prototype, "hero_level", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Start_buttle", null);
+    ], $gen_app_game.prototype, "Hero_level_value", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Reward", null);
+    ], $gen_app_game.prototype, "Hero_level", null);
     __decorate([
         $mol_mem
-    ], $gen_app_game.prototype, "Reward_item", null);
+    ], $gen_app_game.prototype, "generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Result", null);
     $.$gen_app_game = $gen_app_game;
 })($ || ($ = {}));
 //gen/app/game/-view.tree/game.view.tree.ts
@@ -8762,115 +9524,80 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $gen_app_game extends $.$gen_app_game {
-            reward() {
-                return JSON.stringify(this.engine().reward());
+        class $gen_generator extends $.$mol_object {
+            seed() {
+                return '1';
+            }
+            start(level) {
+                const enemies = this.get_enemies(level);
+                const format_enemies = enemies.map((enemy, index) => {
+                    return `\n**Враг ${index + 1}**\nХарактеристики: ${enemy.point.stats}\nУмения: ${enemy.point.skill}\nПредметы: ${enemy.point.equip}\n`;
+                });
+                return `
+			Местность: ${this.get_terrain()}
+			Режим: ${this.get_mode()}
+			Врагов: ${enemies.length}
+			${format_enemies.join('\n')}
+			`;
+            }
+            get_enemies(level) {
+                const count = $mol_array_lottery([1, 2, 3, 4]);
+                const enemies = [];
+                for (let i = 0; i < count; i++) {
+                    enemies.push(this.get_enemy(level));
+                }
+                return enemies;
+            }
+            get_enemy(level) {
+                const stats = level - this.random(level - 2);
+                const skill = this.random(level - stats);
+                const equip = level - stats - skill;
+                return {
+                    name: 'Враг',
+                    level: level,
+                    skills: [],
+                    point: {
+                        stats,
+                        skill,
+                        equip,
+                    }
+                };
+            }
+            random(max) {
+                return Math.floor(Math.random() * max);
+            }
+            get_mode() {
+                return $mol_array_lottery(['битва', 'все против всех', 'предательство']);
+            }
+            get_terrain() {
+                return $mol_array_lottery(['обычная', 'горы', 'низины', 'горы и низины']);
             }
         }
-        $$.$gen_app_game = $gen_app_game;
+        $$.$gen_generator = $gen_generator;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//gen/app/game/game.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_button_major extends $mol_button_typed {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_theme: "$mol_theme_accent"
-            };
-        }
-    }
-    $.$mol_button_major = $mol_button_major;
-})($ || ($ = {}));
-//mol/button/major/-view.tree/major.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
-})($ || ($ = {}));
-//mol/button/major/-css/major.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_admin extends $mol_page {
-        title() {
-            return "Хак панель";
-        }
-        engine() {
-            const obj = new this.$.$gen_engine();
-            return obj;
-        }
-        body() {
-            return [
-                this.Win(),
-                this.Add_skill()
-            ];
-        }
-        make_win(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Win() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Победить (хак)";
-            obj.click = (next) => this.make_win(next);
-            return obj;
-        }
-        add_hero_skill(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Add_skill() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Добавить уменее";
-            obj.click = (next) => this.add_hero_skill(next);
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "make_win", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "Win", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "add_hero_skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_admin.prototype, "Add_skill", null);
-    $.$gen_app_admin = $gen_app_admin;
-})($ || ($ = {}));
-//gen/app/admin/-view.tree/admin.view.tree.ts
+//gen/generator/generator.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $gen_app_admin extends $.$gen_app_admin {
-            make_win(next) {
-                this.engine().make_win(true);
+        class $gen_app_game extends $.$gen_app_game {
+            result(next) {
+                return new this.$.$gen_generator().start(this.hero_level());
             }
-            add_hero_skill(next) {
-                this.engine().add_hero_skill();
-                console.log(this.engine());
+            generate(next) {
+                return this.result(true);
             }
         }
-        $$.$gen_app_admin = $gen_app_admin;
+        __decorate([
+            $mol_mem
+        ], $gen_app_game.prototype, "result", null);
+        $$.$gen_app_game = $gen_app_game;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//gen/app/admin/admin.view.ts
+//gen/app/game/game.view.ts
 ;
 "use strict";
 var $;
@@ -8886,8 +9613,7 @@ var $;
         pages() {
             return [
                 this.Hero_page(),
-                this.Game_page(),
-                this.Hack_page()
+                this.Game_page()
             ];
         }
         Hero_page() {
@@ -8897,11 +9623,6 @@ var $;
         }
         Game_page() {
             const obj = new this.$.$gen_app_game();
-            obj.engine = () => this.engine();
-            return obj;
-        }
-        Hack_page() {
-            const obj = new this.$.$gen_app_admin();
             obj.engine = () => this.engine();
             return obj;
         }
@@ -8915,12 +9636,16 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Game_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app.prototype, "Hack_page", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 20rem;\n}");
+})($ || ($ = {}));
+//gen/app/-css/app.view.css.ts
 ;
 "use strict";
 var $;
@@ -9852,6 +10577,234 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $.$mol_after_mock_queue = [];
+    function $mol_after_mock_warp() {
+        const queue = $.$mol_after_mock_queue.splice(0);
+        for (const task of queue)
+            task();
+    }
+    $.$mol_after_mock_warp = $mol_after_mock_warp;
+    class $mol_after_mock_commmon extends $mol_object2 {
+        task;
+        promise = Promise.resolve();
+        cancelled = false;
+        id;
+        constructor(task) {
+            super();
+            this.task = task;
+            $.$mol_after_mock_queue.push(task);
+        }
+        destructor() {
+            const index = $.$mol_after_mock_queue.indexOf(this.task);
+            if (index >= 0)
+                $.$mol_after_mock_queue.splice(index, 1);
+        }
+    }
+    $.$mol_after_mock_commmon = $mol_after_mock_commmon;
+    class $mol_after_mock_timeout extends $mol_after_mock_commmon {
+        delay;
+        constructor(delay, task) {
+            super(task);
+            this.delay = delay;
+        }
+    }
+    $.$mol_after_mock_timeout = $mol_after_mock_timeout;
+})($ || ($ = {}));
+//mol/after/mock/mock.test.ts
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test({
+        'span for same uri'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 4);
+            const child = span.span(4, 5, 8);
+            $mol_assert_equal(child.uri, 'test.ts');
+            $mol_assert_equal(child.row, 4);
+            $mol_assert_equal(child.col, 5);
+            $mol_assert_equal(child.length, 8);
+        },
+        'span after of given position'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 4);
+            const child = span.after(11);
+            $mol_assert_equal(child.uri, 'test.ts');
+            $mol_assert_equal(child.row, 1);
+            $mol_assert_equal(child.col, 7);
+            $mol_assert_equal(child.length, 11);
+        },
+        'slice span - regular'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 5);
+            const child = span.slice(1, 4);
+            $mol_assert_equal(child.row, 1);
+            $mol_assert_equal(child.col, 4);
+            $mol_assert_equal(child.length, 3);
+            const child2 = span.slice(2, 2);
+            $mol_assert_equal(child2.col, 5);
+            $mol_assert_equal(child2.length, 0);
+        },
+        'slice span - negative'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 5);
+            const child = span.slice(-3, -1);
+            $mol_assert_equal(child.row, 1);
+            $mol_assert_equal(child.col, 5);
+            $mol_assert_equal(child.length, 2);
+        },
+        'slice span - out of range'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 5);
+            $mol_assert_fail(() => span.slice(-1, 3), `End value '3' can't be less than begin value (test.ts#1:3/5)`);
+            $mol_assert_fail(() => span.slice(1, 6), `End value '6' out of range (test.ts#1:3/5)`);
+            $mol_assert_fail(() => span.slice(1, 10), `End value '10' out of range (test.ts#1:3/5)`);
+        },
+        'error handling'($) {
+            const span = new $mol_span('test.ts', '', 1, 3, 4);
+            const error = span.error('Some error');
+            $mol_assert_equal(error.message, 'Some error (test.ts#1:3/4)');
+        }
+    });
+})($ || ($ = {}));
+//mol/span/span.test.ts
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test({
+        'inserting'($) {
+            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
+                .insert($mol_tree2.struct('x'), 'a', 'b', 'c')
+                .toString(), 'a b x\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
+                .insert($mol_tree2.struct('x'), 'a', 'b', 'c', 'd')
+                .toString(), 'a b c x\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
+                .insert($mol_tree2.struct('x'), 0, 0, 0)
+                .toString(), 'a b x\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
+                .insert($mol_tree2.struct('x'), 0, 0, 0, 0)
+                .toString(), 'a b \\\n\tx\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
+                .insert($mol_tree2.struct('x'), null, null, null)
+                .toString(), 'a b x\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
+                .insert($mol_tree2.struct('x'), null, null, null, null)
+                .toString(), 'a b \\\n\tx\n');
+        },
+        'deleting'($) {
+            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
+                .insert(null, 'a', 'b', 'c')
+                .toString(), 'a b\n');
+            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
+                .insert(null, 0, 0, 0)
+                .toString(), 'a b\n');
+        },
+        'hack'($) {
+            const res = $.$mol_tree2_from_string(`foo bar xxx\n`)
+                .hack({
+                'bar': (input, belt) => [input.struct('777', input.hack(belt))],
+            });
+            $mol_assert_equal(res.toString(), 'foo 777 xxx\n');
+        },
+    });
+})($ || ($ = {}));
+//mol/tree2/tree2.test.ts
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test({
+        'tree parsing'($) {
+            $mol_assert_equal($.$mol_tree2_from_string("foo\nbar\n").kids.length, 2);
+            $mol_assert_equal($.$mol_tree2_from_string("foo\nbar\n").kids[1].type, "bar");
+            $mol_assert_equal($.$mol_tree2_from_string("foo\n\n\n").kids.length, 1);
+            $mol_assert_equal($.$mol_tree2_from_string("=foo\n\\bar\n").kids.length, 2);
+            $mol_assert_equal($.$mol_tree2_from_string("=foo\n\\bar\n").kids[1].value, "bar");
+            $mol_assert_equal($.$mol_tree2_from_string("foo bar \\pol\n").kids[0].kids[0].kids[0].value, "pol");
+            $mol_assert_equal($.$mol_tree2_from_string("foo bar\n\t\\pol\n\t\\men\n").kids[0].kids[0].kids[1].value, "men");
+            $mol_assert_equal($.$mol_tree2_from_string('foo bar \\text\n').toString(), 'foo bar \\text\n');
+        },
+        'Too many tabs'($) {
+            const tree = `
+				foo
+						bar
+			`;
+            $mol_assert_fail(() => {
+                $.$mol_tree2_from_string(tree, 'test');
+            }, 'Too many tabs\ntest#3:1/6\n!!!!!!\n\t\t\t\t\t\tbar');
+        },
+        'Too few tabs'($) {
+            const tree = `
+					foo
+				bar
+			`;
+            $mol_assert_fail(() => {
+                $.$mol_tree2_from_string(tree, 'test');
+            }, 'Too few tabs\ntest#3:1/4\n!!!!\n\t\t\t\tbar');
+        },
+        'Wrong nodes separator at start'($) {
+            const tree = `foo\n \tbar\n`;
+            $mol_assert_fail(() => {
+                $.$mol_tree2_from_string(tree, 'test');
+            }, 'Wrong nodes separator\ntest#2:1/2\n!!\n \tbar');
+        },
+        'Wrong nodes separator in the middle'($) {
+            const tree = `foo  bar\n`;
+            $mol_assert_fail(() => {
+                $.$mol_tree2_from_string(tree, 'test');
+            }, 'Wrong nodes separator\ntest#1:5/1\n    !\nfoo  bar');
+        },
+        'Unexpected EOF, LF required'($) {
+            const tree = `	foo`;
+            $mol_assert_fail(() => {
+                $.$mol_tree2_from_string(tree, 'test');
+            }, 'Unexpected EOF, LF required\ntest#1:5/1\n	   !\n	foo');
+        },
+        'Errors skip and collect'($) {
+            const tree = `foo  bar`;
+            const errors = [];
+            const $$ = $.$mol_ambient({
+                $mol_fail: (error) => {
+                    errors.push(error.message);
+                    return null;
+                }
+            });
+            const res = $$.$mol_tree2_from_string(tree, 'test');
+            $mol_assert_like(errors, [
+                'Wrong nodes separator\ntest#1:5/1\n    !\nfoo  bar',
+                'Unexpected EOF, LF required\ntest#1:9/1\n        !\nfoo  bar',
+            ]);
+            $mol_assert_equal(res.toString(), 'foo bar\n');
+        },
+    });
+})($ || ($ = {}));
+//mol/tree2/from/string/string.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_test({
+        'fromJSON'() {
+            $mol_assert_equal($mol_tree2_from_json([]).toString(), '/\n');
+            $mol_assert_equal($mol_tree2_from_json([false, true]).toString(), '/\n\tfalse\n\ttrue\n');
+            $mol_assert_equal($mol_tree2_from_json([0, 1, 2.3]).toString(), '/\n\t0\n\t1\n\t2.3\n');
+            $mol_assert_equal($mol_tree2_from_json(new Uint16Array([1, 10, 256])).toString(), '\\\x01\x00\n\\\x00\x00\x01\n');
+            $mol_assert_equal($mol_tree2_from_json(['', 'foo', 'bar\nbaz']).toString(), '/\n\t\\\n\t\\foo\n\t\\\n\t\t\\bar\n\t\t\\baz\n');
+            $mol_assert_equal($mol_tree2_from_json({ 'foo': false, 'bar\nbaz': 'lol' }).toString(), '*\n\tfoo false\n\t\\\n\t\t\\bar\n\t\t\\baz\n\t\t\\lol\n');
+        },
+    });
+})($ || ($ = {}));
+//mol/tree2/from/json/json.test.ts
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test_mocks.push($ => {
+        $.$mol_after_tick = $mol_after_mock_commmon;
+    });
+})($ || ($ = {}));
+//mol/after/tick/tick.test.ts
+;
+"use strict";
+var $;
+(function ($) {
     $mol_test({
         'init with overload'() {
             class X extends $mol_object {
@@ -9925,44 +10878,6 @@ var $;
     });
 })($ || ($ = {}));
 //mol/wire/pub/sub/sub.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_after_mock_queue = [];
-    function $mol_after_mock_warp() {
-        const queue = $.$mol_after_mock_queue.splice(0);
-        for (const task of queue)
-            task();
-    }
-    $.$mol_after_mock_warp = $mol_after_mock_warp;
-    class $mol_after_mock_commmon extends $mol_object2 {
-        task;
-        promise = Promise.resolve();
-        cancelled = false;
-        id;
-        constructor(task) {
-            super();
-            this.task = task;
-            $.$mol_after_mock_queue.push(task);
-        }
-        destructor() {
-            const index = $.$mol_after_mock_queue.indexOf(this.task);
-            if (index >= 0)
-                $.$mol_after_mock_queue.splice(index, 1);
-        }
-    }
-    $.$mol_after_mock_commmon = $mol_after_mock_commmon;
-    class $mol_after_mock_timeout extends $mol_after_mock_commmon {
-        delay;
-        constructor(delay, task) {
-            super(task);
-            this.delay = delay;
-        }
-    }
-    $.$mol_after_mock_timeout = $mol_after_mock_timeout;
-})($ || ($ = {}));
-//mol/after/mock/mock.test.ts
 ;
 "use strict";
 var $;
@@ -10754,15 +11669,6 @@ var $;
 ;
 "use strict";
 var $;
-(function ($_1) {
-    $mol_test_mocks.push($ => {
-        $.$mol_after_tick = $mol_after_mock_commmon;
-    });
-})($ || ($ = {}));
-//mol/after/tick/tick.test.ts
-;
-"use strict";
-var $;
 (function ($) {
     $mol_test({
         'run callback'() {
@@ -11360,187 +12266,6 @@ var $;
     })($$ = $_1.$$ || ($_1.$$ = {}));
 })($ || ($ = {}));
 //mol/view/tree/test/tree.test.ts
-;
-"use strict";
-var $;
-(function ($_1) {
-    $mol_test({
-        'span for same uri'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 4);
-            const child = span.span(4, 5, 8);
-            $mol_assert_equal(child.uri, 'test.ts');
-            $mol_assert_equal(child.row, 4);
-            $mol_assert_equal(child.col, 5);
-            $mol_assert_equal(child.length, 8);
-        },
-        'span after of given position'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 4);
-            const child = span.after(11);
-            $mol_assert_equal(child.uri, 'test.ts');
-            $mol_assert_equal(child.row, 1);
-            $mol_assert_equal(child.col, 7);
-            $mol_assert_equal(child.length, 11);
-        },
-        'slice span - regular'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 5);
-            const child = span.slice(1, 4);
-            $mol_assert_equal(child.row, 1);
-            $mol_assert_equal(child.col, 4);
-            $mol_assert_equal(child.length, 3);
-            const child2 = span.slice(2, 2);
-            $mol_assert_equal(child2.col, 5);
-            $mol_assert_equal(child2.length, 0);
-        },
-        'slice span - negative'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 5);
-            const child = span.slice(-3, -1);
-            $mol_assert_equal(child.row, 1);
-            $mol_assert_equal(child.col, 5);
-            $mol_assert_equal(child.length, 2);
-        },
-        'slice span - out of range'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 5);
-            $mol_assert_fail(() => span.slice(-1, 3), `End value '3' can't be less than begin value (test.ts#1:3/5)`);
-            $mol_assert_fail(() => span.slice(1, 6), `End value '6' out of range (test.ts#1:3/5)`);
-            $mol_assert_fail(() => span.slice(1, 10), `End value '10' out of range (test.ts#1:3/5)`);
-        },
-        'error handling'($) {
-            const span = new $mol_span('test.ts', '', 1, 3, 4);
-            const error = span.error('Some error');
-            $mol_assert_equal(error.message, 'Some error (test.ts#1:3/4)');
-        }
-    });
-})($ || ($ = {}));
-//mol/span/span.test.ts
-;
-"use strict";
-var $;
-(function ($_1) {
-    $mol_test({
-        'inserting'($) {
-            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
-                .insert($mol_tree2.struct('x'), 'a', 'b', 'c')
-                .toString(), 'a b x\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
-                .insert($mol_tree2.struct('x'), 'a', 'b', 'c', 'd')
-                .toString(), 'a b c x\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
-                .insert($mol_tree2.struct('x'), 0, 0, 0)
-                .toString(), 'a b x\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
-                .insert($mol_tree2.struct('x'), 0, 0, 0, 0)
-                .toString(), 'a b \\\n\tx\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
-                .insert($mol_tree2.struct('x'), null, null, null)
-                .toString(), 'a b x\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b\n')
-                .insert($mol_tree2.struct('x'), null, null, null, null)
-                .toString(), 'a b \\\n\tx\n');
-        },
-        'deleting'($) {
-            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
-                .insert(null, 'a', 'b', 'c')
-                .toString(), 'a b\n');
-            $mol_assert_equal($.$mol_tree2_from_string('a b c d\n')
-                .insert(null, 0, 0, 0)
-                .toString(), 'a b\n');
-        },
-        'hack'($) {
-            const res = $.$mol_tree2_from_string(`foo bar xxx\n`)
-                .hack({
-                'bar': (input, belt) => [input.struct('777', input.hack(belt))],
-            });
-            $mol_assert_equal(res.toString(), 'foo 777 xxx\n');
-        },
-    });
-})($ || ($ = {}));
-//mol/tree2/tree2.test.ts
-;
-"use strict";
-var $;
-(function ($_1) {
-    $mol_test({
-        'tree parsing'($) {
-            $mol_assert_equal($.$mol_tree2_from_string("foo\nbar\n").kids.length, 2);
-            $mol_assert_equal($.$mol_tree2_from_string("foo\nbar\n").kids[1].type, "bar");
-            $mol_assert_equal($.$mol_tree2_from_string("foo\n\n\n").kids.length, 1);
-            $mol_assert_equal($.$mol_tree2_from_string("=foo\n\\bar\n").kids.length, 2);
-            $mol_assert_equal($.$mol_tree2_from_string("=foo\n\\bar\n").kids[1].value, "bar");
-            $mol_assert_equal($.$mol_tree2_from_string("foo bar \\pol\n").kids[0].kids[0].kids[0].value, "pol");
-            $mol_assert_equal($.$mol_tree2_from_string("foo bar\n\t\\pol\n\t\\men\n").kids[0].kids[0].kids[1].value, "men");
-            $mol_assert_equal($.$mol_tree2_from_string('foo bar \\text\n').toString(), 'foo bar \\text\n');
-        },
-        'Too many tabs'($) {
-            const tree = `
-				foo
-						bar
-			`;
-            $mol_assert_fail(() => {
-                $.$mol_tree2_from_string(tree, 'test');
-            }, 'Too many tabs\ntest#3:1/6\n!!!!!!\n\t\t\t\t\t\tbar');
-        },
-        'Too few tabs'($) {
-            const tree = `
-					foo
-				bar
-			`;
-            $mol_assert_fail(() => {
-                $.$mol_tree2_from_string(tree, 'test');
-            }, 'Too few tabs\ntest#3:1/4\n!!!!\n\t\t\t\tbar');
-        },
-        'Wrong nodes separator at start'($) {
-            const tree = `foo\n \tbar\n`;
-            $mol_assert_fail(() => {
-                $.$mol_tree2_from_string(tree, 'test');
-            }, 'Wrong nodes separator\ntest#2:1/2\n!!\n \tbar');
-        },
-        'Wrong nodes separator in the middle'($) {
-            const tree = `foo  bar\n`;
-            $mol_assert_fail(() => {
-                $.$mol_tree2_from_string(tree, 'test');
-            }, 'Wrong nodes separator\ntest#1:5/1\n    !\nfoo  bar');
-        },
-        'Unexpected EOF, LF required'($) {
-            const tree = `	foo`;
-            $mol_assert_fail(() => {
-                $.$mol_tree2_from_string(tree, 'test');
-            }, 'Unexpected EOF, LF required\ntest#1:5/1\n	   !\n	foo');
-        },
-        'Errors skip and collect'($) {
-            const tree = `foo  bar`;
-            const errors = [];
-            const $$ = $.$mol_ambient({
-                $mol_fail: (error) => {
-                    errors.push(error.message);
-                    return null;
-                }
-            });
-            const res = $$.$mol_tree2_from_string(tree, 'test');
-            $mol_assert_like(errors, [
-                'Wrong nodes separator\ntest#1:5/1\n    !\nfoo  bar',
-                'Unexpected EOF, LF required\ntest#1:9/1\n        !\nfoo  bar',
-            ]);
-            $mol_assert_equal(res.toString(), 'foo bar\n');
-        },
-    });
-})($ || ($ = {}));
-//mol/tree2/from/string/string.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        'fromJSON'() {
-            $mol_assert_equal($mol_tree2_from_json([]).toString(), '/\n');
-            $mol_assert_equal($mol_tree2_from_json([false, true]).toString(), '/\n\tfalse\n\ttrue\n');
-            $mol_assert_equal($mol_tree2_from_json([0, 1, 2.3]).toString(), '/\n\t0\n\t1\n\t2.3\n');
-            $mol_assert_equal($mol_tree2_from_json(new Uint16Array([1, 10, 256])).toString(), '\\\x01\x00\n\\\x00\x00\x01\n');
-            $mol_assert_equal($mol_tree2_from_json(['', 'foo', 'bar\nbaz']).toString(), '/\n\t\\\n\t\\foo\n\t\\\n\t\t\\bar\n\t\t\\baz\n');
-            $mol_assert_equal($mol_tree2_from_json({ 'foo': false, 'bar\nbaz': 'lol' }).toString(), '*\n\tfoo false\n\t\\\n\t\t\\bar\n\t\t\\baz\n\t\t\\lol\n');
-        },
-    });
-})($ || ($ = {}));
-//mol/tree2/from/json/json.test.ts
 ;
 "use strict";
 var $;
@@ -12580,6 +13305,13 @@ var $;
             $mol_assert_equal(engine.hero().skills.length, 2);
             engine.add_hero_skill();
             $mol_assert_equal(engine.hero().skills.length, 3);
+        },
+        'engine skill level up'() {
+            const skill = engine.hero_skills()[0];
+            $mol_assert_equal(skill.level, 1);
+            engine.skill_level_up(skill.id);
+            $mol_assert_equal(skill.level, 2);
+            $mol_assert_equal(engine.all_skills().length, 3);
         }
     });
 })($ || ($ = {}));
@@ -12989,13 +13721,14 @@ var $;
                 element.dispatchEvent(event);
                 $mol_assert_not(clicked);
             },
-            'Store error'($) {
+            async 'Store error'($) {
                 const clicker = $mol_button.make({
                     $,
                     click: (event) => $.$mol_fail(new Error('Test error')),
                 });
                 const event = $mol_dom_context.document.createEvent('mouseevent');
                 $mol_assert_fail(() => clicker.event_activate(event), 'Test error');
+                await Promise.resolve();
                 $mol_assert_equal(clicker.status()[0].message, 'Test error');
             },
         });
