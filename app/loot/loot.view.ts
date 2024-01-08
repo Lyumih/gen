@@ -4,24 +4,24 @@ namespace $.$$ {
 		generate_item( next?: any ) {
 			const skill = $mol_array_lottery( this.engine().all_skills() )
 			const eqiup = $mol_array_lottery( this.engine().all_equip() )
-			const item = $mol_array_lottery( [ skill, eqiup ] )
+			const mode = $mol_array_lottery( this.engine().all_mode() )
+			const item = $mol_array_lottery( [ skill, eqiup, mode ] )
 			this.history( [ ...this.history(), item ] )
-		}
-
-		new_item(): string {
-			console.log( this.history().length )
-			const history = this.history()
-			return JSON.stringify( history[ 0 ] )
 		}
 
 		@$mol_mem
 		history( next?: any ): any[] {
-			console.log( 'history, ', next )
 			return next ?? []
 		}
 
+		new_item(): string {
+			const history = this.history()
+			return JSON.stringify( history[ history.length - 1 ] || 'Нет предмета' )
+		}
+
+
 		history_text(): string {
-			return JSON.stringify( this.history() )
+			return 'История:\n' + JSON.stringify( this.history() )
 		}
 
 	}

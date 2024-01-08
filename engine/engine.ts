@@ -65,5 +65,10 @@ namespace $.$$ {
 			const create_equip = ( id: string, name: string ) => ( { id, name, type: 'equip' } )
 			return [ create_equip( '1', 'Меч' ), create_equip( '2', 'Щит' ), create_equip( '3', 'Шлем' ) ]
 		}
+
+		all_mode() {
+			const create_mode = ( id: string, name: string ) => ( { id, name, type: 'mode' } )
+			return [ create_mode( '1', 'Урон: х2' ), create_mode( '2', 'Снаряды: +2' ), create_mode( '3', 'Дальность: +2' ) ]
+		}
 	}
 }
