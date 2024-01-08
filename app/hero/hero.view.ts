@@ -29,7 +29,6 @@ namespace $.$$ {
 		}
 
 		skill_level_up( id: string, next?: any ) {
-			console.log( id, next )
 			this.engine().skill_level_up( id )
 		}
 

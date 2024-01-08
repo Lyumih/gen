@@ -27,12 +27,10 @@ namespace $.$$ {
 
 		@$mol_mem
 		reward( next?: any ) {
-			console.log( 'reward', next )
 			return next ?? this.get_random_skill()
 		}
 
 		make_win( next?: any ) {
-			console.log( 'make win', next )
 			this.reward()
 			this.get_random_skill()
 			return next ?? false
@@ -40,26 +38,16 @@ namespace $.$$ {
 
 		@$mol_mem
 		all_skills() {
-			return [ {
-				id: '1',
-				name: 'Атака'
-			}, {
-				id: '2',
-				name: 'Защита'
-			}, {
-				id: '3',
-				name: 'Хил'
-			} ]
+			const create_skill = ( id: string, name: string ) => ( { id, name, type: 'skill' } )
+			return [ create_skill( '1', 'Атака' ), create_skill( '2', 'Защита' ), create_skill( '3', 'Хил' ) ]
 		}
 
 		@$mol_mem
 		get_random_skill( next?: any ) {
-			console.log( 'get_random_skill' )
 			return { ...this.$.$mol_array_lottery( this.all_skills() ), level: 1 }
 		}
 
 		add_hero_skill() {
-			console.log( 'add_hero_skill', this.hero() )
 			this.hero_skills( [ ...this.hero_skills(), this.get_random_skill() ] )
 		}
 
@@ -71,6 +59,11 @@ namespace $.$$ {
 				console.log( skills )
 				this.hero_skills( skills )
 			}
+		}
+
+		all_equip() {
+			const create_equip = ( id: string, name: string ) => ( { id, name, type: 'equip' } )
+			return [ create_equip( '1', 'Меч' ), create_equip( '2', 'Щит' ), create_equip( '3', 'Шлем' ) ]
 		}
 	}
 }

@@ -1,0 +1,9 @@
+$gen_app_loot $mol_page
+	title \Лут
+	engine $gen_engine
+	body /
+		<= Generate $mol_button_major
+			title \Получить предмет
+			click? <=> generate_item? null
+		<= New_item $mol_text text <= new_item \Новый предмет
+		<= History_item $mol_text text <= history_text \История предметов

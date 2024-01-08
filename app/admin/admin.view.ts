@@ -7,7 +7,6 @@ namespace $.$$ {
 
 		add_hero_skill( next?: any ) {
 			this.engine().add_hero_skill()
-			console.log( this.engine() )
 		}
 	}
 }
