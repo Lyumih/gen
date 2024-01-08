@@ -3065,6 +3065,10 @@ var $;
                 const create_equip = (id, name) => ({ id, name, type: 'equip' });
                 return [create_equip('1', 'Меч'), create_equip('2', 'Щит'), create_equip('3', 'Шлем')];
             }
+            all_mode() {
+                const create_mode = (id, name) => ({ id, name, type: 'mode' });
+                return [create_mode('1', 'Урон: х2'), create_mode('2', 'Снаряды: +2'), create_mode('3', 'Дальность: +2')];
+            }
         }
         __decorate([
             $mol_mem
@@ -9105,20 +9109,19 @@ var $;
             generate_item(next) {
                 const skill = $mol_array_lottery(this.engine().all_skills());
                 const eqiup = $mol_array_lottery(this.engine().all_equip());
-                const item = $mol_array_lottery([skill, eqiup]);
+                const mode = $mol_array_lottery(this.engine().all_mode());
+                const item = $mol_array_lottery([skill, eqiup, mode]);
                 this.history([...this.history(), item]);
             }
-            new_item() {
-                console.log(this.history().length);
-                const history = this.history();
-                return JSON.stringify(history[0]);
-            }
             history(next) {
-                console.log('history, ', next);
                 return next ?? [];
             }
+            new_item() {
+                const history = this.history();
+                return JSON.stringify(history[history.length - 1] || 'Нет предмета');
+            }
             history_text() {
-                return JSON.stringify(this.history());
+                return 'История:\n' + JSON.stringify(this.history());
             }
         }
         __decorate([
@@ -9173,7 +9176,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 20rem;\n}");
+    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 30rem;\n}");
 })($ || ($ = {}));
 //gen/app/-css/app.view.css.ts
 

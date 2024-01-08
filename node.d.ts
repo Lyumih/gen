@@ -1089,6 +1089,11 @@ declare namespace $.$$ {
             name: string;
             type: string;
         }[];
+        all_mode(): {
+            id: string;
+            name: string;
+            type: string;
+        }[];
     }
     export {};
 }
@@ -2841,8 +2846,8 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_loot extends $.$gen_app_loot {
         generate_item(next?: any): void;
-        new_item(): string;
         history(next?: any): any[];
+        new_item(): string;
         history_text(): string;
     }
 }
