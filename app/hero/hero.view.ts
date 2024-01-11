@@ -4,6 +4,22 @@ namespace $.$$ {
 			return `Имя: ${ this.engine().hero().name }`
 		}
 
+		equipment_list(): readonly any[] {
+			return this.engine().hero_equipments().map( item => this.Equipment( item.id ) )
+		}
+
+		get_equipment( id: string ) {
+			return this.engine().hero_equipments().find( item => item.id === id )
+		}
+
+		equipment_name( id: string ): string {
+			return this.get_equipment( id )?.name || 'no equipment'
+		}
+
+		equipment_unequip( id: any, next?: any ) {
+			this.engine().hero_unequip( id )
+		}
+
 		skill_points(): string {
 			return `Очков умений: ${ this.engine().hero().point.skill }`
 		}
@@ -25,7 +41,7 @@ namespace $.$$ {
 		}
 
 		skill_level( id: any ): string {
-			return `Уровень: ${ this.get_skill( id )?.level }`
+			return `Уровень: ${ this.get_skill( id )?.level || '-' }`
 		}
 
 		skill_level_up( id: string, next?: any ) {
@@ -39,6 +55,11 @@ namespace $.$$ {
 
 		skill_add_mode() {
 			const mode = this.engine().all_mode()
+		}
+
+		skill_unequip( id: any, next?: any ) {
+			console.log( id )
+			this.engine().skill_unequip( id )
 		}
 
 		inventory_list(): readonly any[] {
@@ -55,6 +76,10 @@ namespace $.$$ {
 
 		inventory_item_sell( id: any, next?: any ) {
 			this.engine().inventory_sell( id )
+		}
+
+		inventory_equip( id: any, next?: any ) {
+			this.engine().inventory_equip( id )
 		}
 
 		shop_list(): readonly any[] {

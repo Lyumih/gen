@@ -34,6 +34,16 @@ namespace $ {
 			$mol_assert_equal( engine.inventory().length, 3 )
 			engine.inventory_sell( item_id )
 			$mol_assert_equal( engine.shop().length, engine.inventory().length, 2 )
+		},
+
+		'hero equip'() {
+			const item_id = engine.hero_equipments()[ 0 ].id
+			$mol_assert_equal( engine.hero().equip.length, engine.inventory().length, 2 )
+			engine.hero_unequip( item_id )
+			$mol_assert_equal( engine.hero().equip.length, 1 )
+			$mol_assert_equal( engine.inventory().length, 3 )
+			engine.inventory_equip( item_id )
+			$mol_assert_equal( engine.hero().equip.length, engine.inventory().length, 2 )
 		}
 	} )
 }

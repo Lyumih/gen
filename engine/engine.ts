@@ -15,10 +15,11 @@ namespace $.$$ {
 			return next ?? {
 				name: 'Milis',
 				level: 5,
-				skills: this.hero_skills(),
 				point: {
 					skill: 4,
 				},
+				equip: this.hero_equipments(),
+				skills: this.hero_skills(),
 				inventory: this.inventory()
 			}
 		}
@@ -26,6 +27,21 @@ namespace $.$$ {
 		@$mol_mem
 		hero_skills( next?: any ): Skill[] {
 			return next ?? [ { id: this.uuid(), name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', level: 1 } ]
+		}
+
+		@$mol_mem
+		hero_equipments( next?: any ): Item[] {
+			return next ?? [ { id: this.uuid(), name: 'Кинжал', type: 'weapon' }, { id: this.uuid(), name: 'Пояс', type: 'armor' } ]
+		}
+
+		is_equipment( type?: string ) {
+			return [ 'weapon', 'armor' ].includes( type || '' )
+		}
+
+		hero_unequip( id: any, next?: any ) {
+			const item = this.hero_equipments().find( item => item.id === id )
+			this.hero_equipments( this.hero_equipments().filter( item => item.id !== id ) )
+			this.inventory( [ ...this.inventory(), item ] )
 		}
 
 		@$mol_mem
@@ -63,6 +79,14 @@ namespace $.$$ {
 			}
 		}
 
+		skill_unequip( id: string ) {
+			const skill = this.hero_skills().find( item => item.id === id )
+			if( skill ) {
+				this.hero_skills( this.hero_skills().filter( item => item.id !== id ) )
+				this.inventory( [ ...this.inventory(), skill ] )
+			}
+		}
+
 		all_equip() {
 			const create_equip = ( id: string, name: string ) => ( { id, name, type: 'equip' } )
 			return [ create_equip( this.uuid(), 'Меч' ), create_equip( this.uuid(), 'Щит' ), create_equip( this.uuid(), 'Шлем' ) ]
@@ -84,6 +108,12 @@ namespace $.$$ {
 			this.inventory( this.inventory().filter( item => item.id !== id ) )
 		}
 
+		inventory_equip( id: string ) {
+			const item = this.inventory().find( item => item.id === id )
+			this.is_equipment( item?.type ) ? this.hero_equipments( [ ...this.hero_equipments(), item ] ) : this.hero_skills( [ ...this.hero_skills(), item ] )
+			this.inventory( this.inventory().filter( item => item.id !== id ) )
+		}
+
 		@$mol_mem
 		shop( next?: any ): Item[] {
 			return next ?? [ { id: this.uuid(), name: 'Лук', type: 'weapon' }, { id: this.uuid(), name: 'Перчатки', type: 'armor' } ]
@@ -98,5 +128,6 @@ namespace $.$$ {
 		uuid() {
 			return this.$.$mol_guid()
 		}
+
 	}
 }
