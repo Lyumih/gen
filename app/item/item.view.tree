@@ -3,11 +3,15 @@ $gen_app_item $mol_view
 		type \Тип
 		name \Имя
 	sub /
-		<= Type $mol_text text <= type \
-		<= Name $mol_text text <= name \
-		<= Add $mol_button_major
-			title <= add_title \+
-			click? <=> add? null
-		<= Remove $mol_button_major
-			title <= remove_title \-
-			click? <=> remove? null
+		<= Info $mol_labeler
+			title <= type \
+			content /
+				<= Name $mol_text text <= name \
+		<= Actions_list $mol_list rows /
+			<= Move_row $mol_row sub /
+				<= Add $mol_button_major
+					title <= add_title \+
+					click? <=> add? null
+				<= Remove $mol_button_major
+					title <= remove_title \-
+					click? <=> remove? null
