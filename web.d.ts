@@ -943,16 +943,17 @@ declare namespace $ {
 }
 
 declare namespace $.$$ {
-    type Skill = {
-        id: string;
-        name: string;
-        type: string;
-        level: number;
-    };
     type Item = {
         id: string;
         name: string;
         type: string;
+    };
+    type Skill = Item & {
+        level: number;
+        modes: Mode[];
+    };
+    type Mode = Item & {
+        type: 'mode';
     };
     export class $gen_engine extends $.$mol_object {
         seed(): string;
@@ -2477,8 +2478,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_button_major extends $mol_button_typed {
-        attr(): Record<string, any>;
+    class $mol_row extends $mol_view {
     }
 }
 
@@ -2486,7 +2486,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_row extends $mol_view {
+    class $mol_button_major extends $mol_button_typed {
+        attr(): Record<string, any>;
     }
 }
 
@@ -2503,15 +2504,22 @@ declare namespace $ {
         description(): string;
         Desription(): $$.$mol_text;
         Info(): $mol_labeler;
+        mode_name(id: any): string;
+        Mode_name(id: any): $$.$mol_text;
+        Mode(id: any): $mol_row;
+        modes_list(): readonly any[];
+        Modes_list(): $$.$mol_list;
         add_title(): string;
         add(next?: any): any;
         Add(): $mol_button_major;
         remove_title(): string;
         remove(next?: any): any;
         Remove(): $mol_button_major;
-        Move_row(): $mol_row;
         Other_actions(): $mol_view;
+        Move_row(): $mol_row;
         Actions_list(): $$.$mol_list;
+        card_rows(): readonly any[];
+        Card(): $$.$mol_list;
     }
 }
 
@@ -2521,7 +2529,16 @@ declare namespace $.$$ {
         type(): string;
         name(): any;
         description(): string;
+        modes_list(): readonly any[];
+        get_mode(id: string): {
+            id: string;
+            name: string;
+        } | undefined;
+        mode_name(id: any): string;
     }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -2536,8 +2553,6 @@ declare namespace $ {
         add_mode(next?: any): any;
         add_title(): string;
         remove_title(): string;
-        Other_actions(): $mol_row;
-        Add_mode(): $mol_button_major;
     }
 }
 
@@ -2634,12 +2649,20 @@ declare namespace $.$$ {
         skill_points(): string;
         skills(): string;
         skill_list(): readonly any[];
-        get_skill(id: string): {
+        get_skill(id: string): ({
             id: string;
             name: string;
             type: string;
+        } & {
             level: number;
-        } | undefined;
+            modes: ({
+                id: string;
+                name: string;
+                type: string;
+            } & {
+                type: "mode";
+            })[];
+        }) | undefined;
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
         skill_add_mode(id: string, next?: any): void;

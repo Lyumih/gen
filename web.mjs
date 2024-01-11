@@ -3034,7 +3034,7 @@ var $;
                 };
             }
             hero_skills(next) {
-                return next ?? [{ id: this.uuid(), type: 'skill', name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 }];
+                return next ?? [{ id: this.uuid(), type: 'skill', name: 'Атака', level: 1, modes: [{ id: this.uuid(), name: 'Урон x2', type: 'mode' }] }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 }];
             }
             hero_equipments(next) {
                 return next ?? [{ id: this.uuid(), name: 'Кинжал', type: 'weapon' }, { id: this.uuid(), name: 'Пояс', type: 'armor' }];
@@ -8305,6 +8305,22 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_row extends $mol_view {
+    }
+    $.$mol_row = $mol_row;
+})($ || ($ = {}));
+//mol/row/-view.tree/row.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
+})($ || ($ = {}));
+//mol/row/-css/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_button_major extends $mol_button_typed {
         attr() {
             return {
@@ -8327,34 +8343,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_row extends $mol_view {
-    }
-    $.$mol_row = $mol_row;
-})($ || ($ = {}));
-//mol/row/-view.tree/row.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
-})($ || ($ = {}));
-//mol/row/-css/row.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_app_item extends $mol_view {
         item() {
             return {
-                type: "Тип",
-                name: "Имя",
-                level: 0
+                type: "",
+                name: "",
+                level: 0,
+                modes: []
             };
         }
         sub() {
             return [
-                this.Info(),
-                this.Actions_list()
+                this.Card()
             ];
         }
         type() {
@@ -8385,6 +8385,31 @@ var $;
             ];
             return obj;
         }
+        mode_name(id) {
+            return "123";
+        }
+        Mode_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.mode_name(id);
+            return obj;
+        }
+        Mode(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Mode_name(id)
+            ];
+            return obj;
+        }
+        modes_list() {
+            return [
+                this.Mode("0")
+            ];
+        }
+        Modes_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.modes_list();
+            return obj;
+        }
         add_title() {
             return "+";
         }
@@ -8413,24 +8438,36 @@ var $;
             obj.click = (next) => this.remove(next);
             return obj;
         }
+        Other_actions() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
         Move_row() {
             const obj = new this.$.$mol_row();
             obj.sub = () => [
                 this.Add(),
-                this.Remove()
+                this.Remove(),
+                this.Other_actions()
             ];
-            return obj;
-        }
-        Other_actions() {
-            const obj = new this.$.$mol_view();
             return obj;
         }
         Actions_list() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
-                this.Move_row(),
-                this.Other_actions()
+                this.Move_row()
             ];
+            return obj;
+        }
+        card_rows() {
+            return [
+                this.Info(),
+                this.Modes_list(),
+                this.Actions_list()
+            ];
+        }
+        Card() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.card_rows();
             return obj;
         }
     }
@@ -8443,6 +8480,15 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Info", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_item.prototype, "Mode_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_item.prototype, "Mode", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item.prototype, "Modes_list", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "add", null);
@@ -8457,13 +8503,16 @@ var $;
     ], $gen_app_item.prototype, "Remove", null);
     __decorate([
         $mol_mem
-    ], $gen_app_item.prototype, "Move_row", null);
-    __decorate([
-        $mol_mem
     ], $gen_app_item.prototype, "Other_actions", null);
     __decorate([
         $mol_mem
+    ], $gen_app_item.prototype, "Move_row", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_item.prototype, "Actions_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item.prototype, "Card", null);
     $.$gen_app_item = $gen_app_item;
 })($ || ($ = {}));
 //gen/app/item/-view.tree/item.view.tree.ts
@@ -8491,11 +8540,31 @@ var $;
             description() {
                 return this.item().level ? `Ур. ${this.item().level}` : '';
             }
+            modes_list() {
+                const modes = (this.item()?.modes || []);
+                console.log(modes);
+                return modes?.map(mode => this.Mode(mode.id));
+            }
+            get_mode(id) {
+                const modes = (this.item()?.modes || []);
+                return modes.find(mode => mode.id === id);
+            }
+            mode_name(id) {
+                console.log(this.get_mode(id));
+                return "Мод: " + this.get_mode(id)?.name;
+            }
         }
         $$.$gen_app_item = $gen_app_item;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/item/item.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/item/item.view.css", "[gen_app_item] {\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}");
+})($ || ($ = {}));
+//gen/app/item/-css/item.view.css.ts
 ;
 "use strict";
 var $;
@@ -8527,30 +8596,10 @@ var $;
         remove_title() {
             return "Снять";
         }
-        Other_actions() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Add_mode()
-            ];
-            return obj;
-        }
-        Add_mode() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Добавить мод";
-            obj.enabled = () => false;
-            obj.click = (next) => this.add_mode(next);
-            return obj;
-        }
     }
     __decorate([
         $mol_mem
     ], $gen_app_item_skill.prototype, "add_mode", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_item_skill.prototype, "Other_actions", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_item_skill.prototype, "Add_mode", null);
     $.$gen_app_item_skill = $gen_app_item_skill;
 })($ || ($ = {}));
 //gen/app/item/skill/-view.tree/skill.view.tree.ts
