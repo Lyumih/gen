@@ -1,9 +1,8 @@
 namespace $.$$ {
 
-	type Skill = { id: string, name: string, type: string, level: number }
-
 	type Item = { id: string, name: string, type: string }
-
+	type Skill = Item & { level: number, modes: Mode[] }
+	type Mode = Item & { type: 'mode' }
 	export class $gen_engine extends $.$mol_object {
 
 		seed() {
@@ -26,7 +25,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero_skills( next?: any ): Skill[] {
-			return next ?? [ { id: this.uuid(), type: 'skill', name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 } ]
+			return next ?? [ { id: this.uuid(), type: 'skill', name: 'Атака', level: 1, modes: [ { id: this.uuid(), name: 'Урон x2', type: 'mode' } ] }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 } ]
 		}
 
 		@$mol_mem

@@ -1,20 +1,25 @@
-$gen_app_item $mol_view 
+$gen_app_item $mol_view
 	item *
-		type \Тип
-		name \Имя
+		type \
+		name \
 		level 0
+		modes /
 	sub /
-		<= Info $mol_labeler
-			title <= type \
-			content /
-				<= Name $mol_text text <= name \
-				<= Desription $mol_text text <= description \
-		<= Actions_list $mol_list rows /
-			<= Move_row $mol_row sub /
-				<= Add $mol_button_major
-					title <= add_title \+
-					click? <=> add? null
-				<= Remove $mol_button_major
-					title <= remove_title \-
-					click? <=> remove? null
-			<= Other_actions $mol_view
+		<= Card $mol_list rows <= card_rows /
+			<= Info $mol_labeler
+				title <= type \
+				content /
+					<= Name $mol_text text <= name \
+					<= Desription $mol_text text <= description \
+			<= Modes_list $mol_list rows <= modes_list /
+				<= Mode*0 $mol_row sub /
+					<= Mode_name* $mol_text text <= mode_name* \123
+			<= Actions_list $mol_list rows /
+				<= Move_row $mol_row sub /
+					<= Add $mol_button_major
+						title <= add_title \+
+						click? <=> add? null
+					<= Remove $mol_button_major
+						title <= remove_title \-
+						click? <=> remove? null
+					<= Other_actions $mol_view
