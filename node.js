@@ -3535,7 +3535,8 @@ var $;
                     skills: this.hero_skills(),
                     point: {
                         skill: 4,
-                    }
+                    },
+                    inventory: this.inventory()
                 };
             }
             hero_skills(next) {
@@ -3577,6 +3578,25 @@ var $;
                 const create_mode = (id, name) => ({ id, name, type: 'mode' });
                 return [create_mode('1', 'Урон: х2'), create_mode('2', 'Снаряды: +2'), create_mode('3', 'Дальность: +2')];
             }
+            inventory(next) {
+                return next ?? [{ id: this.uuid(), name: 'Меч', type: 'weapon' }, { id: this.uuid(), name: 'Щит', type: 'armor' }];
+            }
+            inventory_sell(id) {
+                const item = this.inventory().find(item => item.id === id);
+                this.shop([...this.shop(), item]);
+                this.inventory(this.inventory().filter(item => item.id !== id));
+            }
+            shop(next) {
+                return next ?? [{ id: this.uuid(), name: 'Лук', type: 'weapon' }, { id: this.uuid(), name: 'Перчатки', type: 'armor' }];
+            }
+            shop_buy(id) {
+                const item = this.shop().find(item => item.id === id);
+                this.inventory([...this.inventory(), item]);
+                this.shop(this.shop().filter(item => item.id !== id));
+            }
+            uuid() {
+                return this.$.$mol_guid();
+            }
         }
         __decorate([
             $mol_mem
@@ -3593,6 +3613,12 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_engine.prototype, "get_random_skill", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "inventory", null);
+        __decorate([
+            $mol_mem
+        ], $gen_engine.prototype, "shop", null);
         $$.$gen_engine = $gen_engine;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -8711,7 +8737,12 @@ var $;
                 this.Name(),
                 this.Level(),
                 this.Points(),
-                this.Skills()
+                this.Skill_label(),
+                this.Skills(),
+                this.Inventory_label(),
+                this.Inventory_list(),
+                this.Shop_label(),
+                this.Shop_list()
             ];
         }
         name() {
@@ -8738,6 +8769,11 @@ var $;
             obj.text = () => this.skill_points();
             return obj;
         }
+        Skill_label() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "# Умения";
+            return obj;
+        }
         skill_name(id) {
             return "";
         }
@@ -8761,8 +8797,27 @@ var $;
         }
         Skill_level_up(id) {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "+";
+            obj.title = () => "+ ур.";
             obj.click = (next) => this.skill_level_up(id, next);
+            return obj;
+        }
+        skill_mode(id) {
+            return "";
+        }
+        Skill_mode(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.skill_mode(id);
+            return obj;
+        }
+        skill_add_mode(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Skill_add_mode(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Добавить мод";
+            obj.click = (next) => this.skill_add_mode(id, next);
             return obj;
         }
         Skill(id) {
@@ -8770,7 +8825,9 @@ var $;
             obj.sub = () => [
                 this.Skill_name(id),
                 this.Skill_level(id),
-                this.Skill_level_up(id)
+                this.Skill_level_up(id),
+                this.Skill_mode(id),
+                this.Skill_add_mode(id)
             ];
             return obj;
         }
@@ -8782,6 +8839,90 @@ var $;
         Skills() {
             const obj = new this.$.$mol_list();
             obj.rows = () => this.skill_list();
+            return obj;
+        }
+        Inventory_label() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "# Инвентарь";
+            return obj;
+        }
+        inventory_item_name(id) {
+            return "Предмет 1";
+        }
+        Inventory_item_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.inventory_item_name(id);
+            return obj;
+        }
+        inventory_item_sell(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Inventory_item_sell(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Продать";
+            obj.click = (next) => this.inventory_item_sell(id, next);
+            return obj;
+        }
+        Inventory_item(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Inventory_item_name(id),
+                this.Inventory_item_sell(id)
+            ];
+            return obj;
+        }
+        inventory_list() {
+            return [
+                this.Inventory_item("0")
+            ];
+        }
+        Inventory_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.inventory_list();
+            return obj;
+        }
+        Shop_label() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "# Магазин";
+            return obj;
+        }
+        shop_item_name(id) {
+            return "";
+        }
+        Shop_item_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.shop_item_name(id);
+            return obj;
+        }
+        shop_item_bue(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Shop_item_buy(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Купить";
+            obj.click = (next) => this.shop_item_bue(id, next);
+            return obj;
+        }
+        Shop_item(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Shop_item_name(id),
+                this.Shop_item_buy(id)
+            ];
+            return obj;
+        }
+        shop_list() {
+            return [
+                this.Shop_item("0")
+            ];
+        }
+        Shop_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.shop_list();
             return obj;
         }
     }
@@ -8798,6 +8939,9 @@ var $;
         $mol_mem
     ], $gen_app_hero.prototype, "Points", null);
     __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Skill_label", null);
+    __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "Skill_name", null);
     __decorate([
@@ -8811,10 +8955,55 @@ var $;
     ], $gen_app_hero.prototype, "Skill_level_up", null);
     __decorate([
         $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_mode", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "skill_add_mode", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_add_mode", null);
+    __decorate([
+        $mol_mem_key
     ], $gen_app_hero.prototype, "Skill", null);
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Skills", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Inventory_label", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Inventory_item_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "inventory_item_sell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Inventory_item_sell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Inventory_item", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Inventory_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Shop_label", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Shop_item_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "shop_item_bue", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Shop_item_buy", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Shop_item", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Shop_list", null);
     $.$gen_app_hero = $gen_app_hero;
 })($ || ($ = {}));
 //gen/app/hero/-view.tree/hero.view.tree.ts
@@ -8845,10 +9034,44 @@ var $;
                 return `Умение: ${this.get_skill(id)?.name}`;
             }
             skill_level(id) {
+                console.log('skill name');
                 return `Уровень: ${this.get_skill(id)?.level}`;
             }
             skill_level_up(id, next) {
                 this.engine().skill_level_up(id);
+                this.skill_level(id);
+                console.log(this.get_skill(id));
+            }
+            skill_mode(id) {
+                return this.get_skill(id)?.name || 'no mode';
+            }
+            skill_add_mode() {
+                const mode = this.engine().all_mode();
+                console.log(mode);
+            }
+            inventory_list() {
+                return this.engine().inventory().map(item => this.Inventory_item(item.id));
+            }
+            get_inventory_item(id) {
+                return this.engine().inventory().find(item => item.id === id);
+            }
+            inventory_item_name(id) {
+                return this.get_inventory_item(id)?.name || 'no item';
+            }
+            inventory_item_sell(id, next) {
+                this.engine().inventory_sell(id);
+            }
+            shop_list() {
+                return this.engine().shop().map(item => this.Shop_item(item.id));
+            }
+            get_shop_item(id) {
+                return this.engine().shop().find(item => item.id === id);
+            }
+            shop_item_name(id) {
+                return this.get_shop_item(id)?.name || 'no shop item';
+            }
+            shop_item_bue(id, next) {
+                this.engine().shop_buy(id);
             }
         }
         $$.$gen_app_hero = $gen_app_hero;

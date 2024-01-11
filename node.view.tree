@@ -523,13 +523,32 @@ $gen_app_hero $mol_page
 		<= Name $mol_text text <= name \Имя:
 		<= Level $mol_text text <= level \ Уровень 5
 		<= Points $mol_text text <= skill_points \Очков умений: 10
+		<= Skill_label $mol_text text \# Умения
 		<= Skills $mol_list rows <= skill_list /
 			<= Skill*0 $mol_row sub /
 				<= Skill_name* $mol_text text <= skill_name* \
 				<= Skill_level* $mol_text text <= skill_level* \
 				<= Skill_level_up* $mol_button_major
-					title \+
+					title \+ ур.
 					click? <=> skill_level_up*? null
+				<= Skill_mode* $mol_text text <= skill_mode* \
+				<= Skill_add_mode* $mol_button_major
+					title \Добавить мод
+					click? <=> skill_add_mode*? null
+		<= Inventory_label $mol_text text \# Инвентарь
+		<= Inventory_list $mol_list rows <= inventory_list /
+			<= Inventory_item*0 $mol_row sub /
+				<= Inventory_item_name* $mol_text text <= inventory_item_name* \Предмет 1
+				<= Inventory_item_sell* $mol_button_major
+					title \Продать
+					click? <=> inventory_item_sell*? null
+		<= Shop_label $mol_text text \# Магазин
+		<= Shop_list $mol_list rows <= shop_list /
+			<= Shop_item*0 $mol_row sub /
+				<= Shop_item_name* $mol_text text <= shop_item_name* \
+				<= Shop_item_buy* $mol_button_major
+					title \Купить
+					click? <=> shop_item_bue*? null
 
 $mol_hotkey $mol_plugin
 	event *

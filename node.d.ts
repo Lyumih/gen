@@ -1065,6 +1065,11 @@ declare namespace $.$$ {
         name: string;
         level: number;
     };
+    type Item = {
+        id: string;
+        name: string;
+        type: string;
+    };
     export class $gen_engine extends $.$mol_object {
         seed(): string;
         hero(next?: any): any;
@@ -1094,6 +1099,11 @@ declare namespace $.$$ {
             name: string;
             type: string;
         }[];
+        inventory(next?: any): Item[];
+        inventory_sell(id: string): void;
+        shop(next?: any): Item[];
+        shop_buy(id: string): void;
+        uuid(): string;
     }
     export {};
 }
@@ -2559,15 +2569,36 @@ declare namespace $ {
         Level(): $$.$mol_text;
         skill_points(): string;
         Points(): $$.$mol_text;
+        Skill_label(): $$.$mol_text;
         skill_name(id: any): string;
         Skill_name(id: any): $$.$mol_text;
         skill_level(id: any): string;
         Skill_level(id: any): $$.$mol_text;
         skill_level_up(id: any, next?: any): any;
         Skill_level_up(id: any): $mol_button_major;
+        skill_mode(id: any): string;
+        Skill_mode(id: any): $$.$mol_text;
+        skill_add_mode(id: any, next?: any): any;
+        Skill_add_mode(id: any): $mol_button_major;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $$.$mol_list;
+        Inventory_label(): $$.$mol_text;
+        inventory_item_name(id: any): string;
+        Inventory_item_name(id: any): $$.$mol_text;
+        inventory_item_sell(id: any, next?: any): any;
+        Inventory_item_sell(id: any): $mol_button_major;
+        Inventory_item(id: any): $mol_row;
+        inventory_list(): readonly any[];
+        Inventory_list(): $$.$mol_list;
+        Shop_label(): $$.$mol_text;
+        shop_item_name(id: any): string;
+        Shop_item_name(id: any): $$.$mol_text;
+        shop_item_bue(id: any, next?: any): any;
+        Shop_item_buy(id: any): $mol_button_major;
+        Shop_item(id: any): $mol_row;
+        shop_list(): readonly any[];
+        Shop_list(): $$.$mol_list;
     }
 }
 
@@ -2585,6 +2616,24 @@ declare namespace $.$$ {
         skill_name(id: string): string;
         skill_level(id: any): string;
         skill_level_up(id: string, next?: any): void;
+        skill_mode(id: any): string;
+        skill_add_mode(): void;
+        inventory_list(): readonly any[];
+        get_inventory_item(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        inventory_item_name(id: any): string;
+        inventory_item_sell(id: any, next?: any): void;
+        shop_list(): readonly any[];
+        get_shop_item(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        shop_item_name(id: any): string;
+        shop_item_bue(id: any, next?: any): void;
     }
 }
 
