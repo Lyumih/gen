@@ -8830,6 +8830,7 @@ var $;
                 return this.engine().hero_skills().map(skill => this.Skill(skill.id));
             }
             get_skill(id) {
+                console.log('get_skill', id);
                 return this.engine().hero_skills().find(skill => skill.id === id);
             }
             skill_name(id) {
