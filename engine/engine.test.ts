@@ -4,7 +4,6 @@ namespace $ {
 	let seed = 0
 	engine.uuid = () => {
 		seed += 1
-		console.log( 'seed', seed )
 		return seed.toString()
 	}
 	$mol_test( {
@@ -28,11 +27,12 @@ namespace $ {
 		},
 
 		'shop sell'() {
+			const item_id = engine.shop()[ 0 ].id
 			$mol_assert_equal( engine.shop().length, engine.inventory().length, 2 )
-			engine.shop_buy( '3' )
+			engine.shop_buy( item_id )
 			$mol_assert_equal( engine.shop().length, 1 )
 			$mol_assert_equal( engine.inventory().length, 3 )
-			engine.inventory_sell( '3' )
+			engine.inventory_sell( item_id )
 			$mol_assert_equal( engine.shop().length, engine.inventory().length, 2 )
 		}
 	} )

@@ -17,7 +17,6 @@ namespace $.$$ {
 		}
 
 		get_skill( id: string ) {
-			console.log( 'get_skill', id )
 			return this.engine().hero_skills().find( skill => skill.id === id )
 		}
 
@@ -26,14 +25,12 @@ namespace $.$$ {
 		}
 
 		skill_level( id: any ): string {
-			console.log( 'skill name' )
 			return `Уровень: ${ this.get_skill( id )?.level }`
 		}
 
 		skill_level_up( id: string, next?: any ) {
 			this.engine().skill_level_up( id )
 			this.skill_level( id )
-			console.log( this.get_skill( id ) )
 		}
 
 		skill_mode( id: any ): string {
@@ -42,7 +39,6 @@ namespace $.$$ {
 
 		skill_add_mode() {
 			const mode = this.engine().all_mode()
-			console.log( mode )
 		}
 
 		inventory_list(): readonly any[] {

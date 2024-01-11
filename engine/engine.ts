@@ -25,8 +25,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero_skills( next?: any ): Skill[] {
-			console.log( next )
-			return next ?? [ { id: '1', name: 'Атака', level: 1 }, { id: '2', name: 'Защита', level: 1 } ]
+			return next ?? [ { id: this.uuid(), name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', level: 1 } ]
 		}
 
 		@$mol_mem
@@ -43,7 +42,7 @@ namespace $.$$ {
 		@$mol_mem
 		all_skills() {
 			const create_skill = ( id: string, name: string ) => ( { id, name, type: 'skill' } )
-			return [ create_skill( '1', 'Атака' ), create_skill( '2', 'Защита' ), create_skill( '3', 'Хил' ) ]
+			return [ create_skill( this.uuid(), 'Атака' ), create_skill( this.uuid(), 'Защита' ), create_skill( this.uuid(), 'Хил' ) ]
 		}
 
 		@$mol_mem
@@ -60,19 +59,18 @@ namespace $.$$ {
 			const skill = skills.find( skill => skill.id === id )
 			if( skill && skills ) {
 				skills.find( skill => skill.id === id )!.level = skill.level + 1
-				console.log( skills )
 				this.hero_skills( skills )
 			}
 		}
 
 		all_equip() {
 			const create_equip = ( id: string, name: string ) => ( { id, name, type: 'equip' } )
-			return [ create_equip( '1', 'Меч' ), create_equip( '2', 'Щит' ), create_equip( '3', 'Шлем' ) ]
+			return [ create_equip( this.uuid(), 'Меч' ), create_equip( this.uuid(), 'Щит' ), create_equip( this.uuid(), 'Шлем' ) ]
 		}
 
 		all_mode() {
 			const create_mode = ( id: string, name: string ) => ( { id, name, type: 'mode' } )
-			return [ create_mode( '1', 'Урон: х2' ), create_mode( '2', 'Снаряды: +2' ), create_mode( '3', 'Дальность: +2' ) ]
+			return [ create_mode( this.uuid(), 'Урон: х2' ), create_mode( this.uuid(), 'Снаряды: +2' ), create_mode( this.uuid(), 'Дальность: +2' ) ]
 		}
 
 		@$mol_mem
