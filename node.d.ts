@@ -1074,6 +1074,9 @@ declare namespace $.$$ {
         seed(): string;
         hero(next?: any): any;
         hero_skills(next?: any): Skill[];
+        hero_equipments(next?: any): Item[];
+        is_equipment(type?: string): boolean;
+        hero_unequip(id: any, next?: any): void;
         reward(next?: any): any;
         make_win(next?: any): any;
         all_skills(): {
@@ -1089,6 +1092,7 @@ declare namespace $.$$ {
         };
         add_hero_skill(): void;
         skill_level_up(id: string): void;
+        skill_unequip(id: string): void;
         all_equip(): {
             id: string;
             name: string;
@@ -1101,6 +1105,7 @@ declare namespace $.$$ {
         }[];
         inventory(next?: any): Item[];
         inventory_sell(id: string): void;
+        inventory_equip(id: string): void;
         shop(next?: any): Item[];
         shop_buy(id: string): void;
         uuid(): string;
@@ -2567,6 +2572,14 @@ declare namespace $ {
         Name(): $$.$mol_text;
         level(): string;
         Level(): $$.$mol_text;
+        Equipment_label(): $$.$mol_text;
+        equipment_name(id: any): string;
+        Equipment_name(id: any): $$.$mol_text;
+        equipment_unequip(id: any, next?: any): any;
+        Equipment_unequip(id: any): $mol_button_major;
+        Equipment(id: any): $mol_row;
+        equipment_list(): readonly any[];
+        Equipment_list(): $$.$mol_list;
         skill_points(): string;
         Points(): $$.$mol_text;
         Skill_label(): $$.$mol_text;
@@ -2576,8 +2589,8 @@ declare namespace $ {
         Skill_level(id: any): $$.$mol_text;
         skill_level_up(id: any, next?: any): any;
         Skill_level_up(id: any): $mol_button_major;
-        skill_mode(id: any): string;
-        Skill_mode(id: any): $$.$mol_text;
+        skill_unequip(id: any, next?: any): any;
+        Skill_unequip(id: any): $mol_button_major;
         skill_add_mode(id: any, next?: any): any;
         Skill_add_mode(id: any): $mol_button_major;
         Skill(id: any): $mol_row;
@@ -2586,6 +2599,8 @@ declare namespace $ {
         Inventory_label(): $$.$mol_text;
         inventory_item_name(id: any): string;
         Inventory_item_name(id: any): $$.$mol_text;
+        inventory_equip(id: any, next?: any): any;
+        Inventory_equip(id: any): $mol_button_major;
         inventory_item_sell(id: any, next?: any): any;
         Inventory_item_sell(id: any): $mol_button_major;
         Inventory_item(id: any): $mol_row;
@@ -2605,6 +2620,14 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         name(): string;
+        equipment_list(): readonly any[];
+        get_equipment(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        equipment_name(id: string): string;
+        equipment_unequip(id: any, next?: any): void;
         skill_points(): string;
         skills(): string;
         skill_list(): readonly any[];
@@ -2618,6 +2641,7 @@ declare namespace $.$$ {
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
         skill_add_mode(): void;
+        skill_unequip(id: any, next?: any): void;
         inventory_list(): readonly any[];
         get_inventory_item(id: string): {
             id: string;
@@ -2626,6 +2650,7 @@ declare namespace $.$$ {
         } | undefined;
         inventory_item_name(id: any): string;
         inventory_item_sell(id: any, next?: any): void;
+        inventory_equip(id: any, next?: any): void;
         shop_list(): readonly any[];
         get_shop_item(id: string): {
             id: string;

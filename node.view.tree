@@ -522,6 +522,13 @@ $gen_app_hero $mol_page
 	body /
 		<= Name $mol_text text <= name \Имя:
 		<= Level $mol_text text <= level \ Уровень 5
+		<= Equipment_label $mol_text text \# Экипировка
+		<= Equipment_list $mol_list rows <= equipment_list /
+			<= Equipment*0 $mol_row sub /
+				<= Equipment_name* $mol_text text <= equipment_name* \
+				<= Equipment_unequip* $mol_button_major
+					title \Снять
+					click? <=> equipment_unequip*? null
 		<= Points $mol_text text <= skill_points \Очков умений: 10
 		<= Skill_label $mol_text text \# Умения
 		<= Skills $mol_list rows <= skill_list /
@@ -531,14 +538,21 @@ $gen_app_hero $mol_page
 				<= Skill_level_up* $mol_button_major
 					title \+ ур.
 					click? <=> skill_level_up*? null
-				<= Skill_mode* $mol_text text <= skill_mode* \
+				- <= Skill_mode* $mol_text text <= skill_mode* \
+				<= Skill_unequip* $mol_button_major
+					title \Убрать в инвентарь
+					click? <=> skill_unequip*? null
 				<= Skill_add_mode* $mol_button_major
 					title \Добавить мод
+					disabled true
 					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_text text \# Инвентарь
 		<= Inventory_list $mol_list rows <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /
 				<= Inventory_item_name* $mol_text text <= inventory_item_name* \Предмет 1
+				<= Inventory_equip* $mol_button_major
+					title \Использовать
+					click? <=> inventory_equip*? null
 				<= Inventory_item_sell* $mol_button_major
 					title \Продать
 					click? <=> inventory_item_sell*? null
