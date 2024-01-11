@@ -2568,6 +2568,8 @@ declare namespace $ {
         type(): string;
         name(): string;
         Name(): $$.$mol_text;
+        description(): string;
+        Desription(): $$.$mol_text;
         Info(): $mol_labeler;
         add_title(): string;
         add(next?: any): any;
@@ -2576,6 +2578,7 @@ declare namespace $ {
         remove(next?: any): any;
         Remove(): $mol_button_major;
         Move_row(): $mol_row;
+        Other_actions(): $mol_view;
         Actions_list(): $$.$mol_list;
     }
 }
@@ -2585,6 +2588,7 @@ declare namespace $.$$ {
         types_map(type: string): string;
         type(): string;
         name(): any;
+        description(): string;
     }
 }
 
@@ -2597,8 +2601,16 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_item_skill extends $gen_app_item {
+        add_mode(next?: any): any;
         add_title(): string;
         remove_title(): string;
+        Other_actions(): $mol_row;
+        Add_mode(): $mol_button_major;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_item_skill extends $.$gen_app_item_skill {
     }
 }
 
@@ -2654,7 +2666,8 @@ declare namespace $ {
         get_skill(id: any): any;
         skill_level_up(id: any, next?: any): any;
         skill_unequip(id: any, next?: any): any;
-        Skill_card(id: any): $gen_app_item_skill;
+        skill_add_mode(id: any, next?: any): any;
+        Skill_card(id: any): $$.$gen_app_item_skill;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $$.$mol_list;
@@ -2697,7 +2710,7 @@ declare namespace $.$$ {
         } | undefined;
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
-        skill_add_mode(): void;
+        skill_add_mode(id: string, next?: any): void;
         skill_unequip(id: any, next?: any): void;
         inventory_list(): readonly any[];
         get_inventory_item(id: string): {

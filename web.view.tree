@@ -516,11 +516,13 @@ $gen_app_item $mol_view
 	item *
 		type \Тип
 		name \Имя
+		level 0
 	sub /
 		<= Info $mol_labeler
 			title <= type \
 			content /
 				<= Name $mol_text text <= name \
+				<= Desription $mol_text text <= description \
 		<= Actions_list $mol_list rows /
 			<= Move_row $mol_row sub /
 				<= Add $mol_button_major
@@ -529,14 +531,21 @@ $gen_app_item $mol_view
 				<= Remove $mol_button_major
 					title <= remove_title \-
 					click? <=> remove? null
+			<= Other_actions $mol_view
 
 $gen_app_item_equipment $gen_app_item
 	Add null
 	remove_title \Снять
 
 $gen_app_item_skill $gen_app_item
+	add_mode? null
 	add_title \+ ур
 	remove_title \Снять
+	Other_actions $mol_row sub /
+		<= Add_mode $mol_button_major
+			title \Добавить мод
+			enabled false
+			click? <=> add_mode?
 
 $gen_app_item_inventory $gen_app_item
 	add_title \Использовать
@@ -580,6 +589,7 @@ $gen_app_hero $mol_page
 					item <= get_skill* null
 					add <= skill_level_up*? null
 					remove? <=> skill_unequip*? null
+					add_mode? <=> skill_add_mode*? null
 				- <= Skill_add_mode* $mol_button_major
 					title \Добавить мод
 					disabled true

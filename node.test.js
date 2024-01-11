@@ -8744,7 +8744,8 @@ var $;
         item() {
             return {
                 type: "Тип",
-                name: "Имя"
+                name: "Имя",
+                level: 0
             };
         }
         sub() {
@@ -8764,11 +8765,20 @@ var $;
             obj.text = () => this.name();
             return obj;
         }
+        description() {
+            return "";
+        }
+        Desription() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.description();
+            return obj;
+        }
         Info() {
             const obj = new this.$.$mol_labeler();
             obj.title = () => this.type();
             obj.content = () => [
-                this.Name()
+                this.Name(),
+                this.Desription()
             ];
             return obj;
         }
@@ -8808,10 +8818,15 @@ var $;
             ];
             return obj;
         }
+        Other_actions() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
         Actions_list() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
-                this.Move_row()
+                this.Move_row(),
+                this.Other_actions()
             ];
             return obj;
         }
@@ -8819,6 +8834,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item.prototype, "Desription", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Info", null);
@@ -8837,6 +8855,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Move_row", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item.prototype, "Other_actions", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Actions_list", null);
@@ -8864,6 +8885,9 @@ var $;
             name() {
                 return this.item().name;
             }
+            description() {
+                return this.item().level ? `Ур. ${this.item().level}` : '';
+            }
         }
         $$.$gen_app_item = $gen_app_item;
     })($$ = $.$$ || ($.$$ = {}));
@@ -8889,16 +8913,56 @@ var $;
 var $;
 (function ($) {
     class $gen_app_item_skill extends $gen_app_item {
+        add_mode(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         add_title() {
             return "+ ур";
         }
         remove_title() {
             return "Снять";
         }
+        Other_actions() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Add_mode()
+            ];
+            return obj;
+        }
+        Add_mode() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Добавить мод";
+            obj.enabled = () => false;
+            obj.click = (next) => this.add_mode(next);
+            return obj;
+        }
     }
+    __decorate([
+        $mol_mem
+    ], $gen_app_item_skill.prototype, "add_mode", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item_skill.prototype, "Other_actions", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_item_skill.prototype, "Add_mode", null);
     $.$gen_app_item_skill = $gen_app_item_skill;
 })($ || ($ = {}));
 //gen/app/item/skill/-view.tree/skill.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_item_skill extends $.$gen_app_item_skill {
+        }
+        $$.$gen_app_item_skill = $gen_app_item_skill;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/item/skill/skill.view.ts
 ;
 "use strict";
 var $;
@@ -9083,11 +9147,17 @@ var $;
                 return next;
             return null;
         }
+        skill_add_mode(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Skill_card(id) {
             const obj = new this.$.$gen_app_item_skill();
             obj.item = () => this.get_skill(id);
             obj.add = () => this.skill_level_up(id);
             obj.remove = (next) => this.skill_unequip(id, next);
+            obj.add_mode = (next) => this.skill_add_mode(id, next);
             return obj;
         }
         Skill(id) {
@@ -9224,6 +9294,9 @@ var $;
     ], $gen_app_hero.prototype, "skill_unequip", null);
     __decorate([
         $mol_mem_key
+    ], $gen_app_hero.prototype, "skill_add_mode", null);
+    __decorate([
+        $mol_mem_key
     ], $gen_app_hero.prototype, "Skill_card", null);
     __decorate([
         $mol_mem_key
@@ -9304,7 +9377,7 @@ var $;
             skill_mode(id) {
                 return this.get_skill(id)?.name || 'no mode';
             }
-            skill_add_mode() {
+            skill_add_mode(id, next) {
                 const mode = this.engine().all_mode();
             }
             skill_unequip(id, next) {
