@@ -10044,6 +10044,7 @@ var $;
                 const eqiup = $mol_array_lottery(this.engine().all_equip());
                 const mode = $mol_array_lottery(this.engine().all_mode());
                 const item = $mol_array_lottery([skill, eqiup, mode]);
+                this.engine().inventory([...this.engine().inventory(), item]);
                 this.history([...this.history(), item]);
             }
             history(next) {
