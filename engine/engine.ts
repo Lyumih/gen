@@ -22,6 +22,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero_skills( next?: any ): Skill[] {
+			console.log( next )
 			return next ?? [ { id: '1', name: 'Атака', level: 1 }, { id: '2', name: 'Защита', level: 1 } ]
 		}
 
