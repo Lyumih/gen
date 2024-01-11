@@ -26,11 +26,55 @@ namespace $.$$ {
 		}
 
 		skill_level( id: any ): string {
+			console.log( 'skill name' )
 			return `Уровень: ${ this.get_skill( id )?.level }`
 		}
 
 		skill_level_up( id: string, next?: any ) {
 			this.engine().skill_level_up( id )
+			this.skill_level( id )
+			console.log( this.get_skill( id ) )
+		}
+
+		skill_mode( id: any ): string {
+			return this.get_skill( id )?.name || 'no mode'
+		}
+
+		skill_add_mode() {
+			const mode = this.engine().all_mode()
+			console.log( mode )
+		}
+
+		inventory_list(): readonly any[] {
+			return this.engine().inventory().map( item => this.Inventory_item( item.id ) )
+		}
+
+		get_inventory_item( id: string ) {
+			return this.engine().inventory().find( item => item.id === id )
+		}
+
+		inventory_item_name( id: any ): string {
+			return this.get_inventory_item( id )?.name || 'no item'
+		}
+
+		inventory_item_sell( id: any, next?: any ) {
+			this.engine().inventory_sell( id )
+		}
+
+		shop_list(): readonly any[] {
+			return this.engine().shop().map( item => this.Shop_item( item.id ) )
+		}
+
+		get_shop_item( id: string ) {
+			return this.engine().shop().find( item => item.id === id )
+		}
+
+		shop_item_name( id: any ): string {
+			return this.get_shop_item( id )?.name || 'no shop item'
+		}
+
+		shop_item_bue( id: any, next?: any ) {
+			this.engine().shop_buy( id )
 		}
 
 	}

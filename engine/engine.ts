@@ -2,6 +2,8 @@ namespace $.$$ {
 
 	type Skill = { id: string, name: string, level: number }
 
+	type Item = { id: string, name: string, type: string }
+
 	export class $gen_engine extends $.$mol_object {
 
 		seed() {
@@ -16,7 +18,8 @@ namespace $.$$ {
 				skills: this.hero_skills(),
 				point: {
 					skill: 4,
-				}
+				},
+				inventory: this.inventory()
 			}
 		}
 
@@ -70,6 +73,32 @@ namespace $.$$ {
 		all_mode() {
 			const create_mode = ( id: string, name: string ) => ( { id, name, type: 'mode' } )
 			return [ create_mode( '1', 'Урон: х2' ), create_mode( '2', 'Снаряды: +2' ), create_mode( '3', 'Дальность: +2' ) ]
+		}
+
+		@$mol_mem
+		inventory( next?: any ): Item[] {
+			return next ?? [ { id: this.uuid(), name: 'Меч', type: 'weapon' }, { id: this.uuid(), name: 'Щит', type: 'armor' } ]
+		}
+
+		inventory_sell( id: string ) {
+			const item = this.inventory().find( item => item.id === id )
+			this.shop( [ ...this.shop(), item ] )
+			this.inventory( this.inventory().filter( item => item.id !== id ) )
+		}
+
+		@$mol_mem
+		shop( next?: any ): Item[] {
+			return next ?? [ { id: this.uuid(), name: 'Лук', type: 'weapon' }, { id: this.uuid(), name: 'Перчатки', type: 'armor' } ]
+		}
+
+		shop_buy( id: string ) {
+			const item = this.shop().find( item => item.id === id )
+			this.inventory( [ ...this.inventory(), item ] )
+			this.shop( this.shop().filter( item => item.id !== id ) )
+		}
+
+		uuid() {
+			return this.$.$mol_guid()
 		}
 	}
 }
