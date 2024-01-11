@@ -3033,8 +3033,7 @@ var $;
                 };
             }
             hero_skills(next) {
-                console.log(next);
-                return next ?? [{ id: '1', name: 'Атака', level: 1 }, { id: '2', name: 'Защита', level: 1 }];
+                return next ?? [{ id: this.uuid(), name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', level: 1 }];
             }
             reward(next) {
                 return next ?? this.get_random_skill();
@@ -3046,7 +3045,7 @@ var $;
             }
             all_skills() {
                 const create_skill = (id, name) => ({ id, name, type: 'skill' });
-                return [create_skill('1', 'Атака'), create_skill('2', 'Защита'), create_skill('3', 'Хил')];
+                return [create_skill(this.uuid(), 'Атака'), create_skill(this.uuid(), 'Защита'), create_skill(this.uuid(), 'Хил')];
             }
             get_random_skill(next) {
                 return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
@@ -3059,17 +3058,16 @@ var $;
                 const skill = skills.find(skill => skill.id === id);
                 if (skill && skills) {
                     skills.find(skill => skill.id === id).level = skill.level + 1;
-                    console.log(skills);
                     this.hero_skills(skills);
                 }
             }
             all_equip() {
                 const create_equip = (id, name) => ({ id, name, type: 'equip' });
-                return [create_equip('1', 'Меч'), create_equip('2', 'Щит'), create_equip('3', 'Шлем')];
+                return [create_equip(this.uuid(), 'Меч'), create_equip(this.uuid(), 'Щит'), create_equip(this.uuid(), 'Шлем')];
             }
             all_mode() {
                 const create_mode = (id, name) => ({ id, name, type: 'mode' });
-                return [create_mode('1', 'Урон: х2'), create_mode('2', 'Снаряды: +2'), create_mode('3', 'Дальность: +2')];
+                return [create_mode(this.uuid(), 'Урон: х2'), create_mode(this.uuid(), 'Снаряды: +2'), create_mode(this.uuid(), 'Дальность: +2')];
             }
             inventory(next) {
                 return next ?? [{ id: this.uuid(), name: 'Меч', type: 'weapon' }, { id: this.uuid(), name: 'Щит', type: 'armor' }];
@@ -8622,27 +8620,23 @@ var $;
                 return this.engine().hero_skills().map(skill => this.Skill(skill.id));
             }
             get_skill(id) {
-                console.log('get_skill', id);
                 return this.engine().hero_skills().find(skill => skill.id === id);
             }
             skill_name(id) {
                 return `Умение: ${this.get_skill(id)?.name}`;
             }
             skill_level(id) {
-                console.log('skill name');
                 return `Уровень: ${this.get_skill(id)?.level}`;
             }
             skill_level_up(id, next) {
                 this.engine().skill_level_up(id);
                 this.skill_level(id);
-                console.log(this.get_skill(id));
             }
             skill_mode(id) {
                 return this.get_skill(id)?.name || 'no mode';
             }
             skill_add_mode() {
                 const mode = this.engine().all_mode();
-                console.log(mode);
             }
             inventory_list() {
                 return this.engine().inventory().map(item => this.Inventory_item(item.id));
