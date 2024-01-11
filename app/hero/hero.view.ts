@@ -17,6 +17,7 @@ namespace $.$$ {
 		}
 
 		get_skill( id: string ) {
+			console.log( 'get_skill', id )
 			return this.engine().hero_skills().find( skill => skill.id === id )
 		}
 
