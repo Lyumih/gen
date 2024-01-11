@@ -495,30 +495,44 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
 $mol_button_major $mol_button_typed
 	attr *
 		^
 		mol_theme \$mol_theme_accent
+
+$mol_row $mol_view
 
 $gen_app_item $mol_view 
 	item *
 		type \Тип
 		name \Имя
 	sub /
-		<= Type $mol_text text <= type \
-		<= Name $mol_text text <= name \
-		<= Add $mol_button_major
-			title <= add_title \+
-			click? <=> add? null
-		<= Remove $mol_button_major
-			title <= remove_title \-
-			click? <=> remove? null
+		<= Info $mol_labeler
+			title <= type \
+			content /
+				<= Name $mol_text text <= name \
+		<= Actions_list $mol_list rows /
+			<= Move_row $mol_row sub /
+				<= Add $mol_button_major
+					title <= add_title \+
+					click? <=> add? null
+				<= Remove $mol_button_major
+					title <= remove_title \-
+					click? <=> remove? null
 
 $gen_app_item_equipment $gen_app_item
 	Add null
 	remove_title \Снять
-
-$mol_row $mol_view
 
 $gen_app_item_skill $gen_app_item
 	add_title \+ ур
@@ -655,16 +669,6 @@ $mol_number $mol_view
 			event_click? <=> event_inc? null
 			enabled <= inc_enabled <= enabled
 			sub / <= inc_icon $mol_icon_plus
-
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
 
 $gen_app_game $mol_page
 	title \Генератор битвы

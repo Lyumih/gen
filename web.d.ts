@@ -2464,8 +2464,29 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_labeler extends $mol_list {
+        rows(): readonly any[];
+        label(): readonly $mol_view_content[];
+        Label(): $mol_view;
+        content(): readonly any[];
+        Content(): $mol_view;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_button_major extends $mol_button_typed {
         attr(): Record<string, any>;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_row extends $mol_view {
     }
 }
 
@@ -2477,15 +2498,17 @@ declare namespace $ {
         item(): Record<string, any>;
         sub(): readonly any[];
         type(): string;
-        Type(): $$.$mol_text;
         name(): string;
         Name(): $$.$mol_text;
+        Info(): $mol_labeler;
         add_title(): string;
         add(next?: any): any;
         Add(): $mol_button_major;
         remove_title(): string;
         remove(next?: any): any;
         Remove(): $mol_button_major;
+        Move_row(): $mol_row;
+        Actions_list(): $$.$mol_list;
     }
 }
 
@@ -2502,14 +2525,6 @@ declare namespace $ {
         Add(): any;
         remove_title(): string;
     }
-}
-
-declare namespace $ {
-    class $mol_row extends $mol_view {
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -2856,19 +2871,6 @@ declare namespace $.$$ {
         dec_enabled(): boolean;
         inc_enabled(): boolean;
     }
-}
-
-declare namespace $ {
-    class $mol_labeler extends $mol_list {
-        rows(): readonly any[];
-        label(): readonly $mol_view_content[];
-        Label(): $mol_view;
-        content(): readonly any[];
-        Content(): $mol_view;
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
