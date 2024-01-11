@@ -1,0 +1,13 @@
+$gen_app_item $mol_view 
+	item *
+		type \Тип
+		name \Имя
+	sub /
+		<= Type $mol_text text <= type \
+		<= Name $mol_text text <= name \
+		<= Add $mol_button_major
+			title <= add_title \+
+			click? <=> add? null
+		<= Remove $mol_button_major
+			title <= remove_title \-
+			click? <=> remove? null

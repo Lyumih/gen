@@ -1,0 +1,3 @@
+$gen_app_item_skill $gen_app_item
+	add_title \+ ур
+	remove_title \Снять

@@ -12,10 +12,6 @@ namespace $.$$ {
 			return this.engine().hero_equipments().find( item => item.id === id )
 		}
 
-		equipment_name( id: string ): string {
-			return this.get_equipment( id )?.name || 'no equipment'
-		}
-
 		equipment_unequip( id: any, next?: any ) {
 			this.engine().hero_unequip( id )
 		}
@@ -36,17 +32,8 @@ namespace $.$$ {
 			return this.engine().hero_skills().find( skill => skill.id === id )
 		}
 
-		skill_name( id: string ): string {
-			return `Умение: ${ this.get_skill( id )?.name }`
-		}
-
-		skill_level( id: any ): string {
-			return `Уровень: ${ this.get_skill( id )?.level || '-' }`
-		}
-
 		skill_level_up( id: string, next?: any ) {
 			this.engine().skill_level_up( id )
-			this.skill_level( id )
 		}
 
 		skill_mode( id: any ): string {
@@ -70,10 +57,6 @@ namespace $.$$ {
 			return this.engine().inventory().find( item => item.id === id )
 		}
 
-		inventory_item_name( id: any ): string {
-			return this.get_inventory_item( id )?.name || 'no item'
-		}
-
 		inventory_item_sell( id: any, next?: any ) {
 			this.engine().inventory_sell( id )
 		}
@@ -88,10 +71,6 @@ namespace $.$$ {
 
 		get_shop_item( id: string ) {
 			return this.engine().shop().find( item => item.id === id )
-		}
-
-		shop_item_name( id: any ): string {
-			return this.get_shop_item( id )?.name || 'no shop item'
 		}
 
 		shop_item_bue( id: any, next?: any ) {

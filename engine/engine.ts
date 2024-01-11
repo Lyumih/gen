@@ -1,6 +1,6 @@
 namespace $.$$ {
 
-	type Skill = { id: string, name: string, level: number }
+	type Skill = { id: string, name: string, type: string, level: number }
 
 	type Item = { id: string, name: string, type: string }
 
@@ -26,7 +26,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero_skills( next?: any ): Skill[] {
-			return next ?? [ { id: this.uuid(), name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', level: 1 } ]
+			return next ?? [ { id: this.uuid(), type: 'skill', name: 'Атака', level: 1 }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 } ]
 		}
 
 		@$mol_mem
@@ -35,7 +35,7 @@ namespace $.$$ {
 		}
 
 		is_equipment( type?: string ) {
-			return [ 'weapon', 'armor' ].includes( type || '' )
+			return [ 'weapon', 'armor', 'equip' ].includes( type || '' )
 		}
 
 		hero_unequip( id: any, next?: any ) {
