@@ -1,3 +1,9 @@
 $gen_app_item_skill $gen_app_item
+	add_mode? null
 	add_title \+ ур
 	remove_title \Снять
+	Other_actions $mol_row sub /
+		<= Add_mode $mol_button_major
+			title \Добавить мод
+			enabled false
+			click? <=> add_mode?

@@ -18,6 +18,7 @@ $gen_app_hero $mol_page
 					item <= get_skill* null
 					add <= skill_level_up*? null
 					remove? <=> skill_unequip*? null
+					add_mode? <=> skill_add_mode*? null
 				- <= Skill_add_mode* $mol_button_major
 					title \Добавить мод
 					disabled true

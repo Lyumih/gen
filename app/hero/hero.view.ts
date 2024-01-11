@@ -40,7 +40,7 @@ namespace $.$$ {
 			return this.get_skill( id )?.name || 'no mode'
 		}
 
-		skill_add_mode() {
+		skill_add_mode( id: string, next?: any ) {
 			const mode = this.engine().all_mode()
 		}
 

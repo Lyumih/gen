@@ -18,5 +18,9 @@ namespace $.$$ {
 			return this.item().name
 		}
 
+		description(): string {
+			return this.item().level ? `Ур. ${ this.item().level }` : ''
+		}
+
 	}
 }
