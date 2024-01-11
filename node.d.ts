@@ -1063,6 +1063,7 @@ declare namespace $.$$ {
     type Skill = {
         id: string;
         name: string;
+        type: string;
         level: number;
     };
     type Item = {
@@ -2540,11 +2541,64 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_app_item extends $mol_view {
+        item(): Record<string, any>;
+        sub(): readonly any[];
+        type(): string;
+        Type(): $$.$mol_text;
+        name(): string;
+        Name(): $$.$mol_text;
+        add_title(): string;
+        add(next?: any): any;
+        Add(): $mol_button_major;
+        remove_title(): string;
+        remove(next?: any): any;
+        Remove(): $mol_button_major;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_item extends $.$gen_app_item {
+        types_map(type: string): string;
+        type(): string;
+        name(): any;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_item_equipment extends $gen_app_item {
+        Add(): any;
+        remove_title(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_row extends $mol_view {
     }
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_item_skill extends $gen_app_item {
+        add_title(): string;
+        remove_title(): string;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_item_inventory extends $gen_app_item {
+        add_title(): string;
+        remove_title(): string;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_item_shop extends $gen_app_item {
+        Remove(): any;
+        add_title(): string;
+    }
 }
 
 declare namespace $ {
@@ -2573,44 +2627,34 @@ declare namespace $ {
         level(): string;
         Level(): $$.$mol_text;
         Equipment_label(): $$.$mol_text;
-        equipment_name(id: any): string;
-        Equipment_name(id: any): $$.$mol_text;
+        get_equipment(id: any): any;
         equipment_unequip(id: any, next?: any): any;
-        Equipment_unequip(id: any): $mol_button_major;
+        Equipment_card(id: any): $gen_app_item_equipment;
         Equipment(id: any): $mol_row;
         equipment_list(): readonly any[];
         Equipment_list(): $$.$mol_list;
         skill_points(): string;
         Points(): $$.$mol_text;
         Skill_label(): $$.$mol_text;
-        skill_name(id: any): string;
-        Skill_name(id: any): $$.$mol_text;
-        skill_level(id: any): string;
-        Skill_level(id: any): $$.$mol_text;
+        get_skill(id: any): any;
         skill_level_up(id: any, next?: any): any;
-        Skill_level_up(id: any): $mol_button_major;
         skill_unequip(id: any, next?: any): any;
-        Skill_unequip(id: any): $mol_button_major;
-        skill_add_mode(id: any, next?: any): any;
-        Skill_add_mode(id: any): $mol_button_major;
+        Skill_card(id: any): $gen_app_item_skill;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $$.$mol_list;
         Inventory_label(): $$.$mol_text;
-        inventory_item_name(id: any): string;
-        Inventory_item_name(id: any): $$.$mol_text;
+        get_inventory_item(id: any): any;
         inventory_equip(id: any, next?: any): any;
-        Inventory_equip(id: any): $mol_button_major;
         inventory_item_sell(id: any, next?: any): any;
-        Inventory_item_sell(id: any): $mol_button_major;
+        Inventory_card(id: any): $gen_app_item_inventory;
         Inventory_item(id: any): $mol_row;
         inventory_list(): readonly any[];
         Inventory_list(): $$.$mol_list;
         Shop_label(): $$.$mol_text;
-        shop_item_name(id: any): string;
-        Shop_item_name(id: any): $$.$mol_text;
+        get_shop_item(id: any): any;
         shop_item_bue(id: any, next?: any): any;
-        Shop_item_buy(id: any): $mol_button_major;
+        Shop_card(id: any): $gen_app_item_shop;
         Shop_item(id: any): $mol_row;
         shop_list(): readonly any[];
         Shop_list(): $$.$mol_list;
@@ -2626,7 +2670,6 @@ declare namespace $.$$ {
             name: string;
             type: string;
         } | undefined;
-        equipment_name(id: string): string;
         equipment_unequip(id: any, next?: any): void;
         skill_points(): string;
         skills(): string;
@@ -2634,10 +2677,9 @@ declare namespace $.$$ {
         get_skill(id: string): {
             id: string;
             name: string;
+            type: string;
             level: number;
         } | undefined;
-        skill_name(id: string): string;
-        skill_level(id: any): string;
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
         skill_add_mode(): void;
@@ -2648,7 +2690,6 @@ declare namespace $.$$ {
             name: string;
             type: string;
         } | undefined;
-        inventory_item_name(id: any): string;
         inventory_item_sell(id: any, next?: any): void;
         inventory_equip(id: any, next?: any): void;
         shop_list(): readonly any[];
@@ -2657,7 +2698,6 @@ declare namespace $.$$ {
             name: string;
             type: string;
         } | undefined;
-        shop_item_name(id: any): string;
         shop_item_bue(id: any, next?: any): void;
     }
 }

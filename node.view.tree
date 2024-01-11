@@ -500,7 +500,37 @@ $mol_button_major $mol_button_typed
 		^
 		mol_theme \$mol_theme_accent
 
+$gen_app_item $mol_view 
+	item *
+		type \Тип
+		name \Имя
+	sub /
+		<= Type $mol_text text <= type \
+		<= Name $mol_text text <= name \
+		<= Add $mol_button_major
+			title <= add_title \+
+			click? <=> add? null
+		<= Remove $mol_button_major
+			title <= remove_title \-
+			click? <=> remove? null
+
+$gen_app_item_equipment $gen_app_item
+	Add null
+	remove_title \Снять
+
 $mol_row $mol_view
+
+$gen_app_item_skill $gen_app_item
+	add_title \+ ур
+	remove_title \Снять
+
+$gen_app_item_inventory $gen_app_item
+	add_title \Использовать
+	remove_title \Продать
+
+$gen_app_item_shop $gen_app_item
+	Remove null
+	add_title \Купить
 
 $mol_text_list $mol_text
 	auto_scroll null
@@ -525,44 +555,34 @@ $gen_app_hero $mol_page
 		<= Equipment_label $mol_text text \# Экипировка
 		<= Equipment_list $mol_list rows <= equipment_list /
 			<= Equipment*0 $mol_row sub /
-				<= Equipment_name* $mol_text text <= equipment_name* \
-				<= Equipment_unequip* $mol_button_major
-					title \Снять
-					click? <=> equipment_unequip*? null
+				<= Equipment_card* $gen_app_item_equipment
+					item <= get_equipment* null
+					remove? <=> equipment_unequip*? null
 		<= Points $mol_text text <= skill_points \Очков умений: 10
 		<= Skill_label $mol_text text \# Умения
 		<= Skills $mol_list rows <= skill_list /
 			<= Skill*0 $mol_row sub /
-				<= Skill_name* $mol_text text <= skill_name* \
-				<= Skill_level* $mol_text text <= skill_level* \
-				<= Skill_level_up* $mol_button_major
-					title \+ ур.
-					click? <=> skill_level_up*? null
-				- <= Skill_mode* $mol_text text <= skill_mode* \
-				<= Skill_unequip* $mol_button_major
-					title \Убрать в инвентарь
-					click? <=> skill_unequip*? null
-				<= Skill_add_mode* $mol_button_major
+				<= Skill_card* $gen_app_item_skill
+					item <= get_skill* null
+					add <= skill_level_up*? null
+					remove? <=> skill_unequip*? null
+				- <= Skill_add_mode* $mol_button_major
 					title \Добавить мод
 					disabled true
 					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_text text \# Инвентарь
 		<= Inventory_list $mol_list rows <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /
-				<= Inventory_item_name* $mol_text text <= inventory_item_name* \Предмет 1
-				<= Inventory_equip* $mol_button_major
-					title \Использовать
-					click? <=> inventory_equip*? null
-				<= Inventory_item_sell* $mol_button_major
-					title \Продать
-					click? <=> inventory_item_sell*? null
+				<= Inventory_card* $gen_app_item_inventory
+					item <= get_inventory_item* null
+					add? <=> inventory_equip*? null
+					remove? <=> inventory_item_sell*? null
 		<= Shop_label $mol_text text \# Магазин
 		<= Shop_list $mol_list rows <= shop_list /
 			<= Shop_item*0 $mol_row sub /
-				<= Shop_item_name* $mol_text text <= shop_item_name* \
-				<= Shop_item_buy* $mol_button_major
-					title \Купить
-					click? <=> shop_item_bue*? null
+				<= Shop_card* $gen_app_item_shop
+					item <= get_shop_item* null
+					add? <=> shop_item_bue*? null
 
 $mol_hotkey $mol_plugin
 	event *
