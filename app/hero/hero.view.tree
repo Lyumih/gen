@@ -19,14 +19,14 @@ $gen_app_hero $mol_page
 					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_text text \# Инвентарь
 		<= Inventory_list $mol_list rows <= inventory_list /
-			<= Inventory_item* $mol_row sub /
+			<= Inventory_item*0 $mol_row sub /
 				<= Inventory_item_name* $mol_text text <= inventory_item_name* \Предмет 1
 				<= Inventory_item_sell* $mol_button_major
 					title \Продать
 					click? <=> inventory_item_sell*? null
 		<= Shop_label $mol_text text \# Магазин
 		<= Shop_list $mol_list rows <= shop_list /
-			<= Shop_item* $mol_row sub /
+			<= Shop_item*0 $mol_row sub /
 				<= Shop_item_name* $mol_text text <= shop_item_name* \
 				<= Shop_item_buy* $mol_button_major
 					title \Купить
