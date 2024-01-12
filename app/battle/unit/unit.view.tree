@@ -1,0 +1,13 @@
+$gen_app_battle_unit $mol_list
+	source *
+		health 9
+		attack 0
+	rows /
+		<= Name $mol_paragraph title <= name \
+		<= Stats $mol_list rows /
+			<= Health $mol_paragraph title <= health_title \
+			<= Attack $mol_paragraph title <= attack_title \
+		<= Attack_button $mol_button_major
+			title \Атаковать
+			enabled <= attack_enabled true
+			click? <=> use_attack? null

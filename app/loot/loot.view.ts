@@ -3,9 +3,9 @@ namespace $.$$ {
 
 		generate_item( next?: any ) {
 			const skill = $mol_array_lottery( this.engine().all_skills() )
-			const eqiup = $mol_array_lottery( this.engine().all_equip() )
+			const equip = $mol_array_lottery( this.engine().all_equip() )
 			const mode = $mol_array_lottery( this.engine().all_mode() )
-			const item = $mol_array_lottery( [ skill, eqiup, mode ] )
+			const item = $mol_array_lottery( [ skill, equip, mode ] )
 			this.engine().inventory( [ ...this.engine().inventory(), item ] )
 			this.history( [ ...this.history(), item ] )
 		}

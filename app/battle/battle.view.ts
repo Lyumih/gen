@@ -2,40 +2,55 @@ namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
 
 		@$mol_mem
-		history( next?: any ) {
-			return next ?? []
+		hero_health( next?: any ) {
+			return next ?? 30
 		}
 
 		@$mol_mem
-		hero( next?: any ) {
-			return next ?? {
-				type: 'hero',
-				health: 20,
-				attacK: 5,
-			}
-		}
-
-		@$mol_mem
-		enemy( next?: any ) {
-			console.log( 'enemy', next )
-			return next ?? {
-				type: 'enemy',
-				health: 20,
-				attack: 5,
-			}
-		}
-
-		enemy_health() {
-			return "" + this.enemy().health
-		}
-
 		hero_attack( next?: any ) {
-			const hero = this.hero()
-			const enemy = this.enemy()
-			enemy.health -= hero.attacK
-			this.enemy( enemy )
-			console.log( hero, enemy )
-			this.history( [ ...this.history(), [ 'attack', hero, enemy ] ] )
+			return next ?? 10
+		}
+
+		@$mol_mem
+		enemy_health( next?: any ) {
+			console.log( 'enemy_health', next )
+			return next ?? 20
+		}
+
+		@$mol_mem
+		enemy_attack( next?: any ) {
+			return next ?? 5
+
+		}
+
+		use_hero_attack( next?: any ) {
+			this.enemy_health( this.enemy_health() - this.hero_attack() )
+		}
+
+		use_enemy_attack( next?: any ) {
+			this.hero_health( this.hero_health() - this.enemy_attack() )
+		}
+
+		restart( next?: any ) {
+			this.hero_health( 30 )
+			this.enemy_health( 20 )
+		}
+
+		is_game_continue() {
+			return this.enemy_health() > 0 && this.hero_health() > 0
+		}
+
+		is_game_end() {
+			return !this.is_game_continue()
+		}
+
+		end(): string {
+			return this.is_game_continue() ? '' : 'Игра закончена'
+		}
+
+		get_reward( next?: any ) {
+			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )
+			this.restart()
 		}
 
 	}
