@@ -1,16 +1,36 @@
 namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
+
+		@$mol_mem
+		battle() {
+			const battle = new this.$.$gen_engine_battle()
+			battle.units( this.default_units() )
+			return battle
+		}
+
+		default_units() {
+			return [
+				new this.$.$gen_engine_unit(),
+				new this.$.$gen_engine_unit()
+			]
+		}
+
+		turn(): string {
+			return `Ход: ${ this.battle().turn() }`
+		}
+
 		@$mol_mem
 		hero() {
-			return new this.$.$gen_engine_unit()
+			return this.battle().units()[ 0 ]
 		}
 
 		@$mol_mem
 		enemy() {
-			return new this.$.$gen_engine_unit()
+			return this.battle().units()[ 1 ]
 		}
 
 		use_hero_attack( next?: any ) {
+			this.battle().next_turn()
 			this.hero().use_attack( this.enemy() )
 		}
 
@@ -39,6 +59,7 @@ namespace $.$$ {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )
 			this.restart()
 		}
+
 
 	}
 }

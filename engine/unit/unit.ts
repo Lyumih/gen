@@ -1,5 +1,5 @@
 namespace $ {
-	export class $gen_engine_unit extends $.$mol_object {
+	export class $gen_engine_unit extends $.$gen_engine_battle {
 
 		@$mol_mem
 		name( next?: any ) {
@@ -18,13 +18,15 @@ namespace $ {
 		}
 
 		use_attack( target: $gen_engine_unit ) {
-			console.log( 'use_attack' )
+			console.log( 'use_attack', super.turn() )
 			target.health( target.health() - this.attack() )
+			super.next_turn()
 		}
 
 		use_skill( targets: $gen_engine_unit[], skill: any ) {
 			skill.use( this, targets )
 			console.log( 'use_skill' )
+			super.next_turn()
 		}
 
 		is_dead() {
@@ -43,5 +45,6 @@ namespace $ {
 			this.health( null )
 			this.attack( null )
 		}
+
 	}
 }

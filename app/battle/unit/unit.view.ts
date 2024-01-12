@@ -31,7 +31,7 @@ namespace $.$$ {
 		}
 
 		skill_name( id: any ): string {
-			return this.get_skill( id )?.name || 'no skill'
+			return this.get_skill( id )?.name + ': ' + this.get_skill( id )?.description || 'no skill'
 		}
 
 		use_skill( id: string, next?: any ) {
