@@ -9895,14 +9895,14 @@ var $;
                 return `Ход: ${this.battle().turn()}`;
             }
             hero() {
-                const hero = new this.$.$gen_engine_unit();
-                this.battle().init_unit(hero);
-                return hero;
+                return this.$.$gen_engine_unit.make({
+                    next_turn: () => this.battle().next_turn(),
+                });
             }
             enemy() {
-                const enemy = new this.$.$gen_engine_unit();
-                this.battle().init_unit(enemy);
-                return enemy;
+                return this.$.$gen_engine_unit.make({
+                    next_turn: () => this.battle().next_turn(),
+                });
             }
             use_hero_attack(next) {
                 this.hero().use_attack(this.enemy());
