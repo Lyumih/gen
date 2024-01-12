@@ -1,7 +1,5 @@
 $gen_app_battle_unit $mol_list
-	source *
-		health 9
-		attack 0
+	unit $gen_engine_unit
 	rows /
 		<= Name $mol_paragraph title <= name \
 		<= Stats $mol_list rows /

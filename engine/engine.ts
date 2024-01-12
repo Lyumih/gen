@@ -1,4 +1,4 @@
-namespace $.$$ {
+namespace $ {
 
 	type Item = { id: string, name: string, type: string }
 	type Skill = Item & { level: number, modes: Mode[] }

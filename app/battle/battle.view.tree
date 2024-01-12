@@ -5,15 +5,11 @@ $gen_app_battle $mol_page
 		<= Field $mol_list rows /
 			<= Hero $gen_app_battle_unit
 				name \Герой: Милис
-				source *
-					health <= hero_health 0
-					attack <= hero_attack 0
+				unit <= get_hero null
 				use_attack <= use_hero_attack? null
 			<= Enemy $gen_app_battle_unit
 				name \Враг: Гоблин
-				source *
-					health <= enemy_health 0
-					attack <= enemy_attack 0
+				unit <= get_enemy null
 				use_attack <= use_enemy_attack? null
 		<= End $mol_paragraph title <= end \
 		<= Reward $mol_button_major
