@@ -17,11 +17,16 @@ namespace $.$$ {
 
 		@$mol_mem
 		enemy( next?: any ) {
+			console.log( 'enemy', next )
 			return next ?? {
 				type: 'enemy',
 				health: 20,
 				attack: 5,
 			}
+		}
+
+		enemy_health() {
+			return "" + this.enemy().health
 		}
 
 		hero_attack( next?: any ) {
