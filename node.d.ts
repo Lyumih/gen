@@ -2855,6 +2855,8 @@ declare namespace $ {
         hero(): any;
         Hero_stats(): $$.$mol_dump_value;
         Enemy(): $$.$mol_text;
+        enemy_health(): string;
+        Enemy_health(): $$.$mol_text;
         enemy(): any;
         Enemy_stats(): $$.$mol_dump_value;
         hero_attack(next?: any): any;
@@ -2869,6 +2871,7 @@ declare namespace $.$$ {
         history(next?: any): any;
         hero(next?: any): any;
         enemy(next?: any): any;
+        enemy_health(): string;
         hero_attack(next?: any): void;
     }
 }

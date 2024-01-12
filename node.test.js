@@ -9971,6 +9971,7 @@ var $;
                 this.Hero(),
                 this.Hero_stats(),
                 this.Enemy(),
+                this.Enemy_health(),
                 this.Enemy_stats(),
                 this.Hero_step(),
                 this.History()
@@ -9995,6 +9996,14 @@ var $;
             obj.text = () => "Enemy";
             return obj;
         }
+        enemy_health() {
+            return "";
+        }
+        Enemy_health() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.enemy_health();
+            return obj;
+        }
         enemy() {
             return null;
         }
@@ -10011,7 +10020,7 @@ var $;
         }
         Hero_step() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "Действие";
+            obj.title = () => "Атакаовать";
             obj.click = (next) => this.hero_attack(next);
             return obj;
         }
@@ -10037,6 +10046,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Enemy", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Enemy_health", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Enemy_stats", null);
@@ -10070,11 +10082,15 @@ var $;
                 };
             }
             enemy(next) {
+                console.log('enemy', next);
                 return next ?? {
                     type: 'enemy',
                     health: 20,
                     attack: 5,
                 };
+            }
+            enemy_health() {
+                return "" + this.enemy().health;
             }
             hero_attack(next) {
                 const hero = this.hero();

@@ -670,11 +670,12 @@ $gen_app_battle $mol_page
 			value <= hero null
 			expanded true
 		<= Enemy $mol_text text \Enemy
+		<= Enemy_health $mol_text text <= enemy_health \
 		<= Enemy_stats $mol_dump_value
 			value <= enemy null
 			expanded true
 		<= Hero_step $mol_button_major
-			title \Действие
+			title \Атакаовать
 			click? <=> hero_attack? null
 		<= History $mol_dump_value
 			value <= history null
