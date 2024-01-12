@@ -19,8 +19,8 @@ namespace $.$$ {
 		}
 
 		restart() {
-			this.hero().health( 19 )
-			this.enemy().health( 20 )
+			this.hero().refill()
+			this.enemy().refill()
 		}
 
 		is_game_continue() {

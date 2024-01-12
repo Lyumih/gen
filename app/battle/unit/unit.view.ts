@@ -20,5 +20,45 @@ namespace $.$$ {
 		use_attack( next?: any ) {
 			this.unit().use_attack( this.target() )
 		}
+
+		use_skill( id: string, next?: any ) {
+			this.unit().use_skill( [ this.target() ], this.get_skill( id ) )
+		}
+
+		skill_list(): readonly any[] {
+			return this.skills().map( skill => this.Skill( skill.id ) )
+		}
+
+		get_skill( id: string ) {
+			return this.skills().find( skill => skill.id === id )
+		}
+
+		skill_name( id: any ): string {
+			return this.get_skill( id )?.name || 'no skill'
+		}
+
+		skills() {
+			return [
+				{
+					id: 'skill1',
+					name: 'Хил',
+					description: 'Исцеляет на 10 здоровья',
+					mode: 'skill',
+					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+						source.health( source.health() + 10 )
+					}
+				},
+				{
+					id: 'skill2',
+					name: 'Мощный удар',
+					description: 'Урон х2',
+					mode: 'skill',
+					use: ( source: $gen_engine_unit, target: $gen_engine_unit[] ) => {
+						target[ 0 ].health( target[ 0 ].health() - source.attack() * 2 )
+					}
+
+				}
+			]
+		}
 	}
 }
