@@ -2760,18 +2760,20 @@ declare namespace $ {
         attack(next?: any): any;
         use_attack(target: $gen_engine_unit): void;
         use_skill(): void;
+        is_dead(): boolean;
     }
 }
 
 declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
         unit(): $gen_engine_unit;
+        target(): $gen_engine_unit;
         rows(): readonly any[];
         name(): string;
         Name(): $$.$mol_paragraph;
-        health_title(): string;
+        health(): string;
         Health(): $$.$mol_paragraph;
-        attack_title(): string;
+        attack(): string;
         Attack(): $$.$mol_paragraph;
         Stats(): $$.$mol_list;
         attack_enabled(): boolean;
@@ -2783,8 +2785,10 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_battle_unit extends $.$gen_app_battle_unit {
         attack_enabled(): boolean;
-        health_title(): string;
-        attack_title(): string;
+        health(): string;
+        attack(): string;
+        name(): string;
+        use_attack(next?: any): void;
     }
 }
 
@@ -2793,11 +2797,9 @@ declare namespace $ {
         engine(): $gen_engine;
         title(): string;
         body(): readonly any[];
-        get_hero(): any;
-        use_hero_attack(next?: any): any;
+        hero(): any;
+        enemy(): any;
         Hero(): $$.$gen_app_battle_unit;
-        get_enemy(): any;
-        use_enemy_attack(next?: any): any;
         Enemy(): $$.$gen_app_battle_unit;
         Field(): $$.$mol_list;
         end(): string;
@@ -2812,8 +2814,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
-        get_hero(): $gen_engine_unit;
-        get_enemy(): $gen_engine_unit;
+        hero(): $gen_engine_unit;
+        enemy(): $gen_engine_unit;
         use_hero_attack(next?: any): void;
         use_enemy_attack(next?: any): void;
         restart(): void;

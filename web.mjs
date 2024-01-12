@@ -9082,6 +9082,9 @@ var $;
         use_skill() {
             console.log('use_skill');
         }
+        is_dead() {
+            return this.health() <= 0;
+        }
     }
     __decorate([
         $mol_mem
@@ -9104,6 +9107,10 @@ var $;
             const obj = new this.$.$gen_engine_unit();
             return obj;
         }
+        target() {
+            const obj = new this.$.$gen_engine_unit();
+            return obj;
+        }
         rows() {
             return [
                 this.Name(),
@@ -9119,20 +9126,20 @@ var $;
             obj.title = () => this.name();
             return obj;
         }
-        health_title() {
+        health() {
             return "";
         }
         Health() {
             const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.health_title();
+            obj.title = () => this.health();
             return obj;
         }
-        attack_title() {
+        attack() {
             return "";
         }
         Attack() {
             const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.attack_title();
+            obj.title = () => this.attack();
             return obj;
         }
         Stats() {
@@ -9164,6 +9171,9 @@ var $;
     ], $gen_app_battle_unit.prototype, "unit", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle_unit.prototype, "target", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_unit.prototype, "Name", null);
     __decorate([
         $mol_mem
@@ -9193,11 +9203,17 @@ var $;
             attack_enabled() {
                 return this.unit().health() > 0;
             }
-            health_title() {
+            health() {
                 return `Здоровье: ${this.unit().health()}`;
             }
-            attack_title() {
+            attack() {
                 return `Атака: ${this.unit().attack()}`;
+            }
+            name() {
+                return `Имя: ${this.unit().name()}`;
+            }
+            use_attack(next) {
+                this.unit().use_attack(this.target());
             }
         }
         $$.$gen_app_battle_unit = $gen_app_battle_unit;
@@ -9224,34 +9240,22 @@ var $;
                 this.Restart()
             ];
         }
-        get_hero() {
+        hero() {
             return null;
         }
-        use_hero_attack(next) {
-            if (next !== undefined)
-                return next;
+        enemy() {
             return null;
         }
         Hero() {
             const obj = new this.$.$gen_app_battle_unit();
-            obj.name = () => "Герой: Милис";
-            obj.unit = () => this.get_hero();
-            obj.use_attack = () => this.use_hero_attack();
+            obj.unit = () => this.hero();
+            obj.target = () => this.enemy();
             return obj;
-        }
-        get_enemy() {
-            return null;
-        }
-        use_enemy_attack(next) {
-            if (next !== undefined)
-                return next;
-            return null;
         }
         Enemy() {
             const obj = new this.$.$gen_app_battle_unit();
-            obj.name = () => "Враг: Гоблин";
-            obj.unit = () => this.get_enemy();
-            obj.use_attack = () => this.use_enemy_attack();
+            obj.unit = () => this.enemy();
+            obj.target = () => this.hero();
             return obj;
         }
         Field() {
@@ -9302,13 +9306,7 @@ var $;
     ], $gen_app_battle.prototype, "engine", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "use_hero_attack", null);
-    __decorate([
-        $mol_mem
     ], $gen_app_battle.prototype, "Hero", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "use_enemy_attack", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Enemy", null);
@@ -9340,24 +9338,24 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
-            get_hero() {
+            hero() {
                 return new this.$.$gen_engine_unit();
             }
-            get_enemy() {
+            enemy() {
                 return new this.$.$gen_engine_unit();
             }
             use_hero_attack(next) {
-                this.get_hero().use_attack(this.get_enemy());
+                this.hero().use_attack(this.enemy());
             }
             use_enemy_attack(next) {
-                this.get_enemy().use_attack(this.get_hero());
+                this.enemy().use_attack(this.hero());
             }
             restart() {
-                this.get_hero().health(19);
-                this.get_enemy().health(20);
+                this.hero().health(19);
+                this.enemy().health(20);
             }
             is_game_continue() {
-                return this.get_hero().health() > 0 && this.get_enemy().health() > 0;
+                return !this.hero().is_dead() && !this.enemy().is_dead();
             }
             is_game_end() {
                 return !this.is_game_continue();
@@ -9372,10 +9370,10 @@ var $;
         }
         __decorate([
             $mol_mem
-        ], $gen_app_battle.prototype, "get_hero", null);
+        ], $gen_app_battle.prototype, "hero", null);
         __decorate([
             $mol_mem
-        ], $gen_app_battle.prototype, "get_enemy", null);
+        ], $gen_app_battle.prototype, "enemy", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
