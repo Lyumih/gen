@@ -8947,7 +8947,6 @@ var $;
             }
             modes_list() {
                 const modes = (this.item()?.modes || []);
-                console.log(modes);
                 return modes?.map(mode => this.Mode(mode.id));
             }
             get_mode(id) {
@@ -8955,7 +8954,6 @@ var $;
                 return modes.find(mode => mode.id === id);
             }
             mode_name(id) {
-                console.log(this.get_mode(id));
                 return "Мод: " + this.get_mode(id)?.name;
             }
         }
@@ -9467,6 +9465,647 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/hero/hero.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_dump_list extends $mol_view {
+        values() {
+            return [];
+        }
+        sub() {
+            return [
+                this.Dump("0")
+            ];
+        }
+        dump_value(id) {
+            return null;
+        }
+        dump_expanded(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        prototypes() {
+            return false;
+        }
+        preview_show() {
+            return true;
+        }
+        Dump(id) {
+            const obj = new this.$.$mol_dump_value();
+            obj.value = () => this.dump_value(id);
+            obj.expanded = (next) => this.dump_expanded(id, next);
+            obj.prototypes = () => this.prototypes();
+            obj.preview_show = () => this.preview_show();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_dump_list.prototype, "dump_expanded", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_dump_list.prototype, "Dump", null);
+    $.$mol_dump_list = $mol_dump_list;
+})($ || ($ = {}));
+//mol/dump/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_dump_list extends $.$mol_dump_list {
+            sub() {
+                return this.values().map((_, index) => this.Dump(index));
+            }
+            dump_value(index) {
+                return this.values()[index];
+            }
+            expand_all(event) {
+                this.Dump(1).expanded(true);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_dump_list.prototype, "sub", null);
+        $$.$mol_dump_list = $mol_dump_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/dump/list/list.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/dump/list/list.view.css", "[mol_dump_list] {\n\talign-items: flex-start;\n\tgap: var(--mol_gap_space);\n}\n\n[mol_dump_list_dump]:first-child {\n\tposition: sticky;\n\ttop: 0;\n}\n");
+})($ || ($ = {}));
+//mol/dump/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_expander extends $mol_list {
+        rows() {
+            return [
+                this.Label(),
+                this.Content()
+            ];
+        }
+        expanded(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        expandable() {
+            return true;
+        }
+        label() {
+            return [
+                this.title()
+            ];
+        }
+        Trigger() {
+            const obj = new this.$.$mol_check_expand();
+            obj.checked = (next) => this.expanded(next);
+            obj.expandable = () => this.expandable();
+            obj.label = () => this.label();
+            return obj;
+        }
+        Tools() {
+            return null;
+        }
+        Label() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Trigger(),
+                this.Tools()
+            ];
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_expander.prototype, "expanded", null);
+    __decorate([
+        $mol_mem
+    ], $mol_expander.prototype, "Trigger", null);
+    __decorate([
+        $mol_mem
+    ], $mol_expander.prototype, "Label", null);
+    __decorate([
+        $mol_mem
+    ], $mol_expander.prototype, "Content", null);
+    $.$mol_expander = $mol_expander;
+})($ || ($ = {}));
+//mol/expander/-view.tree/expander.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_expander extends $.$mol_expander {
+            rows() {
+                return [
+                    this.Label(),
+                    ...this.expanded() ? [this.Content()] : []
+                ];
+            }
+            expandable() {
+                return this.content().length > 0;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_expander.prototype, "rows", null);
+        $$.$mol_expander = $mol_expander;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/expander/expander.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/expander/expander.view.css", "[mol_expander] {\n\tflex-direction: column;\n}\n\n[mol_expander_label] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_expander_trigger] {\n\tflex: auto;\n\tposition: relative;\n}\n");
+})($ || ($ = {}));
+//mol/expander/-css/expander.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_dump_value extends $mol_view {
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        preview_show(next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
+        sub() {
+            return [
+                this.Simple(),
+                this.Expand()
+            ];
+        }
+        simple() {
+            return "";
+        }
+        Simple() {
+            const obj = new this.$.$mol_text_code();
+            obj.text = () => this.simple();
+            return obj;
+        }
+        expanded(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        expandable() {
+            return true;
+        }
+        expand_all(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        expand_title() {
+            return "";
+        }
+        Expand_title() {
+            const obj = new this.$.$mol_text_code();
+            obj.text = () => this.expand_title();
+            return obj;
+        }
+        Expand_head() {
+            const obj = new this.$.$mol_check_expand();
+            obj.minimal_height = () => 24;
+            obj.minimal_width = () => 24;
+            obj.expanded = (next) => this.expanded(next);
+            obj.expandable = () => this.expandable();
+            obj.clicks = (next) => this.expand_all(next);
+            obj.label = () => [
+                this.Expand_title()
+            ];
+            return obj;
+        }
+        preview_dom() {
+            return null;
+        }
+        preview() {
+            return null;
+        }
+        Preview_dom() {
+            const obj = new this.$.$mol_view();
+            obj.dom_node = () => this.preview_dom();
+            obj.render = () => this.preview();
+            return obj;
+        }
+        Preview() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Preview_dom()
+            ];
+            return obj;
+        }
+        row_values(id) {
+            return [];
+        }
+        prototypes() {
+            return false;
+        }
+        Row(id) {
+            const obj = new this.$.$mol_dump_list();
+            obj.values = () => this.row_values(id);
+            obj.prototypes = () => this.prototypes();
+            obj.preview_show = () => this.preview_show();
+            return obj;
+        }
+        expand_content() {
+            return [
+                this.Preview(),
+                this.Row("0")
+            ];
+        }
+        Expand() {
+            const obj = new this.$.$mol_expander();
+            obj.expanded = (next) => this.expanded(next);
+            obj.Trigger = () => this.Expand_head();
+            obj.content = () => this.expand_content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "preview_show", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Simple", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "expanded", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "expand_all", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Expand_title", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Expand_head", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Preview_dom", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Preview", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_dump_value.prototype, "Row", null);
+    __decorate([
+        $mol_mem
+    ], $mol_dump_value.prototype, "Expand", null);
+    $.$mol_dump_value = $mol_dump_value;
+})($ || ($ = {}));
+//mol/dump/value/-view.tree/value.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_try(handler) {
+        try {
+            return handler();
+        }
+        catch (error) {
+            return error;
+        }
+    }
+    $.$mol_try = $mol_try;
+})($ || ($ = {}));
+//mol/try/try.node.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_dump_value extends $.$mol_dump_value {
+            sub() {
+                const value = this.value();
+                if (!value)
+                    return [this.Simple()];
+                if (typeof value === 'object')
+                    return [this.Expand()];
+                if (typeof value === 'function')
+                    return [this.Expand()];
+                return [this.Simple()];
+            }
+            simple() {
+                const value = this.value();
+                return value ? String(value) : JSON.stringify(value) ?? 'undefined';
+            }
+            expand_title() {
+                const value = this.value();
+                if (typeof value === 'function') {
+                    const name = Reflect.getOwnPropertyDescriptor(value, 'name')?.value;
+                    const source = Function.prototype.toString.call(value);
+                    const args = source.match(/^[^{=>]*?\(([\s\S]*?)\)/)?.[1] ?? source.match(/^([$\w]+)\s+=>/)?.[1] ?? '';
+                    if (name)
+                        return name + '(' + args + ')';
+                }
+                if (value instanceof RegExp)
+                    return String(value);
+                if (value instanceof Date)
+                    return value.toISOString();
+                const kind = Reflect.getOwnPropertyDescriptor(value, Symbol.toStringTag)?.value
+                    ?? value.constructor.name
+                    ?? 'Object';
+                if (value instanceof Node) {
+                    try {
+                        switch (value.nodeType) {
+                            case value.TEXT_NODE: return kind + ' ' + value.nodeValue?.trim();
+                            case value.ELEMENT_NODE: return `<${value.localName}> ${value.id}`;
+                            case value.DOCUMENT_NODE: return kind + ' ' + value.baseURI;
+                        }
+                    }
+                    catch { }
+                }
+                return kind;
+            }
+            rows_values() {
+                let value = this.value();
+                const res = [];
+                if (value instanceof Map) {
+                    for (const [key, val] of value) {
+                        res.push([key, '▶', val]);
+                    }
+                }
+                if (value instanceof Set) {
+                    for (const val of value) {
+                        res.push([val]);
+                    }
+                }
+                if (value instanceof Function) {
+                    let source = Function.prototype.toString.call(value)
+                        .replace(/^.*?\{\r?\n?/, '')
+                        .replace(/}$/, '')
+                        .trimEnd();
+                    const indent = source.match(/^\s*/)[0];
+                    source = source.replace(new RegExp(`^${indent}`, 'gm'), '\t');
+                    res.push([source]);
+                }
+                if (value instanceof Element) {
+                    try {
+                        for (const kid of value.childNodes) {
+                            res.push([kid]);
+                        }
+                        for (const attr of value.attributes) {
+                            if (attr.nodeName === 'id')
+                                continue;
+                            res.push([attr.nodeName, '=', attr.nodeValue]);
+                        }
+                    }
+                    catch { }
+                }
+                if (value && (typeof value === 'object' || typeof value === 'function')) {
+                    for (const key of Reflect.ownKeys(value)) {
+                        const prefix = String(key) + '∶';
+                        const descr = Reflect.getOwnPropertyDescriptor(value, key);
+                        if ('value' in descr) {
+                            const line = [prefix, descr.value];
+                            res.push(line);
+                        }
+                        else {
+                            res.push([prefix, descr.get, descr.set]);
+                        }
+                    }
+                    if (this.prototypes()) {
+                        res.push(['__proto__:', Reflect.getPrototypeOf(value)]);
+                    }
+                }
+                return res;
+            }
+            preview_dom() {
+                const value = this.value();
+                if (value instanceof Element) {
+                    if ($mol_try(() => value.localName) instanceof Error)
+                        return null;
+                    if (value.isConnected)
+                        return null;
+                    return value;
+                }
+                return null;
+            }
+            expand_content() {
+                return [
+                    ...this.preview_show() && this.preview_dom() ? [this.Preview()] : [],
+                    ...this.rows_values().map((_, index) => this.Row(index)),
+                ];
+            }
+            expandable() {
+                return this.expand_content().length > 0;
+            }
+            row_values(index) {
+                return this.rows_values()[index];
+            }
+            expand_all(event) {
+                this.expanded(true);
+                for (const row of this.expand_content()) {
+                    if (!(row instanceof $mol_dump_list))
+                        continue;
+                    if (row.values()[0] === '__proto__:')
+                        continue;
+                    row.expand_all(event);
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "sub", null);
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "simple", null);
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "expand_title", null);
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "rows_values", null);
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "preview_dom", null);
+        __decorate([
+            $mol_mem
+        ], $mol_dump_value.prototype, "expand_content", null);
+        $$.$mol_dump_value = $mol_dump_value;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/dump/value/value.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/dump/value/value.view.css", "[mol_dump_value] {\n\tmin-height: 2.5rem;\n\tmin-width: 2.5rem;\n}\n\n[mol_dump_value_simple] {\n\tpadding: 0;\n}\n\n[mol_dump_value_expand_content] {\n\tpadding-left: 1.5rem;\n\talign-items: flex-start;\n}\n\n[mol_dump_value_expand_title_rows],\n[mol_dump_value_simple_rows],\n[mol_dump_value_expand_head] {\n\tpadding: 0;\n\tgap: 0;\n}\n");
+})($ || ($ = {}));
+//mol/dump/value/-css/value.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_battle extends $mol_page {
+        engine() {
+            const obj = new this.$.$gen_engine();
+            return obj;
+        }
+        title() {
+            return "Битва";
+        }
+        body() {
+            return [
+                this.Hero(),
+                this.Hero_stats(),
+                this.Enemy(),
+                this.Enemy_stats(),
+                this.Hero_step(),
+                this.History()
+            ];
+        }
+        Hero() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "Hero";
+            return obj;
+        }
+        hero() {
+            return null;
+        }
+        Hero_stats() {
+            const obj = new this.$.$mol_dump_value();
+            obj.value = () => this.hero();
+            obj.expanded = () => true;
+            return obj;
+        }
+        Enemy() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "Enemy";
+            return obj;
+        }
+        enemy() {
+            return null;
+        }
+        Enemy_stats() {
+            const obj = new this.$.$mol_dump_value();
+            obj.value = () => this.enemy();
+            obj.expanded = () => true;
+            return obj;
+        }
+        hero_attack(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Hero_step() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Действие";
+            obj.click = (next) => this.hero_attack(next);
+            return obj;
+        }
+        history() {
+            return null;
+        }
+        History() {
+            const obj = new this.$.$mol_dump_value();
+            obj.value = () => this.history();
+            obj.expanded = () => true;
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Hero", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Hero_stats", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Enemy", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Enemy_stats", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "hero_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Hero_step", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History", null);
+    $.$gen_app_battle = $gen_app_battle;
+})($ || ($ = {}));
+//gen/app/battle/-view.tree/battle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_battle extends $.$gen_app_battle {
+            history(next) {
+                return next ?? [];
+            }
+            hero(next) {
+                return next ?? {
+                    type: 'hero',
+                    health: 20,
+                    attacK: 5,
+                };
+            }
+            enemy(next) {
+                return next ?? {
+                    type: 'enemy',
+                    health: 20,
+                    attack: 5,
+                };
+            }
+            hero_attack(next) {
+                const hero = this.hero();
+                const enemy = this.enemy();
+                enemy.health -= hero.attacK;
+                this.enemy(enemy);
+                console.log(hero, enemy);
+                this.history([...this.history(), ['attack', hero, enemy]]);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "history", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "enemy", null);
+        $$.$gen_app_battle = $gen_app_battle;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/battle/battle.view.ts
 ;
 "use strict";
 var $;
@@ -10294,12 +10933,18 @@ var $;
         pages() {
             return [
                 this.Hero_page(),
+                this.Battle_page(),
                 this.Game_page(),
                 this.Loot_page()
             ];
         }
         Hero_page() {
             const obj = new this.$.$gen_app_hero();
+            obj.engine = () => this.engine();
+            return obj;
+        }
+        Battle_page() {
+            const obj = new this.$.$gen_app_battle();
             obj.engine = () => this.engine();
             return obj;
         }
@@ -10320,6 +10965,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Hero_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Battle_page", null);
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Game_page", null);

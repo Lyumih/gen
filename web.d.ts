@@ -2686,6 +2686,126 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_dump_list extends $mol_view {
+        values(): readonly any[];
+        sub(): readonly any[];
+        dump_value(id: any): any;
+        dump_expanded(id: any, next?: any): boolean;
+        prototypes(): boolean;
+        preview_show(): boolean;
+        Dump(id: any): $$.$mol_dump_value;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_dump_list extends $.$mol_dump_list {
+        sub(): $mol_dump_value[];
+        dump_value(index: number): any;
+        expand_all(event?: Event): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_expander extends $mol_list {
+        rows(): readonly any[];
+        expanded(next?: any): boolean;
+        expandable(): boolean;
+        label(): readonly any[];
+        Trigger(): $$.$mol_check_expand;
+        Tools(): any;
+        Label(): $mol_view;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_expander extends $.$mol_expander {
+        rows(): $mol_view[];
+        expandable(): boolean;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_dump_value extends $mol_view {
+        value(next?: any): any;
+        preview_show(next?: any): boolean;
+        sub(): readonly any[];
+        simple(): string;
+        Simple(): $$.$mol_text_code;
+        expanded(next?: any): boolean;
+        expandable(): boolean;
+        expand_all(next?: any): any;
+        expand_title(): string;
+        Expand_title(): $$.$mol_text_code;
+        Expand_head(): $$.$mol_check_expand;
+        preview_dom(): any;
+        preview(): any;
+        Preview_dom(): $mol_view;
+        Preview(): $mol_view;
+        row_values(id: any): readonly any[];
+        prototypes(): boolean;
+        Row(id: any): $$.$mol_dump_list;
+        expand_content(): readonly any[];
+        Expand(): $$.$mol_expander;
+    }
+}
+
+declare namespace $ {
+    function $mol_try<Result>(handler2: () => Result): Result | Error;
+}
+
+declare namespace $.$$ {
+    class $mol_dump_value extends $.$mol_dump_value {
+        sub(): $mol_text_code[] | $mol_expander[];
+        simple(): string;
+        expand_title(): any;
+        rows_values(): any[][];
+        preview_dom(): Element | null;
+        expand_content(): ($mol_view | $mol_dump_list)[];
+        expandable(): boolean;
+        row_values(index: number): any[];
+        expand_all(event?: Event): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_battle extends $mol_page {
+        engine(): $$.$gen_engine;
+        title(): string;
+        body(): readonly any[];
+        Hero(): $$.$mol_text;
+        hero(): any;
+        Hero_stats(): $$.$mol_dump_value;
+        Enemy(): $$.$mol_text;
+        enemy(): any;
+        Enemy_stats(): $$.$mol_dump_value;
+        hero_attack(next?: any): any;
+        Hero_step(): $mol_button_major;
+        history(): any;
+        History(): $$.$mol_dump_value;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle extends $.$gen_app_battle {
+        history(next?: any): any;
+        hero(next?: any): any;
+        enemy(next?: any): any;
+        hero_attack(next?: any): void;
+    }
+}
+
+declare namespace $ {
     class $mol_hotkey extends $mol_plugin {
         event(): Record<string, any>;
         key(): Record<string, any>;
@@ -2990,6 +3110,7 @@ declare namespace $ {
         engine(): $$.$gen_engine;
         pages(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
+        Battle_page(): $$.$gen_app_battle;
         Game_page(): $$.$gen_app_game;
         Loot_page(): $$.$gen_app_loot;
     }
