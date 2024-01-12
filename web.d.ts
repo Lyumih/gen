@@ -2686,96 +2686,28 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_dump_list extends $mol_view {
-        values(): readonly any[];
-        sub(): readonly any[];
-        dump_value(id: any): any;
-        dump_expanded(id: any, next?: any): boolean;
-        prototypes(): boolean;
-        preview_show(): boolean;
-        Dump(id: any): $$.$mol_dump_value;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_dump_list extends $.$mol_dump_list {
-        sub(): $mol_dump_value[];
-        dump_value(index: number): any;
-        expand_all(event?: Event): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_expander extends $mol_list {
+    class $gen_app_battle_unit extends $mol_list {
+        source(): Record<string, any>;
         rows(): readonly any[];
-        expanded(next?: any): boolean;
-        expandable(): boolean;
-        label(): readonly any[];
-        Trigger(): $$.$mol_check_expand;
-        Tools(): any;
-        Label(): $mol_view;
-        content(): readonly any[];
-        Content(): $$.$mol_list;
+        name(): string;
+        Name(): $$.$mol_paragraph;
+        health_title(): string;
+        Health(): $$.$mol_paragraph;
+        attack_title(): string;
+        Attack(): $$.$mol_paragraph;
+        Stats(): $$.$mol_list;
+        attack_enabled(): boolean;
+        use_attack(next?: any): any;
+        Attack_button(): $mol_button_major;
     }
 }
 
 declare namespace $.$$ {
-    class $mol_expander extends $.$mol_expander {
-        rows(): $mol_view[];
-        expandable(): boolean;
+    class $gen_app_battle_unit extends $.$gen_app_battle_unit {
+        attack_enabled(): boolean;
+        health_title(): string;
+        attack_title(): string;
     }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_dump_value extends $mol_view {
-        value(next?: any): any;
-        preview_show(next?: any): boolean;
-        sub(): readonly any[];
-        simple(): string;
-        Simple(): $$.$mol_text_code;
-        expanded(next?: any): boolean;
-        expandable(): boolean;
-        expand_all(next?: any): any;
-        expand_title(): string;
-        Expand_title(): $$.$mol_text_code;
-        Expand_head(): $$.$mol_check_expand;
-        preview_dom(): any;
-        preview(): any;
-        Preview_dom(): $mol_view;
-        Preview(): $mol_view;
-        row_values(id: any): readonly any[];
-        prototypes(): boolean;
-        Row(id: any): $$.$mol_dump_list;
-        expand_content(): readonly any[];
-        Expand(): $$.$mol_expander;
-    }
-}
-
-declare namespace $ {
-    function $mol_try<Result>(handler2: () => Result): Result | Error;
-}
-
-declare namespace $.$$ {
-    class $mol_dump_value extends $.$mol_dump_value {
-        sub(): $mol_text_code[] | $mol_expander[];
-        simple(): string;
-        expand_title(): any;
-        rows_values(): any[][];
-        preview_dom(): Element | null;
-        expand_content(): ($mol_view | $mol_dump_list)[];
-        expandable(): boolean;
-        row_values(index: number): any[];
-        expand_all(event?: Event): void;
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -2783,28 +2715,38 @@ declare namespace $ {
         engine(): $$.$gen_engine;
         title(): string;
         body(): readonly any[];
-        Hero(): $$.$mol_text;
-        hero(): any;
-        Hero_stats(): $$.$mol_dump_value;
-        Enemy(): $$.$mol_text;
-        enemy_health(): string;
-        Enemy_health(): $$.$mol_text;
-        enemy(): any;
-        Enemy_stats(): $$.$mol_dump_value;
-        hero_attack(next?: any): any;
-        Hero_step(): $mol_button_major;
-        history(): any;
-        History(): $$.$mol_dump_value;
+        hero_health(): number;
+        hero_attack(): number;
+        use_hero_attack(next?: any): any;
+        Hero(): $$.$gen_app_battle_unit;
+        enemy_health(): number;
+        enemy_attack(): number;
+        use_enemy_attack(next?: any): any;
+        Enemy(): $$.$gen_app_battle_unit;
+        Field(): $$.$mol_list;
+        end(): string;
+        End(): $$.$mol_paragraph;
+        is_game_end(): boolean;
+        get_reward(next?: any): any;
+        Reward(): $mol_button_major;
+        restart(next?: any): any;
+        Restart(): $mol_button_minor;
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
-        history(next?: any): any;
-        hero(next?: any): any;
-        enemy(next?: any): any;
-        enemy_health(): string;
-        hero_attack(next?: any): void;
+        hero_health(next?: any): any;
+        hero_attack(next?: any): any;
+        enemy_health(next?: any): any;
+        enemy_attack(next?: any): any;
+        use_hero_attack(next?: any): void;
+        use_enemy_attack(next?: any): void;
+        restart(next?: any): void;
+        is_game_continue(): boolean;
+        is_game_end(): boolean;
+        end(): string;
+        get_reward(next?: any): void;
     }
 }
 
