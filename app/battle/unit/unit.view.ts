@@ -21,9 +21,6 @@ namespace $.$$ {
 			this.unit().use_attack( this.target() )
 		}
 
-		use_skill( id: string, next?: any ) {
-			this.unit().use_skill( [ this.target() ], this.get_skill( id ) )
-		}
 
 		skill_list(): readonly any[] {
 			return this.skills().map( skill => this.Skill( skill.id ) )
@@ -35,6 +32,10 @@ namespace $.$$ {
 
 		skill_name( id: any ): string {
 			return this.get_skill( id )?.name || 'no skill'
+		}
+
+		use_skill( id: string, next?: any ) {
+			this.unit().use_skill( [ this.target() ], this.get_skill( id ) )
 		}
 
 		skills() {
