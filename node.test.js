@@ -3517,130 +3517,127 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_engine extends $.$mol_object {
-            seed() {
-                return '1';
-            }
-            hero(next) {
-                return next ?? {
-                    name: 'Milis',
-                    level: 5,
-                    point: {
-                        skill: 4,
-                    },
-                    equip: this.hero_equipments(),
-                    skills: this.hero_skills(),
-                    inventory: this.inventory()
-                };
-            }
-            hero_skills(next) {
-                return next ?? [{ id: this.uuid(), type: 'skill', name: 'Атака', level: 1, modes: [{ id: this.uuid(), name: 'Урон x2', type: 'mode' }] }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 }];
-            }
-            hero_equipments(next) {
-                return next ?? [{ id: this.uuid(), name: 'Кинжал', type: 'weapon' }, { id: this.uuid(), name: 'Пояс', type: 'armor' }];
-            }
-            is_equipment(type) {
-                return ['weapon', 'armor', 'equip'].includes(type || '');
-            }
-            hero_unequip(id, next) {
-                const item = this.hero_equipments().find(item => item.id === id);
-                this.hero_equipments(this.hero_equipments().filter(item => item.id !== id));
-                this.inventory([...this.inventory(), item]);
-            }
-            reward(next) {
-                return next ?? this.get_random_skill();
-            }
-            make_win(next) {
-                this.reward();
-                this.get_random_skill();
-                return next ?? false;
-            }
-            all_skills() {
-                const create_skill = (id, name) => ({ id, name, type: 'skill' });
-                return [create_skill(this.uuid(), 'Атака'), create_skill(this.uuid(), 'Защита'), create_skill(this.uuid(), 'Хил')];
-            }
-            get_random_skill(next) {
-                return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
-            }
-            add_hero_skill() {
-                this.hero_skills([...this.hero_skills(), this.get_random_skill()]);
-            }
-            skill_level_up(id) {
-                const skills = this.hero_skills();
-                const skill = skills.find(skill => skill.id === id);
-                if (skill && skills) {
-                    skills.find(skill => skill.id === id).level = skill.level + 1;
-                    this.hero_skills(skills);
-                }
-            }
-            skill_unequip(id) {
-                const skill = this.hero_skills().find(item => item.id === id);
-                if (skill) {
-                    this.hero_skills(this.hero_skills().filter(item => item.id !== id));
-                    this.inventory([...this.inventory(), skill]);
-                }
-            }
-            all_equip() {
-                const create_equip = (id, name) => ({ id, name, type: 'equip' });
-                return [create_equip(this.uuid(), 'Меч'), create_equip(this.uuid(), 'Щит'), create_equip(this.uuid(), 'Шлем')];
-            }
-            all_mode() {
-                const create_mode = (id, name) => ({ id, name, type: 'mode' });
-                return [create_mode(this.uuid(), 'Урон: х2'), create_mode(this.uuid(), 'Снаряды: +2'), create_mode(this.uuid(), 'Дальность: +2')];
-            }
-            inventory(next) {
-                return next ?? [{ id: this.uuid(), name: 'Меч', type: 'weapon' }, { id: this.uuid(), name: 'Щит', type: 'armor' }];
-            }
-            inventory_sell(id) {
-                const item = this.inventory().find(item => item.id === id);
-                this.shop([...this.shop(), item]);
-                this.inventory(this.inventory().filter(item => item.id !== id));
-            }
-            inventory_equip(id) {
-                const item = this.inventory().find(item => item.id === id);
-                this.is_equipment(item?.type) ? this.hero_equipments([...this.hero_equipments(), item]) : this.hero_skills([...this.hero_skills(), item]);
-                this.inventory(this.inventory().filter(item => item.id !== id));
-            }
-            shop(next) {
-                return next ?? [{ id: this.uuid(), name: 'Лук', type: 'weapon' }, { id: this.uuid(), name: 'Перчатки', type: 'armor' }];
-            }
-            shop_buy(id) {
-                const item = this.shop().find(item => item.id === id);
-                this.inventory([...this.inventory(), item]);
-                this.shop(this.shop().filter(item => item.id !== id));
-            }
-            uuid() {
-                return this.$.$mol_guid();
+    class $gen_engine extends $.$mol_object {
+        seed() {
+            return '1';
+        }
+        hero(next) {
+            return next ?? {
+                name: 'Milis',
+                level: 5,
+                point: {
+                    skill: 4,
+                },
+                equip: this.hero_equipments(),
+                skills: this.hero_skills(),
+                inventory: this.inventory()
+            };
+        }
+        hero_skills(next) {
+            return next ?? [{ id: this.uuid(), type: 'skill', name: 'Атака', level: 1, modes: [{ id: this.uuid(), name: 'Урон x2', type: 'mode' }] }, { id: this.uuid(), name: 'Защита', type: 'skill', level: 1 }];
+        }
+        hero_equipments(next) {
+            return next ?? [{ id: this.uuid(), name: 'Кинжал', type: 'weapon' }, { id: this.uuid(), name: 'Пояс', type: 'armor' }];
+        }
+        is_equipment(type) {
+            return ['weapon', 'armor', 'equip'].includes(type || '');
+        }
+        hero_unequip(id, next) {
+            const item = this.hero_equipments().find(item => item.id === id);
+            this.hero_equipments(this.hero_equipments().filter(item => item.id !== id));
+            this.inventory([...this.inventory(), item]);
+        }
+        reward(next) {
+            return next ?? this.get_random_skill();
+        }
+        make_win(next) {
+            this.reward();
+            this.get_random_skill();
+            return next ?? false;
+        }
+        all_skills() {
+            const create_skill = (id, name) => ({ id, name, type: 'skill' });
+            return [create_skill(this.uuid(), 'Атака'), create_skill(this.uuid(), 'Защита'), create_skill(this.uuid(), 'Хил')];
+        }
+        get_random_skill(next) {
+            return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
+        }
+        add_hero_skill() {
+            this.hero_skills([...this.hero_skills(), this.get_random_skill()]);
+        }
+        skill_level_up(id) {
+            const skills = this.hero_skills();
+            const skill = skills.find(skill => skill.id === id);
+            if (skill && skills) {
+                skills.find(skill => skill.id === id).level = skill.level + 1;
+                this.hero_skills(skills);
             }
         }
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "hero", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "hero_skills", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "hero_equipments", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "reward", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "all_skills", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "get_random_skill", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "inventory", null);
-        __decorate([
-            $mol_mem
-        ], $gen_engine.prototype, "shop", null);
-        $$.$gen_engine = $gen_engine;
-    })($$ = $.$$ || ($.$$ = {}));
+        skill_unequip(id) {
+            const skill = this.hero_skills().find(item => item.id === id);
+            if (skill) {
+                this.hero_skills(this.hero_skills().filter(item => item.id !== id));
+                this.inventory([...this.inventory(), skill]);
+            }
+        }
+        all_equip() {
+            const create_equip = (id, name) => ({ id, name, type: 'equip' });
+            return [create_equip(this.uuid(), 'Меч'), create_equip(this.uuid(), 'Щит'), create_equip(this.uuid(), 'Шлем')];
+        }
+        all_mode() {
+            const create_mode = (id, name) => ({ id, name, type: 'mode' });
+            return [create_mode(this.uuid(), 'Урон: х2'), create_mode(this.uuid(), 'Снаряды: +2'), create_mode(this.uuid(), 'Дальность: +2')];
+        }
+        inventory(next) {
+            return next ?? [{ id: this.uuid(), name: 'Меч', type: 'weapon' }, { id: this.uuid(), name: 'Щит', type: 'armor' }];
+        }
+        inventory_sell(id) {
+            const item = this.inventory().find(item => item.id === id);
+            this.shop([...this.shop(), item]);
+            this.inventory(this.inventory().filter(item => item.id !== id));
+        }
+        inventory_equip(id) {
+            const item = this.inventory().find(item => item.id === id);
+            this.is_equipment(item?.type) ? this.hero_equipments([...this.hero_equipments(), item]) : this.hero_skills([...this.hero_skills(), item]);
+            this.inventory(this.inventory().filter(item => item.id !== id));
+        }
+        shop(next) {
+            return next ?? [{ id: this.uuid(), name: 'Лук', type: 'weapon' }, { id: this.uuid(), name: 'Перчатки', type: 'armor' }];
+        }
+        shop_buy(id) {
+            const item = this.shop().find(item => item.id === id);
+            this.inventory([...this.inventory(), item]);
+            this.shop(this.shop().filter(item => item.id !== id));
+        }
+        uuid() {
+            return this.$.$mol_guid();
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "hero", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "hero_skills", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "hero_equipments", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "reward", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "all_skills", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "get_random_skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "inventory", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine.prototype, "shop", null);
+    $.$gen_engine = $gen_engine;
 })($ || ($ = {}));
 //gen/engine/engine.ts
 ;
@@ -9265,8 +9262,8 @@ var $;
             ];
         }
         Inventory_list() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => this.inventory_list();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.inventory_list();
             return obj;
         }
         Shop_label() {
@@ -9464,12 +9461,45 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_unit extends $.$mol_object {
+        name(next) {
+            return next ?? 'Unit';
+        }
+        health(next) {
+            console.log('health', next);
+            return next ?? 15;
+        }
+        attack(next) {
+            return next ?? 10;
+        }
+        use_attack(target) {
+            console.log('use_attack');
+            target.health(target.health() - this.attack());
+        }
+        use_skill() {
+            console.log('use_skill');
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "attack", null);
+    $.$gen_engine_unit = $gen_engine_unit;
+})($ || ($ = {}));
+//gen/engine/unit/unit.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app_battle_unit extends $mol_list {
-        source() {
-            return {
-                health: 9,
-                attack: 0
-            };
+        unit() {
+            const obj = new this.$.$gen_engine_unit();
+            return obj;
         }
         rows() {
             return [
@@ -9528,6 +9558,9 @@ var $;
     }
     __decorate([
         $mol_mem
+    ], $gen_app_battle_unit.prototype, "unit", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_unit.prototype, "Name", null);
     __decorate([
         $mol_mem
@@ -9555,13 +9588,13 @@ var $;
     (function ($$) {
         class $gen_app_battle_unit extends $.$gen_app_battle_unit {
             attack_enabled() {
-                return this.source().health > 0;
+                return this.unit().health() > 0;
             }
             health_title() {
-                return `Здоровье: ${this.source().health}`;
+                return `Здоровье: ${this.unit().health()}`;
             }
             attack_title() {
-                return `Атака: ${this.source().attack}`;
+                return `Атака: ${this.unit().attack()}`;
             }
         }
         $$.$gen_app_battle_unit = $gen_app_battle_unit;
@@ -9588,11 +9621,8 @@ var $;
                 this.Restart()
             ];
         }
-        hero_health() {
-            return 0;
-        }
-        hero_attack() {
-            return 0;
+        get_hero() {
+            return null;
         }
         use_hero_attack(next) {
             if (next !== undefined)
@@ -9602,18 +9632,12 @@ var $;
         Hero() {
             const obj = new this.$.$gen_app_battle_unit();
             obj.name = () => "Герой: Милис";
-            obj.source = () => ({
-                health: this.hero_health(),
-                attack: this.hero_attack()
-            });
+            obj.unit = () => this.get_hero();
             obj.use_attack = () => this.use_hero_attack();
             return obj;
         }
-        enemy_health() {
-            return 0;
-        }
-        enemy_attack() {
-            return 0;
+        get_enemy() {
+            return null;
         }
         use_enemy_attack(next) {
             if (next !== undefined)
@@ -9623,10 +9647,7 @@ var $;
         Enemy() {
             const obj = new this.$.$gen_app_battle_unit();
             obj.name = () => "Враг: Гоблин";
-            obj.source = () => ({
-                health: this.enemy_health(),
-                attack: this.enemy_attack()
-            });
+            obj.unit = () => this.get_enemy();
             obj.use_attack = () => this.use_enemy_attack();
             return obj;
         }
@@ -9716,31 +9737,24 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
-            hero_health(next) {
-                return next ?? 30;
+            get_hero() {
+                return new this.$.$gen_engine_unit();
             }
-            hero_attack(next) {
-                return next ?? 10;
-            }
-            enemy_health(next) {
-                console.log('enemy_health', next);
-                return next ?? 20;
-            }
-            enemy_attack(next) {
-                return next ?? 5;
+            get_enemy() {
+                return new this.$.$gen_engine_unit();
             }
             use_hero_attack(next) {
-                this.enemy_health(this.enemy_health() - this.hero_attack());
+                this.get_hero().use_attack(this.get_enemy());
             }
             use_enemy_attack(next) {
-                this.hero_health(this.hero_health() - this.enemy_attack());
+                this.get_enemy().use_attack(this.get_hero());
             }
-            restart(next) {
-                this.hero_health(30);
-                this.enemy_health(20);
+            restart() {
+                this.get_hero().health(19);
+                this.get_enemy().health(20);
             }
             is_game_continue() {
-                return this.enemy_health() > 0 && this.hero_health() > 0;
+                return this.get_hero().health() > 0 && this.get_enemy().health() > 0;
             }
             is_game_end() {
                 return !this.is_game_continue();
@@ -9755,832 +9769,14 @@ var $;
         }
         __decorate([
             $mol_mem
-        ], $gen_app_battle.prototype, "hero_health", null);
+        ], $gen_app_battle.prototype, "get_hero", null);
         __decorate([
             $mol_mem
-        ], $gen_app_battle.prototype, "hero_attack", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "enemy_health", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "enemy_attack", null);
+        ], $gen_app_battle.prototype, "get_enemy", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/battle/battle.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_hotkey extends $mol_plugin {
-        event() {
-            return {
-                ...super.event(),
-                keydown: (event) => this.keydown(event)
-            };
-        }
-        key() {
-            return {};
-        }
-        mod_ctrl() {
-            return false;
-        }
-        mod_alt() {
-            return false;
-        }
-        mod_shift() {
-            return false;
-        }
-        keydown(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_hotkey.prototype, "keydown", null);
-    $.$mol_hotkey = $mol_hotkey;
-})($ || ($ = {}));
-//mol/hotkey/-view.tree/hotkey.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_hotkey extends $.$mol_hotkey {
-            key() {
-                return super.key();
-            }
-            keydown(event) {
-                if (!event)
-                    return;
-                if (event.defaultPrevented)
-                    return;
-                let name = $mol_keyboard_code[event.keyCode];
-                if (this.mod_ctrl() !== (event.ctrlKey || event.metaKey))
-                    return;
-                if (this.mod_alt() !== event.altKey)
-                    return;
-                if (this.mod_shift() !== event.shiftKey)
-                    return;
-                const handle = this.key()[name];
-                if (handle)
-                    handle(event);
-            }
-        }
-        $$.$mol_hotkey = $mol_hotkey;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/hotkey/hotkey.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_string extends $mol_view {
-        dom_name() {
-            return "input";
-        }
-        enabled() {
-            return true;
-        }
-        minimal_height() {
-            return 40;
-        }
-        autocomplete() {
-            return false;
-        }
-        selection(next) {
-            if (next !== undefined)
-                return next;
-            return [
-                0,
-                0
-            ];
-        }
-        auto() {
-            return [
-                this.selection_watcher(),
-                this.error_report()
-            ];
-        }
-        field() {
-            return {
-                ...super.field(),
-                disabled: this.disabled(),
-                value: this.value_changed(),
-                placeholder: this.hint_visible(),
-                spellcheck: this.spellcheck(),
-                autocomplete: this.autocomplete_native(),
-                selectionEnd: this.selection_end(),
-                selectionStart: this.selection_start(),
-                inputMode: this.keyboard(),
-                enterkeyhint: this.enter()
-            };
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                maxlength: this.length_max(),
-                type: this.type()
-            };
-        }
-        event() {
-            return {
-                ...super.event(),
-                input: (event) => this.event_change(event)
-            };
-        }
-        plugins() {
-            return [
-                this.Submit()
-            ];
-        }
-        selection_watcher() {
-            return null;
-        }
-        error_report() {
-            return null;
-        }
-        disabled() {
-            return false;
-        }
-        value(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        value_changed(next) {
-            return this.value(next);
-        }
-        hint() {
-            return "";
-        }
-        hint_visible() {
-            return this.hint();
-        }
-        spellcheck() {
-            return true;
-        }
-        autocomplete_native() {
-            return "";
-        }
-        selection_end() {
-            return 0;
-        }
-        selection_start() {
-            return 0;
-        }
-        keyboard() {
-            return "text";
-        }
-        enter() {
-            return "go";
-        }
-        length_max() {
-            return +Infinity;
-        }
-        type(next) {
-            if (next !== undefined)
-                return next;
-            return "text";
-        }
-        event_change(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        submit_with_ctrl() {
-            return false;
-        }
-        submit(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        Submit() {
-            const obj = new this.$.$mol_hotkey();
-            obj.mod_ctrl = () => this.submit_with_ctrl();
-            obj.key = () => ({
-                enter: (event) => this.submit(event)
-            });
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "selection", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "value", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "event_change", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "submit", null);
-    __decorate([
-        $mol_mem
-    ], $mol_string.prototype, "Submit", null);
-    $.$mol_string = $mol_string;
-})($ || ($ = {}));
-//mol/string/-view.tree/string.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_string extends $.$mol_string {
-            event_change(next) {
-                if (!next)
-                    return;
-                const el = next.target;
-                const from = el.selectionStart;
-                const to = el.selectionEnd;
-                try {
-                    el.value = this.value_changed(el.value);
-                }
-                catch (error) {
-                    const el = this.dom_node();
-                    if (error instanceof Error) {
-                        el.setCustomValidity(error.message);
-                        el.reportValidity();
-                    }
-                    $mol_fail_hidden(error);
-                }
-                if (to === null)
-                    return;
-                el.selectionEnd = to;
-                el.selectionStart = from;
-                this.selection_change(next);
-            }
-            error_report() {
-                try {
-                    if (this.focused())
-                        this.value();
-                }
-                catch (error) {
-                    const el = this.dom_node();
-                    if (error instanceof Error) {
-                        el.setCustomValidity(error.message);
-                        el.reportValidity();
-                    }
-                }
-            }
-            hint_visible() {
-                return (this.enabled() ? this.hint() : '') || ' ';
-            }
-            disabled() {
-                return !this.enabled();
-            }
-            autocomplete_native() {
-                return this.autocomplete() ? 'on' : 'off';
-            }
-            selection_watcher() {
-                return new $mol_dom_listener(this.$.$mol_dom_context.document, 'selectionchange', $mol_wire_async(event => this.selection_change(event)));
-            }
-            selection_change(event) {
-                const el = this.dom_node();
-                if (el !== this.$.$mol_dom_context.document.activeElement)
-                    return;
-                const [from, to] = this.selection([
-                    el.selectionStart,
-                    el.selectionEnd,
-                ]);
-                el.selectionEnd = to;
-                el.selectionStart = from;
-                if (to !== from && el.selectionEnd === el.selectionStart) {
-                    el.selectionEnd = to;
-                }
-            }
-            selection_start() {
-                const el = this.dom_node();
-                if (el.selectionStart === null)
-                    return undefined;
-                return this.selection()[0];
-            }
-            selection_end() {
-                const el = this.dom_node();
-                if (el.selectionEnd === null)
-                    return undefined;
-                return this.selection()[1];
-            }
-        }
-        __decorate([
-            $mol_action
-        ], $mol_string.prototype, "event_change", null);
-        __decorate([
-            $mol_mem
-        ], $mol_string.prototype, "error_report", null);
-        __decorate([
-            $mol_mem
-        ], $mol_string.prototype, "selection_watcher", null);
-        $$.$mol_string = $mol_string;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/string/string.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/string/string.view.css", "[mol_string] {\n\tbox-sizing: border-box;\n\toutline-offset: 0;\n\tborder: none;\n\tborder-radius: var(--mol_gap_round);\n\twhite-space: pre-line;\n\toverflow: hidden;\n\ttext-overflow: ellipsis;\n\tpadding: var(--mol_gap_text);\n\ttext-align: left;\n\tposition: relative;\n\tfont: inherit;\n\tflex: 1 1 auto;\n\tbackground: transparent;\n\tmin-width: 0;\n\tcolor: inherit;\n\tbackground: var(--mol_theme_field);\n}\n\n[mol_string]:disabled:not(:placeholder-shown) {\n\tbackground-color: transparent;\n\tcolor: var(--mol_theme_text);\n}\n\n[mol_string]:where(:not(:disabled)) {\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n}\n\n[mol_string]:where(:not(:disabled)):hover {\n\tbox-shadow: inset 0 0 0 2px var(--mol_theme_line);\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_string]:focus {\n\toutline: none;\n\tz-index: var(--mol_layer_focus);\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_focus);\n}\n\n[mol_string]::placeholder {\n\tcolor: var(--mol_theme_shade);\n}\n\n[mol_string]::-ms-clear {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-//mol/string/-css/string.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_minus extends $mol_icon {
-        path() {
-            return "M19,13H5V11H19V13Z";
-        }
-    }
-    $.$mol_icon_minus = $mol_icon_minus;
-})($ || ($ = {}));
-//mol/icon/minus/-view.tree/minus.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_plus extends $mol_icon {
-        path() {
-            return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
-        }
-    }
-    $.$mol_icon_plus = $mol_icon_plus;
-})($ || ($ = {}));
-//mol/icon/plus/-view.tree/plus.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_number extends $mol_view {
-        precision_view() {
-            return this.precision();
-        }
-        precision_change() {
-            return this.precision();
-        }
-        value_min() {
-            return -Infinity;
-        }
-        value_max() {
-            return +Infinity;
-        }
-        value(next) {
-            if (next !== undefined)
-                return next;
-            return +NaN;
-        }
-        enabled() {
-            return true;
-        }
-        sub() {
-            return [
-                this.String(),
-                this.Dec(),
-                this.Inc()
-            ];
-        }
-        precision() {
-            return 1;
-        }
-        type() {
-            return "tel";
-        }
-        value_string(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        hint() {
-            return " ";
-        }
-        string_enabled() {
-            return this.enabled();
-        }
-        submit(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        String() {
-            const obj = new this.$.$mol_string();
-            obj.type = () => this.type();
-            obj.value = (next) => this.value_string(next);
-            obj.hint = () => this.hint();
-            obj.enabled = () => this.string_enabled();
-            obj.submit = (next) => this.submit(next);
-            return obj;
-        }
-        event_dec(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        dec_enabled() {
-            return this.enabled();
-        }
-        dec_icon() {
-            const obj = new this.$.$mol_icon_minus();
-            return obj;
-        }
-        Dec() {
-            const obj = new this.$.$mol_button_minor();
-            obj.event_click = (next) => this.event_dec(next);
-            obj.enabled = () => this.dec_enabled();
-            obj.sub = () => [
-                this.dec_icon()
-            ];
-            return obj;
-        }
-        event_inc(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        inc_enabled() {
-            return this.enabled();
-        }
-        inc_icon() {
-            const obj = new this.$.$mol_icon_plus();
-            return obj;
-        }
-        Inc() {
-            const obj = new this.$.$mol_button_minor();
-            obj.event_click = (next) => this.event_inc(next);
-            obj.enabled = () => this.inc_enabled();
-            obj.sub = () => [
-                this.inc_icon()
-            ];
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "value", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "value_string", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "submit", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "String", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "event_dec", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "dec_icon", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "Dec", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "event_inc", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "inc_icon", null);
-    __decorate([
-        $mol_mem
-    ], $mol_number.prototype, "Inc", null);
-    $.$mol_number = $mol_number;
-})($ || ($ = {}));
-//mol/number/-view.tree/number.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/number/number.css", "[mol_number] {\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tposition: relative;\n\talign-items: stretch;\n\tmax-width: 100%;\n}\n\n[mol_number_string] {\n\tappearance: textfield;\n\tflex: 1 1 7rem;\n\twidth: 7rem;\n}\n\n[mol_number_string]::-webkit-inner-spin-button {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-//mol/number/-css/number.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_number extends $.$mol_number {
-            value_limited(next) {
-                if (next === undefined)
-                    return this.value();
-                if (next === '')
-                    return this.value(Number.NaN);
-                const min = this.value_min();
-                const max = this.value_max();
-                const val = Number(next);
-                if (val < min)
-                    return this.value(min);
-                if (val > max)
-                    return this.value(max);
-                return this.value(val);
-            }
-            event_dec(next) {
-                this.value_limited((this.value_limited() || 0) - this.precision_change());
-            }
-            event_inc(next) {
-                this.value_limited((this.value_limited() || 0) + this.precision_change());
-            }
-            value_string(next) {
-                const next_num = this.value_limited(next);
-                const precisionView = this.precision_view();
-                if (next_num === 0)
-                    return '0';
-                if (!next_num)
-                    return '';
-                if (precisionView >= 1) {
-                    return (next_num / precisionView).toFixed();
-                }
-                else {
-                    const fixedNumber = Math.log10(1 / precisionView);
-                    return next_num.toFixed(Math.ceil(fixedNumber));
-                }
-            }
-            dec_enabled() {
-                return this.enabled() && (!((this.value() || 0) <= this.value_min()));
-            }
-            inc_enabled() {
-                return this.enabled() && (!((this.value() || 0) >= this.value_max()));
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_number.prototype, "dec_enabled", null);
-        __decorate([
-            $mol_mem
-        ], $mol_number.prototype, "inc_enabled", null);
-        $$.$mol_number = $mol_number;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/number/number.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_game extends $mol_page {
-        title() {
-            return "Генератор битвы";
-        }
-        engine() {
-            const obj = new this.$.$gen_engine();
-            return obj;
-        }
-        body() {
-            return [
-                this.Hero_level(),
-                this.Generate(),
-                this.Result()
-            ];
-        }
-        hero_level(next) {
-            if (next !== undefined)
-                return next;
-            return 20;
-        }
-        Hero_level_value() {
-            const obj = new this.$.$mol_number();
-            obj.value = (next) => this.hero_level(next);
-            return obj;
-        }
-        Hero_level() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Ваш уровень героев";
-            obj.content = () => [
-                this.Hero_level_value()
-            ];
-            return obj;
-        }
-        generate(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Generate() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Сгенерировать";
-            obj.click = (next) => this.generate(next);
-            return obj;
-        }
-        result() {
-            return "";
-        }
-        Result() {
-            const obj = new this.$.$mol_text();
-            obj.code_sidebar_showed = () => false;
-            obj.text = () => this.result();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "hero_level", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "Hero_level_value", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "Hero_level", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "generate", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "Generate", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_game.prototype, "Result", null);
-    $.$gen_app_game = $gen_app_game;
-})($ || ($ = {}));
-//gen/app/game/-view.tree/game.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_generator extends $.$mol_object {
-            seed() {
-                return '1';
-            }
-            start(level) {
-                const enemies = this.get_enemies(level);
-                const format_enemies = enemies.map((enemy, index) => {
-                    return `\n**Враг ${index + 1}**\nХарактеристики: ${enemy.point.stats}\nУмения: ${enemy.point.skill}\nПредметы: ${enemy.point.equip}\n`;
-                });
-                return `
-			Местность: ${this.get_terrain()}
-			Режим: ${this.get_mode()}
-			Врагов: ${enemies.length}
-			${format_enemies.join('\n')}
-			`;
-            }
-            get_enemies(level) {
-                const count = $mol_array_lottery([1, 2, 3, 4]);
-                const enemies = [];
-                for (let i = 0; i < count; i++) {
-                    enemies.push(this.get_enemy(level));
-                }
-                return enemies;
-            }
-            get_enemy(level) {
-                const stats = level - this.random(level - 2);
-                const skill = this.random(level - stats);
-                const equip = level - stats - skill;
-                return {
-                    name: 'Враг',
-                    level: level,
-                    skills: [],
-                    point: {
-                        stats,
-                        skill,
-                        equip,
-                    }
-                };
-            }
-            random(max) {
-                return Math.floor(Math.random() * max);
-            }
-            get_mode() {
-                return $mol_array_lottery(['битва', 'все против всех', 'предательство']);
-            }
-            get_terrain() {
-                return $mol_array_lottery(['обычная', 'горы', 'низины', 'горы и низины']);
-            }
-        }
-        $$.$gen_generator = $gen_generator;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/generator/generator.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_game extends $.$gen_app_game {
-            result(next) {
-                return new this.$.$gen_generator().start(this.hero_level());
-            }
-            generate(next) {
-                return this.result(true);
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_game.prototype, "result", null);
-        $$.$gen_app_game = $gen_app_game;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/game/game.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_loot extends $mol_page {
-        title() {
-            return "Лут";
-        }
-        engine() {
-            const obj = new this.$.$gen_engine();
-            return obj;
-        }
-        body() {
-            return [
-                this.Generate(),
-                this.New_item(),
-                this.History_item()
-            ];
-        }
-        generate_item(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Generate() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Получить предмет";
-            obj.click = (next) => this.generate_item(next);
-            return obj;
-        }
-        new_item() {
-            return "Новый предмет";
-        }
-        New_item() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.new_item();
-            return obj;
-        }
-        history_text() {
-            return "История предметов";
-        }
-        History_item() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.history_text();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_loot.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_loot.prototype, "generate_item", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_loot.prototype, "Generate", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_loot.prototype, "New_item", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_loot.prototype, "History_item", null);
-    $.$gen_app_loot = $gen_app_loot;
-})($ || ($ = {}));
-//gen/app/loot/-view.tree/loot.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_loot extends $.$gen_app_loot {
-            generate_item(next) {
-                const skill = $mol_array_lottery(this.engine().all_skills());
-                const equip = $mol_array_lottery(this.engine().all_equip());
-                const mode = $mol_array_lottery(this.engine().all_mode());
-                const item = $mol_array_lottery([skill, equip, mode]);
-                this.engine().inventory([...this.engine().inventory(), item]);
-                this.history([...this.history(), item]);
-            }
-            history(next) {
-                return next ?? [];
-            }
-            new_item() {
-                const history = this.history();
-                return JSON.stringify(history[history.length - 1] || 'Нет предмета');
-            }
-            history_text() {
-                return 'История:\n' + JSON.stringify(this.history());
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_loot.prototype, "history", null);
-        $$.$gen_app_loot = $gen_app_loot;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/loot/loot.view.ts
 ;
 "use strict";
 var $;
@@ -10596,9 +9792,7 @@ var $;
         pages() {
             return [
                 this.Hero_page(),
-                this.Battle_page(),
-                this.Game_page(),
-                this.Loot_page()
+                this.Battle_page()
             ];
         }
         Hero_page() {
@@ -10608,16 +9802,6 @@ var $;
         }
         Battle_page() {
             const obj = new this.$.$gen_app_battle();
-            obj.engine = () => this.engine();
-            return obj;
-        }
-        Game_page() {
-            const obj = new this.$.$gen_app_game();
-            obj.engine = () => this.engine();
-            return obj;
-        }
-        Loot_page() {
-            const obj = new this.$.$gen_app_loot();
             obj.engine = () => this.engine();
             return obj;
         }
@@ -10631,12 +9815,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Battle_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app.prototype, "Game_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app.prototype, "Loot_page", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts

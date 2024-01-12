@@ -942,7 +942,7 @@ declare namespace $ {
     function $mol_array_lottery<Value>(list: readonly Value[]): Value;
 }
 
-declare namespace $.$$ {
+declare namespace $ {
     type Item = {
         id: string;
         name: string;
@@ -2019,7 +2019,7 @@ declare namespace $.$$ {
         col_head_content(colId: string): readonly string[];
         rows(): readonly $mol_view[];
         cells(row_id: string[]): readonly $mol_view[];
-        col_type(col_id: string): "text" | "number" | "branch";
+        col_type(col_id: string): "number" | "text" | "branch";
         Cell(id: {
             row: string[];
             col: string;
@@ -2594,7 +2594,7 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_hero extends $mol_page {
         title(): string;
-        engine(): $$.$gen_engine;
+        engine(): $gen_engine;
         body(): readonly any[];
         name(): string;
         Name(): $$.$mol_text;
@@ -2625,7 +2625,7 @@ declare namespace $ {
         Inventory_card(id: any): $gen_app_item_inventory;
         Inventory_item(id: any): $mol_row;
         inventory_list(): readonly any[];
-        Inventory_list(): $mol_row;
+        Inventory_list(): $$.$mol_list;
         Shop_label(): $$.$mol_text;
         get_shop_item(id: any): any;
         shop_item_bue(id: any, next?: any): any;
@@ -2686,8 +2686,18 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $gen_engine_unit extends $.$mol_object {
+        name(next?: any): any;
+        health(next?: any): any;
+        attack(next?: any): any;
+        use_attack(target: $gen_engine_unit): void;
+        use_skill(): void;
+    }
+}
+
+declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
-        source(): Record<string, any>;
+        unit(): $gen_engine_unit;
         rows(): readonly any[];
         name(): string;
         Name(): $$.$mol_paragraph;
@@ -2712,15 +2722,13 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $gen_app_battle extends $mol_page {
-        engine(): $$.$gen_engine;
+        engine(): $gen_engine;
         title(): string;
         body(): readonly any[];
-        hero_health(): number;
-        hero_attack(): number;
+        get_hero(): any;
         use_hero_attack(next?: any): any;
         Hero(): $$.$gen_app_battle_unit;
-        enemy_health(): number;
-        enemy_attack(): number;
+        get_enemy(): any;
         use_enemy_attack(next?: any): any;
         Enemy(): $$.$gen_app_battle_unit;
         Field(): $$.$mol_list;
@@ -2736,13 +2744,11 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
-        hero_health(next?: any): any;
-        hero_attack(next?: any): any;
-        enemy_health(next?: any): any;
-        enemy_attack(next?: any): any;
+        get_hero(): $gen_engine_unit;
+        get_enemy(): $gen_engine_unit;
         use_hero_attack(next?: any): void;
         use_enemy_attack(next?: any): void;
-        restart(next?: any): void;
+        restart(): void;
         is_game_continue(): boolean;
         is_game_end(): boolean;
         end(): string;
@@ -2751,313 +2757,12 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_hotkey extends $mol_plugin {
-        event(): Record<string, any>;
-        key(): Record<string, any>;
-        mod_ctrl(): boolean;
-        mod_alt(): boolean;
-        mod_shift(): boolean;
-        keydown(event?: any): any;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_hotkey extends $.$mol_hotkey {
-        key(): {
-            readonly [x: number]: ((event: KeyboardEvent) => void) | undefined;
-            readonly backspace?: ((event: KeyboardEvent) => void) | undefined;
-            readonly tab?: ((event: KeyboardEvent) => void) | undefined;
-            readonly enter?: ((event: KeyboardEvent) => void) | undefined;
-            readonly shift?: ((event: KeyboardEvent) => void) | undefined;
-            readonly ctrl?: ((event: KeyboardEvent) => void) | undefined;
-            readonly alt?: ((event: KeyboardEvent) => void) | undefined;
-            readonly pause?: ((event: KeyboardEvent) => void) | undefined;
-            readonly capsLock?: ((event: KeyboardEvent) => void) | undefined;
-            readonly escape?: ((event: KeyboardEvent) => void) | undefined;
-            readonly space?: ((event: KeyboardEvent) => void) | undefined;
-            readonly pageUp?: ((event: KeyboardEvent) => void) | undefined;
-            readonly pageDown?: ((event: KeyboardEvent) => void) | undefined;
-            readonly end?: ((event: KeyboardEvent) => void) | undefined;
-            readonly home?: ((event: KeyboardEvent) => void) | undefined;
-            readonly left?: ((event: KeyboardEvent) => void) | undefined;
-            readonly up?: ((event: KeyboardEvent) => void) | undefined;
-            readonly right?: ((event: KeyboardEvent) => void) | undefined;
-            readonly down?: ((event: KeyboardEvent) => void) | undefined;
-            readonly insert?: ((event: KeyboardEvent) => void) | undefined;
-            readonly delete?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key0?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key1?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key2?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key3?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key4?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key5?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key6?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key7?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key8?: ((event: KeyboardEvent) => void) | undefined;
-            readonly key9?: ((event: KeyboardEvent) => void) | undefined;
-            readonly A?: ((event: KeyboardEvent) => void) | undefined;
-            readonly B?: ((event: KeyboardEvent) => void) | undefined;
-            readonly C?: ((event: KeyboardEvent) => void) | undefined;
-            readonly D?: ((event: KeyboardEvent) => void) | undefined;
-            readonly E?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F?: ((event: KeyboardEvent) => void) | undefined;
-            readonly G?: ((event: KeyboardEvent) => void) | undefined;
-            readonly H?: ((event: KeyboardEvent) => void) | undefined;
-            readonly I?: ((event: KeyboardEvent) => void) | undefined;
-            readonly J?: ((event: KeyboardEvent) => void) | undefined;
-            readonly K?: ((event: KeyboardEvent) => void) | undefined;
-            readonly L?: ((event: KeyboardEvent) => void) | undefined;
-            readonly M?: ((event: KeyboardEvent) => void) | undefined;
-            readonly N?: ((event: KeyboardEvent) => void) | undefined;
-            readonly O?: ((event: KeyboardEvent) => void) | undefined;
-            readonly P?: ((event: KeyboardEvent) => void) | undefined;
-            readonly Q?: ((event: KeyboardEvent) => void) | undefined;
-            readonly R?: ((event: KeyboardEvent) => void) | undefined;
-            readonly S?: ((event: KeyboardEvent) => void) | undefined;
-            readonly T?: ((event: KeyboardEvent) => void) | undefined;
-            readonly U?: ((event: KeyboardEvent) => void) | undefined;
-            readonly V?: ((event: KeyboardEvent) => void) | undefined;
-            readonly W?: ((event: KeyboardEvent) => void) | undefined;
-            readonly X?: ((event: KeyboardEvent) => void) | undefined;
-            readonly Y?: ((event: KeyboardEvent) => void) | undefined;
-            readonly Z?: ((event: KeyboardEvent) => void) | undefined;
-            readonly metaLeft?: ((event: KeyboardEvent) => void) | undefined;
-            readonly metaRight?: ((event: KeyboardEvent) => void) | undefined;
-            readonly select?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad0?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad1?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad2?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad3?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad4?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad5?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad6?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad7?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad8?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numpad9?: ((event: KeyboardEvent) => void) | undefined;
-            readonly multiply?: ((event: KeyboardEvent) => void) | undefined;
-            readonly add?: ((event: KeyboardEvent) => void) | undefined;
-            readonly subtract?: ((event: KeyboardEvent) => void) | undefined;
-            readonly decimal?: ((event: KeyboardEvent) => void) | undefined;
-            readonly divide?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F1?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F2?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F3?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F4?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F5?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F6?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F7?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F8?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F9?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F10?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F11?: ((event: KeyboardEvent) => void) | undefined;
-            readonly F12?: ((event: KeyboardEvent) => void) | undefined;
-            readonly numLock?: ((event: KeyboardEvent) => void) | undefined;
-            readonly scrollLock?: ((event: KeyboardEvent) => void) | undefined;
-            readonly semicolon?: ((event: KeyboardEvent) => void) | undefined;
-            readonly equals?: ((event: KeyboardEvent) => void) | undefined;
-            readonly comma?: ((event: KeyboardEvent) => void) | undefined;
-            readonly dash?: ((event: KeyboardEvent) => void) | undefined;
-            readonly period?: ((event: KeyboardEvent) => void) | undefined;
-            readonly forwardSlash?: ((event: KeyboardEvent) => void) | undefined;
-            readonly graveAccent?: ((event: KeyboardEvent) => void) | undefined;
-            readonly bracketOpen?: ((event: KeyboardEvent) => void) | undefined;
-            readonly slashBack?: ((event: KeyboardEvent) => void) | undefined;
-            readonly slashBackLeft?: ((event: KeyboardEvent) => void) | undefined;
-            readonly bracketClose?: ((event: KeyboardEvent) => void) | undefined;
-            readonly quoteSingle?: ((event: KeyboardEvent) => void) | undefined;
-        };
-        keydown(event?: KeyboardEvent): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_string extends $mol_view {
-        dom_name(): string;
-        enabled(): boolean;
-        minimal_height(): number;
-        autocomplete(): boolean;
-        selection(next?: any): readonly number[];
-        auto(): readonly any[];
-        field(): Record<string, any>;
-        attr(): Record<string, any>;
-        event(): Record<string, any>;
-        plugins(): readonly any[];
-        selection_watcher(): any;
-        error_report(): any;
-        disabled(): boolean;
-        value(next?: any): string;
-        value_changed(next?: any): string;
-        hint(): string;
-        hint_visible(): string;
-        spellcheck(): boolean;
-        autocomplete_native(): string;
-        selection_end(): number;
-        selection_start(): number;
-        keyboard(): string;
-        enter(): string;
-        length_max(): number;
-        type(next?: any): string;
-        event_change(event?: any): any;
-        submit_with_ctrl(): boolean;
-        submit(event?: any): any;
-        Submit(): $$.$mol_hotkey;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_string extends $.$mol_string {
-        event_change(next?: Event): void;
-        error_report(): void;
-        hint_visible(): string;
-        disabled(): boolean;
-        autocomplete_native(): "on" | "off";
-        selection_watcher(): $mol_dom_listener;
-        selection_change(event: Event): void;
-        selection_start(): number;
-        selection_end(): number;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_icon_minus extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_plus extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_number extends $mol_view {
-        precision_view(): number;
-        precision_change(): number;
-        value_min(): number;
-        value_max(): number;
-        value(next?: any): number;
-        enabled(): boolean;
-        sub(): readonly any[];
-        precision(): number;
-        type(): string;
-        value_string(next?: any): string;
-        hint(): string;
-        string_enabled(): boolean;
-        submit(next?: any): any;
-        String(): $$.$mol_string;
-        event_dec(next?: any): any;
-        dec_enabled(): boolean;
-        dec_icon(): $mol_icon_minus;
-        Dec(): $mol_button_minor;
-        event_inc(next?: any): any;
-        inc_enabled(): boolean;
-        inc_icon(): $mol_icon_plus;
-        Inc(): $mol_button_minor;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_number extends $.$mol_number {
-        value_limited(next?: any): number;
-        event_dec(next?: Event): void;
-        event_inc(next?: Event): void;
-        value_string(next?: string): string;
-        dec_enabled(): boolean;
-        inc_enabled(): boolean;
-    }
-}
-
-declare namespace $ {
-    class $gen_app_game extends $mol_page {
-        title(): string;
-        engine(): $$.$gen_engine;
-        body(): readonly any[];
-        hero_level(next?: any): number;
-        Hero_level_value(): $$.$mol_number;
-        Hero_level(): $mol_labeler;
-        generate(next?: any): any;
-        Generate(): $mol_button_major;
-        result(): string;
-        Result(): $$.$mol_text;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_generator extends $.$mol_object {
-        seed(): string;
-        start(level: number): string;
-        get_enemies(level: number): {
-            name: string;
-            level: number;
-            skills: never[];
-            point: {
-                stats: number;
-                skill: number;
-                equip: number;
-            };
-        }[];
-        get_enemy(level: number): {
-            name: string;
-            level: number;
-            skills: never[];
-            point: {
-                stats: number;
-                skill: number;
-                equip: number;
-            };
-        };
-        random(max: number): number;
-        get_mode(): string;
-        get_terrain(): string;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_game extends $.$gen_app_game {
-        result(next?: any): string;
-        generate(next?: any): string;
-    }
-}
-
-declare namespace $ {
-    class $gen_app_loot extends $mol_page {
-        title(): string;
-        engine(): $$.$gen_engine;
-        body(): readonly any[];
-        generate_item(next?: any): any;
-        Generate(): $mol_button_major;
-        new_item(): string;
-        New_item(): $$.$mol_text;
-        history_text(): string;
-        History_item(): $$.$mol_text;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_loot extends $.$gen_app_loot {
-        generate_item(next?: any): void;
-        history(next?: any): any[];
-        new_item(): string;
-        history_text(): string;
-    }
-}
-
-declare namespace $ {
     class $gen_app extends $mol_book2 {
         title(): string;
-        engine(): $$.$gen_engine;
+        engine(): $gen_engine;
         pages(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
-        Game_page(): $$.$gen_app_game;
-        Loot_page(): $$.$gen_app_loot;
     }
 }
 

@@ -202,14 +202,7 @@
     "$gen_app_item_shop",
     "$gen_app_battle",
     "$gen_app_battle_unit",
-    "$gen_app_game",
-    "$mol_number",
-    "$mol_string",
-    "$mol_hotkey",
-    "$mol_icon_minus",
-    "$mol_icon_plus",
-    "$gen_generator",
-    "$gen_app_loot"
+    "$gen_engine_unit"
   ],
   "dependencies": {
     "jsdom": "*",
