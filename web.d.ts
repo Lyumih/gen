@@ -2691,8 +2691,10 @@ declare namespace $ {
         health(next?: any): any;
         attack(next?: any): any;
         use_attack(target: $gen_engine_unit): void;
-        use_skill(): void;
+        use_skill(targets: $gen_engine_unit[], skill: any): void;
         is_dead(): boolean;
+        common_unit(next?: any): any;
+        refill(): void;
     }
 }
 
@@ -2711,6 +2713,13 @@ declare namespace $ {
         attack_enabled(): boolean;
         use_attack(next?: any): any;
         Attack_button(): $mol_button_major;
+        skill_name(id: any): string;
+        Skill_name(id: any): $$.$mol_paragraph;
+        use_skill(id: any, next?: any): any;
+        Skill_use(id: any): $mol_button_major;
+        Skill(id: any): $mol_row;
+        skill_list(): readonly any[];
+        Skill_list(): $$.$mol_list;
     }
 }
 
@@ -2721,6 +2730,23 @@ declare namespace $.$$ {
         attack(): string;
         name(): string;
         use_attack(next?: any): void;
+        use_skill(id: string, next?: any): void;
+        skill_list(): readonly any[];
+        get_skill(id: string): {
+            id: string;
+            name: string;
+            description: string;
+            mode: string;
+            use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
+        } | undefined;
+        skill_name(id: any): string;
+        skills(): {
+            id: string;
+            name: string;
+            description: string;
+            mode: string;
+            use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
+        }[];
     }
 }
 

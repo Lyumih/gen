@@ -9070,20 +9070,32 @@ var $;
         }
         health(next) {
             console.log('health', next);
-            return next ?? 15;
+            return next ?? this.common_unit().health;
         }
         attack(next) {
-            return next ?? 10;
+            return next ?? this.common_unit().attack;
         }
         use_attack(target) {
             console.log('use_attack');
             target.health(target.health() - this.attack());
         }
-        use_skill() {
+        use_skill(targets, skill) {
+            skill.use(this, targets);
             console.log('use_skill');
         }
         is_dead() {
             return this.health() <= 0;
+        }
+        common_unit(next) {
+            return next ?? {
+                name: 'Unit',
+                health: 20,
+                attack: 10,
+            };
+        }
+        refill() {
+            this.health(null);
+            this.attack(null);
         }
     }
     __decorate([
@@ -9115,7 +9127,8 @@ var $;
             return [
                 this.Name(),
                 this.Stats(),
-                this.Attack_button()
+                this.Attack_button(),
+                this.Skill_list()
             ];
         }
         name() {
@@ -9165,6 +9178,43 @@ var $;
             obj.click = (next) => this.use_attack(next);
             return obj;
         }
+        skill_name(id) {
+            return "Умение: Сильный удар";
+        }
+        Skill_name(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.skill_name(id);
+            return obj;
+        }
+        use_skill(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Skill_use(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Использовать умение";
+            obj.click = (next) => this.use_skill(id, next);
+            return obj;
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Skill_name(id),
+                this.Skill_use(id)
+            ];
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
+        }
+        Skill_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.skill_list();
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -9190,6 +9240,21 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle_unit.prototype, "Attack_button", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_unit.prototype, "Skill_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_unit.prototype, "use_skill", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_unit.prototype, "Skill_use", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_unit.prototype, "Skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_unit.prototype, "Skill_list", null);
     $.$gen_app_battle_unit = $gen_app_battle_unit;
 })($ || ($ = {}));
 //gen/app/battle/unit/-view.tree/unit.view.tree.ts
@@ -9214,6 +9279,40 @@ var $;
             }
             use_attack(next) {
                 this.unit().use_attack(this.target());
+            }
+            use_skill(id, next) {
+                this.unit().use_skill([this.target()], this.get_skill(id));
+            }
+            skill_list() {
+                return this.skills().map(skill => this.Skill(skill.id));
+            }
+            get_skill(id) {
+                return this.skills().find(skill => skill.id === id);
+            }
+            skill_name(id) {
+                return this.get_skill(id)?.name || 'no skill';
+            }
+            skills() {
+                return [
+                    {
+                        id: 'skill1',
+                        name: 'Хил',
+                        description: 'Исцеляет на 10 здоровья',
+                        mode: 'skill',
+                        use: (source, targets) => {
+                            source.health(source.health() + 10);
+                        }
+                    },
+                    {
+                        id: 'skill2',
+                        name: 'Мощный удар',
+                        description: 'Урон х2',
+                        mode: 'skill',
+                        use: (source, target) => {
+                            target[0].health(target[0].health() - source.attack() * 2);
+                        }
+                    }
+                ];
             }
         }
         $$.$gen_app_battle_unit = $gen_app_battle_unit;
@@ -9351,8 +9450,8 @@ var $;
                 this.enemy().use_attack(this.hero());
             }
             restart() {
-                this.hero().health(19);
-                this.enemy().health(20);
+                this.hero().refill();
+                this.enemy().refill();
             }
             is_game_continue() {
                 return !this.hero().is_dead() && !this.enemy().is_dead();
