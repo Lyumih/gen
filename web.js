@@ -8770,8 +8770,8 @@ var $;
             ];
         }
         Equipment_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.equipment_list();
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.equipment_list();
             return obj;
         }
         skill_points() {
@@ -8826,8 +8826,8 @@ var $;
             ];
         }
         Skills() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.skill_list();
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.skill_list();
             return obj;
         }
         Inventory_label() {
@@ -8868,8 +8868,8 @@ var $;
             ];
         }
         Inventory_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.inventory_list();
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.inventory_list();
             return obj;
         }
         Shop_label() {
@@ -8904,8 +8904,8 @@ var $;
             ];
         }
         Shop_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.shop_list();
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.shop_list();
             return obj;
         }
     }
@@ -10247,7 +10247,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 25rem;\n}");
+    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 30rem;\n}");
 })($ || ($ = {}));
 //gen/app/-css/app.view.css.ts
 

@@ -2674,7 +2674,7 @@ declare namespace $ {
         Equipment_card(id: any): $gen_app_item_equipment;
         Equipment(id: any): $mol_row;
         equipment_list(): readonly any[];
-        Equipment_list(): $$.$mol_list;
+        Equipment_list(): $mol_row;
         skill_points(): string;
         Points(): $$.$mol_text;
         Skill_label(): $$.$mol_text;
@@ -2685,7 +2685,7 @@ declare namespace $ {
         Skill_card(id: any): $$.$gen_app_item_skill;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
-        Skills(): $$.$mol_list;
+        Skills(): $mol_row;
         Inventory_label(): $$.$mol_text;
         get_inventory_item(id: any): any;
         inventory_equip(id: any, next?: any): any;
@@ -2693,14 +2693,14 @@ declare namespace $ {
         Inventory_card(id: any): $gen_app_item_inventory;
         Inventory_item(id: any): $mol_row;
         inventory_list(): readonly any[];
-        Inventory_list(): $$.$mol_list;
+        Inventory_list(): $mol_row;
         Shop_label(): $$.$mol_text;
         get_shop_item(id: any): any;
         shop_item_bue(id: any, next?: any): any;
         Shop_card(id: any): $gen_app_item_shop;
         Shop_item(id: any): $mol_row;
         shop_list(): readonly any[];
-        Shop_list(): $$.$mol_list;
+        Shop_list(): $mol_row;
     }
 }
 
