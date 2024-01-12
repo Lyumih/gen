@@ -9913,6 +9913,7 @@ var $;
             restart() {
                 this.hero().refill();
                 this.enemy().refill();
+                this.battle().turn(0);
             }
             is_game_continue() {
                 return !this.hero().is_dead() && !this.enemy().is_dead();
