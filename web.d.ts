@@ -2688,13 +2688,26 @@ declare namespace $.$$ {
 declare namespace $ {
     class $gen_engine_unit extends $.$mol_object {
         name(next?: any): any;
-        health(next?: any): any;
-        attack(next?: any): any;
+        health(next?: number): number;
+        attack(next?: number): number;
         use_attack(target: $gen_engine_unit): void;
         use_skill(targets: $gen_engine_unit[], skill: any): void;
         is_dead(): boolean;
-        common_unit(next?: any): any;
+        common_unit(): {
+            name: string;
+            health: number;
+            attack: number;
+        };
+        next_turn(): void;
         refill(): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_battle extends $.$mol_object {
+        turn(next?: number): number;
+        next_turn(): void;
+        init_unit(unit: $gen_engine_unit): void;
     }
 }
 
@@ -2753,8 +2766,11 @@ declare namespace $.$$ {
 declare namespace $ {
     class $gen_app_battle extends $mol_page {
         engine(): $gen_engine;
+        battle(): $gen_engine_battle;
         title(): string;
         body(): readonly any[];
+        turn(): string;
+        Turn(): $$.$mol_paragraph;
         hero(): any;
         enemy(): any;
         Hero(): $$.$gen_app_battle_unit;
@@ -2772,6 +2788,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
+        default_units(): $gen_engine_unit[];
+        turn(): string;
         hero(): $gen_engine_unit;
         enemy(): $gen_engine_unit;
         use_hero_attack(next?: any): void;

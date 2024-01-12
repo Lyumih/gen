@@ -9076,26 +9076,28 @@ var $;
             return next ?? this.common_unit().attack;
         }
         use_attack(target) {
-            console.log('use_attack');
             target.health(target.health() - this.attack());
+            this.next_turn();
         }
         use_skill(targets, skill) {
             skill.use(this, targets);
             console.log('use_skill');
+            this.next_turn();
         }
         is_dead() {
             return this.health() <= 0;
         }
-        common_unit(next) {
-            return next ?? {
+        common_unit() {
+            return {
                 name: 'Unit',
                 health: 20,
                 attack: 10,
             };
         }
+        next_turn() { }
         refill() {
-            this.health(null);
-            this.attack(null);
+            this.health(this.common_unit().health);
+            this.attack(this.common_unit().attack);
         }
     }
     __decorate([
@@ -9110,6 +9112,28 @@ var $;
     $.$gen_engine_unit = $gen_engine_unit;
 })($ || ($ = {}));
 //gen/engine/unit/unit.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_battle extends $.$mol_object {
+        turn(next) {
+            return next ?? 0;
+        }
+        next_turn() {
+            console.log('next_turn', this.turn());
+            this.turn(this.turn() + 1);
+        }
+        init_unit(unit) {
+            unit.next_turn = () => this.next_turn();
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_battle.prototype, "turn", null);
+    $.$gen_engine_battle = $gen_engine_battle;
+})($ || ($ = {}));
+//gen/engine/battle/battle.ts
 ;
 "use strict";
 var $;
@@ -9287,7 +9311,7 @@ var $;
                 return this.skills().find(skill => skill.id === id);
             }
             skill_name(id) {
-                return this.get_skill(id)?.name || 'no skill';
+                return this.get_skill(id)?.name + ': ' + this.get_skill(id)?.description || 'no skill';
             }
             use_skill(id, next) {
                 this.unit().use_skill([this.target()], this.get_skill(id));
@@ -9328,6 +9352,10 @@ var $;
             const obj = new this.$.$gen_engine();
             return obj;
         }
+        battle() {
+            const obj = new this.$.$gen_engine_battle();
+            return obj;
+        }
         title() {
             return "Битва";
         }
@@ -9338,6 +9366,14 @@ var $;
                 this.Reward(),
                 this.Restart()
             ];
+        }
+        turn() {
+            return "Ход: 0";
+        }
+        Turn() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.turn();
+            return obj;
         }
         hero() {
             return null;
@@ -9360,6 +9396,7 @@ var $;
         Field() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
+                this.Turn(),
                 this.Hero(),
                 this.Enemy()
             ];
@@ -9405,6 +9442,12 @@ var $;
     ], $gen_app_battle.prototype, "engine", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle.prototype, "battle", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Turn", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle.prototype, "Hero", null);
     __decorate([
         $mol_mem
@@ -9437,11 +9480,24 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
+            default_units() {
+                return [
+                    new this.$.$gen_engine_unit(),
+                    new this.$.$gen_engine_unit()
+                ];
+            }
+            turn() {
+                return `Ход: ${this.battle().turn()}`;
+            }
             hero() {
-                return new this.$.$gen_engine_unit();
+                const hero = new this.$.$gen_engine_unit();
+                this.battle().init_unit(hero);
+                return hero;
             }
             enemy() {
-                return new this.$.$gen_engine_unit();
+                const enemy = new this.$.$gen_engine_unit();
+                this.battle().init_unit(enemy);
+                return enemy;
             }
             use_hero_attack(next) {
                 this.hero().use_attack(this.enemy());

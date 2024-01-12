@@ -633,9 +633,11 @@ $gen_app_battle_unit $mol_list
 
 $gen_app_battle $mol_page
 	engine $gen_engine
+	battle $gen_engine_battle
 	title \Битва
 	body /
 		<= Field $mol_list rows /
+			<= Turn $mol_paragraph title <= turn \Ход: 0
 			<= Hero $gen_app_battle_unit
 				unit <= hero null
 				target <= enemy null
