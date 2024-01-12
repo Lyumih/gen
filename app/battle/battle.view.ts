@@ -1,13 +1,6 @@
 namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
 
-		@$mol_mem
-		battle() {
-			const battle = new this.$.$gen_engine_battle()
-			battle.units( this.default_units() )
-			return battle
-		}
-
 		default_units() {
 			return [
 				new this.$.$gen_engine_unit(),
@@ -21,16 +14,19 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero() {
-			return this.battle().units()[ 0 ]
+			const hero = new this.$.$gen_engine_unit()
+			this.battle().init_unit( hero )
+			return hero
 		}
 
 		@$mol_mem
 		enemy() {
-			return this.battle().units()[ 1 ]
+			const enemy = new this.$.$gen_engine_unit()
+			this.battle().init_unit( enemy )
+			return enemy
 		}
 
 		use_hero_attack( next?: any ) {
-			this.battle().next_turn()
 			this.hero().use_attack( this.enemy() )
 		}
 
