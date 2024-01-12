@@ -3,6 +3,7 @@ $gen_app $mol_book2
 	engine $gen_engine
 	pages /
 		<= Hero_page $gen_app_hero engine <= engine
+		<= Battle_page $gen_app_battle engine <= engine
 		<= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine
 		<= Loot_page $gen_app_loot engine <= engine
