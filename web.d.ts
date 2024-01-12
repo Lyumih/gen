@@ -2730,7 +2730,6 @@ declare namespace $.$$ {
         attack(): string;
         name(): string;
         use_attack(next?: any): void;
-        use_skill(id: string, next?: any): void;
         skill_list(): readonly any[];
         get_skill(id: string): {
             id: string;
@@ -2740,6 +2739,7 @@ declare namespace $.$$ {
             use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
         } | undefined;
         skill_name(id: any): string;
+        use_skill(id: string, next?: any): void;
         skills(): {
             id: string;
             name: string;

@@ -9677,9 +9677,6 @@ var $;
             use_attack(next) {
                 this.unit().use_attack(this.target());
             }
-            use_skill(id, next) {
-                this.unit().use_skill([this.target()], this.get_skill(id));
-            }
             skill_list() {
                 return this.skills().map(skill => this.Skill(skill.id));
             }
@@ -9688,6 +9685,9 @@ var $;
             }
             skill_name(id) {
                 return this.get_skill(id)?.name || 'no skill';
+            }
+            use_skill(id, next) {
+                this.unit().use_skill([this.target()], this.get_skill(id));
             }
             skills() {
                 return [
