@@ -1,30 +1,30 @@
 namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
 		@$mol_mem
-		get_hero() {
+		hero() {
 			return new this.$.$gen_engine_unit()
 		}
 
 		@$mol_mem
-		get_enemy() {
+		enemy() {
 			return new this.$.$gen_engine_unit()
 		}
 
 		use_hero_attack( next?: any ) {
-			this.get_hero().use_attack( this.get_enemy() )
+			this.hero().use_attack( this.enemy() )
 		}
 
 		use_enemy_attack( next?: any ) {
-			this.get_enemy().use_attack( this.get_hero() )
+			this.enemy().use_attack( this.hero() )
 		}
 
 		restart() {
-			this.get_hero().health( 19 )
-			this.get_enemy().health( 20 )
+			this.hero().health( 19 )
+			this.enemy().health( 20 )
 		}
 
 		is_game_continue() {
-			return this.get_hero().health() > 0 && this.get_enemy().health() > 0
+			return !this.hero().is_dead() && !this.enemy().is_dead()
 		}
 
 		is_game_end() {

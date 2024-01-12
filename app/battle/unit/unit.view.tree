@@ -1,10 +1,11 @@
 $gen_app_battle_unit $mol_list
 	unit $gen_engine_unit
+	target $gen_engine_unit
 	rows /
 		<= Name $mol_paragraph title <= name \
 		<= Stats $mol_list rows /
-			<= Health $mol_paragraph title <= health_title \
-			<= Attack $mol_paragraph title <= attack_title \
+			<= Health $mol_paragraph title <= health \
+			<= Attack $mol_paragraph title <= attack \
 		<= Attack_button $mol_button_major
 			title \Атаковать
 			enabled <= attack_enabled true

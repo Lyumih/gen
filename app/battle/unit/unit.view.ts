@@ -5,12 +5,20 @@ namespace $.$$ {
 			return this.unit().health() > 0
 		}
 
-		health_title() {
+		health() {
 			return `Здоровье: ${ this.unit().health() }`
 		}
 
-		attack_title() {
+		attack() {
 			return `Атака: ${ this.unit().attack() }`
+		}
+
+		name() {
+			return `Имя: ${ this.unit().name() }`
+		}
+
+		use_attack( next?: any ) {
+			this.unit().use_attack( this.target() )
 		}
 	}
 }

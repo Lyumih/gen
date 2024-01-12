@@ -25,5 +25,9 @@ namespace $ {
 		use_skill() {
 			console.log( 'use_skill' )
 		}
+
+		is_dead() {
+			return this.health() <= 0
+		}
 	}
 }
