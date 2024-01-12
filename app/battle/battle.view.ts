@@ -37,6 +37,7 @@ namespace $.$$ {
 		restart() {
 			this.hero().refill()
 			this.enemy().refill()
+			this.battle().turn( 0 )
 		}
 
 		is_game_continue() {
@@ -55,7 +56,6 @@ namespace $.$$ {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )
 			this.restart()
 		}
-
 
 	}
 }
