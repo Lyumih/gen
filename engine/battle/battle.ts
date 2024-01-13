@@ -7,7 +7,6 @@ namespace $ {
 		}
 
 		next_turn() {
-			console.log( 'next_turn', this.turn() )
 			this.turn( this.turn() + 1 )
 		}
 

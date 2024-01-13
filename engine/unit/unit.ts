@@ -8,7 +8,6 @@ namespace $ {
 
 		@$mol_mem
 		health( next?: number ) {
-			console.log( 'health', next )
 			return next ?? this.common_unit().health
 		}
 
@@ -18,14 +17,12 @@ namespace $ {
 		}
 
 		use_attack( target: $gen_engine_unit ) {
-			// console.log( 'use_attack', this.battle().turn() )
 			target.health( target.health() - this.attack() )
 			this.next_turn()
 		}
 
 		use_skill( targets: $gen_engine_unit[], skill: any ) {
 			skill.use( this, targets )
-			console.log( 'use_skill' )
 			this.next_turn()
 		}
 

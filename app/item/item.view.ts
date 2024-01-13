@@ -10,8 +10,12 @@ namespace $.$$ {
 			return types[ type as keyof typeof types ] || type + '?'
 		}
 
-		type() {
+		type_translate() {
 			return this.types_map( this.item().type )
+		}
+
+		type(): string {
+			return this.item().type
 		}
 
 		name() {

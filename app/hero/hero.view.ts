@@ -45,7 +45,6 @@ namespace $.$$ {
 		}
 
 		skill_unequip( id: any, next?: any ) {
-			console.log( id )
 			this.engine().skill_unequip( id )
 		}
 

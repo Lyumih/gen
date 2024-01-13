@@ -1,4 +1,8 @@
 [gen_app_item] {
-	border: 1px solid gray;
+	border: 1px solid gold;
 	border-radius: 1rem;
+}
+
+[gen_app_item][type="skill"] {
+	border-color: aqua;
 }
