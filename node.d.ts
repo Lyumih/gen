@@ -2780,6 +2780,80 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_pop extends $mol_view {
+        showed(next?: any): boolean;
+        align_vert(): string;
+        align_hor(): string;
+        prefer(): string;
+        sub(): readonly any[];
+        sub_visible(): readonly any[];
+        Anchor(): any;
+        align(): string;
+        bubble_content(): readonly $mol_view_content[];
+        height_max(): number;
+        Bubble(): $mol_pop_bubble;
+    }
+    class $mol_pop_bubble extends $mol_view {
+        sub(): readonly $mol_view_content[];
+        style(): Record<string, any>;
+        attr(): Record<string, any>;
+        content(): readonly $mol_view_content[];
+        height_max(): number;
+        align(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_pop extends $.$mol_pop {
+        showed(next?: boolean): boolean;
+        sub_visible(): any[];
+        height_max(): number;
+        align(): string;
+        align_vert(): "suspense" | "top" | "bottom";
+        align_hor(): "suspense" | "left" | "right";
+        View_port(): $mol_view;
+        view_port(): {
+            width: number;
+            height: number;
+            left: number;
+            right: number;
+            top: number;
+            bottom: number;
+        } | {
+            left: number;
+            top: number;
+            width: number;
+            height: number;
+        };
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_pop_over extends $mol_pop {
+        showed(): boolean;
+        attr(): Record<string, any>;
+        event(): Record<string, any>;
+        hovered(next?: any): boolean;
+        event_show(event?: any): any;
+        event_hide(event?: any): any;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_pop_over extends $.$mol_pop_over {
+        event_show(event?: MouseEvent): void;
+        event_hide(event?: MouseEvent): void;
+        showed(): boolean;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
         unit(): $gen_engine_unit;
         target(): $gen_engine_unit;
@@ -2795,10 +2869,13 @@ declare namespace $ {
         use_attack(next?: any): any;
         Attack_button(): $mol_button_major;
         skill_name(id: any): string;
-        Skill_name(id: any): $$.$mol_paragraph;
+        Skill_name(id: any): $$.$mol_text;
+        Skill_bubble_name(id: any): $$.$mol_text;
+        skill_description(id: any): string;
+        Skill_description(id: any): $$.$mol_text;
         use_skill(id: any, next?: any): any;
-        Skill_use(id: any): $mol_button_major;
-        Skill(id: any): $mol_row;
+        Skill_use(id: any): $mol_button_minor;
+        Skill(id: any): $$.$mol_pop_over;
         skill_list(): readonly any[];
         Skill_list(): $$.$mol_list;
     }
@@ -2820,6 +2897,7 @@ declare namespace $.$$ {
             use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
         } | undefined;
         skill_name(id: any): string;
+        skill_description(id: any): string;
         use_skill(id: string, next?: any): void;
         skills(): {
             id: string;

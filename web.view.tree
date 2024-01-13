@@ -612,6 +612,40 @@ $gen_app_hero $mol_page
 					item <= get_shop_item* null
 					add? <=> shop_item_bue*? null
 
+$mol_pop $mol_view
+	showed? false
+	align_vert \
+	align_hor \
+	prefer \vert
+	sub /
+		<= Anchor null
+	sub_visible /
+		<= Anchor
+		<= Bubble $mol_pop_bubble
+			align <= align \bottom_center
+			content <= bubble_content /$mol_view_content
+			height_max <= height_max 9999
+
+$mol_pop_bubble $mol_view
+	sub <= content /$mol_view_content
+	style *
+		^
+		maxHeight <= height_max 9999
+	attr *
+		^
+		mol_pop_align <= align \
+		tabindex 0
+
+$mol_pop_over $mol_pop
+	showed <= hovered? false
+	attr *
+		^
+		tabindex 0
+	event *
+		^
+		mouseenter?event <=> event_show?event null
+		mouseleave?event <=> event_hide?event null
+
 $gen_app_battle_unit $mol_list
 	unit $gen_engine_unit
 	target $gen_engine_unit
@@ -625,11 +659,14 @@ $gen_app_battle_unit $mol_list
 			enabled <= attack_enabled true
 			click? <=> use_attack? null
 		<= Skill_list $mol_list rows <= skill_list /
-			<= Skill*0 $mol_row sub /
-				<= Skill_name* $mol_paragraph title <= skill_name* \Умение: Сильный удар
-				<= Skill_use* $mol_button_major
-					title \Использовать умение
-					click? <=> use_skill*? null
+			<= Skill*0 $mol_pop_over
+				Anchor <= Skill_name* $mol_text text <= skill_name* \Умение: Сильный удар
+				bubble_content /
+					<= Skill_bubble_name* $mol_text text <= skill_name*
+					<= Skill_description* $mol_text text <= skill_description* \Описание
+					<= Skill_use* $mol_button_minor
+						title \Использовать умение
+						click? <=> use_skill*? null
 
 $gen_app_battle $mol_page
 	engine $gen_engine

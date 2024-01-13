@@ -203,7 +203,9 @@
     "$gen_app_battle",
     "$gen_engine_battle",
     "$gen_engine_unit",
-    "$gen_app_battle_unit"
+    "$gen_app_battle_unit",
+    "$mol_pop_over",
+    "$mol_pop"
   ],
   "dependencies": {
     "jsdom": "*",
