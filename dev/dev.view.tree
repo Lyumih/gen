@@ -1,3 +1,4 @@
+- Добавить сохранение умений локально
 $gen_dev $mol_page
 	title \Разработка умения
 	hero $gen_engine_unit
