@@ -1,0 +1,13 @@
+[gen_app_battle_unit] {
+	border: 2px solid gray;
+	border-radius: 1rem;
+	padding: 1rem;
+}
+
+[gen_app_battle_unit][type='hero'] {
+	border-color: greenyellow;
+}
+
+[gen_app_battle_unit][type='enemy'] {
+	border-color: orangered;
+}

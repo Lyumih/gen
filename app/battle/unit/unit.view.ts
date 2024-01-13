@@ -22,6 +22,10 @@ namespace $.$$ {
 			return `Имя: ${ this.unit().name() }`
 		}
 
+		type() {
+			return this.unit().type()
+		}
+
 		use_attack( next?: any ) {
 			this.unit().use_attack( this.target() )
 		}

@@ -1,0 +1,35 @@
+$gen_dev $mol_page
+	title \Разработка умения
+	hero $gen_engine_unit
+	enemy $gen_engine_unit
+	body /
+		<= Instruction $mol_expander
+			title \Инструкция
+			content /
+				<= Example $mol_text_code text \
+					\source: $gen_engine_unit - Источник
+					\target: $gen_engine_unit[] - возможные цели
+					\
+					\* Пример 1. Хил себя на 100 *
+					\source.health( source.health() + 100 )
+					\
+					\* Пример 2. Удар х4 *
+					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 ) \\ Сильная атака х4
+		<= Container $mol_list rows /
+			<= Name_labeler $mol_labeler
+				title \Имя умения
+				content / <= Name $mol_string value? <=> name? \Мега-сильный удар с хилом
+			<= Code_labeler $mol_labeler
+				title \Код умения
+				content / <= Code $mol_textarea value? <=> code? \
+					\source.health( source.health() + 100 )
+					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 )
+			<= Test $mol_button_major
+				title \Тестировать
+				click? <=> test? null
+			<= Hero $gen_app_battle_unit
+				unit <= hero
+				target <= enemy
+			<= Enemy $gen_app_battle_unit
+				unit <= enemy
+				target <= hero

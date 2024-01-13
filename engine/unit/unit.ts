@@ -12,6 +12,11 @@ namespace $ {
 		}
 
 		@$mol_mem
+		type( next?: string ) {
+			return next ?? 'unit'
+		}
+
+		@$mol_mem
 		level( next?: number ) {
 			return next ?? 1
 		}

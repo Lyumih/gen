@@ -13,7 +13,7 @@ namespace $.$$ {
 		@$mol_mem
 		common_party() {
 			return [
-				this.$.$gen_engine_unit.make( { name: () => 'Вася' } ),
+				this.$.$gen_engine_unit.make( { name: () => 'Вася', type: () => 'hero' } ),
 				this.$.$gen_engine_unit.make( { name: () => 'Даша', level: () => 10 } ),
 				this.$.$gen_engine_unit.make( {} ),
 			]
