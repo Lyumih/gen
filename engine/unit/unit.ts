@@ -2,7 +2,12 @@ namespace $ {
 	export class $gen_engine_unit extends $.$mol_object {
 
 		@$mol_mem
-		name( next?: any ) {
+		id() {
+			return this.$.$mol_guid()
+		}
+
+		@$mol_mem
+		name( next?: string ) {
 			return next ?? 'Unit'
 		}
 

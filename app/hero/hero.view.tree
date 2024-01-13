@@ -1,7 +1,21 @@
 $gen_app_hero $mol_page
 	title \Персонаж
 	engine $gen_engine
+	party /$gen_engine_unit
+	active_hero? \
 	body /
+		<= Party_title $mol_section title \Отряд
+		<= Party_list $mol_row sub <= party_list / 
+			<= Party*0 $mol_pop_over
+				Anchor <= Party_hero_name* $mol_text 
+					text <= party_hero_name* \Герой
+				bubble_content /
+					<= Party_hero_pick* $mol_button_minor
+						title \Выбрать героя
+						click? <=> party_hero_pick*? null
+		<= Start_battle $mol_button_major
+			title \Начать битву
+			click? <=> start_battle? null
 		<= Name $mol_section title <= name \Имя:
 		<= Level $mol_text text <= level \ Уровень 5
 		<= Equipment_label $mol_section title \Экипировка
@@ -19,10 +33,6 @@ $gen_app_hero $mol_page
 					add <= skill_level_up*? null
 					remove? <=> skill_unequip*? null
 					add_mode? <=> skill_add_mode*? null
-				- <= Skill_add_mode* $mol_button_major
-					title \Добавить мод
-					disabled true
-					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_section title \Инвентарь
 		<= Inventory_list $mol_row sub <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /

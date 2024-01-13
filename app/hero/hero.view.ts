@@ -1,8 +1,24 @@
 namespace $.$$ {
 	export class $gen_app_hero extends $.$gen_app_hero {
 		name(): string {
-			return `Имя: ${ this.engine().hero().name }`
+			return `Имя: ${ this.get_active_hero()?.name() }`
 		}
+
+		get_active_hero() {
+			return this.party().find( unit => unit.id() === this.active_hero() )
+		}
+
+		@$mol_mem
+		active_hero( next?: any ): string {
+			return next ?? this.party()[ 0 ]?.id()
+		}
+
+		start_battle( next?: any ) {
+			console.log( 'start battle' )
+			// Тут надо как-то передать в gen_app_battle 
+			// Выбранного героя
+		}
+
 
 		equipment_list(): readonly any[] {
 			return this.engine().hero_equipments().map( item => this.Equipment( item.id ) )
@@ -74,6 +90,37 @@ namespace $.$$ {
 
 		shop_item_bue( id: any, next?: any ) {
 			this.engine().shop_buy( id )
+		}
+
+
+		party() {
+			return this.common_party()
+		}
+
+		party_list() {
+			return this.party().map( unit => this.Party( unit.id() ) )
+		}
+
+		get_party_hero( id: string ) {
+			return this.party().find( unit => unit.id() === id )
+		}
+
+		party_hero_name( id: string ): string {
+			return this.get_party_hero( id )?.name() || 'no name'
+		}
+
+		party_hero_pick( id: string, next?: any ) {
+			console.log( id, next )
+			this.active_hero( id )
+		}
+
+		@$mol_mem
+		common_party() {
+			return [
+				this.$.$gen_engine_unit.make( { id: () => '112233', name: () => 'Вася' } ),
+				this.$.$gen_engine_unit.make( { name: () => 'Даша' } ),
+				this.$.$gen_engine_unit.make( {} ),
+			]
 		}
 
 	}
