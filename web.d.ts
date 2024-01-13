@@ -3189,6 +3189,7 @@ declare namespace $ {
         body(): readonly any[];
         Example(): $$.$mol_text_code;
         Instruction(): $$.$mol_expander;
+        All_skills(): $$.$mol_expander;
         name(next?: any): string;
         Name(): $$.$mol_string;
         Name_labeler(): $mol_labeler;

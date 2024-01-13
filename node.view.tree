@@ -849,6 +849,7 @@ $mol_textarea_edit $mol_string
 		scrollTop 0
 
 - Добавить сохранение умений локально
+- Список всех умений - это реальный список умений с их логикой
 $gen_dev $mol_page
 	title \Разработка умения
 	hero $gen_engine_unit
@@ -866,12 +867,13 @@ $gen_dev $mol_page
 					\
 					\* Пример 2. Удар х4 *
 					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 ) \\ Сильная атака х4
+		<= All_skills $mol_expander title \Все умения
 		<= Container $mol_list rows /
 			<= Name_labeler $mol_labeler
-				title \Имя умения
+				title \Имя нового умения
 				content / <= Name $mol_string value? <=> name? \Мега-сильный удар с хилом
 			<= Code_labeler $mol_labeler
-				title \Код умения
+				title \Код нового умения
 				content / <= Code $mol_textarea value? <=> code? \
 					\source.health( source.health() + 100 )
 					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 )

@@ -10822,6 +10822,7 @@ var $;
         body() {
             return [
                 this.Instruction(),
+                this.All_skills(),
                 this.Container()
             ];
         }
@@ -10838,6 +10839,11 @@ var $;
             ];
             return obj;
         }
+        All_skills() {
+            const obj = new this.$.$mol_expander();
+            obj.title = () => "Все умения";
+            return obj;
+        }
         name(next) {
             if (next !== undefined)
                 return next;
@@ -10850,7 +10856,7 @@ var $;
         }
         Name_labeler() {
             const obj = new this.$.$mol_labeler();
-            obj.title = () => "Имя умения";
+            obj.title = () => "Имя нового умения";
             obj.content = () => [
                 this.Name()
             ];
@@ -10868,7 +10874,7 @@ var $;
         }
         Code_labeler() {
             const obj = new this.$.$mol_labeler();
-            obj.title = () => "Код умения";
+            obj.title = () => "Код нового умения";
             obj.content = () => [
                 this.Code()
             ];
@@ -10921,6 +10927,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_dev.prototype, "Instruction", null);
+    __decorate([
+        $mol_mem
+    ], $gen_dev.prototype, "All_skills", null);
     __decorate([
         $mol_mem
     ], $gen_dev.prototype, "name", null);
@@ -10977,7 +10986,8 @@ var $;
                 });
             }
             test() {
-                console.log('test');
+                console.log('Использовано тестовое умение');
+                this.hero().use_skill([this.enemy()], this.skill());
             }
             skill() {
                 return {
@@ -10986,11 +10996,19 @@ var $;
                     description: 'Исцеляет на 10 здоровья',
                     mode: 'skill',
                     use: (source, targets) => {
-                        source.health(source.health() + 10);
+                        console.log('skill use', source, targets);
+                        source.health(source.health() + 100);
+                        targets[0].health(targets[0].health() - source.attack() * 4);
                     }
                 };
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_dev.prototype, "hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_dev.prototype, "enemy", null);
         $$.$gen_dev = $gen_dev;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
