@@ -24,7 +24,7 @@ $gen_app_hero $mol_page
 					disabled true
 					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_text text \# Инвентарь
-		<= Inventory_list $mol_list rows <= inventory_list /
+		<= Inventory_list $mol_row sub <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /
 				<= Inventory_card* $gen_app_item_inventory
 					item <= get_inventory_item* null
