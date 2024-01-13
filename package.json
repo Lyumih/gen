@@ -205,7 +205,13 @@
     "$gen_app_item_shop",
     "$gen_app_battle",
     "$gen_engine_battle",
-    "$gen_app_battle_unit"
+    "$gen_app_battle_unit",
+    "$gen_dev",
+    "$mol_expander",
+    "$mol_string",
+    "$mol_hotkey",
+    "$mol_labeler",
+    "$mol_textarea"
   ],
   "dependencies": {
     "jsdom": "*",
