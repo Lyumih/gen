@@ -75,28 +75,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_after_tick extends $mol_object2 {
-        task: () => void;
-        promise: any;
-        cancelled: boolean;
-        constructor(task: () => void);
-        destructor(): void;
-    }
-}
-
-declare namespace $ {
-    var $mol_dom_context: typeof globalThis;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    function $mol_style_attach_force(): HTMLStyleElement;
-    function $mol_style_attach(id: string, text: string): HTMLStyleElement | null;
-}
-
-declare namespace $ {
     namespace $$ { }
     const $mol_object_field: unique symbol;
     class $mol_object extends $mol_object2 {
@@ -384,6 +362,23 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    var $mol_dom_context: typeof globalThis;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_after_tick extends $mol_object2 {
+        task: () => void;
+        promise: any;
+        cancelled: boolean;
+        constructor(task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
     class $mol_view_selection extends $mol_object {
         static focused(next?: Element[], notify?: 'notify'): Element[];
     }
@@ -476,6 +471,11 @@ declare namespace $ {
 
 declare namespace $ {
     type $mol_type_pick<Input, Upper> = Pick<Input, $mol_type_keys_extract<Input, Upper>>;
+}
+
+declare namespace $ {
+    function $mol_style_attach_force(): HTMLStyleElement;
+    function $mol_style_attach(id: string, text: string): HTMLStyleElement | null;
 }
 
 declare namespace $ {
@@ -999,6 +999,26 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_engine_unit extends $.$mol_object {
+        id(): string;
+        name(next?: string): string;
+        level(next?: number): number;
+        health(next?: number): number;
+        attack(next?: number): number;
+        use_attack(target: $gen_engine_unit): void;
+        use_skill(targets: $gen_engine_unit[], skill: any): void;
+        is_dead(): boolean;
+        common_unit(): {
+            name: string;
+            health: number;
+            attack: number;
+        };
+        next_turn(): void;
+        refill(): void;
+    }
+}
+
+declare namespace $ {
     class $mol_page extends $mol_view {
         dom_name(): string;
         field(): Record<string, any>;
@@ -1022,26 +1042,6 @@ declare namespace $ {
 }
 
 declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $gen_engine_unit extends $.$mol_object {
-        id(): string;
-        name(next?: string): string;
-        level(next?: number): number;
-        health(next?: number): number;
-        attack(next?: number): number;
-        use_attack(target: $gen_engine_unit): void;
-        use_skill(targets: $gen_engine_unit[], skill: any): void;
-        is_dead(): boolean;
-        common_unit(): {
-            name: string;
-            health: number;
-            attack: number;
-        };
-        next_turn(): void;
-        refill(): void;
-    }
 }
 
 declare namespace $ {
@@ -2911,12 +2911,10 @@ declare namespace $.$$ {
             type: string;
         } | undefined;
         shop_item_bue(id: any, next?: any): void;
-        party(): $gen_engine_unit[];
         party_list(): $mol_pop_over[];
         get_party_hero(id: string): $gen_engine_unit | undefined;
         party_hero_name(id: string): string;
         party_hero_pick(id: string, next?: any): void;
-        common_party(): $gen_engine_unit[];
     }
 }
 
@@ -2924,9 +2922,17 @@ declare namespace $ {
     class $gen_app extends $mol_book2 {
         title(): string;
         engine(): $gen_engine;
+        party(): readonly $gen_engine_unit[];
         pages(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app extends $.$gen_app {
+        party(): readonly $gen_engine_unit[];
+        common_party(): $gen_engine_unit[];
     }
 }
 

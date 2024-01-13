@@ -238,75 +238,6 @@ var $;
 ;
 "use strict";
 var $;
-(function ($) {
-    class $mol_after_tick extends $mol_object2 {
-        task;
-        promise;
-        cancelled = false;
-        constructor(task) {
-            super();
-            this.task = task;
-            this.promise = Promise.resolve().then(() => {
-                if (this.cancelled)
-                    return;
-                task();
-            });
-        }
-        destructor() {
-            this.cancelled = true;
-        }
-    }
-    $.$mol_after_tick = $mol_after_tick;
-})($ || ($ = {}));
-//mol/after/tick/tick.ts
-;
-"use strict";
-var $;
-(function ($) {
-})($ || ($ = {}));
-//mol/dom/context/context.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_dom_context = self;
-})($ || ($ = {}));
-//mol/dom/context/context.web.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let all = [];
-    let el = null;
-    let timer = null;
-    function $mol_style_attach_force() {
-        if (all.length) {
-            el.innerHTML += '\n' + all.join('\n\n');
-            all = [];
-        }
-        timer = null;
-        return el;
-    }
-    $.$mol_style_attach_force = $mol_style_attach_force;
-    function $mol_style_attach(id, text) {
-        all.push(`/* ${id} */\n\n${text}`);
-        if (timer)
-            return el;
-        const doc = $mol_dom_context.document;
-        if (!doc)
-            return null;
-        el = doc.createElement('style');
-        el.id = `$mol_style_attach`;
-        doc.head.appendChild(el);
-        timer = new $mol_after_tick($mol_style_attach_force);
-        return el;
-    }
-    $.$mol_style_attach = $mol_style_attach;
-})($ || ($ = {}));
-//mol/style/attach/attach.ts
-;
-"use strict";
-var $;
 (function ($_1) {
     let $$;
     (function ($$) {
@@ -1561,6 +1492,43 @@ var $;
 "use strict";
 var $;
 (function ($) {
+})($ || ($ = {}));
+//mol/dom/context/context.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_dom_context = self;
+})($ || ($ = {}));
+//mol/dom/context/context.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_tick extends $mol_object2 {
+        task;
+        promise;
+        cancelled = false;
+        constructor(task) {
+            super();
+            this.task = task;
+            this.promise = Promise.resolve().then(() => {
+                if (this.cancelled)
+                    return;
+                task();
+            });
+        }
+        destructor() {
+            this.cancelled = true;
+        }
+    }
+    $.$mol_after_tick = $mol_after_tick;
+})($ || ($ = {}));
+//mol/after/tick/tick.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_view_selection extends $mol_object {
         static focused(next, notify) {
             const parents = [];
@@ -1904,6 +1872,38 @@ var $;
 ;
 "use strict";
 //mol/type/pick/pick.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let all = [];
+    let el = null;
+    let timer = null;
+    function $mol_style_attach_force() {
+        if (all.length) {
+            el.innerHTML += '\n' + all.join('\n\n');
+            all = [];
+        }
+        timer = null;
+        return el;
+    }
+    $.$mol_style_attach_force = $mol_style_attach_force;
+    function $mol_style_attach(id, text) {
+        all.push(`/* ${id} */\n\n${text}`);
+        if (timer)
+            return el;
+        const doc = $mol_dom_context.document;
+        if (!doc)
+            return null;
+        el = doc.createElement('style');
+        el.id = `$mol_style_attach`;
+        doc.head.appendChild(el);
+        timer = new $mol_after_tick($mol_style_attach_force);
+        return el;
+    }
+    $.$mol_style_attach = $mol_style_attach;
+})($ || ($ = {}));
+//mol/style/attach/attach.ts
 ;
 "use strict";
 var $;
@@ -3143,6 +3143,68 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_unit extends $.$mol_object {
+        id() {
+            return this.$.$mol_guid();
+        }
+        name(next) {
+            return next ?? 'Unit';
+        }
+        level(next) {
+            return next ?? 1;
+        }
+        health(next) {
+            return next ?? this.common_unit().health;
+        }
+        attack(next) {
+            return next ?? this.common_unit().attack;
+        }
+        use_attack(target) {
+            target.health(target.health() - this.attack());
+            this.next_turn();
+        }
+        use_skill(targets, skill) {
+            skill.use(this, targets);
+            this.next_turn();
+        }
+        is_dead() {
+            return this.health() <= 0;
+        }
+        common_unit() {
+            return {
+                name: 'Unit',
+                health: 20,
+                attack: 10,
+            };
+        }
+        next_turn() { }
+        refill() {
+            this.health(this.common_unit().health);
+            this.attack(this.common_unit().attack);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "attack", null);
+    $.$gen_engine_unit = $gen_engine_unit;
+})($ || ($ = {}));
+//gen/engine/unit/unit.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_page extends $mol_view {
         dom_name() {
             return "article";
@@ -3360,68 +3422,6 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/page/page.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_unit extends $.$mol_object {
-        id() {
-            return this.$.$mol_guid();
-        }
-        name(next) {
-            return next ?? 'Unit';
-        }
-        level(next) {
-            return next ?? 1;
-        }
-        health(next) {
-            return next ?? this.common_unit().health;
-        }
-        attack(next) {
-            return next ?? this.common_unit().attack;
-        }
-        use_attack(target) {
-            target.health(target.health() - this.attack());
-            this.next_turn();
-        }
-        use_skill(targets, skill) {
-            skill.use(this, targets);
-            this.next_turn();
-        }
-        is_dead() {
-            return this.health() <= 0;
-        }
-        common_unit() {
-            return {
-                name: 'Unit',
-                health: 20,
-                attack: 10,
-            };
-        }
-        next_turn() { }
-        refill() {
-            this.health(this.common_unit().health);
-            this.attack(this.common_unit().attack);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "id", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "level", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "attack", null);
-    $.$gen_engine_unit = $gen_engine_unit;
-})($ || ($ = {}));
-//gen/engine/unit/unit.ts
 ;
 "use strict";
 var $;
@@ -9996,9 +9996,6 @@ var $;
             shop_item_bue(id, next) {
                 this.engine().shop_buy(id);
             }
-            party() {
-                return this.common_party();
-            }
             party_list() {
                 return this.party().map(unit => this.Party(unit.id()));
             }
@@ -10012,20 +10009,10 @@ var $;
                 console.log(id, next);
                 this.active_hero(id);
             }
-            common_party() {
-                return [
-                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
-                    this.$.$gen_engine_unit.make({}),
-                ];
-            }
         }
         __decorate([
             $mol_mem
         ], $gen_app_hero.prototype, "active_hero", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_hero.prototype, "common_party", null);
         $$.$gen_app_hero = $gen_app_hero;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -10042,6 +10029,9 @@ var $;
             const obj = new this.$.$gen_engine();
             return obj;
         }
+        party() {
+            return [];
+        }
         pages() {
             return [
                 this.Hero_page(),
@@ -10051,6 +10041,7 @@ var $;
         Hero_page() {
             const obj = new this.$.$gen_app_hero();
             obj.engine = () => this.engine();
+            obj.party = () => this.party();
             return obj;
         }
         Battle_page() {
@@ -10071,6 +10062,38 @@ var $;
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app extends $.$gen_app {
+            party() {
+                return [
+                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
+                    this.$.$gen_engine_unit.make({}),
+                ];
+            }
+            common_party() {
+                return [
+                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
+                    this.$.$gen_engine_unit.make({}),
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app.prototype, "party", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app.prototype, "common_party", null);
+        $$.$gen_app = $gen_app;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/app.view.ts
 ;
 "use strict";
 var $;
