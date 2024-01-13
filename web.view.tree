@@ -59,6 +59,18 @@ $mol_paragraph $mol_view
 	row_width 0
 	sub / <= title
 
+$mol_section $mol_list
+	level 1
+	rows /
+		<= Head $mol_view
+			sub <= head /
+				<= Title $mol_paragraph
+					dom_name <= title_dom_name \h1
+					title <= title
+				<= Tools $mol_view sub <= tools /
+		<= Content $mol_list
+			rows <= content /
+
 $mol_stack $mol_view
 
 $mol_dimmer $mol_paragraph
@@ -604,16 +616,16 @@ $gen_app_hero $mol_page
 	title \Персонаж
 	engine $gen_engine
 	body /
-		<= Name $mol_text text <= name \Имя:
+		<= Name $mol_section title <= name \Имя:
 		<= Level $mol_text text <= level \ Уровень 5
-		<= Equipment_label $mol_text text \# Экипировка
+		<= Equipment_label $mol_section title \Экипировка
 		<= Equipment_list $mol_row sub <= equipment_list /
 			<= Equipment*0 $mol_row sub /
 				<= Equipment_card* $gen_app_item_equipment
 					item <= get_equipment* null
 					remove? <=> equipment_unequip*? null
+		<= Skill_label $mol_section title \Умения
 		<= Points $mol_text text <= skill_points \Очков умений: 10
-		<= Skill_label $mol_text text \# Умения
 		<= Skills $mol_row sub <= skill_list /
 			<= Skill*0 $mol_row sub /
 				<= Skill_card* $gen_app_item_skill
@@ -625,14 +637,14 @@ $gen_app_hero $mol_page
 					title \Добавить мод
 					disabled true
 					click? <=> skill_add_mode*? null
-		<= Inventory_label $mol_text text \# Инвентарь
+		<= Inventory_label $mol_section title \Инвентарь
 		<= Inventory_list $mol_row sub <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /
 				<= Inventory_card* $gen_app_item_inventory
 					item <= get_inventory_item* null
 					add? <=> inventory_equip*? null
 					remove? <=> inventory_item_sell*? null
-		<= Shop_label $mol_text text \# Магазин
+		<= Shop_label $mol_section title \Магазин
 		<= Shop_list $mol_row sub <= shop_list /
 			<= Shop_item*0 $mol_row sub /
 				<= Shop_card* $gen_app_item_shop
@@ -657,7 +669,7 @@ $gen_app_battle_unit $mol_list
 				bubble_content /
 					<= Skill_bubble_name* $mol_text text <= skill_name*
 					<= Skill_description* $mol_text text <= skill_description* \Описание
-					<= Skill_use* $mol_button_major
+					<= Skill_use* $mol_button_minor
 						title \Использовать умение
 						click? <=> use_skill*? null
 
@@ -667,7 +679,7 @@ $gen_app_battle $mol_page
 	title \Битва
 	body /
 		<= Field $mol_list rows /
-			<= Turn $mol_paragraph title <= turn \Ход: 0
+			<= Turn $mol_section title <= turn \Ход: 0
 			<= Hero $gen_app_battle_unit
 				unit <= hero null
 				target <= enemy null

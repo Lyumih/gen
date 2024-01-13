@@ -1083,6 +1083,30 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_section extends $mol_list {
+        level(): number;
+        rows(): readonly any[];
+        title_dom_name(): string;
+        Title(): $$.$mol_paragraph;
+        tools(): readonly any[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_section extends $.$mol_section {
+        title_dom_name(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_stack extends $mol_view {
     }
 }
@@ -2661,19 +2685,19 @@ declare namespace $ {
         engine(): $gen_engine;
         body(): readonly any[];
         name(): string;
-        Name(): $$.$mol_text;
+        Name(): $$.$mol_section;
         level(): string;
         Level(): $$.$mol_text;
-        Equipment_label(): $$.$mol_text;
+        Equipment_label(): $$.$mol_section;
         get_equipment(id: any): any;
         equipment_unequip(id: any, next?: any): any;
         Equipment_card(id: any): $gen_app_item_equipment;
         Equipment(id: any): $mol_row;
         equipment_list(): readonly any[];
         Equipment_list(): $mol_row;
+        Skill_label(): $$.$mol_section;
         skill_points(): string;
         Points(): $$.$mol_text;
-        Skill_label(): $$.$mol_text;
         get_skill(id: any): any;
         skill_level_up(id: any, next?: any): any;
         skill_unequip(id: any, next?: any): any;
@@ -2682,7 +2706,7 @@ declare namespace $ {
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $mol_row;
-        Inventory_label(): $$.$mol_text;
+        Inventory_label(): $$.$mol_section;
         get_inventory_item(id: any): any;
         inventory_equip(id: any, next?: any): any;
         inventory_item_sell(id: any, next?: any): any;
@@ -2690,7 +2714,7 @@ declare namespace $ {
         Inventory_item(id: any): $mol_row;
         inventory_list(): readonly any[];
         Inventory_list(): $mol_row;
-        Shop_label(): $$.$mol_text;
+        Shop_label(): $$.$mol_section;
         get_shop_item(id: any): any;
         shop_item_bue(id: any, next?: any): any;
         Shop_card(id: any): $gen_app_item_shop;
@@ -2796,7 +2820,7 @@ declare namespace $ {
         skill_description(id: any): string;
         Skill_description(id: any): $$.$mol_text;
         use_skill(id: any, next?: any): any;
-        Skill_use(id: any): $mol_button_major;
+        Skill_use(id: any): $mol_button_minor;
         Skill(id: any): $$.$mol_pop_over;
         skill_list(): readonly any[];
         Skill_list(): $$.$mol_list;
@@ -2838,7 +2862,7 @@ declare namespace $ {
         title(): string;
         body(): readonly any[];
         turn(): string;
-        Turn(): $$.$mol_paragraph;
+        Turn(): $$.$mol_section;
         hero(): any;
         enemy(): any;
         Hero(): $$.$gen_app_battle_unit;

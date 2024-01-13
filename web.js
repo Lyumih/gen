@@ -3658,6 +3658,94 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_section extends $mol_list {
+        level() {
+            return 1;
+        }
+        rows() {
+            return [
+                this.Head(),
+                this.Content()
+            ];
+        }
+        title_dom_name() {
+            return "h1";
+        }
+        Title() {
+            const obj = new this.$.$mol_paragraph();
+            obj.dom_name = () => this.title_dom_name();
+            obj.title = () => this.title();
+            return obj;
+        }
+        tools() {
+            return [];
+        }
+        Tools() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.tools();
+            return obj;
+        }
+        head() {
+            return [
+                this.Title(),
+                this.Tools()
+            ];
+        }
+        Head() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.head();
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Title", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Tools", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Head", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Content", null);
+    $.$mol_section = $mol_section;
+})($ || ($ = {}));
+//mol/section/-view.tree/section.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_section extends $.$mol_section {
+            title_dom_name() {
+                return 'h' + this.level();
+            }
+        }
+        $$.$mol_section = $mol_section;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/section/section.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/section/section.view.css", "[mol_section_head] {\n\tjustify-content: space-between;\n\talign-items: flex-end;\n\tflex-wrap: wrap;\n}\n\n[mol_section_title] {\n\tpadding: var(--mol_gap_text);\n\ttext-shadow: 0 0;\n\tfont-weight: normal;\n}\n\nh1[mol_section_title] {\n\tfont-size: 1.5rem;\n}\n\nh2[mol_section_title] {\n\tfont-size: 1.5rem;\n\tfont-style: italic;\n}\n\nh3[mol_section_title] {\n\tfont-size: 1.25rem;\n}\n\nh4[mol_section_title] {\n\tfont-size: 1.25rem;\n\tfont-style: italic;\n}\n\nh5[mol_section_title] {\n\tfont-size: 1rem;\n}\n\nh6[mol_section_title] {\n\tfont-size: 1rem;\n\tfont-style: italic;\n}\n");
+})($ || ($ = {}));
+//mol/section/-css/section.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_stack extends $mol_view {
     }
     $.$mol_stack = $mol_stack;
@@ -8941,8 +9029,8 @@ var $;
                 this.Level(),
                 this.Equipment_label(),
                 this.Equipment_list(),
-                this.Points(),
                 this.Skill_label(),
+                this.Points(),
                 this.Skills(),
                 this.Inventory_label(),
                 this.Inventory_list(),
@@ -8954,8 +9042,8 @@ var $;
             return "Имя:";
         }
         Name() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.name();
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.name();
             return obj;
         }
         level() {
@@ -8967,8 +9055,8 @@ var $;
             return obj;
         }
         Equipment_label() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "# Экипировка";
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Экипировка";
             return obj;
         }
         get_equipment(id) {
@@ -9002,17 +9090,17 @@ var $;
             obj.sub = () => this.equipment_list();
             return obj;
         }
+        Skill_label() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Умения";
+            return obj;
+        }
         skill_points() {
             return "Очков умений: 10";
         }
         Points() {
             const obj = new this.$.$mol_text();
             obj.text = () => this.skill_points();
-            return obj;
-        }
-        Skill_label() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "# Умения";
             return obj;
         }
         get_skill(id) {
@@ -9059,8 +9147,8 @@ var $;
             return obj;
         }
         Inventory_label() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "# Инвентарь";
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Инвентарь";
             return obj;
         }
         get_inventory_item(id) {
@@ -9101,8 +9189,8 @@ var $;
             return obj;
         }
         Shop_label() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "# Магазин";
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Магазин";
             return obj;
         }
         get_shop_item(id) {
@@ -9163,10 +9251,10 @@ var $;
     ], $gen_app_hero.prototype, "Equipment_list", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Points", null);
+    ], $gen_app_hero.prototype, "Skill_label", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Skill_label", null);
+    ], $gen_app_hero.prototype, "Points", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "skill_level_up", null);
@@ -9456,7 +9544,7 @@ var $;
             return null;
         }
         Skill_use(id) {
-            const obj = new this.$.$mol_button_major();
+            const obj = new this.$.$mol_button_minor();
             obj.title = () => "Использовать умение";
             obj.click = (next) => this.use_skill(id, next);
             return obj;
@@ -9559,7 +9647,7 @@ var $;
                 return this.skills().find(skill => skill.id === id);
             }
             skill_name(id) {
-                return this.get_skill(id)?.name + ': ' + this.get_skill(id)?.description || 'no skill';
+                return this.get_skill(id)?.name || 'no name';
             }
             skill_description(id) {
                 return this.get_skill(id)?.description || 'no description';
@@ -9622,7 +9710,7 @@ var $;
             return "Ход: 0";
         }
         Turn() {
-            const obj = new this.$.$mol_paragraph();
+            const obj = new this.$.$mol_section();
             obj.title = () => this.turn();
             return obj;
         }
