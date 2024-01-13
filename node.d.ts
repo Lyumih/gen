@@ -64,12 +64,12 @@ declare namespace $ {
         get $(): $;
         set $(next: $);
         static create<Instance>(this: new (init?: (instance: any) => void) => Instance, init?: (instance: $mol_type_writable<Instance>) => void): Instance;
-        static [Symbol.toPrimitive](): string;
-        static toString(): string;
+        static [Symbol.toPrimitive](): any;
+        static toString(): any;
+        static toJSON(): any;
         destructor(): void;
         static destructor(): void;
         toString(): string;
-        static toJSON(): any;
         toJSON(): any;
     }
 }
@@ -1139,6 +1139,25 @@ declare namespace $ {
 }
 
 declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $gen_engine_unit extends $.$mol_object {
+        id(): string;
+        name(next?: string): string;
+        health(next?: number): number;
+        attack(next?: number): number;
+        use_attack(target: $gen_engine_unit): void;
+        use_skill(targets: $gen_engine_unit[], skill: any): void;
+        is_dead(): boolean;
+        common_unit(): {
+            name: string;
+            health: number;
+            attack: number;
+        };
+        next_turn(): void;
+        refill(): void;
+    }
 }
 
 declare namespace $ {
@@ -2557,23 +2576,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_row extends $mol_view {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_button_major extends $mol_button_typed {
-        attr(): Record<string, any>;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_pop extends $mol_view {
         showed(next?: any): boolean;
         align_vert(): string;
@@ -2641,6 +2643,23 @@ declare namespace $.$$ {
         event_show(event?: MouseEvent): void;
         event_hide(event?: MouseEvent): void;
         showed(): boolean;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_row extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_button_major extends $mol_button_typed {
+        attr(): Record<string, any>;
     }
 }
 
@@ -2751,7 +2770,19 @@ declare namespace $ {
     class $gen_app_hero extends $mol_page {
         title(): string;
         engine(): $gen_engine;
+        party(): readonly $gen_engine_unit[];
+        active_hero(next?: any): string;
         body(): readonly any[];
+        Party_title(): $$.$mol_section;
+        party_hero_name(id: any): string;
+        Party_hero_name(id: any): $$.$mol_text;
+        party_hero_pick(id: any, next?: any): any;
+        Party_hero_pick(id: any): $mol_button_minor;
+        Party(id: any): $$.$mol_pop_over;
+        party_list(): readonly any[];
+        Party_list(): $mol_row;
+        start_battle(next?: any): any;
+        Start_battle(): $mol_button_major;
         name(): string;
         Name(): $$.$mol_section;
         level(): string;
@@ -2795,6 +2826,9 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         name(): string;
+        get_active_hero(): $gen_engine_unit | undefined;
+        active_hero(next?: any): string;
+        start_battle(next?: any): void;
         equipment_list(): readonly any[];
         get_equipment(id: string): {
             id: string;
@@ -2838,24 +2872,12 @@ declare namespace $.$$ {
             type: string;
         } | undefined;
         shop_item_bue(id: any, next?: any): void;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_unit extends $.$mol_object {
-        name(next?: any): any;
-        health(next?: number): number;
-        attack(next?: number): number;
-        use_attack(target: $gen_engine_unit): void;
-        use_skill(targets: $gen_engine_unit[], skill: any): void;
-        is_dead(): boolean;
-        common_unit(): {
-            name: string;
-            health: number;
-            attack: number;
-        };
-        next_turn(): void;
-        refill(): void;
+        party(): $gen_engine_unit[];
+        party_list(): $mol_pop_over[];
+        get_party_hero(id: string): $gen_engine_unit | undefined;
+        party_hero_name(id: string): string;
+        party_hero_pick(id: string, next?: any): void;
+        common_party(): $gen_engine_unit[];
     }
 }
 
@@ -2897,6 +2919,7 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle_unit extends $.$gen_app_battle_unit {
+        id(): string;
         attack_enabled(): boolean;
         health(): string;
         attack(): string;

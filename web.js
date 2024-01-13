@@ -218,17 +218,15 @@ var $;
             return this.toString();
         }
         static toString() {
-            if (Symbol.toStringTag in this)
-                return this[Symbol.toStringTag];
-            return this.name;
+            return this[Symbol.toStringTag] || this.$.$mol_func_name(this);
+        }
+        static toJSON() {
+            return this.toString();
         }
         destructor() { }
         static destructor() { }
         toString() {
             return this[Symbol.toStringTag] || this.constructor.name + '<>';
-        }
-        static toJSON() {
-            return this[Symbol.toStringTag] || this.$.$mol_func_name(this);
         }
         toJSON() {
             return this.toString();
@@ -3362,6 +3360,62 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/page/page.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_unit extends $.$mol_object {
+        id() {
+            return this.$.$mol_guid();
+        }
+        name(next) {
+            return next ?? 'Unit';
+        }
+        health(next) {
+            return next ?? this.common_unit().health;
+        }
+        attack(next) {
+            return next ?? this.common_unit().attack;
+        }
+        use_attack(target) {
+            target.health(target.health() - this.attack());
+            this.next_turn();
+        }
+        use_skill(targets, skill) {
+            skill.use(this, targets);
+            this.next_turn();
+        }
+        is_dead() {
+            return this.health() <= 0;
+        }
+        common_unit() {
+            return {
+                name: 'Unit',
+                health: 20,
+                attack: 10,
+            };
+        }
+        next_turn() { }
+        refill() {
+            this.health(this.common_unit().health);
+            this.attack(this.common_unit().attack);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "attack", null);
+    $.$gen_engine_unit = $gen_engine_unit;
+})($ || ($ = {}));
+//gen/engine/unit/unit.ts
 ;
 "use strict";
 var $;
@@ -8345,44 +8399,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_row extends $mol_view {
-    }
-    $.$mol_row = $mol_row;
-})($ || ($ = {}));
-//mol/row/-view.tree/row.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
-})($ || ($ = {}));
-//mol/row/-css/row.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_button_major extends $mol_button_typed {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_theme: "$mol_theme_accent"
-            };
-        }
-    }
-    $.$mol_button_major = $mol_button_major;
-})($ || ($ = {}));
-//mol/button/major/-view.tree/major.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
-})($ || ($ = {}));
-//mol/button/major/-css/major.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_pop extends $mol_view {
         showed(next) {
             if (next !== undefined)
@@ -8562,7 +8578,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/pop/pop.view.css", "[mol_pop] {\n\tposition: relative;\n\tdisplay: inline-flex;\n}\n\n[mol_pop_bubble] {\n\tbox-shadow: 0 0 1rem hsla(0,0%,0%,.5);\n\tborder-radius: var(--mol_gap_round);\n\tposition: absolute;\n\tz-index: var(--mol_layer_popup);\n\tbackground: var(--mol_theme_back);\n\tmax-width: none;\n\tmax-height: none;\n\t/* overflow: hidden;\n\toverflow-y: scroll;\n\toverflow-y: overlay; */\n\tword-break: normal;\n\twidth: max-content;\n\theight: max-content;\n\tflex-direction: column;\n\tmax-width: 80vw;\n\tmax-height: 80vw;\n}\n\n:where( [mol_pop_bubble] > * ) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_pop_bubble][mol_scroll] {\n\tbackground: var(--mol_theme_back);\n}\n\n[mol_pop_bubble]:focus {\n\toutline: none;\n}\n\n[mol_pop_align=\"suspense_suspense\"] {\n\topacity: 0;\n}\n\n[mol_pop_align=\"left_top\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"left_center\"] {\n\ttransform: translate(-100%, -50%);\n\tleft: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"left_bottom\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"right_top\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"right_center\"] {\n\ttransform: translate(100%, -50%);\n\tright: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"right_bottom\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"center\"] {\n\tleft: 50%;\n\ttop: 50%;\n\ttransform: translate(-50%, -50%);\n}\n\n[mol_pop_align=\"top_left\"] {\n\tright: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_right\"] {\n\tleft: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"bottom_left\"] {\n\tright: 0;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_right\"] {\n\tleft: 0;\n\ttop: 100%;\n}\n");
+    $mol_style_attach("mol/pop/pop.view.css", "[mol_pop] {\n\tposition: relative;\n\tdisplay: inline-flex;\n}\n\n[mol_pop_bubble] {\n\tbox-shadow: 0 0 1rem hsla(0,0%,0%,.5);\n\tborder-radius: var(--mol_gap_round);\n\tposition: absolute;\n\tz-index: var(--mol_layer_popup);\n\tbackground: var(--mol_theme_back);\n\tmax-width: none;\n\tmax-height: none;\n\t/* overflow: hidden;\n\toverflow-y: scroll;\n\toverflow-y: overlay; */\n\tword-break: normal;\n\twidth: max-content;\n\theight: max-content;\n\tflex-direction: column;\n\tmax-width: 80vw;\n\tmax-height: 80vw;\n\ttransition: none;\n}\n\n:where( [mol_pop_bubble] > * ) {\n\tbackground: var(--mol_theme_card);\n}\n\n[mol_pop_bubble][mol_scroll] {\n\tbackground: var(--mol_theme_back);\n}\n\n[mol_pop_bubble]:focus {\n\toutline: none;\n}\n\n[mol_pop_align=\"suspense_suspense\"] {\n\topacity: 0;\n}\n\n[mol_pop_align=\"left_top\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"left_center\"] {\n\ttransform: translate(-100%, -50%);\n\tleft: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"left_bottom\"] {\n\ttransform: translate(-100%);\n\tleft: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"right_top\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\tbottom: 0;\n}\n\n[mol_pop_align=\"right_center\"] {\n\ttransform: translate(100%, -50%);\n\tright: 0;\n\ttop: 50%;\n}\n\n[mol_pop_align=\"right_bottom\"] {\n\ttransform: translate(100%);\n\tright: 0;\n\ttop: 0;\n}\n\n[mol_pop_align=\"center\"] {\n\tleft: 50%;\n\ttop: 50%;\n\ttransform: translate(-50%, -50%);\n}\n\n[mol_pop_align=\"top_left\"] {\n\tright: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"top_right\"] {\n\tleft: 0;\n\tbottom: 100%;\n}\n\n[mol_pop_align=\"bottom_left\"] {\n\tright: 0;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_center\"] {\n\ttransform: translate(-50%);\n\tleft: 50%;\n\ttop: 100%;\n}\n\n[mol_pop_align=\"bottom_right\"] {\n\tleft: 0;\n\ttop: 100%;\n}\n");
 })($ || ($ = {}));
 //mol/pop/-css/pop.view.css.ts
 ;
@@ -8642,6 +8658,44 @@ var $;
     $mol_style_attach("mol/pop/over/over.view.css", "[mol_pop_over]:focus {\r\n\toutline: none;\r\n}");
 })($ || ($ = {}));
 //mol/pop/over/-css/over.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_row extends $mol_view {
+    }
+    $.$mol_row = $mol_row;
+})($ || ($ = {}));
+//mol/row/-view.tree/row.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/row/row.view.css", "[mol_row] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\talign-items: flex-start;\n\talign-content: flex-start;\n\tjustify-content: flex-start;\n\tpadding: var(--mol_gap_block);\n\tgap: var(--mol_gap_block);\n\tflex: 0 0 auto;\n\tbox-sizing: border-box;\n\tmax-width: 100%;\n}\n\n[mol_row] > * {\n\tmax-width: 100%;\n}\n");
+})($ || ($ = {}));
+//mol/row/-css/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_button_major extends $mol_button_typed {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_theme: "$mol_theme_accent"
+            };
+        }
+    }
+    $.$mol_button_major = $mol_button_major;
+})($ || ($ = {}));
+//mol/button/major/-view.tree/major.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/button/major/major.view.css", "[mol_button_major][disabled] {\n\topacity: .5;\n\tfilter: grayscale();\n}\n");
+})($ || ($ = {}));
+//mol/button/major/-css/major.view.css.ts
 ;
 "use strict";
 var $;
@@ -9023,8 +9077,19 @@ var $;
             const obj = new this.$.$gen_engine();
             return obj;
         }
+        party() {
+            return [];
+        }
+        active_hero(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
         body() {
             return [
+                this.Party_title(),
+                this.Party_list(),
+                this.Start_battle(),
                 this.Name(),
                 this.Level(),
                 this.Equipment_label(),
@@ -9037,6 +9102,59 @@ var $;
                 this.Shop_label(),
                 this.Shop_list()
             ];
+        }
+        Party_title() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Отряд";
+            return obj;
+        }
+        party_hero_name(id) {
+            return "Герой";
+        }
+        Party_hero_name(id) {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.party_hero_name(id);
+            return obj;
+        }
+        party_hero_pick(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Party_hero_pick(id) {
+            const obj = new this.$.$mol_button_minor();
+            obj.title = () => "Выбрать героя";
+            obj.click = (next) => this.party_hero_pick(id, next);
+            return obj;
+        }
+        Party(id) {
+            const obj = new this.$.$mol_pop_over();
+            obj.Anchor = () => this.Party_hero_name(id);
+            obj.bubble_content = () => [
+                this.Party_hero_pick(id)
+            ];
+            return obj;
+        }
+        party_list() {
+            return [
+                this.Party("0")
+            ];
+        }
+        Party_list() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.party_list();
+            return obj;
+        }
+        start_battle(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Start_battle() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Начать битву";
+            obj.click = (next) => this.start_battle(next);
+            return obj;
         }
         name() {
             return "Имя:";
@@ -9230,6 +9348,33 @@ var $;
     ], $gen_app_hero.prototype, "engine", null);
     __decorate([
         $mol_mem
+    ], $gen_app_hero.prototype, "active_hero", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Party_title", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Party_hero_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "party_hero_pick", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Party_hero_pick", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_hero.prototype, "Party", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Party_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "start_battle", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Start_battle", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_hero.prototype, "Name", null);
     __decorate([
         $mol_mem
@@ -9317,7 +9462,16 @@ var $;
     (function ($$) {
         class $gen_app_hero extends $.$gen_app_hero {
             name() {
-                return `Имя: ${this.engine().hero().name}`;
+                return `Имя: ${this.get_active_hero()?.name()}`;
+            }
+            get_active_hero() {
+                return this.party().find(unit => unit.id() === this.active_hero());
+            }
+            active_hero(next) {
+                return next ?? this.party()[0]?.id();
+            }
+            start_battle(next) {
+                console.log('start battle');
             }
             equipment_list() {
                 return this.engine().hero_equipments().map(item => this.Equipment(item.id));
@@ -9373,61 +9527,40 @@ var $;
             shop_item_bue(id, next) {
                 this.engine().shop_buy(id);
             }
+            party() {
+                return this.common_party();
+            }
+            party_list() {
+                return this.party().map(unit => this.Party(unit.id()));
+            }
+            get_party_hero(id) {
+                return this.party().find(unit => unit.id() === id);
+            }
+            party_hero_name(id) {
+                return this.get_party_hero(id)?.name() || 'no name';
+            }
+            party_hero_pick(id, next) {
+                console.log(id, next);
+                this.active_hero(id);
+            }
+            common_party() {
+                return [
+                    this.$.$gen_engine_unit.make({ id: () => '112233', name: () => 'Вася' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша' }),
+                    this.$.$gen_engine_unit.make({}),
+                ];
+            }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_hero.prototype, "active_hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_hero.prototype, "common_party", null);
         $$.$gen_app_hero = $gen_app_hero;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/hero/hero.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_unit extends $.$mol_object {
-        name(next) {
-            return next ?? 'Unit';
-        }
-        health(next) {
-            return next ?? this.common_unit().health;
-        }
-        attack(next) {
-            return next ?? this.common_unit().attack;
-        }
-        use_attack(target) {
-            target.health(target.health() - this.attack());
-            this.next_turn();
-        }
-        use_skill(targets, skill) {
-            skill.use(this, targets);
-            this.next_turn();
-        }
-        is_dead() {
-            return this.health() <= 0;
-        }
-        common_unit() {
-            return {
-                name: 'Unit',
-                health: 20,
-                attack: 10,
-            };
-        }
-        next_turn() { }
-        refill() {
-            this.health(this.common_unit().health);
-            this.attack(this.common_unit().attack);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "attack", null);
-    $.$gen_engine_unit = $gen_engine_unit;
-})($ || ($ = {}));
-//gen/engine/unit/unit.ts
 ;
 "use strict";
 var $;
@@ -9625,6 +9758,9 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle_unit extends $.$gen_app_battle_unit {
+            id() {
+                return this.$.$mol_guid();
+            }
             attack_enabled() {
                 return this.unit().health() > 0;
             }
@@ -9678,6 +9814,9 @@ var $;
                 ];
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_unit.prototype, "id", null);
         $$.$gen_app_battle_unit = $gen_app_battle_unit;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
