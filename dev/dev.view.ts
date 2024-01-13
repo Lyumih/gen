@@ -1,6 +1,7 @@
 namespace $.$$ {
 	export class $gen_dev extends $.$gen_dev {
 
+		@$mol_mem
 		hero(): $gen_engine_unit {
 			return this.$.$gen_engine_unit.make( {
 				name: () => 'Герой',
@@ -8,6 +9,7 @@ namespace $.$$ {
 			} )
 		}
 
+		@$mol_mem
 		enemy(): $gen_engine_unit {
 			return this.$.$gen_engine_unit.make( {
 				name: () => 'Враг',
@@ -16,7 +18,8 @@ namespace $.$$ {
 		}
 
 		test() {
-			console.log( 'test' )
+			console.log( 'Использовано тестовое умение' )
+			this.hero().use_skill( [ this.enemy() ], this.skill() )
 		}
 
 		skill() {
@@ -26,7 +29,9 @@ namespace $.$$ {
 				description: 'Исцеляет на 10 здоровья',
 				mode: 'skill',
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
-					source.health( source.health() + 10 )
+					console.log( 'skill use', source, targets )
+					source.health( source.health() + 100 )
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
 				}
 			}
 		}
