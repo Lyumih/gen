@@ -1,8 +1,11 @@
 $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
+	party /$gen_engine_unit
 	pages /
-		<= Hero_page $gen_app_hero engine <= engine
+		<= Hero_page $gen_app_hero 
+			engine <= engine
+			party <= party
 		<= Battle_page $gen_app_battle engine <= engine
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine

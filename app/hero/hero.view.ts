@@ -99,9 +99,9 @@ namespace $.$$ {
 		}
 
 
-		party() {
-			return this.common_party()
-		}
+		// party() {
+		// 	return this.common_party()
+		// }
 
 		party_list() {
 			return this.party().map( unit => this.Party( unit.id() ) )
@@ -120,14 +120,14 @@ namespace $.$$ {
 			this.active_hero( id )
 		}
 
-		@$mol_mem
-		common_party() {
-			return [
-				this.$.$gen_engine_unit.make( { name: () => 'Вася' } ),
-				this.$.$gen_engine_unit.make( { name: () => 'Даша', level: () => 10 } ),
-				this.$.$gen_engine_unit.make( {} ),
-			]
-		}
+		// @$mol_mem
+		// common_party() {
+		// 	return [
+		// 		this.$.$gen_engine_unit.make( { name: () => 'Вася' } ),
+		// 		this.$.$gen_engine_unit.make( { name: () => 'Даша', level: () => 10 } ),
+		// 		this.$.$gen_engine_unit.make( {} ),
+		// 	]
+		// }
 
 	}
 }
