@@ -16,6 +16,6 @@ $gen_app_battle_unit $mol_list
 				bubble_content /
 					<= Skill_bubble_name* $mol_text text <= skill_name*
 					<= Skill_description* $mol_text text <= skill_description* \Описание
-					<= Skill_use* $mol_button_major
+					<= Skill_use* $mol_button_minor
 						title \Использовать умение
 						click? <=> use_skill*? null

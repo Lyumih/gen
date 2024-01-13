@@ -4,7 +4,7 @@ $gen_app_battle $mol_page
 	title \Битва
 	body /
 		<= Field $mol_list rows /
-			<= Turn $mol_paragraph title <= turn \Ход: 0
+			<= Turn $mol_section title <= turn \Ход: 0
 			<= Hero $gen_app_battle_unit
 				unit <= hero null
 				target <= enemy null
