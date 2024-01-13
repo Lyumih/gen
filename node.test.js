@@ -3870,6 +3870,9 @@ var $;
         name(next) {
             return next ?? 'Unit';
         }
+        level(next) {
+            return next ?? 1;
+        }
         health(next) {
             return next ?? this.common_unit().health;
         }
@@ -3906,6 +3909,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_unit.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "level", null);
     __decorate([
         $mol_mem
     ], $gen_engine_unit.prototype, "health", null);
@@ -9858,9 +9864,6 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_hero extends $.$gen_app_hero {
-            name() {
-                return `Имя: ${this.get_active_hero()?.name()}`;
-            }
             get_active_hero() {
                 return this.party().find(unit => unit.id() === this.active_hero());
             }
@@ -9869,6 +9872,12 @@ var $;
             }
             start_battle(next) {
                 console.log('start battle');
+            }
+            name() {
+                return `Имя: ${this.get_active_hero()?.name()}`;
+            }
+            level() {
+                return `Уровень: ${this.get_active_hero()?.level()}`;
             }
             equipment_list() {
                 return this.engine().hero_equipments().map(item => this.Equipment(item.id));
@@ -9942,8 +9951,8 @@ var $;
             }
             common_party() {
                 return [
-                    this.$.$gen_engine_unit.make({ id: () => '112233', name: () => 'Вася' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
                     this.$.$gen_engine_unit.make({}),
                 ];
             }

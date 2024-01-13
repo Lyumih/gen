@@ -1145,6 +1145,7 @@ declare namespace $ {
     class $gen_engine_unit extends $.$mol_object {
         id(): string;
         name(next?: string): string;
+        level(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
         use_attack(target: $gen_engine_unit): void;
@@ -2825,10 +2826,11 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
-        name(): string;
         get_active_hero(): $gen_engine_unit | undefined;
         active_hero(next?: any): string;
         start_battle(next?: any): void;
+        name(): string;
+        level(): string;
         equipment_list(): readonly any[];
         get_equipment(id: string): {
             id: string;
