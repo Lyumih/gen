@@ -2,10 +2,18 @@ namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
 
 		default_units() {
-			return [
-				new this.$.$gen_engine_unit(),
-				new this.$.$gen_engine_unit()
+			const units = [
+				... this.$.$gen_app_battle.call_unit(),
+				this.$.$gen_engine_unit.make( {} ),
+				this.$.$gen_engine_unit.make( {} )
 			]
+			units.forEach( unit => unit.next_turn = () => this.battle().next_turn() )
+			return units
+		}
+
+		@$mol_mem
+		static call_unit( next?: $gen_engine_unit[] ) {
+			return next ?? []
 		}
 
 		turn(): string {
@@ -14,9 +22,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero() {
-			return this.$.$gen_engine_unit.make( {
-				next_turn: () => this.battle().next_turn(),
-			} )
+			return this.default_units()[ 0 ]
 		}
 
 		@$mol_mem

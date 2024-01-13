@@ -15,6 +15,8 @@ namespace $.$$ {
 			console.log( 'start battle' )
 			// Тут надо как-то передать в gen_app_battle 
 			// Выбранного героя
+			const unit = this.get_active_hero()
+			unit && this.$.$gen_app_battle.call_unit( [ unit ] )
 		}
 
 		name(): string {
