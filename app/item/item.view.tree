@@ -1,7 +1,7 @@
 $gen_app_item $mol_view
 	attr *
 		^
-		type <= type
+		type <= type \
 	item *
 		type \
 		name \
