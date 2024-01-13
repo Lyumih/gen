@@ -34,6 +34,10 @@ namespace $.$$ {
 			return this.get_skill( id )?.name + ': ' + this.get_skill( id )?.description || 'no skill'
 		}
 
+		skill_description( id: any ): string {
+			return this.get_skill( id )?.description || 'no description'
+		}
+
 		use_skill( id: string, next?: any ) {
 			this.unit().use_skill( [ this.target() ], this.get_skill( id ) )
 		}
