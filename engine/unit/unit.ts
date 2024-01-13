@@ -12,6 +12,11 @@ namespace $ {
 		}
 
 		@$mol_mem
+		level( next?: number ) {
+			return next ?? 1
+		}
+
+		@$mol_mem
 		health( next?: number ) {
 			return next ?? this.common_unit().health
 		}

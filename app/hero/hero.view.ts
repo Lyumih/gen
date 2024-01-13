@@ -1,8 +1,6 @@
 namespace $.$$ {
 	export class $gen_app_hero extends $.$gen_app_hero {
-		name(): string {
-			return `Имя: ${ this.get_active_hero()?.name() }`
-		}
+
 
 		get_active_hero() {
 			return this.party().find( unit => unit.id() === this.active_hero() )
@@ -19,7 +17,13 @@ namespace $.$$ {
 			// Выбранного героя
 		}
 
+		name(): string {
+			return `Имя: ${ this.get_active_hero()?.name() }`
+		}
 
+		level(): string {
+			return `Уровень: ${ this.get_active_hero()?.level() }`
+		}
 		equipment_list(): readonly any[] {
 			return this.engine().hero_equipments().map( item => this.Equipment( item.id ) )
 		}
@@ -117,8 +121,8 @@ namespace $.$$ {
 		@$mol_mem
 		common_party() {
 			return [
-				this.$.$gen_engine_unit.make( { id: () => '112233', name: () => 'Вася' } ),
-				this.$.$gen_engine_unit.make( { name: () => 'Даша' } ),
+				this.$.$gen_engine_unit.make( { name: () => 'Вася' } ),
+				this.$.$gen_engine_unit.make( { name: () => 'Даша', level: () => 10 } ),
 				this.$.$gen_engine_unit.make( {} ),
 			]
 		}
