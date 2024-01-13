@@ -9869,116 +9869,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_hero extends $.$gen_app_hero {
-            get_active_hero() {
-                return this.party().find(unit => unit.id() === this.active_hero());
-            }
-            active_hero(next) {
-                return next ?? this.party()[0]?.id();
-            }
-            start_battle(next) {
-                console.log('start battle');
-            }
-            name() {
-                return `Имя: ${this.get_active_hero()?.name()}`;
-            }
-            level() {
-                return `Уровень: ${this.get_active_hero()?.level()}`;
-            }
-            equipment_list() {
-                return this.engine().hero_equipments().map(item => this.Equipment(item.id));
-            }
-            get_equipment(id) {
-                return this.engine().hero_equipments().find(item => item.id === id);
-            }
-            equipment_unequip(id, next) {
-                this.engine().hero_unequip(id);
-            }
-            skill_points() {
-                return `Очков умений: ${this.engine().hero().point.skill}`;
-            }
-            skills() {
-                return `Умения: ${JSON.stringify(this.engine().hero_skills, null, 2)}`;
-            }
-            skill_list() {
-                return this.engine().hero_skills().map(skill => this.Skill(skill.id));
-            }
-            get_skill(id) {
-                return this.engine().hero_skills().find(skill => skill.id === id);
-            }
-            skill_level_up(id, next) {
-                this.engine().skill_level_up(id);
-            }
-            skill_mode(id) {
-                return this.get_skill(id)?.name || 'no mode';
-            }
-            skill_add_mode(id, next) {
-                const mode = this.engine().all_mode();
-            }
-            skill_unequip(id, next) {
-                this.engine().skill_unequip(id);
-            }
-            inventory_list() {
-                return this.engine().inventory().map(item => this.Inventory_item(item.id));
-            }
-            get_inventory_item(id) {
-                return this.engine().inventory().find(item => item.id === id);
-            }
-            inventory_item_sell(id, next) {
-                this.engine().inventory_sell(id);
-            }
-            inventory_equip(id, next) {
-                this.engine().inventory_equip(id);
-            }
-            shop_list() {
-                return this.engine().shop().map(item => this.Shop_item(item.id));
-            }
-            get_shop_item(id) {
-                return this.engine().shop().find(item => item.id === id);
-            }
-            shop_item_bue(id, next) {
-                this.engine().shop_buy(id);
-            }
-            party() {
-                return this.common_party();
-            }
-            party_list() {
-                return this.party().map(unit => this.Party(unit.id()));
-            }
-            get_party_hero(id) {
-                return this.party().find(unit => unit.id() === id);
-            }
-            party_hero_name(id) {
-                return this.get_party_hero(id)?.name() || 'no name';
-            }
-            party_hero_pick(id, next) {
-                console.log(id, next);
-                this.active_hero(id);
-            }
-            common_party() {
-                return [
-                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
-                    this.$.$gen_engine_unit.make({}),
-                ];
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_hero.prototype, "active_hero", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_hero.prototype, "common_party", null);
-        $$.$gen_app_hero = $gen_app_hero;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/hero/hero.view.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_engine_battle extends $.$mol_object {
         turn(next) {
             return next ?? 0;
@@ -10373,18 +10263,22 @@ var $;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
             default_units() {
-                return [
-                    new this.$.$gen_engine_unit(),
-                    new this.$.$gen_engine_unit()
+                const units = [
+                    ...this.$.$gen_app_battle.call_unit(),
+                    this.$.$gen_engine_unit.make({}),
+                    this.$.$gen_engine_unit.make({})
                 ];
+                units.forEach(unit => unit.next_turn = () => this.battle().next_turn());
+                return units;
+            }
+            static call_unit(next) {
+                return next ?? [];
             }
             turn() {
                 return `Ход: ${this.battle().turn()}`;
             }
             hero() {
-                return this.$.$gen_engine_unit.make({
-                    next_turn: () => this.battle().next_turn(),
-                });
+                return this.default_units()[0];
             }
             enemy() {
                 return this.$.$gen_engine_unit.make({
@@ -10422,10 +10316,125 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "enemy", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle, "call_unit", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/battle/battle.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_hero extends $.$gen_app_hero {
+            get_active_hero() {
+                return this.party().find(unit => unit.id() === this.active_hero());
+            }
+            active_hero(next) {
+                return next ?? this.party()[0]?.id();
+            }
+            start_battle(next) {
+                console.log('start battle');
+                const unit = this.get_active_hero();
+                unit && this.$.$gen_app_battle.call_unit([unit]);
+            }
+            name() {
+                return `Имя: ${this.get_active_hero()?.name()}`;
+            }
+            level() {
+                return `Уровень: ${this.get_active_hero()?.level()}`;
+            }
+            equipment_list() {
+                return this.engine().hero_equipments().map(item => this.Equipment(item.id));
+            }
+            get_equipment(id) {
+                return this.engine().hero_equipments().find(item => item.id === id);
+            }
+            equipment_unequip(id, next) {
+                this.engine().hero_unequip(id);
+            }
+            skill_points() {
+                return `Очков умений: ${this.engine().hero().point.skill}`;
+            }
+            skills() {
+                return `Умения: ${JSON.stringify(this.engine().hero_skills, null, 2)}`;
+            }
+            skill_list() {
+                return this.engine().hero_skills().map(skill => this.Skill(skill.id));
+            }
+            get_skill(id) {
+                return this.engine().hero_skills().find(skill => skill.id === id);
+            }
+            skill_level_up(id, next) {
+                this.engine().skill_level_up(id);
+            }
+            skill_mode(id) {
+                return this.get_skill(id)?.name || 'no mode';
+            }
+            skill_add_mode(id, next) {
+                const mode = this.engine().all_mode();
+            }
+            skill_unequip(id, next) {
+                this.engine().skill_unequip(id);
+            }
+            inventory_list() {
+                return this.engine().inventory().map(item => this.Inventory_item(item.id));
+            }
+            get_inventory_item(id) {
+                return this.engine().inventory().find(item => item.id === id);
+            }
+            inventory_item_sell(id, next) {
+                this.engine().inventory_sell(id);
+            }
+            inventory_equip(id, next) {
+                this.engine().inventory_equip(id);
+            }
+            shop_list() {
+                return this.engine().shop().map(item => this.Shop_item(item.id));
+            }
+            get_shop_item(id) {
+                return this.engine().shop().find(item => item.id === id);
+            }
+            shop_item_bue(id, next) {
+                this.engine().shop_buy(id);
+            }
+            party() {
+                return this.common_party();
+            }
+            party_list() {
+                return this.party().map(unit => this.Party(unit.id()));
+            }
+            get_party_hero(id) {
+                return this.party().find(unit => unit.id() === id);
+            }
+            party_hero_name(id) {
+                return this.get_party_hero(id)?.name() || 'no name';
+            }
+            party_hero_pick(id, next) {
+                console.log(id, next);
+                this.active_hero(id);
+            }
+            common_party() {
+                return [
+                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
+                    this.$.$gen_engine_unit.make({}),
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_hero.prototype, "active_hero", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_hero.prototype, "common_party", null);
+        $$.$gen_app_hero = $gen_app_hero;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/hero/hero.view.ts
 ;
 "use strict";
 var $;

@@ -2824,65 +2824,6 @@ declare namespace $ {
     }
 }
 
-declare namespace $.$$ {
-    class $gen_app_hero extends $.$gen_app_hero {
-        get_active_hero(): $gen_engine_unit | undefined;
-        active_hero(next?: any): string;
-        start_battle(next?: any): void;
-        name(): string;
-        level(): string;
-        equipment_list(): readonly any[];
-        get_equipment(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
-        equipment_unequip(id: any, next?: any): void;
-        skill_points(): string;
-        skills(): string;
-        skill_list(): readonly any[];
-        get_skill(id: string): ({
-            id: string;
-            name: string;
-            type: string;
-        } & {
-            level: number;
-            modes: ({
-                id: string;
-                name: string;
-                type: string;
-            } & {
-                type: "mode";
-            })[];
-        }) | undefined;
-        skill_level_up(id: string, next?: any): void;
-        skill_mode(id: any): string;
-        skill_add_mode(id: string, next?: any): void;
-        skill_unequip(id: any, next?: any): void;
-        inventory_list(): readonly any[];
-        get_inventory_item(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
-        inventory_item_sell(id: any, next?: any): void;
-        inventory_equip(id: any, next?: any): void;
-        shop_list(): readonly any[];
-        get_shop_item(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
-        shop_item_bue(id: any, next?: any): void;
-        party(): $gen_engine_unit[];
-        party_list(): $mol_pop_over[];
-        get_party_hero(id: string): $gen_engine_unit | undefined;
-        party_hero_name(id: string): string;
-        party_hero_pick(id: string, next?: any): void;
-        common_party(): $gen_engine_unit[];
-    }
-}
-
 declare namespace $ {
     class $gen_engine_battle extends $.$mol_object {
         turn(next?: number): number;
@@ -2974,6 +2915,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
         default_units(): $gen_engine_unit[];
+        static call_unit(next?: $gen_engine_unit[]): $gen_engine_unit[];
         turn(): string;
         hero(): $gen_engine_unit;
         enemy(): $gen_engine_unit;
@@ -2984,6 +2926,65 @@ declare namespace $.$$ {
         is_game_end(): boolean;
         end(): string;
         get_reward(next?: any): void;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_hero extends $.$gen_app_hero {
+        get_active_hero(): $gen_engine_unit | undefined;
+        active_hero(next?: any): string;
+        start_battle(next?: any): void;
+        name(): string;
+        level(): string;
+        equipment_list(): readonly any[];
+        get_equipment(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        equipment_unequip(id: any, next?: any): void;
+        skill_points(): string;
+        skills(): string;
+        skill_list(): readonly any[];
+        get_skill(id: string): ({
+            id: string;
+            name: string;
+            type: string;
+        } & {
+            level: number;
+            modes: ({
+                id: string;
+                name: string;
+                type: string;
+            } & {
+                type: "mode";
+            })[];
+        }) | undefined;
+        skill_level_up(id: string, next?: any): void;
+        skill_mode(id: any): string;
+        skill_add_mode(id: string, next?: any): void;
+        skill_unequip(id: any, next?: any): void;
+        inventory_list(): readonly any[];
+        get_inventory_item(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        inventory_item_sell(id: any, next?: any): void;
+        inventory_equip(id: any, next?: any): void;
+        shop_list(): readonly any[];
+        get_shop_item(id: string): {
+            id: string;
+            name: string;
+            type: string;
+        } | undefined;
+        shop_item_bue(id: any, next?: any): void;
+        party(): $gen_engine_unit[];
+        party_list(): $mol_pop_over[];
+        get_party_hero(id: string): $gen_engine_unit | undefined;
+        party_hero_name(id: string): string;
+        party_hero_pick(id: string, next?: any): void;
+        common_party(): $gen_engine_unit[];
     }
 }
 
