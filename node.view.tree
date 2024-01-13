@@ -495,16 +495,6 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
-
 $mol_row $mol_view
 
 $mol_button_major $mol_button_typed
@@ -512,31 +502,68 @@ $mol_button_major $mol_button_typed
 		^
 		mol_theme \$mol_theme_accent
 
+$mol_pop $mol_view
+	showed? false
+	align_vert \
+	align_hor \
+	prefer \vert
+	sub /
+		<= Anchor null
+	sub_visible /
+		<= Anchor
+		<= Bubble $mol_pop_bubble
+			align <= align \bottom_center
+			content <= bubble_content /$mol_view_content
+			height_max <= height_max 9999
+
+$mol_pop_bubble $mol_view
+	sub <= content /$mol_view_content
+	style *
+		^
+		maxHeight <= height_max 9999
+	attr *
+		^
+		mol_pop_align <= align \
+		tabindex 0
+
+$mol_pop_over $mol_pop
+	showed <= hovered? false
+	attr *
+		^
+		tabindex 0
+	event *
+		^
+		mouseenter?event <=> event_show?event null
+		mouseleave?event <=> event_hide?event null
+
 $gen_app_item $mol_view
+	attr *
+		^
+		type <= type \
 	item *
 		type \
 		name \
 		level 0
 		modes /
 	sub /
-		<= Card $mol_list rows <= card_rows /
-			<= Info $mol_labeler
-				title <= type \
-				content /
-					<= Name $mol_text text <= name \
-					<= Desription $mol_text text <= description \
-			<= Modes_list $mol_list rows <= modes_list /
-				<= Mode*0 $mol_row sub /
-					<= Mode_name* $mol_text text <= mode_name* \123
-			<= Actions_list $mol_list rows /
-				<= Move_row $mol_row sub /
-					<= Add $mol_button_major
-						title <= add_title \+
-						click? <=> add? null
-					<= Remove $mol_button_major
-						title <= remove_title \-
-						click? <=> remove? null
-					<= Other_actions $mol_view
+		<= Card $mol_pop_over
+			Anchor <= Name $mol_text text <= name \
+			bubble_content /
+				<= Type $mol_text text <= type_translate \
+				<= Name_bubble $mol_text text <= name \
+				<= Desription $mol_text text <= description \
+				<= Modes_list $mol_list rows <= modes_list /
+					<= Mode*0 $mol_row sub /
+						<= Mode_name* $mol_text text <= mode_name* \123
+				<= Actions_list $mol_list rows /
+					<= Move_row $mol_row sub /
+						<= Add $mol_button_major
+							title <= add_title \+
+							click? <=> add? null
+						<= Remove $mol_button_major
+							title <= remove_title \-
+							click? <=> remove? null
+						<= Other_actions $mol_view
 
 $gen_app_item_equipment $gen_app_item
 	Add null
@@ -599,7 +626,7 @@ $gen_app_hero $mol_page
 					disabled true
 					click? <=> skill_add_mode*? null
 		<= Inventory_label $mol_text text \# Инвентарь
-		<= Inventory_list $mol_list rows <= inventory_list /
+		<= Inventory_list $mol_row sub <= inventory_list /
 			<= Inventory_item*0 $mol_row sub /
 				<= Inventory_card* $gen_app_item_inventory
 					item <= get_inventory_item* null
@@ -611,40 +638,6 @@ $gen_app_hero $mol_page
 				<= Shop_card* $gen_app_item_shop
 					item <= get_shop_item* null
 					add? <=> shop_item_bue*? null
-
-$mol_pop $mol_view
-	showed? false
-	align_vert \
-	align_hor \
-	prefer \vert
-	sub /
-		<= Anchor null
-	sub_visible /
-		<= Anchor
-		<= Bubble $mol_pop_bubble
-			align <= align \bottom_center
-			content <= bubble_content /$mol_view_content
-			height_max <= height_max 9999
-
-$mol_pop_bubble $mol_view
-	sub <= content /$mol_view_content
-	style *
-		^
-		maxHeight <= height_max 9999
-	attr *
-		^
-		mol_pop_align <= align \
-		tabindex 0
-
-$mol_pop_over $mol_pop
-	showed <= hovered? false
-	attr *
-		^
-		tabindex 0
-	event *
-		^
-		mouseenter?event <=> event_show?event null
-		mouseleave?event <=> event_hide?event null
 
 $gen_app_battle_unit $mol_list
 	unit $gen_engine_unit
@@ -664,7 +657,7 @@ $gen_app_battle_unit $mol_list
 				bubble_content /
 					<= Skill_bubble_name* $mol_text text <= skill_name*
 					<= Skill_description* $mol_text text <= skill_description* \Описание
-					<= Skill_use* $mol_button_minor
+					<= Skill_use* $mol_button_major
 						title \Использовать умение
 						click? <=> use_skill*? null
 

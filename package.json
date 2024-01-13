@@ -194,18 +194,17 @@
     "$mol_frame",
     "$gen_app_item_equipment",
     "$gen_app_item",
-    "$mol_labeler",
     "$mol_row",
     "$mol_button_major",
+    "$mol_pop_over",
+    "$mol_pop",
     "$gen_app_item_skill",
     "$gen_app_item_inventory",
     "$gen_app_item_shop",
     "$gen_app_battle",
     "$gen_engine_battle",
     "$gen_engine_unit",
-    "$gen_app_battle_unit",
-    "$mol_pop_over",
-    "$mol_pop"
+    "$gen_app_battle_unit"
   ],
   "dependencies": {
     "jsdom": "*",
