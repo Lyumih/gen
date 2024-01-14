@@ -16,10 +16,15 @@
 	justify-content: center;
 }
 
+[gen_app_talent_talent_cell][status='open'] {
+	border: 2px dotted darkorange;
+}
+
 [gen_app_talent_talent_cell][status='active'] {
 	border: 2px solid darkgreen;
 }
 
-[gen_app_talent_talent_cell][status='open'] {
-	border: 2px dotted darkgoldenrod;
+[gen_app_talent_talent_cell][search='true'] {
+	border-width: 4px;
+	transform: scale(1.4);
 }

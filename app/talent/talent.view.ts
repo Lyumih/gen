@@ -28,14 +28,15 @@ namespace $.$$ {
 			} ]
 		}
 
-		status_locale() {
-			return
+		talent_count(): string {
+			return `Талантов: ${ this.common_talents().length }`
 		}
 
 		status( id: any ) {
 			const point = this.parse_x_y( id )
-			const is_open = this.talents_opened().some( talent => talent.x === point.x() && talent.y === point.y() )
-			const is_active = this.common_talents().some( talent => talent.x() === point.x() && talent.y() === point.y() )
+
+			const is_open = this.talents_opened().find( talent => talent.x === point.x() && talent.y === point.y() )
+			const is_active = this.common_talents().find( talent => talent.x() === point.x() && talent.y() === point.y() )
 			if( is_open && is_active ) {
 				return 'active'
 			} else if( is_active ) {
@@ -44,6 +45,16 @@ namespace $.$$ {
 				return 'active'
 			}
 			return ''
+		}
+
+		is_search( id: any ): boolean {
+			if( this.talent_search() ) {
+				const point = this.parse_x_y( id )
+				const is_active = this.common_talents().find( talent => talent.x() === point.x() && talent.y() === point.y() )
+				return Boolean( is_active?.name().toLocaleLowerCase().includes( this.talent_search().toLocaleLowerCase() ) || is_active?.description().includes( this.talent_search().toLocaleLowerCase() ) )
+			}
+			return false
+
 		}
 
 		@$mol_mem
@@ -115,11 +126,7 @@ namespace $.$$ {
 		@$mol_mem
 		common_talents( next?: $gen_engine_item_talent[] ) {
 			const talent1 = new this.$.$gen_engine_item_talent_all().all()[ 0 ]
-			const talent2 = new this.$.$gen_engine_item_talent_all().all()[ 1 ]
-			const talent3 = new this.$.$gen_engine_item_talent_all().all()[ 2 ]
-			talent2.set_x_y( 1, 3 )
-			talent3.set_x_y( 3, 1 )
-			return next ?? [ talent1, talent2, talent3 ]
+			return next ?? [ talent1 ]
 		}
 
 	}
