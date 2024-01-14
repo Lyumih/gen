@@ -2926,6 +2926,32 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $gen_engine_item extends $.$mol_object {
+        id_root(next?: string): string;
+        id(next?: string): string;
+        type(next?: string): string;
+        name(next?: string): string;
+        description(next?: string): string;
+        level(next?: number): number;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_skill extends $.$gen_engine_item {
+        type(): string;
+        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): string;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_skill_all extends $.$mol_object {
+        all(): $gen_engine_item_skill[];
+        create_id_root(id_root: string): string;
+        resource(): $gen_engine_item_skill[];
+    }
+}
+
+declare namespace $ {
     class $mol_expander extends $mol_list {
         rows(): readonly any[];
         expanded(next?: any): boolean;
@@ -3186,12 +3212,15 @@ declare namespace $ {
         title(): string;
         hero(): $gen_engine_unit;
         enemy(): $gen_engine_unit;
+        skills(): $gen_engine_item_skill_all;
         body(): readonly any[];
         Example(): $$.$mol_text_code;
         Instruction(): $$.$mol_expander;
-        Skill_name(): $$.$mol_text;
-        Skill_code(): $$.$mol_text_code;
-        Skill(id: any): $mol_row;
+        skill_name(id: any): string;
+        Skill_name(id: any): $$.$mol_section;
+        skill_code(id: any): string;
+        Skill_code(id: any): $$.$mol_text_code;
+        Skill(id: any): $$.$mol_list;
         all_skill_list(): readonly any[];
         All_skills_list(): $$.$mol_list;
         All_skills(): $$.$mol_expander;
@@ -3209,29 +3238,15 @@ declare namespace $ {
     }
 }
 
-declare namespace $ {
-    class $gen_engine_item extends $.$mol_object {
-        id_root(next?: string): string;
-        id(next?: string): string;
-        type(next?: string): string;
-        name(next?: string): string;
-        description(next?: string): string;
-        level(next?: number): number;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_skill extends $.$gen_engine_item {
-        type(): string;
-        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): string;
-    }
-}
-
 declare namespace $.$$ {
     class $gen_dev extends $.$gen_dev {
         hero(): $gen_engine_unit;
         enemy(): $gen_engine_unit;
         test(): void;
+        all_skill_list(): readonly any[];
+        get_skill(id: string): $gen_engine_item_skill | undefined;
+        skill_name(id: any): string;
+        skill_code(id: any): string;
         skill(): $gen_engine_item_skill;
     }
 }

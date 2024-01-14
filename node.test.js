@@ -10443,6 +10443,116 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item extends $.$mol_object {
+        id_root(next) {
+            return next ?? this.$.$mol_guid();
+        }
+        id(next) {
+            return next ?? this.$.$mol_guid();
+        }
+        type(next) {
+            return 'item';
+        }
+        name(next) {
+            return next ?? 'no name';
+        }
+        description(next) {
+            return next ?? 'no description';
+        }
+        level(next) {
+            return next ?? 1;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "id_root", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "description", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "level", null);
+    $.$gen_engine_item = $gen_engine_item;
+})($ || ($ = {}));
+//gen/engine/item/item.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_skill extends $.$gen_engine_item {
+        type() {
+            return 'skill';
+        }
+        use(source, targets) {
+            return 'not implemented';
+        }
+    }
+    $.$gen_engine_item_skill = $gen_engine_item_skill;
+})($ || ($ = {}));
+//gen/engine/item/skill/skill.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_skill_all extends $.$mol_object {
+        all() {
+            return this.resource();
+        }
+        create_id_root(id_root) {
+            return `skill-${id_root}`;
+        }
+        resource() {
+            return [
+                this.$.$gen_engine_item_skill.make({
+                    id_root: () => this.create_id_root('1'),
+                    name: () => 'Хил',
+                    description: () => 'Исцеляет на 10 здоровья',
+                    use: (source, targets) => {
+                        source.health(source.health() + 10);
+                        return 'Хил';
+                    }
+                }),
+                this.$.$gen_engine_item_skill.make({
+                    id_root: () => this.create_id_root('2'),
+                    name: () => 'Сильный удар',
+                    description: () => 'Урон x2',
+                    use: (source, targets) => {
+                        targets[0].health(targets[0].health() - source.attack() * 2);
+                        return 'Сильный удар';
+                    }
+                }),
+                this.$.$gen_engine_item_skill.make({
+                    id_root: () => this.create_id_root('3'),
+                    name: () => 'Сильный удар и самолечение',
+                    description: () => 'Урон x4 и лечение себя на 10',
+                    use: (source, targets) => {
+                        targets[0].health(targets[0].health() - source.attack() * 4);
+                        source.health(source.health() + 10);
+                        return 'Сильный удар и самолечение';
+                    }
+                })
+            ];
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_skill_all.prototype, "all", null);
+    $.$gen_engine_item_skill_all = $gen_engine_item_skill_all;
+})($ || ($ = {}));
+//gen/engine/item/skill/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_expander extends $mol_list {
         rows() {
             return [
@@ -11216,6 +11326,10 @@ var $;
             const obj = new this.$.$gen_engine_unit();
             return obj;
         }
+        skills() {
+            const obj = new this.$.$gen_engine_item_skill_all();
+            return obj;
+        }
         body() {
             return [
                 this.Instruction(),
@@ -11236,21 +11350,27 @@ var $;
             ];
             return obj;
         }
-        Skill_name() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => "Skill name";
+        skill_name(id) {
+            return "Skill name";
+        }
+        Skill_name(id) {
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.skill_name(id);
             return obj;
         }
-        Skill_code() {
+        skill_code(id) {
+            return "Skill code";
+        }
+        Skill_code(id) {
             const obj = new this.$.$mol_text_code();
-            obj.text = () => "Skill code";
+            obj.text = () => this.skill_code(id);
             return obj;
         }
         Skill(id) {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Skill_name(),
-                this.Skill_code()
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Skill_name(id),
+                this.Skill_code(id)
             ];
             return obj;
         }
@@ -11351,15 +11471,18 @@ var $;
     ], $gen_dev.prototype, "enemy", null);
     __decorate([
         $mol_mem
+    ], $gen_dev.prototype, "skills", null);
+    __decorate([
+        $mol_mem
     ], $gen_dev.prototype, "Example", null);
     __decorate([
         $mol_mem
     ], $gen_dev.prototype, "Instruction", null);
     __decorate([
-        $mol_mem
+        $mol_mem_key
     ], $gen_dev.prototype, "Skill_name", null);
     __decorate([
-        $mol_mem
+        $mol_mem_key
     ], $gen_dev.prototype, "Skill_code", null);
     __decorate([
         $mol_mem_key
@@ -11410,66 +11533,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item extends $.$mol_object {
-        id_root(next) {
-            return next ?? this.$.$mol_guid();
-        }
-        id(next) {
-            return next ?? this.$.$mol_guid();
-        }
-        type(next) {
-            return 'item';
-        }
-        name(next) {
-            return next ?? 'no name';
-        }
-        description(next) {
-            return next ?? 'no description';
-        }
-        level(next) {
-            return next ?? 1;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "id_root", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "id", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "description", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "level", null);
-    $.$gen_engine_item = $gen_engine_item;
-})($ || ($ = {}));
-//gen/engine/item/item.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_item_skill extends $.$gen_engine_item {
-        type() {
-            return 'skill';
-        }
-        use(source, targets) {
-            return 'not implemented';
-        }
-    }
-    $.$gen_engine_item_skill = $gen_engine_item_skill;
-})($ || ($ = {}));
-//gen/engine/item/skill/skill.ts
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
@@ -11489,6 +11552,18 @@ var $;
                 console.log('Использовано тестовое умение');
                 this.hero().use_skill([this.enemy()], this.skill());
             }
+            all_skill_list() {
+                return this.skills().all().map(skill => this.Skill(skill.id()));
+            }
+            get_skill(id) {
+                return this.skills().all().find(skill => skill.id() === id);
+            }
+            skill_name(id) {
+                return this.get_skill(id)?.name() || 'no name';
+            }
+            skill_code(id) {
+                return this.get_skill(id)?.use.toString() || 'no code';
+            }
             skill() {
                 return this.$.$gen_engine_item_skill.make({
                     use: (source, targets) => {
@@ -11505,6 +11580,9 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_dev.prototype, "enemy", null);
+        __decorate([
+            $mol_mem
+        ], $gen_dev.prototype, "all_skill_list", null);
         $$.$gen_dev = $gen_dev;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

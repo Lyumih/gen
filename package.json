@@ -207,13 +207,14 @@
     "$gen_engine_battle",
     "$gen_app_battle_unit",
     "$gen_dev",
+    "$gen_engine_item_skill_all",
+    "$gen_engine_item_skill",
+    "$gen_engine_item",
     "$mol_expander",
     "$mol_string",
     "$mol_hotkey",
     "$mol_labeler",
-    "$mol_textarea",
-    "$gen_engine_item_skill",
-    "$gen_engine_item"
+    "$mol_textarea"
   ],
   "dependencies": {
     "jsdom": "*",
