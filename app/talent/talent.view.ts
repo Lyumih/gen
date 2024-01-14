@@ -120,7 +120,19 @@ namespace $.$$ {
 			return this.get_talent_id( id )?.description() ?? ''
 		}
 
-		nearest_point( x: number, y: number, points: { x: number, y: number }[] ) {
+		@$mol_mem
+		stats(): string {
+			const sorted_talents = this.common_talents().sort( ( a, b ) => a.name().localeCompare( b.name() ) )
+			const reduced: { count: number, description: string }[] = []
+			sorted_talents.forEach( talent => {
+				const index = reduced.findIndex( item => item.description === talent.description() )
+				if( index === -1 ) {
+					reduced.push( { count: 1, description: talent.description() } )
+				} else {
+					reduced[ index ].count++
+				}
+			} )
+			return reduced.map( talent => `**${ talent.count }x** ${ talent.description }` ).join( '\n' )
 		}
 
 		@$mol_mem
