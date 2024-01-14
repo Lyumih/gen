@@ -23,16 +23,22 @@ namespace $.$$ {
 		}
 
 		skill() {
-			return {
-				id: 'skill1',
-				name: 'Хил',
-				description: 'Исцеляет на 10 здоровья',
-				mode: 'skill',
+			return this.$.$gen_engine_item_skill.make( {
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 					console.log( 'code', this.code() )
 					eval( this.code() )
 				}
-			}
+			} )
+			// return {
+			// 	id: 'skill1',
+			// 	name: 'Хил',
+			// 	description: 'Исцеляет на 10 здоровья',
+			// 	type: 'skill',
+			// 	use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+			// 		console.log( 'code', this.code() )
+			// 		eval( this.code() )
+			// 	}
+			// }
 		}
 	}
 }
