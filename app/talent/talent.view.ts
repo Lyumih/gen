@@ -2,7 +2,7 @@ namespace $.$$ {
 	export class $gen_app_talent extends $.$gen_app_talent {
 
 		light() {
-			return 2
+			return 1
 		}
 
 		@$mol_mem
