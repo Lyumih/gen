@@ -7,7 +7,7 @@ namespace $ {
 
 		/** Метод для использования данного умения */
 		use( source: $gen_engine_unit, targets: $gen_engine_unit[] ) {
-
+			return 'not implemented'
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace $ {
 		/** Корневой идентификатор умения в глобальной базе данных */
 		@$mol_mem
 		id_root( next?: string ) {
-			return 'item'
+			return next ?? this.$.$mol_guid()
 		}
 
 		@$mol_mem

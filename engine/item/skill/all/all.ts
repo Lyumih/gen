@@ -17,6 +17,7 @@ namespace $ {
 					description: () => 'Исцеляет на 10 здоровья',
 					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 						source.health( source.health() + 10 )
+						return 'Хил'
 					}
 				} ),
 				this.$.$gen_engine_item_skill.make( {
@@ -25,6 +26,7 @@ namespace $ {
 					description: () => 'Урон x2',
 					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
+						return 'Сильный удар'
 					}
 				} ),
 				this.$.$gen_engine_item_skill.make( {
@@ -34,6 +36,7 @@ namespace $ {
 					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
 						source.health( source.health() + 10 )
+						return 'Сильный удар и самолечение'
 					}
 				} )
 			]

@@ -27,6 +27,7 @@ namespace $.$$ {
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 					console.log( 'code', this.code() )
 					eval( this.code() )
+					return 'success use skill'
 				}
 			} )
 			// return {
