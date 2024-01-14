@@ -3272,18 +3272,30 @@ declare namespace $ {
     }
 }
 
+declare namespace $ {
+    class $gen_engine_item extends $.$mol_object {
+        id_root(next?: string): string;
+        id(next?: string): string;
+        type(next?: string): string;
+        name(next?: string): string;
+        description(next?: string): string;
+        level(next?: number): number;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_skill extends $.$gen_engine_item {
+        type(): string;
+        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
+    }
+}
+
 declare namespace $.$$ {
     class $gen_dev extends $.$gen_dev {
         hero(): $gen_engine_unit;
         enemy(): $gen_engine_unit;
         test(): void;
-        skill(): {
-            id: string;
-            name: string;
-            description: string;
-            mode: string;
-            use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
-        };
+        skill(): $gen_engine_item_skill;
     }
 }
 

@@ -4031,5 +4031,17 @@ var $;
     });
 })($ || ($ = {}));
 //gen/engine/battle/batlle.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    const skill = $$.$gen_engine_item_skill.make({});
+    $mol_test({
+        'skill type'() {
+            $mol_assert_equal(skill.type(), 'skill');
+        }
+    });
+})($ || ($ = {}));
+//gen/engine/item/skill/skill.test.ts
 
 //# sourceMappingURL=web.test.js.map

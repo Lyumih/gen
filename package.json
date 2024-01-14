@@ -211,7 +211,9 @@
     "$mol_string",
     "$mol_hotkey",
     "$mol_labeler",
-    "$mol_textarea"
+    "$mol_textarea",
+    "$gen_engine_item_skill",
+    "$gen_engine_item"
   ],
   "dependencies": {
     "jsdom": "*",

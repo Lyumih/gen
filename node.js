@@ -11375,6 +11375,65 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item extends $.$mol_object {
+        id_root(next) {
+            return 'item';
+        }
+        id(next) {
+            return next ?? this.$.$mol_guid();
+        }
+        type(next) {
+            return 'item';
+        }
+        name(next) {
+            return next ?? 'no name';
+        }
+        description(next) {
+            return next ?? 'no description';
+        }
+        level(next) {
+            return next ?? 1;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "id_root", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "description", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "level", null);
+    $.$gen_engine_item = $gen_engine_item;
+})($ || ($ = {}));
+//gen/engine/item/item.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_skill extends $.$gen_engine_item {
+        type() {
+            return 'skill';
+        }
+        use(source, targets) {
+        }
+    }
+    $.$gen_engine_item_skill = $gen_engine_item_skill;
+})($ || ($ = {}));
+//gen/engine/item/skill/skill.ts
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
@@ -11395,16 +11454,12 @@ var $;
                 this.hero().use_skill([this.enemy()], this.skill());
             }
             skill() {
-                return {
-                    id: 'skill1',
-                    name: 'Хил',
-                    description: 'Исцеляет на 10 здоровья',
-                    mode: 'skill',
+                return this.$.$gen_engine_item_skill.make({
                     use: (source, targets) => {
                         console.log('code', this.code());
                         eval(this.code());
                     }
-                };
+                });
             }
         }
         __decorate([
