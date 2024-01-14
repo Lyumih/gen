@@ -3257,6 +3257,56 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $gen_app_talent extends $mol_page {
+        title(): string;
+        body(): readonly any[];
+        Talent_title(): $$.$mol_section;
+        Talent_seed(): $$.$mol_section;
+        talent_search(next?: any): string;
+        Talent_search(): $$.$mol_string;
+        Talent_labeler(): $mol_labeler;
+        talent_short_name(id: any): string;
+        Talent_short_name(id: any): $$.$mol_paragraph;
+        Talent(id: any): $$.$mol_pop_over;
+        x_list(id: any): readonly any[];
+        X(id: any): $mol_row;
+        y_list(): readonly any[];
+        Y(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_talent extends $.$gen_app_talent {
+        y_list(): $mol_row[];
+        x_list(id_y: string): $mol_pop_over[];
+        max_x_count(): number[];
+        max_y_count(): number[];
+        light(): number;
+        max_x_y(): {
+            x: number;
+            y: number;
+        };
+        array_fill(count: number): number[];
+        get_talent_id(id_x_y: string): {
+            x: number;
+            y: number;
+            id: string;
+            name: string;
+        } | undefined;
+        talent_short_name(id: any): string;
+        common_talents(): {
+            x: number;
+            y: number;
+            id: string;
+            name: string;
+        }[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $gen_app extends $mol_book2 {
         title(): string;
         engine(): $gen_engine;
@@ -3265,6 +3315,7 @@ declare namespace $ {
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
         Dev_page(): $$.$gen_dev;
+        Talent_page(): $$.$gen_app_talent;
     }
 }
 

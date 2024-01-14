@@ -11611,6 +11611,190 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_app_talent extends $mol_page {
+        title() {
+            return "Дерево талантов";
+        }
+        body() {
+            return [
+                this.Talent_title(),
+                this.Talent_seed(),
+                this.Talent_labeler(),
+                this.Y()
+            ];
+        }
+        Talent_title() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Талантов 23";
+            return obj;
+        }
+        Talent_seed() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Seed: 1";
+            return obj;
+        }
+        talent_search(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Talent_search() {
+            const obj = new this.$.$mol_string();
+            obj.hint = () => "Атака";
+            obj.value = (next) => this.talent_search(next);
+            return obj;
+        }
+        Talent_labeler() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Поиск по талантам";
+            obj.content = () => [
+                this.Talent_search()
+            ];
+            return obj;
+        }
+        talent_short_name(id) {
+            return "Атака";
+        }
+        Talent_short_name(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.talent_short_name(id);
+            return obj;
+        }
+        Talent(id) {
+            const obj = new this.$.$mol_pop_over();
+            obj.Anchor = () => this.Talent_short_name(id);
+            return obj;
+        }
+        x_list(id) {
+            return [
+                this.Talent("0_0")
+            ];
+        }
+        X(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.x_list(id);
+            return obj;
+        }
+        y_list() {
+            return [
+                this.X("0")
+            ];
+        }
+        Y() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.y_list();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Talent_title", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Talent_seed", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "talent_search", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Talent_search", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Talent_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_talent.prototype, "Talent_short_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_talent.prototype, "Talent", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_talent.prototype, "X", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Y", null);
+    $.$gen_app_talent = $gen_app_talent;
+})($ || ($ = {}));
+//gen/app/talent/-view.tree/talent.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_talent extends $.$gen_app_talent {
+            y_list() {
+                return this.max_y_count().map((y) => this.X(y));
+            }
+            x_list(id_y) {
+                return this.max_x_count().map((x) => this.Talent(`${id_y}_${x}`));
+            }
+            max_x_count() {
+                return this.array_fill(this.max_x_y().x);
+            }
+            max_y_count() {
+                return this.array_fill(this.max_x_y().y);
+            }
+            light() {
+                return 20;
+            }
+            max_x_y() {
+                let x = 0;
+                let y = 0;
+                this.common_talents().forEach(talent => {
+                    x = Math.max(x, talent.x);
+                    y = Math.max(y, talent.y);
+                });
+                return {
+                    x: x + this.light(),
+                    y: y + this.light()
+                };
+            }
+            array_fill(count) {
+                return Array.from({ length: count }, (elm, index) => {
+                    return index;
+                });
+            }
+            get_talent_id(id_x_y) {
+                const [id_x, id_y] = id_x_y.split('_');
+                return this.common_talents()
+                    .find(talent => talent.x === +id_x && talent.y === +id_y);
+            }
+            talent_short_name(id) {
+                return this.get_talent_id(id)?.name?.slice(0, 4) ?? '';
+            }
+            common_talents() {
+                return [{
+                        x: 0,
+                        y: 0,
+                        id: 'talent',
+                        name: 'Урон'
+                    }, {
+                        x: 2,
+                        y: 2,
+                        id: 'talent',
+                        name: 'Здоровье'
+                    },];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_talent.prototype, "common_talents", null);
+        $$.$gen_app_talent = $gen_app_talent;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/talent/talent.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_y] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_x] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3rem;\n\theight: 3rem;\n\talign-items: center;\n\tjustify-content: center;\n}");
+})($ || ($ = {}));
+//gen/app/talent/-css/talent.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app extends $mol_book2 {
         title() {
             return "Игра Gen";
@@ -11626,7 +11810,8 @@ var $;
             return [
                 this.Hero_page(),
                 this.Battle_page(),
-                this.Dev_page()
+                this.Dev_page(),
+                this.Talent_page()
             ];
         }
         Hero_page() {
@@ -11644,6 +11829,10 @@ var $;
             const obj = new this.$.$gen_dev();
             return obj;
         }
+        Talent_page() {
+            const obj = new this.$.$gen_app_talent();
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -11657,6 +11846,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Dev_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Talent_page", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts

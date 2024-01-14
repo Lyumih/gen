@@ -896,6 +896,24 @@ $gen_dev $mol_page
 				unit <= enemy
 				target <= hero
 
+- Дерево талантов.
+- Таланты генерируются случайно. Область открытых талантов +5.
+$gen_app_talent $mol_page
+	title \Дерево талантов
+	body /
+		<= Talent_title $mol_section title \Талантов 23
+		<= Talent_seed $mol_section title \Seed: 1
+		<= Talent_labeler $mol_labeler 
+			title \Поиск по талантам
+			content /
+				<= Talent_search $mol_string
+					hint \Атака
+					value? <=> talent_search? \
+		<= Y $mol_list rows <= y_list /
+			<= X*0 $mol_row sub <= x_list* /
+				<= Talent*0_0 $mol_pop_over
+					Anchor <= Talent_short_name* $mol_paragraph title <= talent_short_name* \Атака
+
 $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
@@ -906,6 +924,7 @@ $gen_app $mol_book2
 			party <= party
 		<= Battle_page $gen_app_battle engine <= engine
 		<= Dev_page $gen_dev
+		<= Talent_page $gen_app_talent
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine
 		- <= Loot_page $gen_app_loot engine <= engine
