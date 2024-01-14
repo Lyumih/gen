@@ -11956,7 +11956,7 @@ var $;
     (function ($$) {
         class $gen_app_talent extends $.$gen_app_talent {
             light() {
-                return 2;
+                return 1;
             }
             x_list(next) {
                 console.log('x_list', this.array_range(this.max_x_y().y));
