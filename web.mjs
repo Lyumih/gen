@@ -11328,6 +11328,9 @@ var $;
             ];
             return obj;
         }
+        is_open(id) {
+            return true;
+        }
         talent_short_name(id) {
             return "Атака";
         }
@@ -11336,8 +11339,11 @@ var $;
                 return next;
             return null;
         }
-        Talent_short_name(id) {
+        Talent_cell(id) {
             const obj = new this.$.$mol_button_minor();
+            obj.attr = () => ({
+                open: this.is_open(id)
+            });
             obj.title = () => this.talent_short_name(id);
             obj.click = (next) => this.talent_click(id, next);
             return obj;
@@ -11352,7 +11358,7 @@ var $;
         }
         Talent(id) {
             const obj = new this.$.$mol_pop_over();
-            obj.Anchor = () => this.Talent_short_name(id);
+            obj.Anchor = () => this.Talent_cell(id);
             obj.bubble_content = () => [
                 this.Talent_description(id)
             ];
@@ -11399,7 +11405,7 @@ var $;
     ], $gen_app_talent.prototype, "talent_click", null);
     __decorate([
         $mol_mem_key
-    ], $gen_app_talent.prototype, "Talent_short_name", null);
+    ], $gen_app_talent.prototype, "Talent_cell", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_talent.prototype, "Talent_description", null);
@@ -11415,6 +11421,45 @@ var $;
     $.$gen_app_talent = $gen_app_talent;
 })($ || ($ = {}));
 //gen/app/talent/-view.tree/talent.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_point extends $.$mol_object {
+        x(next) {
+            return next ?? 0;
+        }
+        y(next) {
+            return next ?? 0;
+        }
+        range(length = 1) {
+            const xy = (x, y) => ({ x, y });
+            const nearest = [
+                xy(-1, 1), xy(-1, 0), xy(-1, 1),
+                xy(0, -1), xy(0, 0), xy(0, 1),
+                xy(1, -1), xy(1, 0), xy(1, 1),
+            ];
+            return nearest;
+        }
+        in_range(point, distance = 1) {
+            return Math.abs(this.x() - point.x) <= distance && Math.abs(this.y() - point.y) <= distance;
+        }
+        in_range_points(points, distance = 1) {
+            return points.some(point => this.in_range(point, distance));
+        }
+        simple() {
+            return { x: this.x(), y: this.y() };
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_point.prototype, "x", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_point.prototype, "y", null);
+    $.$gen_engine_point = $gen_engine_point;
+})($ || ($ = {}));
+//gen/engine/point/point.ts
 ;
 "use strict";
 var $;
@@ -11461,6 +11506,10 @@ var $;
                     name: () => 'ХП',
                     description: () => 'ХП +1',
                 }),
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'УрХп',
+                    description: () => 'Урон +1 и ХП +1',
+                }),
             ];
         }
     }
@@ -11477,44 +11526,58 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_talent extends $.$gen_app_talent {
-            x_list() {
-                return this.max_y_count().map((x) => this.Y(x));
+            light() {
+                return 2;
+            }
+            x_list(next) {
+                console.log('x_list', this.array_range(this.max_x_y().y));
+                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
             }
             y_list(id_x) {
-                return this.max_x_count().map((y) => this.Talent(`${id_x}_${y}`));
-            }
-            max_x_count() {
-                return this.array_range(this.max_x_y().x);
-            }
-            max_y_count() {
-                return this.array_range(this.max_x_y().y);
+                return this.array_range(this.max_x_y().x).map((y) => this.Talent(`${id_x}_${y}`));
             }
             array_range(length) {
                 return Array.from({ length }, (_, index) => index);
             }
-            light() {
-                return 15;
+            talents_opened(next) {
+                console.log('talents_opened', next);
+                return next ?? [{
+                        x: 0,
+                        y: 0,
+                    }];
             }
-            max_x_y() {
-                let x = 1;
-                let y = 1;
-                this.common_talents().forEach(talent => {
-                    x = Math.max(x, talent.x());
-                    y = Math.max(y, talent.y());
+            is_open(id) {
+                const point = this.parse_x_y(id);
+                return this.talents_opened().some(talent => talent.x === point.x() && talent.y === point.y());
+            }
+            max_x_y(next) {
+                let x = 0;
+                let y = 0;
+                this.talents_opened().forEach(talent => {
+                    x = Math.max(x, talent.x);
+                    y = Math.max(y, talent.y);
                 });
+                console.log('max_x_y', x, y, this.talents_opened());
                 return {
-                    x: x + this.light(),
-                    y: y + this.light()
+                    x: x + this.light() + 1,
+                    y: y + this.light() + 1,
                 };
             }
-            get_talent_id(id_y_x) {
-                const [id_x, id_y] = id_y_x.split('_');
-                return this.common_talents()
-                    .find(talent => talent.x() === +id_x && talent.y() === +id_y);
+            parse_x_y(id_y_x) {
+                const [y, x] = id_y_x.split('_');
+                return this.$.$gen_engine_point.make({ x: () => +x, y: () => +y });
             }
-            talent_click(id, next) {
-                const talent = this.get_talent_id(id);
-                console.log(talent, id);
+            get_talent_id(id_y_x) {
+                const point = this.parse_x_y(id_y_x);
+                return this.common_talents().find(talent => talent.x() === point.x() && talent.y() === point.y());
+            }
+            talent_click(id_y_x, next) {
+                const point = this.parse_x_y(id_y_x);
+                const is_nearest_point = point.in_range_points(this.talents_opened());
+                if (is_nearest_point) {
+                    this.talents_opened([...this.talents_opened(), point.simple()]);
+                }
+                console.log('talent_click', id_y_x);
             }
             talent_short_name(id) {
                 return this.get_talent_id(id)?.name()?.slice(0, 4) ?? '';
@@ -11522,13 +11585,26 @@ var $;
             talent_description(id) {
                 return this.get_talent_id(id)?.description() ?? '';
             }
+            nearest_point(x, y, points) {
+            }
             common_talents() {
                 const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
                 const talent2 = new this.$.$gen_engine_item_talent_all().all()[1];
-                talent2.set_x_y(2, 3);
-                return [talent1, talent2];
+                const talent3 = new this.$.$gen_engine_item_talent_all().all()[2];
+                talent2.set_x_y(1, 3);
+                talent3.set_x_y(3, 1);
+                return [talent1, talent2, talent3];
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_talent.prototype, "x_list", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_talent.prototype, "talents_opened", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_talent.prototype, "max_x_y", null);
         __decorate([
             $mol_mem
         ], $gen_app_talent.prototype, "common_talents", null);
@@ -11540,7 +11616,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_short_name] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}");
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][open='true'] {\n\tborder: 1px dashed green;\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
 ;

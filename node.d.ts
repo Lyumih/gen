@@ -3347,9 +3347,10 @@ declare namespace $ {
         talent_search(next?: any): string;
         Talent_search(): $$.$mol_string;
         Talent_labeler(): $mol_labeler;
+        is_open(id: any): boolean;
         talent_short_name(id: any): string;
         talent_click(id: any, next?: any): any;
-        Talent_short_name(id: any): $mol_button_minor;
+        Talent_cell(id: any): $mol_button_minor;
         talent_description(id: any): string;
         Talent_description(id: any): $$.$mol_paragraph;
         Talent(id: any): $$.$mol_pop_over;
@@ -3358,6 +3359,28 @@ declare namespace $ {
         x_list(): readonly any[];
         X(): $$.$mol_list;
     }
+}
+
+declare namespace $ {
+    type Point = {
+        x: number;
+        y: number;
+    };
+    export class $gen_engine_point extends $.$mol_object {
+        x(next?: number): number;
+        y(next?: number): number;
+        range(length?: number): {
+            x: number;
+            y: number;
+        }[];
+        in_range(point: Point, distance?: number): boolean;
+        in_range_points(points: Point[], distance?: number): boolean;
+        simple(): {
+            x: number;
+            y: number;
+        };
+    }
+    export {};
 }
 
 declare namespace $ {
@@ -3378,20 +3401,31 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_talent extends $.$gen_app_talent {
-        x_list(): $mol_row[];
-        y_list(id_x: string): $mol_pop_over[];
-        max_x_count(): number[];
-        max_y_count(): number[];
-        array_range(length: number): number[];
         light(): number;
-        max_x_y(): {
+        x_list(next?: any): $mol_row[];
+        y_list(id_x: string): $mol_pop_over[];
+        array_range(length: number): number[];
+        talents_opened(next?: {
+            x: number;
+            y: number;
+        }[]): {
+            x: number;
+            y: number;
+        }[];
+        is_open(id: any): boolean;
+        max_x_y(next?: any): {
             x: number;
             y: number;
         };
+        parse_x_y(id_y_x: string): $gen_engine_point;
         get_talent_id(id_y_x: string): $gen_engine_item_talent | undefined;
-        talent_click(id: any, next?: any): void;
+        talent_click(id_y_x: string, next?: any): void;
         talent_short_name(id: any): string;
         talent_description(id: any): string;
+        nearest_point(x: number, y: number, points: {
+            x: number;
+            y: number;
+        }[]): void;
         common_talents(): $gen_engine_item_talent[];
     }
 }

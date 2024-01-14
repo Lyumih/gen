@@ -217,6 +217,7 @@
     "$mol_textarea",
     "$gen_auction",
     "$gen_app_talent",
+    "$gen_engine_point",
     "$gen_engine_item_talent_all",
     "$gen_engine_item_talent"
   ],

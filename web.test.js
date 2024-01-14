@@ -758,7 +758,7 @@ var $;
                     continue;
                 if (!$mol_compare_deep(args[i], args[j]))
                     continue;
-                $mol_fail(new Error(`args[${i}] = args[${j}] = ${args[i]}`));
+                $mol_fail(new Error(`args[${i}] = args[${j}] = ${print(args[i])}`));
             }
         }
     }
@@ -4046,5 +4046,31 @@ var $;
     });
 })($ || ($ = {}));
 //gen/engine/item/skill/skill.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    const point = $$.$gen_engine_point.make({});
+    const xy = (x, y) => $$.$gen_engine_point.make({ x: () => x, y: () => y });
+    const nearest = [
+        xy(-1, 1), xy(-1, 0), xy(-1, 1),
+        xy(0, -1), xy(0, 0), xy(0, 1),
+        xy(1, -1), xy(1, 0), xy(1, 1),
+    ];
+    $mol_test({
+        "point 0 0"() {
+            $mol_assert_equal(point.x(), point.y(), 0, 0);
+        },
+        "range point"() {
+            console.log(point.range(1)[0].x);
+        },
+        "nearest point"() {
+            $mol_assert_equal(point.in_range({ x: 0, y: 0 }), true);
+            $mol_assert_equal(point.in_range({ x: 1, y: 1 }), true);
+            $mol_assert_equal(point.in_range({ x: -2, y: -2 }), false);
+        },
+    });
+})($ || ($ = {}));
+//gen/engine/point/point.test.ts
 
 //# sourceMappingURL=web.test.js.map
