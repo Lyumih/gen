@@ -28,9 +28,22 @@ namespace $.$$ {
 			} ]
 		}
 
-		is_open( id: any ): boolean {
+		status_locale() {
+			return
+		}
+
+		status( id: any ) {
 			const point = this.parse_x_y( id )
-			return this.talents_opened().some( talent => talent.x === point.x() && talent.y === point.y() )
+			const is_open = this.talents_opened().some( talent => talent.x === point.x() && talent.y === point.y() )
+			const is_active = this.common_talents().some( talent => talent.x() === point.x() && talent.y() === point.y() )
+			if( is_open && is_active ) {
+				return 'active'
+			} else if( is_active ) {
+				return 'open'
+			} else if( is_open ) {
+				return 'active'
+			}
+			return ''
 		}
 
 		@$mol_mem
