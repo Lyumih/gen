@@ -11922,8 +11922,24 @@ var $;
                     description: () => 'ХП +1',
                 }),
                 this.$.$gen_engine_item_talent.make({
+                    name: () => 'Защ',
+                    description: () => 'Защита +1',
+                }),
+                this.$.$gen_engine_item_talent.make({
                     name: () => 'УрХп',
                     description: () => 'Урон +1 и ХП +1',
+                }),
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'Крит',
+                    description: () => 'Крит +1',
+                }),
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'КрУр',
+                    description: () => 'Крит урон +1',
+                }),
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'Хил',
+                    description: () => 'Хил +1',
                 }),
             ];
         }
@@ -11942,7 +11958,7 @@ var $;
     (function ($$) {
         class $gen_app_talent extends $.$gen_app_talent {
             light() {
-                return 1;
+                return 2;
             }
             x_list(next) {
                 console.log('x_list', this.array_range(this.max_x_y().y));
