@@ -29,9 +29,8 @@ namespace $.$$ {
 				description: 'Исцеляет на 10 здоровья',
 				mode: 'skill',
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
-					console.log( 'skill use', source, targets )
-					source.health( source.health() + 100 )
-					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
+					console.log( 'code', this.code() )
+					eval( this.code() )
 				}
 			}
 		}
