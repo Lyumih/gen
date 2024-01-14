@@ -16,6 +16,10 @@ namespace $ {
 					name: () => 'ХП',
 					description: () => 'ХП +1',
 				} ),
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'УрХп',
+					description: () => 'Урон +1 и ХП +1',
+				} ),
 			]
 		}
 

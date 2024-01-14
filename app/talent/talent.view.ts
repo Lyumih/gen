@@ -1,52 +1,70 @@
 namespace $.$$ {
 	export class $gen_app_talent extends $.$gen_app_talent {
 
-		x_list() {
-			return this.max_y_count().map( ( x ) => this.Y( x ) )
+		light() {
+			return 2
+		}
+
+		@$mol_mem
+		x_list( next?: any ) {
+			console.log( 'x_list', this.array_range( this.max_x_y().y ) )
+			return this.array_range( this.max_x_y().y ).map( ( x ) => this.Y( x ) )
 		}
 
 		y_list( id_x: string ) {
-			return this.max_x_count().map( ( y ) => this.Talent( `${ id_x }_${ y }` ) )
-		}
-
-		max_x_count() {
-			return this.array_range( this.max_x_y().x )
-		}
-
-		max_y_count() {
-			return this.array_range( this.max_x_y().y )
+			return this.array_range( this.max_x_y().x ).map( ( y ) => this.Talent( `${ id_x }_${ y }` ) )
 		}
 
 		array_range( length: number ) {
 			return Array.from( { length }, ( _, index ) => index )
 		}
 
-		light() {
-			return 15
+		@$mol_mem
+		talents_opened( next?: { x: number, y: number }[] ) {
+			console.log( 'talents_opened', next )
+			return next ?? [ {
+				x: 0,
+				y: 0,
+			} ]
 		}
 
-		max_x_y() {
-			let x = 1
-			let y = 1
-			this.common_talents().forEach( talent => {
-				x = Math.max( x, talent.x() )
-				y = Math.max( y, talent.y() )
+		is_open( id: any ): boolean {
+			const point = this.parse_x_y( id )
+			return this.talents_opened().some( talent => talent.x === point.x() && talent.y === point.y() )
+		}
+
+		@$mol_mem
+		max_x_y( next?: any ) {
+			let x = 0
+			let y = 0
+			this.talents_opened().forEach( talent => {
+				x = Math.max( x, talent.x )
+				y = Math.max( y, talent.y )
 			} )
+			console.log( 'max_x_y', x, y, this.talents_opened() )
 			return {
-				x: x + this.light(),
-				y: y + this.light()
+				x: x + this.light() + 1,
+				y: y + this.light() + 1,
 			}
 		}
 
-		get_talent_id( id_y_x: string ) {
-			const [ id_x, id_y ] = id_y_x.split( '_' )
-			return this.common_talents()
-				.find( talent => talent.x() === +id_x && talent.y() === +id_y )
+		parse_x_y( id_y_x: string ) {
+			const [ y, x ] = id_y_x.split( '_' )
+			return this.$.$gen_engine_point.make( { x: () => +x, y: () => +y } )
 		}
 
-		talent_click( id: any, next?: any ) {
-			const talent = this.get_talent_id( id )
-			console.log( talent, id )
+		get_talent_id( id_y_x: string ) {
+			const point = this.parse_x_y( id_y_x )
+			return this.common_talents().find( talent => talent.x() === point.x() && talent.y() === point.y() )
+		}
+
+		talent_click( id_y_x: string, next?: any ) {
+			const point = this.parse_x_y( id_y_x )
+			const is_nearest_point = point.in_range_points( this.talents_opened() )
+			if( is_nearest_point ) {
+				this.talents_opened( [ ...this.talents_opened(), point.simple() ] )
+			}
+			console.log( 'talent_click', id_y_x )
 		}
 
 		talent_short_name( id: any ): string {
@@ -57,12 +75,17 @@ namespace $.$$ {
 			return this.get_talent_id( id )?.description() ?? ''
 		}
 
+		nearest_point( x: number, y: number, points: { x: number, y: number }[] ) {
+		}
+
 		@$mol_mem
 		common_talents() {
 			const talent1 = new this.$.$gen_engine_item_talent_all().all()[ 0 ]
 			const talent2 = new this.$.$gen_engine_item_talent_all().all()[ 1 ]
-			talent2.set_x_y( 2, 3 )
-			return [ talent1, talent2 ]
+			const talent3 = new this.$.$gen_engine_item_talent_all().all()[ 2 ]
+			talent2.set_x_y( 1, 3 )
+			talent3.set_x_y( 3, 1 )
+			return [ talent1, talent2, talent3 ]
 		}
 
 	}

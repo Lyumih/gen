@@ -8,11 +8,15 @@
 	flex-wrap: nowrap;
 }
 
-[gen_app_talent_talent_short_name] {
+[gen_app_talent_talent_cell] {
 	border: 1px dashed antiquewhite;
 	border-radius: 1rem;
 	width: 3.5rem;
 	height: 3.5rem;
 	align-items: center;
 	justify-content: center;
+}
+
+[gen_app_talent_talent_cell][open='true'] {
+	border: 1px dashed green;
 }
