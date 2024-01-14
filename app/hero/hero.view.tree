@@ -7,6 +7,8 @@ $gen_app_hero $mol_page
 		<= Party_title $mol_section title \Отряд
 		<= Party_list $mol_row sub <= party_list / 
 			<= Party*0 $mol_pop_over
+				attr *
+					active <= is_active_hero* false
 				Anchor <= Party_hero_name* $mol_text 
 					text <= party_hero_name* \Герой
 				bubble_content /

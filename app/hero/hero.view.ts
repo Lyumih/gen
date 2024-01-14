@@ -11,6 +11,10 @@ namespace $.$$ {
 			return next ?? this.party()[ 0 ]?.id()
 		}
 
+		is_active_hero( id: string ) {
+			return this.active_hero() === id
+		}
+
 		start_battle( next?: any ) {
 			console.log( 'start battle' )
 			// Тут надо как-то передать в gen_app_battle 
