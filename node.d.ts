@@ -3334,7 +3334,6 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
         party(): readonly $gen_engine_unit[];
-        common_party(): $gen_engine_unit[];
     }
 }
 

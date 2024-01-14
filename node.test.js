@@ -11645,25 +11645,15 @@ var $;
         class $gen_app extends $.$gen_app {
             party() {
                 return [
-                    this.$.$gen_engine_unit.make({ name: () => 'Вася' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
-                    this.$.$gen_engine_unit.make({}),
-                ];
-            }
-            common_party() {
-                return [
                     this.$.$gen_engine_unit.make({ name: () => 'Вася', type: () => 'hero' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша', level: () => 10 }),
-                    this.$.$gen_engine_unit.make({}),
+                    this.$.$gen_engine_unit.make({ name: () => 'Даша', type: () => 'hero', level: () => 10 }),
+                    this.$.$gen_engine_unit.make({ type: () => 'hero' }),
                 ];
             }
         }
         __decorate([
             $mol_mem
         ], $gen_app.prototype, "party", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app.prototype, "common_party", null);
         $$.$gen_app = $gen_app;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
