@@ -3007,7 +3007,7 @@ declare namespace $ {
 declare namespace $ {
     class $gen_engine_item_skill extends $.$gen_engine_item {
         type(): string;
-        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): string;
+        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
     }
 }
 
