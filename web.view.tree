@@ -861,12 +861,12 @@ $gen_dev $mol_page
 				<= Example $mol_text_code text \
 					\source: $gen_engine_unit - Источник
 					\target: $gen_engine_unit[] - возможные цели
-					\
+					\targets[ 0 ] - враг
 					\* Пример 1. Хил себя на 100 *
 					\source.health( source.health() + 100 )
 					\
 					\* Пример 2. Удар х4 *
-					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 ) \\ Сильная атака х4
+					\targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 ) \\ Сильная атака х4
 		<= All_skills $mol_expander title \Все умения
 		<= Container $mol_list rows /
 			<= Name_labeler $mol_labeler
@@ -876,7 +876,7 @@ $gen_dev $mol_page
 				title \Код нового умения
 				content / <= Code $mol_textarea value? <=> code? \
 					\source.health( source.health() + 100 )
-					\target[ 0 ].health( target[ 0 ].health() - source.attack() * 4 )
+					\targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
 			<= Test $mol_button_major
 				title \Тестировать
 				click? <=> test? null

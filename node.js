@@ -11233,7 +11233,7 @@ var $;
         }
         Example() {
             const obj = new this.$.$mol_text_code();
-            obj.text = () => "source: $gen_engine_unit - Источник\ntarget: $gen_engine_unit[] - возможные цели\n\n* Пример 1. Хил себя на 100 *\nsource.health( source.health() + 100 )\n\n* Пример 2. Удар х4 *\ntarget[ 0 ].health( target[ 0 ].health() - source.attack() * 4 ) \\\\ Сильная атака х4";
+            obj.text = () => "source: $gen_engine_unit - Источник\ntarget: $gen_engine_unit[] - возможные цели\ntargets[ 0 ] - враг\n* Пример 1. Хил себя на 100 *\nsource.health( source.health() + 100 )\n\n* Пример 2. Удар х4 *\ntargets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 ) \\\\ Сильная атака х4";
             return obj;
         }
         Instruction() {
@@ -11270,7 +11270,7 @@ var $;
         code(next) {
             if (next !== undefined)
                 return next;
-            return "source.health( source.health() + 100 )\ntarget[ 0 ].health( target[ 0 ].health() - source.attack() * 4 )";
+            return "source.health( source.health() + 100 )\ntargets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )";
         }
         Code() {
             const obj = new this.$.$mol_textarea();
@@ -11401,9 +11401,8 @@ var $;
                     description: 'Исцеляет на 10 здоровья',
                     mode: 'skill',
                     use: (source, targets) => {
-                        console.log('skill use', source, targets);
-                        source.health(source.health() + 100);
-                        targets[0].health(targets[0].health() - source.attack() * 4);
+                        console.log('code', this.code());
+                        eval(this.code());
                     }
                 };
             }
