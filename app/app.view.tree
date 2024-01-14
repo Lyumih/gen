@@ -8,6 +8,7 @@ $gen_app $mol_book2
 			party <= party
 		<= Battle_page $gen_app_battle engine <= engine
 		<= Dev_page $gen_dev
+		<= Auction $gen_auction
 		<= Talent_page $gen_app_talent
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine

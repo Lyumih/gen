@@ -15,3 +15,5 @@ $gen_app_talent $mol_page
 			<= X*0 $mol_row sub <= x_list* /
 				<= Talent*0_0 $mol_pop_over
 					Anchor <= Talent_short_name* $mol_paragraph title <= talent_short_name* \Атака
+					bubble_content /
+						<= Talent_description* $mol_paragraph title <= talent_description* \

@@ -48,17 +48,23 @@ namespace $.$$ {
 			return this.get_talent_id( id )?.name?.slice( 0, 4 ) ?? ''
 		}
 
+		talent_description( id: any ): string {
+			return this.get_talent_id( id )?.description ?? ''
+		}
+
 		@$mol_mem
 		common_talents() {
 			return [ {
 				x: 0,
 				y: 0,
-				id: 'talent',
+				id: '1',
+				description: 'Урон +1',
 				name: 'Урон'
 			}, {
 				x: 2,
 				y: 2,
-				id: 'talent',
+				id: '2',
+				description: 'ХП +1',
 				name: 'ХП'
 			}, ]
 		}

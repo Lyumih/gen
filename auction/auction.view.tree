@@ -1,0 +1,12 @@
+$gen_auction $mol_page
+	title \Аукцион
+	body /
+		<= Donat $mol_paragraph title \Монет: 532
+		<= Hero2 $mol_paragraph title \Вася. Ур. 5
+		<= Sell_hero $mol_button_major
+			title \Выставить на аукцион героя
+		<= Hero_list $mol_list rows /
+			<= Hero_card*0 $mol_row sub /
+				<= Hero* $mol_paragraph title \Марио . Ур. 5
+				<= Buy_hero* $mol_button_major
+					title \Купить героя за 100 у.е. руб 
