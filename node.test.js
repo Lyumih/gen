@@ -11693,7 +11693,7 @@ var $;
                 this.Talent_title(),
                 this.Talent_seed(),
                 this.Talent_labeler(),
-                this.Y()
+                this.X()
             ];
         }
         Talent_title() {
@@ -11719,7 +11719,7 @@ var $;
         }
         Talent_labeler() {
             const obj = new this.$.$mol_labeler();
-            obj.title = () => "Поиск по талантам";
+            obj.title = () => "Поиск по талантам2";
             obj.content = () => [
                 this.Talent_search()
             ];
@@ -11728,9 +11728,15 @@ var $;
         talent_short_name(id) {
             return "Атака";
         }
+        talent_click(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Talent_short_name(id) {
-            const obj = new this.$.$mol_paragraph();
+            const obj = new this.$.$mol_button_minor();
             obj.title = () => this.talent_short_name(id);
+            obj.click = (next) => this.talent_click(id, next);
             return obj;
         }
         talent_description(id) {
@@ -11749,24 +11755,24 @@ var $;
             ];
             return obj;
         }
-        x_list(id) {
+        y_list(id) {
             return [
                 this.Talent("0_0")
             ];
         }
-        X(id) {
+        Y(id) {
             const obj = new this.$.$mol_row();
-            obj.sub = () => this.x_list(id);
+            obj.sub = () => this.y_list(id);
             return obj;
         }
-        y_list() {
+        x_list() {
             return [
-                this.X("0")
+                this.Y("0")
             ];
         }
-        Y() {
+        X() {
             const obj = new this.$.$mol_list();
-            obj.rows = () => this.y_list();
+            obj.rows = () => this.x_list();
             return obj;
         }
     }
@@ -11787,6 +11793,9 @@ var $;
     ], $gen_app_talent.prototype, "Talent_labeler", null);
     __decorate([
         $mol_mem_key
+    ], $gen_app_talent.prototype, "talent_click", null);
+    __decorate([
+        $mol_mem_key
     ], $gen_app_talent.prototype, "Talent_short_name", null);
     __decorate([
         $mol_mem_key
@@ -11796,10 +11805,10 @@ var $;
     ], $gen_app_talent.prototype, "Talent", null);
     __decorate([
         $mol_mem_key
-    ], $gen_app_talent.prototype, "X", null);
+    ], $gen_app_talent.prototype, "Y", null);
     __decorate([
         $mol_mem
-    ], $gen_app_talent.prototype, "Y", null);
+    ], $gen_app_talent.prototype, "X", null);
     $.$gen_app_talent = $gen_app_talent;
 })($ || ($ = {}));
 //gen/app/talent/-view.tree/talent.view.tree.ts
@@ -11807,14 +11816,69 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_talent extends $.$gen_engine_item {
+        type() {
+            return 'talent';
+        }
+        x(next) {
+            return next ?? 0;
+        }
+        y(next) {
+            return next ?? 0;
+        }
+        set_x_y(x, y) {
+            this.x(x);
+            this.y(y);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_talent.prototype, "x", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_talent.prototype, "y", null);
+    $.$gen_engine_item_talent = $gen_engine_item_talent;
+})($ || ($ = {}));
+//gen/engine/item/talent/telent.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_talent_all extends $.$mol_object {
+        all() {
+            return this.resource();
+        }
+        resource() {
+            return [
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'Урон',
+                    description: () => 'Урон +1',
+                }),
+                this.$.$gen_engine_item_talent.make({
+                    name: () => 'ХП',
+                    description: () => 'ХП +1',
+                }),
+            ];
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_talent_all.prototype, "all", null);
+    $.$gen_engine_item_talent_all = $gen_engine_item_talent_all;
+})($ || ($ = {}));
+//gen/engine/item/talent/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $gen_app_talent extends $.$gen_app_talent {
-            y_list() {
-                return this.max_y_count().map((y) => this.X(y));
+            x_list() {
+                return this.max_y_count().map((x) => this.Y(x));
             }
-            x_list(id_y) {
-                return this.max_x_count().map((x) => this.Talent(`${id_y}_${x}`));
+            y_list(id_x) {
+                return this.max_x_count().map((y) => this.Talent(`${id_x}_${y}`));
             }
             max_x_count() {
                 return this.array_range(this.max_x_y().x);
@@ -11826,45 +11890,40 @@ var $;
                 return Array.from({ length }, (_, index) => index);
             }
             light() {
-                return 5;
+                return 15;
             }
             max_x_y() {
-                let x = 0;
-                let y = 0;
+                let x = 1;
+                let y = 1;
                 this.common_talents().forEach(talent => {
-                    x = Math.max(x, talent.x);
-                    y = Math.max(y, talent.y);
+                    x = Math.max(x, talent.x());
+                    y = Math.max(y, talent.y());
                 });
                 return {
                     x: x + this.light(),
                     y: y + this.light()
                 };
             }
-            get_talent_id(id_x_y) {
-                const [id_x, id_y] = id_x_y.split('_');
+            get_talent_id(id_y_x) {
+                const [id_x, id_y] = id_y_x.split('_');
                 return this.common_talents()
-                    .find(talent => talent.x === +id_x && talent.y === +id_y);
+                    .find(talent => talent.x() === +id_x && talent.y() === +id_y);
+            }
+            talent_click(id, next) {
+                const talent = this.get_talent_id(id);
+                console.log(talent, id);
             }
             talent_short_name(id) {
-                return this.get_talent_id(id)?.name?.slice(0, 4) ?? '';
+                return this.get_talent_id(id)?.name()?.slice(0, 4) ?? '';
             }
             talent_description(id) {
-                return this.get_talent_id(id)?.description ?? '';
+                return this.get_talent_id(id)?.description() ?? '';
             }
             common_talents() {
-                return [{
-                        x: 0,
-                        y: 0,
-                        id: '1',
-                        description: 'Урон +1',
-                        name: 'Урон'
-                    }, {
-                        x: 2,
-                        y: 2,
-                        id: '2',
-                        description: 'ХП +1',
-                        name: 'ХП'
-                    },];
+                const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
+                const talent2 = new this.$.$gen_engine_item_talent_all().all()[1];
+                talent2.set_x_y(2, 3);
+                return [talent1, talent2];
             }
         }
         __decorate([
@@ -11878,7 +11937,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_y] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_x] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3rem;\n\theight: 3rem;\n\talign-items: center;\n\tjustify-content: center;\n}");
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_short_name] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
 ;

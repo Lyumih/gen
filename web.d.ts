@@ -3280,21 +3280,38 @@ declare namespace $ {
         Talent_search(): $$.$mol_string;
         Talent_labeler(): $mol_labeler;
         talent_short_name(id: any): string;
-        Talent_short_name(id: any): $$.$mol_paragraph;
+        talent_click(id: any, next?: any): any;
+        Talent_short_name(id: any): $mol_button_minor;
         talent_description(id: any): string;
         Talent_description(id: any): $$.$mol_paragraph;
         Talent(id: any): $$.$mol_pop_over;
-        x_list(id: any): readonly any[];
-        X(id: any): $mol_row;
-        y_list(): readonly any[];
-        Y(): $$.$mol_list;
+        y_list(id: any): readonly any[];
+        Y(id: any): $mol_row;
+        x_list(): readonly any[];
+        X(): $$.$mol_list;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_talent extends $.$gen_engine_item {
+        type(): string;
+        x(next?: number): number;
+        y(next?: number): number;
+        set_x_y(x: number, y: number): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_talent_all extends $.$mol_object {
+        all(): $gen_engine_item_talent[];
+        resource(): $gen_engine_item_talent[];
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_talent extends $.$gen_app_talent {
-        y_list(): $mol_row[];
-        x_list(id_y: string): $mol_pop_over[];
+        x_list(): $mol_row[];
+        y_list(id_x: string): $mol_pop_over[];
         max_x_count(): number[];
         max_y_count(): number[];
         array_range(length: number): number[];
@@ -3303,22 +3320,11 @@ declare namespace $.$$ {
             x: number;
             y: number;
         };
-        get_talent_id(id_x_y: string): {
-            x: number;
-            y: number;
-            id: string;
-            description: string;
-            name: string;
-        } | undefined;
+        get_talent_id(id_y_x: string): $gen_engine_item_talent | undefined;
+        talent_click(id: any, next?: any): void;
         talent_short_name(id: any): string;
         talent_description(id: any): string;
-        common_talents(): {
-            x: number;
-            y: number;
-            id: string;
-            description: string;
-            name: string;
-        }[];
+        common_talents(): $gen_engine_item_talent[];
     }
 }
 
