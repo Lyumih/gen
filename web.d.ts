@@ -3276,6 +3276,9 @@ declare namespace $ {
         body(): readonly any[];
         talent_count(): string;
         Talent_count(): $$.$mol_section;
+        stats(): string;
+        Content(): $$.$mol_text;
+        Stats_expander(): $$.$mol_expander;
         talent_search(next?: any): string;
         Talent_search(): $$.$mol_string;
         Talent_labeler(): $mol_labeler;
@@ -3364,10 +3367,7 @@ declare namespace $.$$ {
         talent_click(id_y_x: string, next?: any): void;
         talent_short_name(id: any): string;
         talent_description(id: any): string;
-        nearest_point(x: number, y: number, points: {
-            x: number;
-            y: number;
-        }[]): void;
+        stats(): string;
         common_talents(next?: $gen_engine_item_talent[]): $gen_engine_item_talent[];
     }
 }

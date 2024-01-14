@@ -915,7 +915,10 @@ $gen_app_talent $mol_page
 	title \Дерево талантов
 	body /
 		<= Talent_count $mol_section title <= talent_count \Талантов 23
-		- <= Talent_seed $mol_section title \Seed: 1
+		<= Stats_expander $mol_expander
+			title \Статистика
+			content /
+				<= Content $mol_text text <= stats \
 		<= Talent_labeler $mol_labeler 
 			title \Поиск по талантам
 			content /

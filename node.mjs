@@ -11699,6 +11699,7 @@ var $;
         body() {
             return [
                 this.Talent_count(),
+                this.Stats_expander(),
                 this.Talent_labeler(),
                 this.X()
             ];
@@ -11709,6 +11710,22 @@ var $;
         Talent_count() {
             const obj = new this.$.$mol_section();
             obj.title = () => this.talent_count();
+            return obj;
+        }
+        stats() {
+            return "";
+        }
+        Content() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.stats();
+            return obj;
+        }
+        Stats_expander() {
+            const obj = new this.$.$mol_expander();
+            obj.title = () => "Статистика";
+            obj.content = () => [
+                this.Content()
+            ];
             return obj;
         }
         talent_search(next) {
@@ -11794,6 +11811,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_talent.prototype, "Talent_count", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Content", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_talent.prototype, "Stats_expander", null);
     __decorate([
         $mol_mem
     ], $gen_app_talent.prototype, "talent_search", null);
@@ -12063,7 +12086,19 @@ var $;
             talent_description(id) {
                 return this.get_talent_id(id)?.description() ?? '';
             }
-            nearest_point(x, y, points) {
+            stats() {
+                const sorted_talents = this.common_talents().sort((a, b) => a.name().localeCompare(b.name()));
+                const reduced = [];
+                sorted_talents.forEach(talent => {
+                    const index = reduced.findIndex(item => item.description === talent.description());
+                    if (index === -1) {
+                        reduced.push({ count: 1, description: talent.description() });
+                    }
+                    else {
+                        reduced[index].count++;
+                    }
+                });
+                return reduced.map(talent => `**${talent.count}x** ${talent.description}`).join('\n');
             }
             common_talents(next) {
                 const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
@@ -12079,6 +12114,9 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_app_talent.prototype, "max_x_y", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_talent.prototype, "stats", null);
         __decorate([
             $mol_mem
         ], $gen_app_talent.prototype, "common_talents", null);
