@@ -11293,20 +11293,17 @@ var $;
         }
         body() {
             return [
-                this.Talent_title(),
-                this.Talent_seed(),
+                this.Talent_count(),
                 this.Talent_labeler(),
                 this.X()
             ];
         }
-        Talent_title() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Талантов 23";
-            return obj;
+        talent_count() {
+            return "Талантов 23";
         }
-        Talent_seed() {
+        Talent_count() {
             const obj = new this.$.$mol_section();
-            obj.title = () => "Seed: 1";
+            obj.title = () => this.talent_count();
             return obj;
         }
         talent_search(next) {
@@ -11322,7 +11319,7 @@ var $;
         }
         Talent_labeler() {
             const obj = new this.$.$mol_labeler();
-            obj.title = () => "Поиск по талантам2";
+            obj.title = () => "Поиск по талантам";
             obj.content = () => [
                 this.Talent_search()
             ];
@@ -11330,6 +11327,9 @@ var $;
         }
         status(id) {
             return " ";
+        }
+        is_search(id) {
+            return false;
         }
         talent_short_name(id) {
             return "Атака";
@@ -11342,7 +11342,8 @@ var $;
         Talent_cell(id) {
             const obj = new this.$.$mol_button_minor();
             obj.attr = () => ({
-                status: this.status(id)
+                status: this.status(id),
+                search: this.is_search(id)
             });
             obj.title = () => this.talent_short_name(id);
             obj.click = (next) => this.talent_click(id, next);
@@ -11387,10 +11388,7 @@ var $;
     }
     __decorate([
         $mol_mem
-    ], $gen_app_talent.prototype, "Talent_title", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_talent.prototype, "Talent_seed", null);
+    ], $gen_app_talent.prototype, "Talent_count", null);
     __decorate([
         $mol_mem
     ], $gen_app_talent.prototype, "talent_search", null);
@@ -11580,13 +11578,13 @@ var $;
                         y: 0,
                     }];
             }
-            status_locale() {
-                return;
+            talent_count() {
+                return `Талантов: ${this.common_talents().length}`;
             }
             status(id) {
                 const point = this.parse_x_y(id);
-                const is_open = this.talents_opened().some(talent => talent.x === point.x() && talent.y === point.y());
-                const is_active = this.common_talents().some(talent => talent.x() === point.x() && talent.y() === point.y());
+                const is_open = this.talents_opened().find(talent => talent.x === point.x() && talent.y === point.y());
+                const is_active = this.common_talents().find(talent => talent.x() === point.x() && talent.y() === point.y());
                 if (is_open && is_active) {
                     return 'active';
                 }
@@ -11597,6 +11595,14 @@ var $;
                     return 'active';
                 }
                 return '';
+            }
+            is_search(id) {
+                if (this.talent_search()) {
+                    const point = this.parse_x_y(id);
+                    const is_active = this.common_talents().find(talent => talent.x() === point.x() && talent.y() === point.y());
+                    return Boolean(is_active?.name().toLocaleLowerCase().includes(this.talent_search().toLocaleLowerCase()) || is_active?.description().includes(this.talent_search().toLocaleLowerCase()));
+                }
+                return false;
             }
             max_x_y(next) {
                 let x = 0;
@@ -11656,11 +11662,7 @@ var $;
             }
             common_talents(next) {
                 const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
-                const talent2 = new this.$.$gen_engine_item_talent_all().all()[1];
-                const talent3 = new this.$.$gen_engine_item_talent_all().all()[2];
-                talent2.set_x_y(1, 3);
-                talent3.set_x_y(3, 1);
-                return next ?? [talent1, talent2, talent3];
+                return next ?? [talent1];
             }
         }
         __decorate([
@@ -11683,7 +11685,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed gray;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][status='active'] {\n\tborder: 2px solid darkgreen;\n}\n\n[gen_app_talent_talent_cell][status='open'] {\n\tborder: 2px dotted darkgoldenrod;\n}");
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed gray;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][status='open'] {\n\tborder: 2px dotted darkorange;\n}\n\n[gen_app_talent_talent_cell][status='active'] {\n\tborder: 2px solid darkgreen;\n}\n\n[gen_app_talent_talent_cell][search='true'] {\n\tborder-width: 4px;\n\ttransform: scale(1.4);\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
 ;

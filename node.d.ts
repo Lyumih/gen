@@ -3342,12 +3342,13 @@ declare namespace $ {
     class $gen_app_talent extends $mol_page {
         title(): string;
         body(): readonly any[];
-        Talent_title(): $$.$mol_section;
-        Talent_seed(): $$.$mol_section;
+        talent_count(): string;
+        Talent_count(): $$.$mol_section;
         talent_search(next?: any): string;
         Talent_search(): $$.$mol_string;
         Talent_labeler(): $mol_labeler;
         status(id: any): string;
+        is_search(id: any): boolean;
         talent_short_name(id: any): string;
         talent_click(id: any, next?: any): any;
         Talent_cell(id: any): $mol_button_minor;
@@ -3418,8 +3419,9 @@ declare namespace $.$$ {
             x: number;
             y: number;
         }[];
-        status_locale(): void;
+        talent_count(): string;
         status(id: any): "" | "active" | "open";
+        is_search(id: any): boolean;
         max_x_y(next?: any): {
             x: number;
             y: number;

@@ -914,10 +914,10 @@ $gen_auction $mol_page
 $gen_app_talent $mol_page
 	title \Дерево талантов
 	body /
-		<= Talent_title $mol_section title \Талантов 23
-		<= Talent_seed $mol_section title \Seed: 1
+		<= Talent_count $mol_section title <= talent_count \Талантов 23
+		- <= Talent_seed $mol_section title \Seed: 1
 		<= Talent_labeler $mol_labeler 
-			title \Поиск по талантам2
+			title \Поиск по талантам
 			content /
 				<= Talent_search $mol_string
 					hint \Атака
@@ -928,6 +928,7 @@ $gen_app_talent $mol_page
 					Anchor <= Talent_cell* $mol_button_minor
 						attr *
 							status <= status* \ 
+							search <= is_search* false
 						title <= talent_short_name* \Атака
 						click? <=> talent_click*? null
 					bubble_content /
