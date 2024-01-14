@@ -11325,13 +11325,16 @@ var $;
                 return this.max_x_count().map((x) => this.Talent(`${id_y}_${x}`));
             }
             max_x_count() {
-                return this.array_fill(this.max_x_y().x);
+                return this.array_range(this.max_x_y().x);
             }
             max_y_count() {
-                return this.array_fill(this.max_x_y().y);
+                return this.array_range(this.max_x_y().y);
+            }
+            array_range(length) {
+                return Array.from({ length }, (_, index) => index);
             }
             light() {
-                return 20;
+                return 5;
             }
             max_x_y() {
                 let x = 0;
@@ -11344,11 +11347,6 @@ var $;
                     x: x + this.light(),
                     y: y + this.light()
                 };
-            }
-            array_fill(count) {
-                return Array.from({ length: count }, (elm, index) => {
-                    return index;
-                });
             }
             get_talent_id(id_x_y) {
                 const [id_x, id_y] = id_x_y.split('_');
@@ -11368,7 +11366,7 @@ var $;
                         x: 2,
                         y: 2,
                         id: 'talent',
-                        name: 'Здоровье'
+                        name: 'ХП'
                     },];
             }
         }

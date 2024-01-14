@@ -3349,12 +3349,12 @@ declare namespace $.$$ {
         x_list(id_y: string): $mol_pop_over[];
         max_x_count(): number[];
         max_y_count(): number[];
+        array_range(length: number): number[];
         light(): number;
         max_x_y(): {
             x: number;
             y: number;
         };
-        array_fill(count: number): number[];
         get_talent_id(id_x_y: string): {
             x: number;
             y: number;
