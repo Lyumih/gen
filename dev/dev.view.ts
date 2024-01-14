@@ -22,6 +22,23 @@ namespace $.$$ {
 			this.hero().use_skill( [ this.enemy() ], this.skill() )
 		}
 
+		@$mol_mem
+		all_skill_list(): readonly any[] {
+			return this.skills().all().map( skill => this.Skill( skill.id() ) )
+		}
+
+		get_skill( id: string ) {
+			return this.skills().all().find( skill => skill.id() === id )
+		}
+
+		skill_name( id: any ): string {
+			return this.get_skill( id )?.name() || 'no name'
+		}
+
+		skill_code( id: any ): string {
+			return this.get_skill( id )?.use.toString() || 'no code'
+		}
+
 		skill() {
 			return this.$.$gen_engine_item_skill.make( {
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
@@ -30,16 +47,6 @@ namespace $.$$ {
 					return 'success use skill'
 				}
 			} )
-			// return {
-			// 	id: 'skill1',
-			// 	name: 'Хил',
-			// 	description: 'Исцеляет на 10 здоровья',
-			// 	type: 'skill',
-			// 	use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
-			// 		console.log( 'code', this.code() )
-			// 		eval( this.code() )
-			// 	}
-			// }
 		}
 	}
 }

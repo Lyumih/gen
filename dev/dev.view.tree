@@ -4,6 +4,7 @@ $gen_dev $mol_page
 	title \Разработка умения
 	hero $gen_engine_unit
 	enemy $gen_engine_unit
+	skills $gen_engine_item_skill_all
 	body /
 		<= Instruction $mol_expander
 			title \Инструкция
@@ -21,9 +22,9 @@ $gen_dev $mol_page
 			title \Все умения
 			content /
 				<= All_skills_list $mol_list rows <= all_skill_list /
-					<= Skill*0 $mol_row sub /
-						<= Skill_name $mol_text text \Skill name
-						<= Skill_code $mol_text_code text \Skill code
+					<= Skill*0 $mol_list rows /
+						<= Skill_name* $mol_section title <= skill_name* \Skill name
+						<= Skill_code* $mol_text_code text <= skill_code* \Skill code
 		<= Container $mol_list rows /
 			<= Name_labeler $mol_labeler
 				title \Имя нового умения
