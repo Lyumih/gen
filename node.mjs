@@ -11506,7 +11506,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 30rem;\n}");
+    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 30rem;\n}\n\n[gen_app_dev_page] {\n\tflex-basis: 50rem;\n}");
 })($ || ($ = {}));
 //gen/app/-css/app.view.css.ts
 
