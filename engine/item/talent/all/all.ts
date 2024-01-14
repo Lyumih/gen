@@ -17,8 +17,24 @@ namespace $ {
 					description: () => 'ХП +1',
 				} ),
 				this.$.$gen_engine_item_talent.make( {
+					name: () => 'Защ',
+					description: () => 'Защита +1',
+				} ),
+				this.$.$gen_engine_item_talent.make( {
 					name: () => 'УрХп',
 					description: () => 'Урон +1 и ХП +1',
+				} ),
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'Крит',
+					description: () => 'Крит +1',
+				} ),
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'КрУр',
+					description: () => 'Крит урон +1',
+				} ),
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'Хил',
+					description: () => 'Хил +1',
 				} ),
 			]
 		}
