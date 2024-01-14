@@ -2708,6 +2708,7 @@ declare namespace $ {
         active_hero(next?: any): string;
         body(): readonly any[];
         Party_title(): $$.$mol_section;
+        is_active_hero(id: any): boolean;
         party_hero_name(id: any): string;
         Party_hero_name(id: any): $$.$mol_text;
         party_hero_pick(id: any, next?: any): any;
@@ -2872,6 +2873,7 @@ declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         get_active_hero(): $gen_engine_unit | undefined;
         active_hero(next?: any): string;
+        is_active_hero(id: string): boolean;
         start_battle(next?: any): void;
         name(): string;
         level(): string;
@@ -2923,6 +2925,9 @@ declare namespace $.$$ {
         party_hero_name(id: string): string;
         party_hero_pick(id: string, next?: any): void;
     }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {

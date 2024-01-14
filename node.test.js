@@ -9517,6 +9517,9 @@ var $;
             obj.title = () => "Отряд";
             return obj;
         }
+        is_active_hero(id) {
+            return false;
+        }
         party_hero_name(id) {
             return "Герой";
         }
@@ -9538,6 +9541,9 @@ var $;
         }
         Party(id) {
             const obj = new this.$.$mol_pop_over();
+            obj.attr = () => ({
+                active: this.is_active_hero(id)
+            });
             obj.Anchor = () => this.Party_hero_name(id);
             obj.bubble_content = () => [
                 this.Party_hero_pick(id)
@@ -10353,6 +10359,9 @@ var $;
             active_hero(next) {
                 return next ?? this.party()[0]?.id();
             }
+            is_active_hero(id) {
+                return this.active_hero() === id;
+            }
             start_battle(next) {
                 console.log('start battle');
                 const unit = this.get_active_hero();
@@ -10439,6 +10448,13 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //gen/app/hero/hero.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/hero/hero.view.css", "[gen_app_hero_party][active='true'] {\n\tborder: 2px solid greenyellow;\n\tborder-radius: 1rem;\n}");
+})($ || ($ = {}));
+//gen/app/hero/-css/hero.view.css.ts
 ;
 "use strict";
 var $;
