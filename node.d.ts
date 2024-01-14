@@ -3374,7 +3374,13 @@ declare namespace $ {
             y: number;
         }[];
         in_range(point: Point, distance?: number): boolean;
+        in_range_hor(point: Point, distance?: number): boolean;
+        in_range_vert(point: Point, distance?: number): boolean;
         in_range_points(points: Point[], distance?: number): boolean;
+        in_range_points_hor(points: Point[], distance?: number): boolean;
+        in_range_points_vert(points: Point[], distance?: number): boolean;
+        in_range_points_hor_vert(points: Point[], distance?: number): boolean;
+        in_range_points_diagonal(points: Point[], distance?: number): boolean;
         simple(): {
             x: number;
             y: number;
@@ -3419,6 +3425,7 @@ declare namespace $.$$ {
         };
         parse_x_y(id_y_x: string): $gen_engine_point;
         get_talent_id(id_y_x: string): $gen_engine_item_talent | undefined;
+        find_empty_cell(x_y: string): false | number[];
         talent_click(id_y_x: string, next?: any): void;
         talent_short_name(id: any): string;
         talent_description(id: any): string;
@@ -3426,7 +3433,7 @@ declare namespace $.$$ {
             x: number;
             y: number;
         }[]): void;
-        common_talents(): $gen_engine_item_talent[];
+        common_talents(next?: $gen_engine_item_talent[]): $gen_engine_item_talent[];
     }
 }
 

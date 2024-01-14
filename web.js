@@ -11444,8 +11444,26 @@ var $;
         in_range(point, distance = 1) {
             return Math.abs(this.x() - point.x) <= distance && Math.abs(this.y() - point.y) <= distance;
         }
+        in_range_hor(point, distance = 1) {
+            return Math.abs(this.x() - point.x) <= distance;
+        }
+        in_range_vert(point, distance = 1) {
+            return Math.abs(this.y() - point.y) <= distance;
+        }
         in_range_points(points, distance = 1) {
             return points.some(point => this.in_range(point, distance));
+        }
+        in_range_points_hor(points, distance = 1) {
+            return points.some(point => this.in_range_hor(point, distance));
+        }
+        in_range_points_vert(points, distance = 1) {
+            return points.some(point => this.in_range_vert(point, distance));
+        }
+        in_range_points_hor_vert(points, distance = 1) {
+            return points.some(point => this.in_range_hor(point, distance) && this.in_range_vert(point, distance));
+        }
+        in_range_points_diagonal(points, distance = 1) {
+            return points.some(point => this.in_range_points(points, distance) && !this.in_range_points_hor_vert(points, distance));
         }
         simple() {
             return { x: this.x(), y: this.y() };
@@ -11527,7 +11545,7 @@ var $;
     (function ($$) {
         class $gen_app_talent extends $.$gen_app_talent {
             light() {
-                return 2;
+                return 1;
             }
             x_list(next) {
                 console.log('x_list', this.array_range(this.max_x_y().y));
@@ -11571,10 +11589,29 @@ var $;
                 const point = this.parse_x_y(id_y_x);
                 return this.common_talents().find(talent => talent.x() === point.x() && talent.y() === point.y());
             }
+            find_empty_cell(x_y) {
+                const x = this.$.$mol_array_lottery(this.array_range(this.max_x_y().x));
+                const y = this.$.$mol_array_lottery(this.array_range(this.max_x_y().y));
+                const is_active = this.common_talents().some(talent => talent.x() === x && talent.y() === y);
+                const is_opened = this.talents_opened().some(talent => talent.x === x && talent.y === y);
+                const point = this.parse_x_y(x_y);
+                const is_clicked = x === point.x() && y === point.y();
+                if (is_active || is_opened || is_clicked) {
+                    return false;
+                }
+                return [x, y];
+            }
             talent_click(id_y_x, next) {
                 const point = this.parse_x_y(id_y_x);
                 const is_nearest_point = point.in_range_points(this.talents_opened());
                 if (is_nearest_point) {
+                    const new_point = this.find_empty_cell(id_y_x);
+                    if (new_point) {
+                        console.log('add talent');
+                        const new_talent = this.$.$mol_array_lottery(new this.$.$gen_engine_item_talent_all().all());
+                        new_talent.set_x_y(new_point[0], new_point[1]);
+                        this.common_talents([...this.common_talents(), new_talent]);
+                    }
                     this.talents_opened([...this.talents_opened(), point.simple()]);
                 }
                 console.log('talent_click', id_y_x);
@@ -11587,13 +11624,13 @@ var $;
             }
             nearest_point(x, y, points) {
             }
-            common_talents() {
+            common_talents(next) {
                 const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
                 const talent2 = new this.$.$gen_engine_item_talent_all().all()[1];
                 const talent3 = new this.$.$gen_engine_item_talent_all().all()[2];
                 talent2.set_x_y(1, 3);
                 talent3.set_x_y(3, 1);
-                return [talent1, talent2, talent3];
+                return next ?? [talent1, talent2, talent3];
             }
         }
         __decorate([
@@ -11616,7 +11653,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n\theight: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][open='true'] {\n\tborder: 1px dashed green;\n}");
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][open='true'] {\n\tborder: 1px dashed green;\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
 ;
