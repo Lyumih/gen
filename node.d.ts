@@ -3325,6 +3325,20 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $gen_auction extends $mol_page {
+        title(): string;
+        body(): readonly any[];
+        Donat(): $$.$mol_paragraph;
+        Hero2(): $$.$mol_paragraph;
+        Sell_hero(): $mol_button_major;
+        Hero(id: any): $$.$mol_paragraph;
+        Buy_hero(id: any): $mol_button_major;
+        Hero_card(id: any): $mol_row;
+        Hero_list(): $$.$mol_list;
+    }
+}
+
+declare namespace $ {
     class $gen_app_talent extends $mol_page {
         title(): string;
         body(): readonly any[];
@@ -3335,6 +3349,8 @@ declare namespace $ {
         Talent_labeler(): $mol_labeler;
         talent_short_name(id: any): string;
         Talent_short_name(id: any): $$.$mol_paragraph;
+        talent_description(id: any): string;
+        Talent_description(id: any): $$.$mol_paragraph;
         Talent(id: any): $$.$mol_pop_over;
         x_list(id: any): readonly any[];
         X(id: any): $mol_row;
@@ -3359,13 +3375,16 @@ declare namespace $.$$ {
             x: number;
             y: number;
             id: string;
+            description: string;
             name: string;
         } | undefined;
         talent_short_name(id: any): string;
+        talent_description(id: any): string;
         common_talents(): {
             x: number;
             y: number;
             id: string;
+            description: string;
             name: string;
         }[];
     }
@@ -3383,6 +3402,7 @@ declare namespace $ {
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
         Dev_page(): $$.$gen_dev;
+        Auction(): $gen_auction;
         Talent_page(): $$.$gen_app_talent;
     }
 }

@@ -11603,6 +11603,87 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_auction extends $mol_page {
+        title() {
+            return "Аукцион";
+        }
+        body() {
+            return [
+                this.Donat(),
+                this.Hero2(),
+                this.Sell_hero(),
+                this.Hero_list()
+            ];
+        }
+        Donat() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Монет: 532";
+            return obj;
+        }
+        Hero2() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Вася. Ур. 5";
+            return obj;
+        }
+        Sell_hero() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Выставить на аукцион героя";
+            return obj;
+        }
+        Hero(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Марио . Ур. 5";
+            return obj;
+        }
+        Buy_hero(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Купить героя за 100 у.е. руб ";
+            return obj;
+        }
+        Hero_card(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Hero(id),
+                this.Buy_hero(id)
+            ];
+            return obj;
+        }
+        Hero_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Hero_card("0")
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_auction.prototype, "Donat", null);
+    __decorate([
+        $mol_mem
+    ], $gen_auction.prototype, "Hero2", null);
+    __decorate([
+        $mol_mem
+    ], $gen_auction.prototype, "Sell_hero", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_auction.prototype, "Hero", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_auction.prototype, "Buy_hero", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_auction.prototype, "Hero_card", null);
+    __decorate([
+        $mol_mem
+    ], $gen_auction.prototype, "Hero_list", null);
+    $.$gen_auction = $gen_auction;
+})($ || ($ = {}));
+//gen/auction/-view.tree/auction.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app_talent extends $mol_page {
         title() {
             return "Дерево талантов";
@@ -11652,9 +11733,20 @@ var $;
             obj.title = () => this.talent_short_name(id);
             return obj;
         }
+        talent_description(id) {
+            return "";
+        }
+        Talent_description(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.talent_description(id);
+            return obj;
+        }
         Talent(id) {
             const obj = new this.$.$mol_pop_over();
             obj.Anchor = () => this.Talent_short_name(id);
+            obj.bubble_content = () => [
+                this.Talent_description(id)
+            ];
             return obj;
         }
         x_list(id) {
@@ -11696,6 +11788,9 @@ var $;
     __decorate([
         $mol_mem_key
     ], $gen_app_talent.prototype, "Talent_short_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_talent.prototype, "Talent_description", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_talent.prototype, "Talent", null);
@@ -11753,16 +11848,21 @@ var $;
             talent_short_name(id) {
                 return this.get_talent_id(id)?.name?.slice(0, 4) ?? '';
             }
+            talent_description(id) {
+                return this.get_talent_id(id)?.description ?? '';
+            }
             common_talents() {
                 return [{
                         x: 0,
                         y: 0,
-                        id: 'talent',
+                        id: '1',
+                        description: 'Урон +1',
                         name: 'Урон'
                     }, {
                         x: 2,
                         y: 2,
-                        id: 'talent',
+                        id: '2',
+                        description: 'ХП +1',
                         name: 'ХП'
                     },];
             }
@@ -11801,6 +11901,7 @@ var $;
                 this.Hero_page(),
                 this.Battle_page(),
                 this.Dev_page(),
+                this.Auction(),
                 this.Talent_page()
             ];
         }
@@ -11817,6 +11918,10 @@ var $;
         }
         Dev_page() {
             const obj = new this.$.$gen_dev();
+            return obj;
+        }
+        Auction() {
+            const obj = new this.$.$gen_auction();
             return obj;
         }
         Talent_page() {
@@ -11836,6 +11941,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Dev_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Auction", null);
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Talent_page", null);

@@ -215,6 +215,7 @@
     "$mol_hotkey",
     "$mol_labeler",
     "$mol_textarea",
+    "$gen_auction",
     "$gen_app_talent"
   ],
   "dependencies": {
