@@ -1,12 +1,12 @@
 namespace $.$$ {
 	export class $gen_app_talent extends $.$gen_app_talent {
 
-		y_list() {
-			return this.max_y_count().map( ( y ) => this.X( y ) )
+		x_list() {
+			return this.max_y_count().map( ( x ) => this.Y( x ) )
 		}
 
-		x_list( id_y: string ) {
-			return this.max_x_count().map( ( x ) => this.Talent( `${ id_y }_${ x }` ) )
+		y_list( id_x: string ) {
+			return this.max_x_count().map( ( y ) => this.Talent( `${ id_x }_${ y }` ) )
 		}
 
 		max_x_count() {
@@ -22,15 +22,15 @@ namespace $.$$ {
 		}
 
 		light() {
-			return 5
+			return 15
 		}
 
 		max_x_y() {
-			let x = 0
-			let y = 0
+			let x = 1
+			let y = 1
 			this.common_talents().forEach( talent => {
-				x = Math.max( x, talent.x )
-				y = Math.max( y, talent.y )
+				x = Math.max( x, talent.x() )
+				y = Math.max( y, talent.y() )
 			} )
 			return {
 				x: x + this.light(),
@@ -38,35 +38,31 @@ namespace $.$$ {
 			}
 		}
 
-		get_talent_id( id_x_y: string ) {
-			const [ id_x, id_y ] = id_x_y.split( '_' )
+		get_talent_id( id_y_x: string ) {
+			const [ id_x, id_y ] = id_y_x.split( '_' )
 			return this.common_talents()
-				.find( talent => talent.x === +id_x && talent.y === +id_y )
+				.find( talent => talent.x() === +id_x && talent.y() === +id_y )
+		}
+
+		talent_click( id: any, next?: any ) {
+			const talent = this.get_talent_id( id )
+			console.log( talent, id )
 		}
 
 		talent_short_name( id: any ): string {
-			return this.get_talent_id( id )?.name?.slice( 0, 4 ) ?? ''
+			return this.get_talent_id( id )?.name()?.slice( 0, 4 ) ?? ''
 		}
 
 		talent_description( id: any ): string {
-			return this.get_talent_id( id )?.description ?? ''
+			return this.get_talent_id( id )?.description() ?? ''
 		}
 
 		@$mol_mem
 		common_talents() {
-			return [ {
-				x: 0,
-				y: 0,
-				id: '1',
-				description: 'Урон +1',
-				name: 'Урон'
-			}, {
-				x: 2,
-				y: 2,
-				id: '2',
-				description: 'ХП +1',
-				name: 'ХП'
-			}, ]
+			const talent1 = new this.$.$gen_engine_item_talent_all().all()[ 0 ]
+			const talent2 = new this.$.$gen_engine_item_talent_all().all()[ 1 ]
+			talent2.set_x_y( 2, 3 )
+			return [ talent1, talent2 ]
 		}
 
 	}

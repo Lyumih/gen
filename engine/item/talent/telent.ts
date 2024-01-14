@@ -13,5 +13,10 @@ namespace $ {
 		y( next?: number ) {
 			return next ?? 0
 		}
+
+		set_x_y( x: number, y: number ) {
+			this.x( x )
+			this.y( y )
+		}
 	}
 }

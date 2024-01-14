@@ -1,18 +1,18 @@
-[gen_app_talent_y] {
+[gen_app_talent_x] {
 	overflow: scroll;
 	width: 500px;
 	height: 500px;
 }
 
-[gen_app_talent_page_x] {
+[gen_app_talent_page_y] {
 	flex-wrap: nowrap;
 }
 
-[gen_app_talent_talent] {
+[gen_app_talent_talent_short_name] {
 	border: 1px dashed antiquewhite;
 	border-radius: 1rem;
-	width: 3rem;
-	height: 3rem;
+	width: 3.5rem;
+	height: 3.5rem;
 	align-items: center;
 	justify-content: center;
 }

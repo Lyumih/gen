@@ -1,15 +1,23 @@
-// namespace $ {
-// 	export class $gen_engine_item_talent_all extends $.$gen_engine_resource {
+namespace $ {
+	export class $gen_engine_item_talent_all extends $.$mol_object {
 
-// 		override resource() {
+		@$mol_mem
+		all(): $gen_engine_item_talent[] {
+			return this.resource()
+		}
 
-// 			return [
-// 				this.$.$gen_engine_item_talent.make( {
+		resource() {
+			return [
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'Урон',
+					description: () => 'Урон +1',
+				} ),
+				this.$.$gen_engine_item_talent.make( {
+					name: () => 'ХП',
+					description: () => 'ХП +1',
+				} ),
+			]
+		}
 
-// 				} )
-// 			]
-
-// 		}
-
-// 	}
-// }
+	}
+}

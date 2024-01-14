@@ -6,14 +6,16 @@ $gen_app_talent $mol_page
 		<= Talent_title $mol_section title \Талантов 23
 		<= Talent_seed $mol_section title \Seed: 1
 		<= Talent_labeler $mol_labeler 
-			title \Поиск по талантам
+			title \Поиск по талантам2
 			content /
 				<= Talent_search $mol_string
 					hint \Атака
 					value? <=> talent_search? \
-		<= Y $mol_list rows <= y_list /
-			<= X*0 $mol_row sub <= x_list* /
+		<= X $mol_list rows <= x_list /
+			<= Y*0 $mol_row sub <= y_list* /
 				<= Talent*0_0 $mol_pop_over
-					Anchor <= Talent_short_name* $mol_paragraph title <= talent_short_name* \Атака
+					Anchor <= Talent_short_name* $mol_button_minor 
+						title <= talent_short_name* \Атака
+						click? <=> talent_click*? null
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
