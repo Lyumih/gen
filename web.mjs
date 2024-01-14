@@ -11328,8 +11328,8 @@ var $;
             ];
             return obj;
         }
-        is_open(id) {
-            return true;
+        status(id) {
+            return " ";
         }
         talent_short_name(id) {
             return "Атака";
@@ -11342,7 +11342,7 @@ var $;
         Talent_cell(id) {
             const obj = new this.$.$mol_button_minor();
             obj.attr = () => ({
-                open: this.is_open(id)
+                status: this.status(id)
             });
             obj.title = () => this.talent_short_name(id);
             obj.click = (next) => this.talent_click(id, next);
@@ -11580,9 +11580,23 @@ var $;
                         y: 0,
                     }];
             }
-            is_open(id) {
+            status_locale() {
+                return;
+            }
+            status(id) {
                 const point = this.parse_x_y(id);
-                return this.talents_opened().some(talent => talent.x === point.x() && talent.y === point.y());
+                const is_open = this.talents_opened().some(talent => talent.x === point.x() && talent.y === point.y());
+                const is_active = this.common_talents().some(talent => talent.x() === point.x() && talent.y() === point.y());
+                if (is_open && is_active) {
+                    return 'active';
+                }
+                else if (is_active) {
+                    return 'open';
+                }
+                else if (is_open) {
+                    return 'active';
+                }
+                return '';
             }
             max_x_y(next) {
                 let x = 0;
@@ -11669,7 +11683,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed antiquewhite;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][open='true'] {\n\tborder: 1px dashed green;\n}");
+    $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed gray;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][status='active'] {\n\tborder: 2px solid darkgreen;\n}\n\n[gen_app_talent_talent_cell][status='open'] {\n\tborder: 2px dotted darkgoldenrod;\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
 ;

@@ -3279,7 +3279,7 @@ declare namespace $ {
         talent_search(next?: any): string;
         Talent_search(): $$.$mol_string;
         Talent_labeler(): $mol_labeler;
-        is_open(id: any): boolean;
+        status(id: any): string;
         talent_short_name(id: any): string;
         talent_click(id: any, next?: any): any;
         Talent_cell(id: any): $mol_button_minor;
@@ -3350,7 +3350,8 @@ declare namespace $.$$ {
             x: number;
             y: number;
         }[];
-        is_open(id: any): boolean;
+        status_locale(): void;
+        status(id: any): "" | "active" | "open";
         max_x_y(next?: any): {
             x: number;
             y: number;

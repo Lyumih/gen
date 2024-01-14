@@ -927,7 +927,7 @@ $gen_app_talent $mol_page
 				<= Talent*0_0 $mol_pop_over
 					Anchor <= Talent_cell* $mol_button_minor
 						attr *
-							open <= is_open* true 
+							status <= status* \ 
 						title <= talent_short_name* \Атака
 						click? <=> talent_click*? null
 					bubble_content /
