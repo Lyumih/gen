@@ -10,15 +10,19 @@ namespace $.$$ {
 		}
 
 		max_x_count() {
-			return this.array_fill( this.max_x_y().x )
+			return this.array_range( this.max_x_y().x )
 		}
 
 		max_y_count() {
-			return this.array_fill( this.max_x_y().y )
+			return this.array_range( this.max_x_y().y )
+		}
+
+		array_range( length: number ) {
+			return Array.from( { length }, ( _, index ) => index )
 		}
 
 		light() {
-			return 20
+			return 5
 		}
 
 		max_x_y() {
@@ -32,12 +36,6 @@ namespace $.$$ {
 				x: x + this.light(),
 				y: y + this.light()
 			}
-		}
-
-		array_fill( count: number ) {
-			return Array.from( { length: count }, ( elm, index ) => {
-				return index
-			} )
 		}
 
 		get_talent_id( id_x_y: string ) {
@@ -61,7 +59,7 @@ namespace $.$$ {
 				x: 2,
 				y: 2,
 				id: 'talent',
-				name: 'Здоровье'
+				name: 'ХП'
 			}, ]
 		}
 
