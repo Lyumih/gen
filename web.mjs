@@ -10839,9 +10839,40 @@ var $;
             ];
             return obj;
         }
+        Skill_name() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => "Skill name";
+            return obj;
+        }
+        Skill_code() {
+            const obj = new this.$.$mol_text_code();
+            obj.text = () => "Skill code";
+            return obj;
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Skill_name(),
+                this.Skill_code()
+            ];
+            return obj;
+        }
+        all_skill_list() {
+            return [
+                this.Skill("0")
+            ];
+        }
+        All_skills_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.all_skill_list();
+            return obj;
+        }
         All_skills() {
             const obj = new this.$.$mol_expander();
             obj.title = () => "Все умения";
+            obj.content = () => [
+                this.All_skills_list()
+            ];
             return obj;
         }
         name(next) {
@@ -10929,6 +10960,18 @@ var $;
     ], $gen_dev.prototype, "Instruction", null);
     __decorate([
         $mol_mem
+    ], $gen_dev.prototype, "Skill_name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_dev.prototype, "Skill_code", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_dev.prototype, "Skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_dev.prototype, "All_skills_list", null);
+    __decorate([
+        $mol_mem
     ], $gen_dev.prototype, "All_skills", null);
     __decorate([
         $mol_mem
@@ -10972,7 +11015,7 @@ var $;
 (function ($) {
     class $gen_engine_item extends $.$mol_object {
         id_root(next) {
-            return 'item';
+            return next ?? this.$.$mol_guid();
         }
         id(next) {
             return next ?? this.$.$mol_guid();
@@ -11020,6 +11063,7 @@ var $;
             return 'skill';
         }
         use(source, targets) {
+            return 'not implemented';
         }
     }
     $.$gen_engine_item_skill = $gen_engine_item_skill;
@@ -11053,6 +11097,7 @@ var $;
                     use: (source, targets) => {
                         console.log('code', this.code());
                         eval(this.code());
+                        return 'success use skill';
                     }
                 });
             }

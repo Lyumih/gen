@@ -3257,6 +3257,11 @@ declare namespace $ {
         body(): readonly any[];
         Example(): $$.$mol_text_code;
         Instruction(): $$.$mol_expander;
+        Skill_name(): $$.$mol_text;
+        Skill_code(): $$.$mol_text_code;
+        Skill(id: any): $mol_row;
+        all_skill_list(): readonly any[];
+        All_skills_list(): $$.$mol_list;
         All_skills(): $$.$mol_expander;
         name(next?: any): string;
         Name(): $$.$mol_string;
@@ -3286,7 +3291,7 @@ declare namespace $ {
 declare namespace $ {
     class $gen_engine_item_skill extends $.$gen_engine_item {
         type(): string;
-        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
+        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): string;
     }
 }
 
