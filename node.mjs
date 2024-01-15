@@ -12602,7 +12602,7 @@ var $;
                 return `Уровень снаряжения: ${this.equipment().level()}`;
             }
             equipment() {
-                return this.$.$gen_engine_item_equipment.make({
+                return $gen_engine_item_equipment.make({
                     level: () => 10
                 });
             }
