@@ -10,5 +10,10 @@ namespace $ {
 			return 'equipment'
 		}
 
+		@$mol_mem
+		props( next?: $gen_engine_item_prop[] ): $gen_engine_item_prop[] {
+			return next ?? []
+		}
+
 	}
 }

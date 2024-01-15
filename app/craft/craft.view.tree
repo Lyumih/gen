@@ -1,14 +1,15 @@
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
-	points 20
+	unit $gen_engine_unit
 	title \Крафт
 	body /
-		<= Points $mol_section title \Кол-во очков: 10пт (1 победа = 1 пт)
+		<= Points $mol_section title <= points_title \
 		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
 		<= Equipment_level $mol_paragraph title <= equipment_level \
 		<= Prop_stage $mol_section title \Этап 1. Свойства. Макс. 10 свойств 10ур
 		<= Prop_level_up $mol_button_major
 			title \Повысить уровень. 1пт
+			click? <=> prop_level_up? null
 		<= Prop_open $mol_button_major
 			title \Открыть свойство. 5пт
 		<= Prop_min_max $mol_expander

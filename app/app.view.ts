@@ -9,5 +9,14 @@ namespace $.$$ {
 				$gen_engine_unit.make( { type: () => 'hero' } ),
 			]
 		}
+
+		@$mol_mem
+		craft( next?: $gen_engine_craft ) {
+			if( next ) return next
+			console.log( 'next' )
+			const craft = new $gen_engine_craft
+			craft.unit( this.party()[ 0 ] )
+			return craft
+		}
 	}
 }

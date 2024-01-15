@@ -2,6 +2,7 @@ $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
 	party /$gen_engine_unit
+	craft $gen_engine_craft
 	pages /
 		<= Hero_page $gen_app_hero 
 			engine <= engine
@@ -11,6 +12,7 @@ $gen_app $mol_book2
 		<= Auction $gen_auction
 		<= Talent_page $gen_app_talent
 		<= Craft_page $gen_app_craft
+			unit <= active_hero? $gen_engine_unit
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine
 		- <= Loot_page $gen_app_loot engine <= engine

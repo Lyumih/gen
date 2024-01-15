@@ -7,7 +7,6 @@ namespace $.$$ {
 
 		@$mol_mem
 		x_list( next?: any ) {
-			console.log( 'x_list', this.array_range( this.max_x_y().y ) )
 			return this.array_range( this.max_x_y().y ).map( ( x ) => this.Y( x ) )
 		}
 
@@ -21,7 +20,6 @@ namespace $.$$ {
 
 		@$mol_mem
 		talents_opened( next?: { x: number, y: number }[] ) {
-			console.log( 'talents_opened', next )
 			return next ?? [ {
 				x: 0,
 				y: 0,
@@ -65,7 +63,6 @@ namespace $.$$ {
 				x = Math.max( x, talent.x )
 				y = Math.max( y, talent.y )
 			} )
-			console.log( 'max_x_y', x, y, this.talents_opened() )
 			return {
 				x: x + this.light() + 1,
 				y: y + this.light() + 1,
