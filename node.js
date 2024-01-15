@@ -3523,7 +3523,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine extends $.$mol_object {
+    class $gen_engine extends $mol_object {
         seed() {
             return '1';
         }
@@ -3566,7 +3566,7 @@ var $;
             return [create_skill(this.uuid(), 'Атака'), create_skill(this.uuid(), 'Защита'), create_skill(this.uuid(), 'Хил')];
         }
         get_random_skill(next) {
-            return { ...this.$.$mol_array_lottery(this.all_skills()), level: 1 };
+            return { ...$mol_array_lottery(this.all_skills()), level: 1 };
         }
         add_hero_skill() {
             this.hero_skills([...this.hero_skills(), this.get_random_skill()]);
@@ -3616,7 +3616,7 @@ var $;
             this.shop(this.shop().filter(item => item.id !== id));
         }
         uuid() {
-            return this.$.$mol_guid();
+            return $mol_guid();
         }
     }
     __decorate([
@@ -3650,9 +3650,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_unit extends $.$mol_object {
+    class $gen_engine_unit extends $mol_object {
         id() {
-            return this.$.$mol_guid();
+            return $mol_guid();
         }
         name(next) {
             return next ?? 'Unit';
@@ -9881,7 +9881,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_battle extends $.$mol_object {
+    class $gen_engine_battle extends $mol_object {
         turn(next) {
             return next ?? 0;
         }
@@ -10084,7 +10084,7 @@ var $;
     (function ($$) {
         class $gen_app_battle_unit extends $.$gen_app_battle_unit {
             id() {
-                return this.$.$mol_guid();
+                return $mol_guid();
             }
             attack_enabled() {
                 return this.unit().health() > 0;
@@ -10295,9 +10295,9 @@ var $;
         class $gen_app_battle extends $.$gen_app_battle {
             default_units() {
                 const units = [
-                    ...this.$.$gen_app_battle.call_unit(),
-                    this.$.$gen_engine_unit.make({}),
-                    this.$.$gen_engine_unit.make({})
+                    ...$gen_app_battle.call_unit(),
+                    $gen_engine_unit.make({}),
+                    $gen_engine_unit.make({})
                 ];
                 units.forEach(unit => unit.next_turn = () => this.battle().next_turn());
                 return units;
@@ -10312,7 +10312,7 @@ var $;
                 return this.default_units()[0];
             }
             enemy() {
-                return this.$.$gen_engine_unit.make({
+                return $gen_engine_unit.make({
                     next_turn: () => this.battle().next_turn(),
                 });
             }
@@ -10467,12 +10467,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item extends $.$mol_object {
+    class $gen_engine_item extends $mol_object {
         id_root(next) {
-            return next ?? this.$.$mol_guid();
+            return next ?? $mol_guid();
         }
         id(next) {
-            return next ?? this.$.$mol_guid();
+            return next ?? $mol_guid();
         }
         type(next) {
             return 'item';
@@ -10512,7 +10512,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_skill extends $.$gen_engine_item {
+    class $gen_engine_item_skill extends $gen_engine_item {
         type() {
             return 'skill';
         }
@@ -10526,7 +10526,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_skill_all extends $.$mol_object {
+    class $gen_engine_item_skill_all extends $mol_object {
         all() {
             return this.resource();
         }
@@ -10535,7 +10535,7 @@ var $;
         }
         resource() {
             return [
-                this.$.$gen_engine_item_skill.make({
+                $gen_engine_item_skill.make({
                     id_root: () => this.create_id_root('1'),
                     name: () => 'Хил',
                     description: () => 'Исцеляет на 10 здоровья',
@@ -10543,7 +10543,7 @@ var $;
                         source.health(source.health() + 10);
                     }
                 }),
-                this.$.$gen_engine_item_skill.make({
+                $gen_engine_item_skill.make({
                     id_root: () => this.create_id_root('2'),
                     name: () => 'Сильный удар',
                     description: () => 'Урон x2',
@@ -10551,7 +10551,7 @@ var $;
                         targets[0].health(targets[0].health() - source.attack() * 2);
                     }
                 }),
-                this.$.$gen_engine_item_skill.make({
+                $gen_engine_item_skill.make({
                     id_root: () => this.create_id_root('3'),
                     name: () => 'Сильный удар и самолечение',
                     description: () => 'Урон x4 и лечение себя на 10',
@@ -11557,13 +11557,13 @@ var $;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
             hero() {
-                return this.$.$gen_engine_unit.make({
+                return $gen_engine_unit.make({
                     name: () => 'Герой',
                     type: () => 'hero',
                 });
             }
             enemy() {
-                return this.$.$gen_engine_unit.make({
+                return $gen_engine_unit.make({
                     name: () => 'Враг',
                     type: () => 'enemy',
                 });
@@ -11585,7 +11585,7 @@ var $;
                 return this.get_skill(id)?.use.toString() || 'no code';
             }
             skill() {
-                return this.$.$gen_engine_item_skill.make({
+                return $gen_engine_item_skill.make({
                     use: (source, targets) => {
                         console.log('code', this.code());
                         eval(this.code());
@@ -11851,7 +11851,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_point extends $.$mol_object {
+    class $gen_engine_point extends $mol_object {
         x(next) {
             return next ?? 0;
         }
@@ -11908,7 +11908,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_talent extends $.$gen_engine_item {
+    class $gen_engine_item_talent extends $gen_engine_item {
         type() {
             return 'talent';
         }
@@ -11936,37 +11936,37 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_talent_all extends $.$mol_object {
+    class $gen_engine_item_talent_all extends $mol_object {
         all() {
             return this.resource();
         }
         resource() {
             return [
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'Урон',
                     description: () => 'Урон +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'ХП',
                     description: () => 'ХП +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'Защ',
                     description: () => 'Защита +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'УрХп',
                     description: () => 'Урон +1 и ХП +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'Крит',
                     description: () => 'Крит +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'КрУр',
                     description: () => 'Крит урон +1',
                 }),
-                this.$.$gen_engine_item_talent.make({
+                $gen_engine_item_talent.make({
                     name: () => 'Хил',
                     description: () => 'Хил +1',
                 }),
@@ -12047,15 +12047,15 @@ var $;
             }
             parse_x_y(id_y_x) {
                 const [y, x] = id_y_x.split('_');
-                return this.$.$gen_engine_point.make({ x: () => +x, y: () => +y });
+                return $gen_engine_point.make({ x: () => +x, y: () => +y });
             }
             get_talent_id(id_y_x) {
                 const point = this.parse_x_y(id_y_x);
                 return this.common_talents().find(talent => talent.x() === point.x() && talent.y() === point.y());
             }
             find_empty_cell(x_y) {
-                const x = this.$.$mol_array_lottery(this.array_range(this.max_x_y().x));
-                const y = this.$.$mol_array_lottery(this.array_range(this.max_x_y().y));
+                const x = $mol_array_lottery(this.array_range(this.max_x_y().x));
+                const y = $mol_array_lottery(this.array_range(this.max_x_y().y));
                 const is_active = this.common_talents().some(talent => talent.x() === x && talent.y() === y);
                 const is_opened = this.talents_opened().some(talent => talent.x === x && talent.y === y);
                 const point = this.parse_x_y(x_y);
@@ -12073,7 +12073,7 @@ var $;
                     const new_point = this.find_empty_cell(id_y_x);
                     if (new_point) {
                         console.log('add talent');
-                        const new_talent = this.$.$mol_array_lottery(new this.$.$gen_engine_item_talent_all().all());
+                        const new_talent = $mol_array_lottery(new $gen_engine_item_talent_all().all());
                         new_talent.set_x_y(new_point[0], new_point[1]);
                         this.common_talents([...this.common_talents(), new_talent]);
                     }
@@ -12101,7 +12101,7 @@ var $;
                 return reduced.map(talent => `**${talent.count}x** ${talent.description}`).join('\n');
             }
             common_talents(next) {
-                const talent1 = new this.$.$gen_engine_item_talent_all().all()[0];
+                const talent1 = new $gen_engine_item_talent_all().all()[0];
                 return next ?? [talent1];
             }
         }
@@ -12135,7 +12135,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_equipment extends $.$gen_engine_item {
+    class $gen_engine_item_equipment extends $gen_engine_item {
         type() {
             return 'equipment';
         }
@@ -12190,17 +12190,21 @@ var $;
             const obj = new this.$.$gen_engine_item_equipment();
             return obj;
         }
+        points() {
+            return 20;
+        }
         title() {
             return "Крафт";
         }
         body() {
             return [
                 this.Points(),
+                this.Equipment_title(),
+                this.Equipment_level(),
                 this.Prop_stage(),
                 this.Prop_level_up(),
                 this.Prop_open(),
                 this.Prop_min_max(),
-                this.Equipment_title(),
                 this.Prop_list(),
                 this.Luck_stage(),
                 this.Luck_unlock(),
@@ -12225,6 +12229,19 @@ var $;
         Points() {
             const obj = new this.$.$mol_section();
             obj.title = () => "Кол-во очков: 10пт (1 победа = 1 пт)";
+            return obj;
+        }
+        Equipment_title() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Снаряжение: Броня. Тип: лёгкая. Ур. 1";
+            return obj;
+        }
+        equipment_level() {
+            return "";
+        }
+        Equipment_level() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.equipment_level();
             return obj;
         }
         Prop_stage() {
@@ -12289,11 +12306,6 @@ var $;
                 this.Prop_base_rerolll(),
                 this.Prop_remove()
             ];
-            return obj;
-        }
-        Equipment_title() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Снаряжение: Броня. Тип: лёгкая. Ур. 1";
             return obj;
         }
         Prop_check(id) {
@@ -12461,6 +12473,12 @@ var $;
     ], $gen_app_craft.prototype, "Points", null);
     __decorate([
         $mol_mem
+    ], $gen_app_craft.prototype, "Equipment_title", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Equipment_level", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_craft.prototype, "Prop_stage", null);
     __decorate([
         $mol_mem
@@ -12492,9 +12510,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_craft.prototype, "Prop_min_max", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_craft.prototype, "Equipment_title", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_craft.prototype, "Prop_check", null);
@@ -12576,6 +12591,26 @@ var $;
     $.$gen_app_craft = $gen_app_craft;
 })($ || ($ = {}));
 //gen/app/craft/-view.tree/craft.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_craft extends $.$gen_app_craft {
+            equipment_level() {
+                return `Уровень снаряжения: ${this.equipment().level()}`;
+            }
+            equipment() {
+                return this.$.$gen_engine_item_equipment.make({
+                    level: () => 10
+                });
+            }
+        }
+        $$.$gen_app_craft = $gen_app_craft;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/craft/craft.vies.ts
 ;
 "use strict";
 var $;
@@ -12662,9 +12697,9 @@ var $;
         class $gen_app extends $.$gen_app {
             party() {
                 return [
-                    this.$.$gen_engine_unit.make({ name: () => 'Вася', type: () => 'hero' }),
-                    this.$.$gen_engine_unit.make({ name: () => 'Даша', type: () => 'hero', level: () => 10 }),
-                    this.$.$gen_engine_unit.make({ type: () => 'hero' }),
+                    $gen_engine_unit.make({ name: () => 'Вася', type: () => 'hero' }),
+                    $gen_engine_unit.make({ name: () => 'Даша', type: () => 'hero', level: () => 10 }),
+                    $gen_engine_unit.make({ type: () => 'hero' }),
                 ];
             }
         }

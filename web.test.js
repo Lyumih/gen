@@ -3469,7 +3469,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const engine = new $$.$gen_engine();
+    const engine = $gen_engine.make({});
     let seed = 0;
     engine.uuid = () => {
         seed += 1;
@@ -4003,9 +4003,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const battle = new $$.$gen_engine_battle();
-    const hero = new $$.$gen_engine_unit();
-    const enemy = new $$.$gen_engine_unit();
+    const battle = $gen_engine_battle.make({});
+    const hero = $gen_engine_unit.make({});
+    const enemy = $gen_engine_unit.make({});
     battle.init_unit(hero);
     battle.init_unit(enemy);
     const skill = {
@@ -4035,7 +4035,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const skill = $$.$gen_engine_item_skill.make({
+    const skill = $gen_engine_item_skill.make({
         id_root: () => '1',
     });
     $mol_test({
@@ -4050,8 +4050,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const point = $$.$gen_engine_point.make({});
-    const make = (x, y) => $$.$gen_engine_point.make({ x: () => x, y: () => y });
+    const point = $gen_engine_point.make({});
+    const make = (x, y) => $gen_engine_point.make({ x: () => x, y: () => y });
     const nearest = [
         make(-1, 1), make(-1, 0), make(-1, 1),
         make(0, -1), make(0, 0), make(0, 1),

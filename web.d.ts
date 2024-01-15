@@ -955,7 +955,7 @@ declare namespace $ {
     type Mode = Item & {
         type: 'mode';
     };
-    export class $gen_engine extends $.$mol_object {
+    export class $gen_engine extends $mol_object {
         seed(): string;
         hero(next?: any): any;
         hero_skills(next?: any): Skill[];
@@ -999,7 +999,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_unit extends $.$mol_object {
+    class $gen_engine_unit extends $mol_object {
         id(): string;
         name(next?: string): string;
         type(next?: string): string;
@@ -2759,7 +2759,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_battle extends $.$mol_object {
+    class $gen_engine_battle extends $mol_object {
         turn(next?: number): number;
         next_turn(): void;
         init_unit(unit: $gen_engine_unit): void;
@@ -2931,7 +2931,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item extends $.$mol_object {
+    class $gen_engine_item extends $mol_object {
         id_root(next?: string): string;
         id(next?: string): string;
         type(next?: string): string;
@@ -2942,14 +2942,14 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_skill extends $.$gen_engine_item {
+    class $gen_engine_item_skill extends $gen_engine_item {
         type(): string;
         use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
     }
 }
 
 declare namespace $ {
-    class $gen_engine_item_skill_all extends $.$mol_object {
+    class $gen_engine_item_skill_all extends $mol_object {
         all(): $gen_engine_item_skill[];
         create_id_root(id_root: string): string;
         resource(): $gen_engine_item_skill[];
@@ -3302,7 +3302,7 @@ declare namespace $ {
         x: number;
         y: number;
     };
-    export class $gen_engine_point extends $.$mol_object {
+    export class $gen_engine_point extends $mol_object {
         x(next?: number): number;
         y(next?: number): number;
         range(length?: number): {
@@ -3326,7 +3326,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_talent extends $.$gen_engine_item {
+    class $gen_engine_item_talent extends $gen_engine_item {
         type(): string;
         x(next?: number): number;
         y(next?: number): number;
@@ -3335,7 +3335,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_talent_all extends $.$mol_object {
+    class $gen_engine_item_talent_all extends $mol_object {
         all(): $gen_engine_item_talent[];
         resource(): $gen_engine_item_talent[];
     }
@@ -3376,7 +3376,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_equipment extends $.$gen_engine_item {
+    class $gen_engine_item_equipment extends $gen_engine_item {
         type(): string;
         part(): string;
     }
@@ -3400,9 +3400,13 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_craft extends $mol_page {
         equipment(): $gen_engine_item_equipment;
+        points(): number;
         title(): string;
         body(): readonly any[];
         Points(): $$.$mol_section;
+        Equipment_title(): $$.$mol_section;
+        equipment_level(): string;
+        Equipment_level(): $$.$mol_paragraph;
         Prop_stage(): $$.$mol_section;
         Prop_level_up(): $mol_button_major;
         Prop_open(): $mol_button_major;
@@ -3414,7 +3418,6 @@ declare namespace $ {
         Prop_base_rerolll(): $mol_button_major;
         Prop_remove(): $mol_button_major;
         Prop_min_max(): $$.$mol_expander;
-        Equipment_title(): $$.$mol_section;
         Prop_check(id: any): $mol_check_box;
         prop_name(id: any): string;
         Prop_name(id: any): $$.$mol_paragraph;
@@ -3450,6 +3453,13 @@ declare namespace $ {
     }
 }
 
+declare namespace $.$$ {
+    class $gen_app_craft extends $.$gen_app_craft {
+        equipment_level(): string;
+        equipment(): $gen_engine_item_equipment;
+    }
+}
+
 declare namespace $ {
     class $gen_app extends $mol_book2 {
         title(): string;
@@ -3461,7 +3471,7 @@ declare namespace $ {
         Dev_page(): $$.$gen_dev;
         Auction(): $gen_auction;
         Talent_page(): $$.$gen_app_talent;
-        Craft_page(): $gen_app_craft;
+        Craft_page(): $$.$gen_app_craft;
     }
 }
 
