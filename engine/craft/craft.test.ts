@@ -24,10 +24,7 @@ namespace $.$$ {
 		},
 
 		"remove 10 prop"() {
-			console.log( equipment.props() )
-
 			repeat( 10, () => craft.prop_remove( equipment.props()[ equipment.props().length - 1 ]?.id() ) )
-			console.log( equipment.props() )
 			$mol_assert_equal( equipment.props().length, 0 )
 			$mol_assert_equal( unit.points(), 99850 )
 		},
@@ -36,6 +33,7 @@ namespace $.$$ {
 			repeat( 10, () => craft.prop_add( new $gen_engine_item_prop ) )
 			$mol_assert_equal( unit.points(), 99800 )
 			repeat( 10, ( i ) => repeat( 10, () => craft.prop_level_up( equipment.props()[ i ]?.id() ) ) )
+			$mol_assert_equal( craft.equipment().props()[ 0 ].level(), craft.equipment().props()[ 9 ].level(), 11 )
 			$mol_assert_equal( unit.points(), 99700 )
 		}
 
