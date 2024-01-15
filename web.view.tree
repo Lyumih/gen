@@ -937,6 +937,73 @@ $gen_app_talent $mol_page
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
 
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$gen_app_craft $mol_page
+	equipment $gen_engine_item_equipment
+	title \Крафт
+	body /
+		<= Points $mol_section title \Кол-во очков: 10пт (1 победа = 1 пт)
+		<= Prop_stage $mol_section title \Этап 1. Свойства. Макс. 10 свойств 10ур
+		<= Prop_level_up $mol_button_major
+			title \Повысить уровень. 1пт
+		<= Prop_open $mol_button_major
+			title \Открыть свойство. 5пт
+		<= Prop_min_max $mol_expander
+			title \Максимизация базовых свойств
+			content /
+				<= Prop_level_down $mol_button_major
+					title \Понизить уровень. 5пт
+				<= Prop_fix $mol_button_major
+					title \Зафиксировать свойство. 50пт
+				<= Prop_unfix $mol_button_major
+					title \Открепить. 50пт
+				<= Prop_tier_up $mol_button_major
+					title \Повысить тир. 50пт
+				<= Prop_bless_reroll $mol_button_major
+					title \Перебросить благословение. 50пт
+				<= Prop_base_rerolll $mol_button_major
+					title \Перековать основу. 100пт
+				<= Prop_remove $mol_button_major
+					title \Удалить свойство. 10пт
+		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
+		<= Prop_list $mol_list rows <= prop_list /
+			<= Prop*0 $mol_row sub /
+				<= Prop_check* $mol_check_box
+				<= Prop_name* $mol_paragraph title <= prop_name* \Свойство 1. Атака + 5 (3-7 разброс)
+				<= Prop_level* $mol_paragraph title <= prop_level* \Уровень 1.
+				<= Prop_luck* $mol_paragraph title <= prop_luck* \Удачно: 3
+				<= Prop_bless* $mol_paragraph title <= prop_unluck* \Благословение: неудачно (-50% эффекта)
+				<= Prop_tier* $mol_paragraph title <= prop_tier* \Тир: 3
+		<= Luck_stage $mol_section title \Этап 2. Удачный скил. 50+ ур.
+		<= Luck_unlock $mol_button_major
+			title \Разблокировать удачный скил. 25пт
+		<= Luck_level_up $mol_button_major
+			title \Повысить уровень умения. 1пт
+		<= Luck_reroll $mol_button_major
+			title \Поменять реликвию. 100пт
+		<= Luck_chance $mol_paragraph title \Шанс при атаке: 1%
+		<= Luck_name $mol_paragraph title \Умение: Мощное исцеление. Уровень 1.
+		<= Relic_stage $mol_section title \Этап 3. Сила реликвии. 100+ ур
+		<= Relic_unlock $mol_button_major
+			title \Разблокировать реликвию. 25пт
+		<= Relic_level_up $mol_button_major
+			title \Поднять уровень реликвии. 1пт
+		<= Relic_reroll $mol_button_major
+			title \Поменять реликвию. 100пт
+		<= Relic_name $mol_paragraph
+			title \Холодная кровь. Ур. 1. Кровотечение также замораживает противника с шансом 1% (+1 за ур.).
+		<= Uniq_stage $mol_section title \Этап 4. Сетовый набор. 150+ ур.
+		<= Uniq_reroll $mol_button_major title \Сменить набор. 20пт
+		<= Uniq_name $mol_paragraph title \Набор крови. 3пр. 25% Шанс игнорировать сопротивление цели к кровотечению
+		<= Power $mol_section title \Этап 5. Максимальная мощь. 200+ ур.
+		<= Power_name $mol_paragraph title \Ваши физические атаки игорируют 100% сопр. врага с шансом 10%
+		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
+		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
+
 $gen_app $mol_book2
 	title \Игра Gen
 	engine $gen_engine
@@ -949,6 +1016,7 @@ $gen_app $mol_book2
 		<= Dev_page $gen_dev
 		<= Auction $gen_auction
 		<= Talent_page $gen_app_talent
+		<= Craft_page $gen_app_craft
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine
 		- <= Loot_page $gen_app_loot engine <= engine

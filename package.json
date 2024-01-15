@@ -219,7 +219,11 @@
     "$gen_app_talent",
     "$gen_engine_point",
     "$gen_engine_item_talent_all",
-    "$gen_engine_item_talent"
+    "$gen_engine_item_talent",
+    "$gen_app_craft",
+    "$gen_engine_item_equipment",
+    "$mol_check_box",
+    "$mol_icon_tick"
   ],
   "dependencies": {
     "jsdom": "*",

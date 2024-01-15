@@ -12069,6 +12069,7 @@ var $;
                 const point = this.parse_x_y(id_y_x);
                 const is_nearest_point = point.in_range_points(this.talents_opened());
                 if (is_nearest_point) {
+                    console.log(is_nearest_point, point.simple());
                     const new_point = this.find_empty_cell(id_y_x);
                     if (new_point) {
                         console.log('add talent');
@@ -12078,7 +12079,6 @@ var $;
                     }
                     this.talents_opened([...this.talents_opened(), point.simple()]);
                 }
-                console.log('talent_click', id_y_x);
             }
             talent_short_name(id) {
                 return this.get_talent_id(id)?.name()?.slice(0, 4) ?? '';
@@ -12135,6 +12135,451 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_equipment extends $.$gen_engine_item {
+        type() {
+            return 'equipment';
+        }
+        part() {
+            return 'equipment';
+        }
+    }
+    $.$gen_engine_item_equipment = $gen_engine_item_equipment;
+})($ || ($ = {}));
+//gen/engine/item/equipment/equipment.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_tick extends $mol_icon {
+        path() {
+            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+        }
+    }
+    $.$mol_icon_tick = $mol_icon_tick;
+})($ || ($ = {}));
+//mol/icon/tick/-view.tree/tick.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_check_box extends $mol_check {
+        Icon() {
+            const obj = new this.$.$mol_icon_tick();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_check_box.prototype, "Icon", null);
+    $.$mol_check_box = $mol_check_box;
+})($ || ($ = {}));
+//mol/check/box/-view.tree/box.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+})($ || ($ = {}));
+//mol/check/box/-css/box.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_craft extends $mol_page {
+        equipment() {
+            const obj = new this.$.$gen_engine_item_equipment();
+            return obj;
+        }
+        title() {
+            return "Крафт";
+        }
+        body() {
+            return [
+                this.Points(),
+                this.Prop_stage(),
+                this.Prop_level_up(),
+                this.Prop_open(),
+                this.Prop_min_max(),
+                this.Equipment_title(),
+                this.Prop_list(),
+                this.Luck_stage(),
+                this.Luck_unlock(),
+                this.Luck_level_up(),
+                this.Luck_reroll(),
+                this.Luck_chance(),
+                this.Luck_name(),
+                this.Relic_stage(),
+                this.Relic_unlock(),
+                this.Relic_level_up(),
+                this.Relic_reroll(),
+                this.Relic_name(),
+                this.Uniq_stage(),
+                this.Uniq_reroll(),
+                this.Uniq_name(),
+                this.Power(),
+                this.Power_name(),
+                this.Defence(),
+                this.Defence_name()
+            ];
+        }
+        Points() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Кол-во очков: 10пт (1 победа = 1 пт)";
+            return obj;
+        }
+        Prop_stage() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 1. Свойства. Макс. 10 свойств 10ур";
+            return obj;
+        }
+        Prop_level_up() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Повысить уровень. 1пт";
+            return obj;
+        }
+        Prop_open() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Открыть свойство. 5пт";
+            return obj;
+        }
+        Prop_level_down() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Понизить уровень. 5пт";
+            return obj;
+        }
+        Prop_fix() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Зафиксировать свойство. 50пт";
+            return obj;
+        }
+        Prop_unfix() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Открепить. 50пт";
+            return obj;
+        }
+        Prop_tier_up() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Повысить тир. 50пт";
+            return obj;
+        }
+        Prop_bless_reroll() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Перебросить благословение. 50пт";
+            return obj;
+        }
+        Prop_base_rerolll() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Перековать основу. 100пт";
+            return obj;
+        }
+        Prop_remove() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Удалить свойство. 10пт";
+            return obj;
+        }
+        Prop_min_max() {
+            const obj = new this.$.$mol_expander();
+            obj.title = () => "Максимизация базовых свойств";
+            obj.content = () => [
+                this.Prop_level_down(),
+                this.Prop_fix(),
+                this.Prop_unfix(),
+                this.Prop_tier_up(),
+                this.Prop_bless_reroll(),
+                this.Prop_base_rerolll(),
+                this.Prop_remove()
+            ];
+            return obj;
+        }
+        Equipment_title() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Снаряжение: Броня. Тип: лёгкая. Ур. 1";
+            return obj;
+        }
+        Prop_check(id) {
+            const obj = new this.$.$mol_check_box();
+            return obj;
+        }
+        prop_name(id) {
+            return "Свойство 1. Атака + 5 (3-7 разброс)";
+        }
+        Prop_name(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.prop_name(id);
+            return obj;
+        }
+        prop_level(id) {
+            return "Уровень 1.";
+        }
+        Prop_level(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.prop_level(id);
+            return obj;
+        }
+        prop_luck(id) {
+            return "Удачно: 3";
+        }
+        Prop_luck(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.prop_luck(id);
+            return obj;
+        }
+        prop_unluck(id) {
+            return "Благословение: неудачно (-50% эффекта)";
+        }
+        Prop_bless(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.prop_unluck(id);
+            return obj;
+        }
+        prop_tier(id) {
+            return "Тир: 3";
+        }
+        Prop_tier(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.prop_tier(id);
+            return obj;
+        }
+        Prop(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Prop_check(id),
+                this.Prop_name(id),
+                this.Prop_level(id),
+                this.Prop_luck(id),
+                this.Prop_bless(id),
+                this.Prop_tier(id)
+            ];
+            return obj;
+        }
+        prop_list() {
+            return [
+                this.Prop("0")
+            ];
+        }
+        Prop_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.prop_list();
+            return obj;
+        }
+        Luck_stage() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 2. Удачный скил. 50+ ур.";
+            return obj;
+        }
+        Luck_unlock() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Разблокировать удачный скил. 25пт";
+            return obj;
+        }
+        Luck_level_up() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Повысить уровень умения. 1пт";
+            return obj;
+        }
+        Luck_reroll() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Поменять реликвию. 100пт";
+            return obj;
+        }
+        Luck_chance() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Шанс при атаке: 1%";
+            return obj;
+        }
+        Luck_name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Умение: Мощное исцеление. Уровень 1.";
+            return obj;
+        }
+        Relic_stage() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 3. Сила реликвии. 100+ ур";
+            return obj;
+        }
+        Relic_unlock() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Разблокировать реликвию. 25пт";
+            return obj;
+        }
+        Relic_level_up() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Поднять уровень реликвии. 1пт";
+            return obj;
+        }
+        Relic_reroll() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Поменять реликвию. 100пт";
+            return obj;
+        }
+        Relic_name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Холодная кровь. Ур. 1. Кровотечение также замораживает противника с шансом 1% (+1 за ур.).";
+            return obj;
+        }
+        Uniq_stage() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 4. Сетовый набор. 150+ ур.";
+            return obj;
+        }
+        Uniq_reroll() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Сменить набор. 20пт";
+            return obj;
+        }
+        Uniq_name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Набор крови. 3пр. 25% Шанс игнорировать сопротивление цели к кровотечению";
+            return obj;
+        }
+        Power() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 5. Максимальная мощь. 200+ ур.";
+            return obj;
+        }
+        Power_name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Ваши физические атаки игорируют 100% сопр. врага с шансом 10%";
+            return obj;
+        }
+        Defence() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Этап 5. Максимальная защита. 200+ ур.";
+            return obj;
+        }
+        Defence_name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "10% шанс избежать смертельного урона";
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "equipment", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Points", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_stage", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_level_up", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_open", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_level_down", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_fix", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_unfix", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_tier_up", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_bless_reroll", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_base_rerolll", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_remove", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_min_max", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Equipment_title", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_check", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_name", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_level", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_luck", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_bless", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop_tier", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_craft.prototype, "Prop", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Prop_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_stage", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_unlock", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_level_up", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_reroll", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_chance", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Luck_name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Relic_stage", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Relic_unlock", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Relic_level_up", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Relic_reroll", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Relic_name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Uniq_stage", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Uniq_reroll", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Uniq_name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Power", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Power_name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Defence", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_craft.prototype, "Defence_name", null);
+    $.$gen_app_craft = $gen_app_craft;
+})($ || ($ = {}));
+//gen/app/craft/-view.tree/craft.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app extends $mol_book2 {
         title() {
             return "Игра Gen";
@@ -12152,7 +12597,8 @@ var $;
                 this.Battle_page(),
                 this.Dev_page(),
                 this.Auction(),
-                this.Talent_page()
+                this.Talent_page(),
+                this.Craft_page()
             ];
         }
         Hero_page() {
@@ -12178,6 +12624,10 @@ var $;
             const obj = new this.$.$gen_app_talent();
             return obj;
         }
+        Craft_page() {
+            const obj = new this.$.$gen_app_craft();
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -12197,6 +12647,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Talent_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Craft_page", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts

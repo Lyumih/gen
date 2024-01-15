@@ -3376,6 +3376,81 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_engine_item_equipment extends $.$gen_engine_item {
+        type(): string;
+        part(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_tick extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_check_box extends $mol_check {
+        Icon(): $mol_icon_tick;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_craft extends $mol_page {
+        equipment(): $gen_engine_item_equipment;
+        title(): string;
+        body(): readonly any[];
+        Points(): $$.$mol_section;
+        Prop_stage(): $$.$mol_section;
+        Prop_level_up(): $mol_button_major;
+        Prop_open(): $mol_button_major;
+        Prop_level_down(): $mol_button_major;
+        Prop_fix(): $mol_button_major;
+        Prop_unfix(): $mol_button_major;
+        Prop_tier_up(): $mol_button_major;
+        Prop_bless_reroll(): $mol_button_major;
+        Prop_base_rerolll(): $mol_button_major;
+        Prop_remove(): $mol_button_major;
+        Prop_min_max(): $$.$mol_expander;
+        Equipment_title(): $$.$mol_section;
+        Prop_check(id: any): $mol_check_box;
+        prop_name(id: any): string;
+        Prop_name(id: any): $$.$mol_paragraph;
+        prop_level(id: any): string;
+        Prop_level(id: any): $$.$mol_paragraph;
+        prop_luck(id: any): string;
+        Prop_luck(id: any): $$.$mol_paragraph;
+        prop_unluck(id: any): string;
+        Prop_bless(id: any): $$.$mol_paragraph;
+        prop_tier(id: any): string;
+        Prop_tier(id: any): $$.$mol_paragraph;
+        Prop(id: any): $mol_row;
+        prop_list(): readonly any[];
+        Prop_list(): $$.$mol_list;
+        Luck_stage(): $$.$mol_section;
+        Luck_unlock(): $mol_button_major;
+        Luck_level_up(): $mol_button_major;
+        Luck_reroll(): $mol_button_major;
+        Luck_chance(): $$.$mol_paragraph;
+        Luck_name(): $$.$mol_paragraph;
+        Relic_stage(): $$.$mol_section;
+        Relic_unlock(): $mol_button_major;
+        Relic_level_up(): $mol_button_major;
+        Relic_reroll(): $mol_button_major;
+        Relic_name(): $$.$mol_paragraph;
+        Uniq_stage(): $$.$mol_section;
+        Uniq_reroll(): $mol_button_major;
+        Uniq_name(): $$.$mol_paragraph;
+        Power(): $$.$mol_section;
+        Power_name(): $$.$mol_paragraph;
+        Defence(): $$.$mol_section;
+        Defence_name(): $$.$mol_paragraph;
+    }
+}
+
+declare namespace $ {
     class $gen_app extends $mol_book2 {
         title(): string;
         engine(): $gen_engine;
@@ -3386,6 +3461,7 @@ declare namespace $ {
         Dev_page(): $$.$gen_dev;
         Auction(): $gen_auction;
         Talent_page(): $$.$gen_app_talent;
+        Craft_page(): $gen_app_craft;
     }
 }
 
