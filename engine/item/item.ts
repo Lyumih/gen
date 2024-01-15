@@ -2,17 +2,17 @@ namespace $ {
 	/**
 	 * Основной класс для создания различных предметов (умения, предметы и т.д.)
 	 */
-	export class $gen_engine_item extends $.$mol_object {
+	export class $gen_engine_item extends $mol_object {
 
 		/** Корневой идентификатор умения в глобальной базе данных */
 		@$mol_mem
 		id_root( next?: string ) {
-			return next ?? this.$.$mol_guid()
+			return next ?? $mol_guid()
 		}
 
 		@$mol_mem
 		id( next?: string ) {
-			return next ?? this.$.$mol_guid()
+			return next ?? $mol_guid()
 		}
 
 

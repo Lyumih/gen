@@ -3,7 +3,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		id() {
-			return this.$.$mol_guid()
+			return $mol_guid()
 		}
 
 		attack_enabled(): boolean {

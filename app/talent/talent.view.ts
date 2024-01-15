@@ -74,7 +74,7 @@ namespace $.$$ {
 
 		parse_x_y( id_y_x: string ) {
 			const [ y, x ] = id_y_x.split( '_' )
-			return this.$.$gen_engine_point.make( { x: () => +x, y: () => +y } )
+			return $gen_engine_point.make( { x: () => +x, y: () => +y } )
 		}
 
 		get_talent_id( id_y_x: string ) {
@@ -83,8 +83,8 @@ namespace $.$$ {
 		}
 
 		find_empty_cell( x_y: string ) {
-			const x = this.$.$mol_array_lottery( this.array_range( this.max_x_y().x ) )
-			const y = this.$.$mol_array_lottery( this.array_range( this.max_x_y().y ) )
+			const x = $mol_array_lottery( this.array_range( this.max_x_y().x ) )
+			const y = $mol_array_lottery( this.array_range( this.max_x_y().y ) )
 			const is_active = this.common_talents().some( talent => talent.x() === x && talent.y() === y )
 			const is_opened = this.talents_opened().some( talent => talent.x === x && talent.y === y )
 			const point = this.parse_x_y( x_y )
@@ -105,7 +105,7 @@ namespace $.$$ {
 				const new_point = this.find_empty_cell( id_y_x )
 				if( new_point ) {
 					console.log( 'add talent' )
-					const new_talent = this.$.$mol_array_lottery( new this.$.$gen_engine_item_talent_all().all() )
+					const new_talent = $mol_array_lottery( new $gen_engine_item_talent_all().all() )
 					new_talent.set_x_y( new_point[ 0 ], new_point[ 1 ] )
 					this.common_talents( [ ...this.common_talents(), new_talent ] )
 				}
@@ -138,7 +138,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		common_talents( next?: $gen_engine_item_talent[] ) {
-			const talent1 = new this.$.$gen_engine_item_talent_all().all()[ 0 ]
+			const talent1 = new $gen_engine_item_talent_all().all()[ 0 ]
 			return next ?? [ talent1 ]
 		}
 

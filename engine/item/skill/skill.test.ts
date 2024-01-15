@@ -1,6 +1,6 @@
 namespace $ {
 
-	const skill = $$.$gen_engine_item_skill.make( {
+	const skill = $gen_engine_item_skill.make( {
 		id_root: () => '1',
 	} )
 

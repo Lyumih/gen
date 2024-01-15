@@ -1,5 +1,5 @@
 namespace $ {
-	export class $gen_engine_battle extends $.$mol_object {
+	export class $gen_engine_battle extends $mol_object {
 
 		@$mol_mem
 		turn( next?: number ) {

@@ -11,7 +11,7 @@
  * 
 */
 namespace $.$$ {
-	export class $gen_generator extends $.$mol_object {
+	export class $gen_generator extends $mol_object {
 
 		seed() {
 			return '1'

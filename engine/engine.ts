@@ -3,7 +3,7 @@ namespace $ {
 	type Item = { id: string, name: string, type: string }
 	type Skill = Item & { level: number, modes: Mode[] }
 	type Mode = Item & { type: 'mode' }
-	export class $gen_engine extends $.$mol_object {
+	export class $gen_engine extends $mol_object {
 
 		seed() {
 			return '1'
@@ -62,7 +62,7 @@ namespace $ {
 
 		@$mol_mem
 		get_random_skill( next?: any ) {
-			return { ...this.$.$mol_array_lottery( this.all_skills() ), level: 1 }
+			return { ...$mol_array_lottery( this.all_skills() ), level: 1 }
 		}
 
 		add_hero_skill() {
@@ -125,7 +125,7 @@ namespace $ {
 		}
 
 		uuid() {
-			return this.$.$mol_guid()
+			return $mol_guid()
 		}
 
 	}

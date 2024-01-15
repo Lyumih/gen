@@ -3,9 +3,9 @@ namespace $.$$ {
 
 		default_units() {
 			const units = [
-				... this.$.$gen_app_battle.call_unit(),
-				this.$.$gen_engine_unit.make( {} ),
-				this.$.$gen_engine_unit.make( {} )
+				...$gen_app_battle.call_unit(),
+				$gen_engine_unit.make( {} ),
+				$gen_engine_unit.make( {} )
 			]
 			units.forEach( unit => unit.next_turn = () => this.battle().next_turn() )
 			return units
@@ -27,7 +27,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		enemy() {
-			return this.$.$gen_engine_unit.make( {
+			return $gen_engine_unit.make( {
 				next_turn: () => this.battle().next_turn(),
 			} )
 		}

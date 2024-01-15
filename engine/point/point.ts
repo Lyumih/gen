@@ -4,7 +4,7 @@ namespace $ {
 		y: number
 	}
 
-	export class $gen_engine_point extends $.$mol_object {
+	export class $gen_engine_point extends $mol_object {
 		@$mol_mem
 		x( next?: number ) {
 			return next ?? 0

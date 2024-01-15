@@ -1,5 +1,5 @@
 namespace $ {
-	export class $gen_engine_item_skill_all extends $.$mol_object {
+	export class $gen_engine_item_skill_all extends $mol_object {
 		@$mol_mem
 		all(): $gen_engine_item_skill[] {
 			return this.resource()
@@ -11,7 +11,7 @@ namespace $ {
 
 		resource(): $gen_engine_item_skill[] {
 			return [
-				this.$.$gen_engine_item_skill.make( {
+				$gen_engine_item_skill.make( {
 					id_root: () => this.create_id_root( '1' ),
 					name: () => 'Хил',
 					description: () => 'Исцеляет на 10 здоровья',
@@ -19,7 +19,7 @@ namespace $ {
 						source.health( source.health() + 10 )
 					}
 				} ),
-				this.$.$gen_engine_item_skill.make( {
+				$gen_engine_item_skill.make( {
 					id_root: () => this.create_id_root( '2' ),
 					name: () => 'Сильный удар',
 					description: () => 'Урон x2',
@@ -27,7 +27,7 @@ namespace $ {
 						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
 					}
 				} ),
-				this.$.$gen_engine_item_skill.make( {
+				$gen_engine_item_skill.make( {
 					id_root: () => this.create_id_root( '3' ),
 					name: () => 'Сильный удар и самолечение',
 					description: () => 'Урон x4 и лечение себя на 10',

@@ -3,7 +3,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		result( next?: any ): string {
-			return new this.$.$gen_generator().start( this.hero_level() )
+			return new $gen_generator().start( this.hero_level() )
 		}
 
 		generate( next?: any ) {

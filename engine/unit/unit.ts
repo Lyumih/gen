@@ -1,9 +1,9 @@
 namespace $ {
-	export class $gen_engine_unit extends $.$mol_object {
+	export class $gen_engine_unit extends $mol_object {
 
 		@$mol_mem
 		id() {
-			return this.$.$mol_guid()
+			return $mol_guid()
 		}
 
 		@$mol_mem

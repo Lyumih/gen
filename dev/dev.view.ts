@@ -3,7 +3,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero(): $gen_engine_unit {
-			return this.$.$gen_engine_unit.make( {
+			return $gen_engine_unit.make( {
 				name: () => 'Герой',
 				type: () => 'hero',
 			} )
@@ -11,7 +11,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		enemy(): $gen_engine_unit {
-			return this.$.$gen_engine_unit.make( {
+			return $gen_engine_unit.make( {
 				name: () => 'Враг',
 				type: () => 'enemy',
 			} )
@@ -40,7 +40,7 @@ namespace $.$$ {
 		}
 
 		skill() {
-			return this.$.$gen_engine_item_skill.make( {
+			return $gen_engine_item_skill.make( {
 				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
 					console.log( 'code', this.code() )
 					eval( this.code() )
