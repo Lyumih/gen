@@ -7,7 +7,7 @@ namespace $.$$ {
 		}
 
 		equipment(): $gen_engine_item_equipment {
-			return this.$.$gen_engine_item_equipment.make( {
+			return $gen_engine_item_equipment.make( {
 				level: () => 10
 			} )
 		}
