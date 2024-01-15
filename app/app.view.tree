@@ -10,6 +10,7 @@ $gen_app $mol_book2
 		<= Dev_page $gen_dev
 		<= Auction $gen_auction
 		<= Talent_page $gen_app_talent
+		<= Craft_page $gen_app_craft
 		- <= Game_page $gen_app_game engine <= engine
 		- <= Hack_page $gen_app_admin engine <= engine
 		- <= Loot_page $gen_app_loot engine <= engine

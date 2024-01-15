@@ -99,7 +99,9 @@ namespace $.$$ {
 		talent_click( id_y_x: string, next?: any ) {
 			const point = this.parse_x_y( id_y_x )
 			const is_nearest_point = point.in_range_points( this.talents_opened() )
+
 			if( is_nearest_point ) {
+				console.log( is_nearest_point, point.simple() )
 				const new_point = this.find_empty_cell( id_y_x )
 				if( new_point ) {
 					console.log( 'add talent' )
@@ -109,7 +111,6 @@ namespace $.$$ {
 				}
 				this.talents_opened( [ ...this.talents_opened(), point.simple() ] )
 			}
-			console.log( 'talent_click', id_y_x )
 		}
 
 		talent_short_name( id: any ): string {
