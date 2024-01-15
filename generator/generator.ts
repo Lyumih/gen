@@ -10,7 +10,7 @@
  * 1. Генерируем умения, характеристики и предметы
  * 
 */
-namespace $.$$ {
+namespace $ {
 	export class $gen_generator extends $mol_object {
 
 		seed() {
