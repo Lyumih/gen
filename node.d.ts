@@ -1121,6 +1121,7 @@ declare namespace $ {
         name(next?: string): string;
         type(next?: string): string;
         level(next?: number): number;
+        points(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
         use_attack(target: $gen_engine_unit): void;
@@ -1133,6 +1134,38 @@ declare namespace $ {
         };
         next_turn(): void;
         refill(): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item extends $mol_object {
+        id_root(next?: string): string;
+        id(next?: string): string;
+        type(next?: string): string;
+        name(next?: string): string;
+        description(next?: string): string;
+        level(next?: number): number;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_prop extends $gen_engine_item {
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_equipment extends $gen_engine_item {
+        type(): string;
+        part(): string;
+        props(next?: $gen_engine_item_prop[]): $gen_engine_item_prop[];
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_craft extends $mol_object {
+        unit(next?: $gen_engine_unit): $gen_engine_unit;
+        equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
+        prop_level_up(): void;
     }
 }
 
@@ -2999,17 +3032,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item extends $mol_object {
-        id_root(next?: string): string;
-        id(next?: string): string;
-        type(next?: string): string;
-        name(next?: string): string;
-        description(next?: string): string;
-        level(next?: number): number;
-    }
-}
-
-declare namespace $ {
     class $gen_engine_item_skill extends $gen_engine_item {
         type(): string;
         use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
@@ -3444,13 +3466,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_equipment extends $gen_engine_item {
-        type(): string;
-        part(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_tick extends $mol_icon {
         path(): string;
     }
@@ -3468,14 +3483,16 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_craft extends $mol_page {
         equipment(): $gen_engine_item_equipment;
-        points(): number;
+        unit(): $gen_engine_unit;
         title(): string;
         body(): readonly any[];
+        points_title(): string;
         Points(): $$.$mol_section;
         Equipment_title(): $$.$mol_section;
         equipment_level(): string;
         Equipment_level(): $$.$mol_paragraph;
         Prop_stage(): $$.$mol_section;
+        prop_level_up(next?: any): any;
         Prop_level_up(): $mol_button_major;
         Prop_open(): $mol_button_major;
         Prop_level_down(): $mol_button_major;
@@ -3524,7 +3541,11 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_craft extends $.$gen_app_craft {
         equipment_level(): string;
-        equipment(): $gen_engine_item_equipment;
+        unit(next?: $gen_engine_unit): $gen_engine_unit;
+        equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
+        points_title(): string;
+        craft(next?: $gen_engine_craft): $gen_engine_craft;
+        prop_level_up(next?: any): void;
     }
 }
 
@@ -3533,12 +3554,14 @@ declare namespace $ {
         title(): string;
         engine(): $gen_engine;
         party(): readonly $gen_engine_unit[];
+        craft(): $gen_engine_craft;
         pages(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
         Dev_page(): $$.$gen_dev;
         Auction(): $gen_auction;
         Talent_page(): $$.$gen_app_talent;
+        active_hero(next?: any): $gen_engine_unit;
         Craft_page(): $$.$gen_app_craft;
     }
 }
@@ -3546,6 +3569,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
         party(): readonly $gen_engine_unit[];
+        craft(next?: $gen_engine_craft): $gen_engine_craft;
     }
 }
 
