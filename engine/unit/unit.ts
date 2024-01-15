@@ -23,7 +23,7 @@ namespace $ {
 
 		@$mol_mem
 		points( next?: number ) {
-			return next ?? 10
+			return next ?? 0
 		}
 
 		@$mol_mem

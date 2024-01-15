@@ -24,17 +24,16 @@ namespace $.$$ {
 
 		@$mol_mem
 		craft( next?: $gen_engine_craft ) {
-			const craft = next ?? new $gen_engine_craft
-			craft?.unit( this.unit() )
-			craft?.equipment( this.equipment() )
+			if( next ) return next
+			const craft = new $gen_engine_craft
+			craft.unit( this.unit() )
+			craft.equipment( this.equipment() )
+			console.log( 'set unit' )
 			return craft
 		}
 
 		prop_level_up( next?: any ) {
-			// this.unit().points( this.unit().points() - 1 )
 			this.craft().prop_level_up()
-			this.equipment().level( this.equipment().level() + 1 )
-			this.craft().equipment().level( 23 )
 		}
 
 	}

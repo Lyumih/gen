@@ -10,13 +10,8 @@ namespace $.$$ {
 			]
 		}
 
-		@$mol_mem
-		craft( next?: $gen_engine_craft ) {
-			if( next ) return next
-			console.log( 'next' )
-			const craft = new $gen_engine_craft
-			craft.unit( this.party()[ 0 ] )
-			return craft
+		active_hero( next?: any ): $gen_engine_unit {
+			return next ?? this.party()[ 0 ]
 		}
 	}
 }
