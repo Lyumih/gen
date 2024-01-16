@@ -12,7 +12,7 @@ $gen_app_hero $mol_page
 				title <= party_hero_name* \Герой
 				click? <=> party_hero_pick*? null
 		<= Name $mol_section title <= name \Имя:
-		<= Level $mol_text text <= level \Уровень:
+		<= Level $mol_section title <= level \Уровень:
 		<= Points_hero $mol_text text <= points \Очки пт:
 		<= Equipment_label $mol_section title \Экипировка
 		<= Equipment_list $mol_row sub <= equipment_list /

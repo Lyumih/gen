@@ -33,6 +33,7 @@ namespace $ {
 
 		@$mol_mem
 		description( next?: string ) {
+			console.log( 'description', next )
 			return next ?? 'no description'
 		}
 

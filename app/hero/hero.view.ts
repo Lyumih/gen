@@ -48,11 +48,11 @@ namespace $.$$ {
 		}
 
 		equipment_list(): readonly any[] {
-			return this.hero()?.equipments().map( item => this.Equipment( item.id() ) ) || []
+			return this.hero()?.equipments()?.map( item => this.Equipment( item.id() ) ) || []
 		}
 
 		get_equipment( id: string ) {
-			return this.hero()?.equipments().find( item => item.id() === id )
+			return this.hero()?.equipments()?.find( item => item.id() === id )
 		}
 
 		equipment_unequip( id: any, next?: any ) {
@@ -64,10 +64,11 @@ namespace $.$$ {
 		}
 
 		skill_list(): readonly any[] {
+			console.log( this.hero() )
 			return this.hero()?.skills()?.map( skill => this.Skill( skill.id() ) ) || []
 		}
 
-		get_skill( id: string ) {
+		get_skill( id?: string ) {
 			return this.hero()?.skills()?.find( skill => skill.id() === id )
 		}
 
