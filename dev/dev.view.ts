@@ -17,9 +17,13 @@ namespace $.$$ {
 			} )
 		}
 
+		battle() {
+			return new $gen_engine_battle()
+		}
+
 		test() {
 			console.log( 'Использовано тестовое умение' )
-			this.hero().use_skill( [ this.enemy() ], this.skill() )
+			this.hero().use_skill( [ this.enemy() ], this.skill(), this.battle() )
 		}
 
 		@$mol_mem

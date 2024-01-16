@@ -4,33 +4,39 @@ namespace $.$$ {
 			return `Ход: ${ this.battle().turn() }`
 		}
 
-		@$mol_mem
-		hero() {
-			return this.party()[ 1 ]
-		}
-
-		@$mol_mem
-		enemy() {
-			return this.party()[ 0 ]
-		}
-
 		restart() {
-			this.hero().refill()
-			this.enemy().refill()
+			// this.hero().refill()
+			// this.enemy().refill()
 			this.battle().turn( 0 )
 		}
 
-		is_game_continue() {
-			return !this.hero().is_dead() && !this.enemy().is_dead()
+		party_list(): readonly any[] {
+			return this.party().map( unit => this.Party( unit.id() ) )
 		}
 
-		is_game_end() {
-			return !this.is_game_continue()
+		get_party_hero( id: string ) {
+			return this.party().find( unit => unit.id() === id )
 		}
 
-		end(): string {
-			return this.is_game_continue() ? '' : 'Игра закончена'
+		party_unit_name( id: string ): string {
+			return this.get_party_hero( id )?.name() || 'no name'
 		}
+
+		unit_battle_list(): readonly any[] {
+			return this.party().map( unit => this.Unit( unit.id() ) )
+		}
+
+		// is_game_continue() {
+		// 	return !this.hero().is_dead() && !this.enemy().is_dead()
+		// }
+
+		// is_game_end() {
+		// 	return !this.is_game_continue()
+		// }
+
+		// end(): string {
+		// 	return this.is_game_continue() ? '' : 'Игра закончена'
+		// }
 
 		get_reward( next?: any ) {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )

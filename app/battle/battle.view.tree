@@ -4,16 +4,26 @@ $gen_app_battle $mol_book2
 	party /$gen_engine_item_unit
 	title \Битва
 	pages /
+		<= Party_page $mol_page
+			title \Группа
+			body /
+				<= Party_list $mol_row sub <= party_list /
+					<= Party*0 $mol_row sub /
+						<= Party_unit* $mol_button_major
+							title <= party_unit_name* \Герой
+				<= Start_battle $mol_button_major
+					title \Начать битву
 		<= Battle_page $mol_page
 			title \Битва
 			body /
 				<= Field $mol_list rows /
 					<= Turn $mol_section title <= turn \Ход: 0
-					<= Hero $gen_app_battle_unit
-						battle <= battle
-						unit <= hero $gen_engine_item_unit
-						target <= enemy $gen_engine_item_unit
-					<= Enemy $gen_app_battle_unit
+					<= Unit_battle_list $mol_row sub <= unit_battle_list /
+						<= Unit*0 $gen_app_battle_unit
+							battle <= battle
+							unit <= source* $gen_engine_item_unit
+							target <= target* $gen_engine_item_unit
+					- <= Enemy $gen_app_battle_unit
 						battle <= battle
 						unit <= enemy $gen_engine_item_unit
 						target <= hero $gen_engine_item_unit
