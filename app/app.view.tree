@@ -4,36 +4,25 @@ $gen_app $mol_page
 	party /$gen_engine_unit
 	craft $gen_engine_craft
 	tools /
+		<= Telegram $mol_link_source
+			Icon <= Telegram_icon $mol_icon_telegram
+			uri \https://github.com/Lyumih/gen
 		<= Sources $mol_link_source
-			uri <= sources_uri \https://github.com/Lyumih/gen
+			uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2_catalog
 			menu_title \Меню
 			param \page
 			spreads *
-				hero_page <= Hero_page $gen_app_hero 
+				battle_page <= Battle_page $gen_app_battle engine <= engine
+				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party
-				battle_page <= Battle_page $gen_app_battle engine <= engine
-				dev_page <= Dev_page $gen_dev
-				auction_page <= Auction $gen_auction
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_unit
-		- <= Game_page $gen_app_game engine <= engine
-		- <= Hack_page $gen_app_admin engine <= engine
-		- <= Loot_page $gen_app_loot engine <= engine
-		- <= Pages $mol_book2
-			pages <= pages /
-				<= Hero_page $gen_app_hero 
-					engine <= engine
-					party <= party
-				<= Battle_page $gen_app_battle engine <= engine
-				<= Dev_page $gen_dev
-				<= Auction $gen_auction
-				<= Talent_page $gen_app_talent
-				<= Craft_page $gen_app_craft
-					unit <= active_hero? $gen_engine_unit
-				<= Game_page $gen_app_game engine <= engine
-				<= Hack_page $gen_app_admin engine <= engine
-				<= Loot_page $gen_app_loot engine <= engine
+				auction_page <= Auction $gen_auction
+				dev_page <= Dev_page $gen_dev
+				game_page <= Game_page $gen_app_game engine <= engine
+				hack_page <= Hack_page $gen_app_admin engine <= engine
+				loot_page <= Loot_page $gen_app_loot engine <= engine
