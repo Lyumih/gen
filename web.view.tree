@@ -956,6 +956,7 @@ $gen_app_craft $mol_page
 			click? <=> prop_level_up? null
 		<= Prop_open $mol_button_major
 			title \Открыть свойство. 5пт
+			click? <=> prop_open? null
 		<= Prop_min_max $mol_expander
 			title \Максимизация базовых свойств
 			content /

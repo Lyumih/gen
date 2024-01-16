@@ -999,28 +999,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_unit extends $mol_object {
-        id(): string;
-        name(next?: string): string;
-        type(next?: string): string;
-        level(next?: number): number;
-        points(next?: number): number;
-        health(next?: number): number;
-        attack(next?: number): number;
-        use_attack(target: $gen_engine_unit): void;
-        use_skill(targets: $gen_engine_unit[], skill: any): void;
-        is_dead(): boolean;
-        common_unit(): {
-            name: string;
-            health: number;
-            attack: number;
-        };
-        next_turn(): void;
-        refill(): void;
-    }
-}
-
-declare namespace $ {
     class $gen_engine_item extends $mol_object {
         id_root(next?: string): string;
         id(next?: string): string;
@@ -1037,19 +1015,61 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_equipment extends $gen_engine_item {
+    type Config = {
+        max_props: number;
+    };
+    export class $gen_engine_item_equipment extends $gen_engine_item {
         type(): string;
         part(): string;
+        config(next?: Config): Config;
         props(next?: $gen_engine_item_prop[]): $gen_engine_item_prop[];
+        add_prop(prop: $gen_engine_item_prop): $gen_engine_item_prop[] | undefined;
+        remove_prop(id: string): boolean;
+        prop_level_up(id: string): number | undefined;
+        level(next?: number | undefined): number;
+    }
+    export {};
+}
+
+declare namespace $ {
+    class $gen_engine_unit extends $mol_object {
+        id(): string;
+        name(next?: string): string;
+        type(next?: string): string;
+        level(next?: number): number;
+        points(next?: number): number;
+        health(next?: number): number;
+        attack(next?: number): number;
+        use_attack(target: $gen_engine_unit): void;
+        use_skill(targets: $gen_engine_unit[], skill: any): void;
+        is_dead(): boolean;
+        common_unit(): {
+            name: string;
+            health: number;
+            attack: number;
+        };
+        equipments(next?: $gen_engine_item_equipment[]): $gen_engine_item_equipment[];
+        next_turn(): void;
+        refill(): void;
     }
 }
 
 declare namespace $ {
-    class $gen_engine_craft extends $mol_object {
+    type Cost = {
+        prop_level_up: number;
+        prop_add: number;
+        prop_remove: number;
+    };
+    export class $gen_engine_craft extends $mol_object {
         unit(next?: $gen_engine_unit): $gen_engine_unit;
         equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
-        prop_level_up(): void;
+        cost(next?: Cost): Cost;
+        prop_add(prop: $gen_engine_item_prop): void;
+        prop_remove(id: string): void;
+        points_minus(cost: number): void;
+        prop_level_up(id: string): void;
     }
+    export {};
 }
 
 declare namespace $ {
@@ -3426,6 +3446,7 @@ declare namespace $ {
         Prop_stage(): $$.$mol_section;
         prop_level_up(next?: any): any;
         Prop_level_up(): $mol_button_major;
+        prop_open(next?: any): any;
         Prop_open(): $mol_button_major;
         Prop_level_down(): $mol_button_major;
         Prop_fix(): $mol_button_major;
@@ -3477,6 +3498,8 @@ declare namespace $.$$ {
         equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
         points_title(): string;
         craft(next?: $gen_engine_craft): $gen_engine_craft;
+        prop_list(): readonly any[];
+        prop_open(next?: any): void;
         prop_level_up(next?: any): void;
     }
 }
@@ -3501,7 +3524,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
         party(): readonly $gen_engine_unit[];
-        craft(next?: $gen_engine_craft): $gen_engine_craft;
+        active_hero(next?: any): $gen_engine_unit;
     }
 }
 

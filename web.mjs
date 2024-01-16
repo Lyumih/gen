@@ -3143,80 +3143,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_unit extends $mol_object {
-        id() {
-            return $mol_guid();
-        }
-        name(next) {
-            return next ?? 'Unit';
-        }
-        type(next) {
-            return next ?? 'unit';
-        }
-        level(next) {
-            return next ?? 1;
-        }
-        points(next) {
-            return next ?? 10;
-        }
-        health(next) {
-            return next ?? this.common_unit().health;
-        }
-        attack(next) {
-            return next ?? this.common_unit().attack;
-        }
-        use_attack(target) {
-            target.health(target.health() - this.attack());
-            this.next_turn();
-        }
-        use_skill(targets, skill) {
-            skill.use(this, targets);
-            this.next_turn();
-        }
-        is_dead() {
-            return this.health() <= 0;
-        }
-        common_unit() {
-            return {
-                name: 'Unit',
-                health: 20,
-                attack: 10,
-            };
-        }
-        next_turn() { }
-        refill() {
-            this.health(this.common_unit().health);
-            this.attack(this.common_unit().attack);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "id", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "level", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "points", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_unit.prototype, "attack", null);
-    $.$gen_engine_unit = $gen_engine_unit;
-})($ || ($ = {}));
-//gen/engine/unit/unit.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_engine_item extends $mol_object {
         id_root(next) {
             return next ?? $mol_guid();
@@ -3234,8 +3160,7 @@ var $;
             return next ?? 'no description';
         }
         level(next) {
-            console.log('level', next);
-            return next ?? 1;
+            return next ?? 0;
         }
     }
     __decorate([
@@ -3279,16 +3204,127 @@ var $;
         part() {
             return 'equipment';
         }
+        config(next) {
+            return next ?? {
+                max_props: 10,
+            };
+        }
         props(next) {
             return next ?? [];
+        }
+        add_prop(prop) {
+            if (this.props().length < 10) {
+                return this.props([...this.props(), prop]);
+            }
+        }
+        remove_prop(id) {
+            return this.props(this.props().filter(prop => prop.id() !== id)).length >= 0;
+        }
+        prop_level_up(id) {
+            const prop = this.props().find(prop => prop.id() === id);
+            if (!prop)
+                return;
+            if (prop.level() <= 10) {
+                return prop.level(prop.level() + 1);
+            }
+        }
+        level(next) {
+            const prop_level = this.props().reduce((sum, prop) => sum + prop.level(), 0);
+            return next ?? prop_level;
         }
     }
     __decorate([
         $mol_mem
+    ], $gen_engine_item_equipment.prototype, "config", null);
+    __decorate([
+        $mol_mem
     ], $gen_engine_item_equipment.prototype, "props", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_equipment.prototype, "level", null);
     $.$gen_engine_item_equipment = $gen_engine_item_equipment;
 })($ || ($ = {}));
 //gen/engine/item/equipment/equipment.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_unit extends $mol_object {
+        id() {
+            return $mol_guid();
+        }
+        name(next) {
+            return next ?? 'Unit';
+        }
+        type(next) {
+            return next ?? 'unit';
+        }
+        level(next) {
+            return next ?? 1;
+        }
+        points(next) {
+            return next ?? 0;
+        }
+        health(next) {
+            return next ?? this.common_unit().health;
+        }
+        attack(next) {
+            return next ?? this.common_unit().attack;
+        }
+        use_attack(target) {
+            target.health(target.health() - this.attack());
+            this.next_turn();
+        }
+        use_skill(targets, skill) {
+            skill.use(this, targets);
+            this.next_turn();
+        }
+        is_dead() {
+            return this.health() <= 0;
+        }
+        common_unit() {
+            return {
+                name: 'Unit',
+                health: 20,
+                attack: 10,
+            };
+        }
+        equipments(next) {
+            return next ?? [new $gen_engine_item_equipment];
+        }
+        next_turn() { }
+        refill() {
+            this.health(this.common_unit().health);
+            this.attack(this.common_unit().attack);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "points", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_unit.prototype, "equipments", null);
+    $.$gen_engine_unit = $gen_engine_unit;
+})($ || ($ = {}));
+//gen/engine/unit/unit.ts
 ;
 "use strict";
 var $;
@@ -3300,12 +3336,41 @@ var $;
         equipment(next) {
             return next ?? new $gen_engine_item_equipment;
         }
-        prop_level_up() {
-            console.log('prop_level_up');
-            this.unit().points(this.unit().points() - 1);
-            this.equipment().level(this.equipment().level() + 1);
+        cost(next) {
+            return next ?? {
+                prop_level_up: 1,
+                prop_add: 5,
+                prop_remove: 10,
+            };
+        }
+        prop_add(prop) {
+            if (this.equipment().add_prop(prop)) {
+                this.points_minus(this.cost().prop_add);
+            }
+        }
+        prop_remove(id) {
+            if (this.equipment().remove_prop(id)) {
+                this.points_minus(this.cost().prop_remove);
+            }
+        }
+        points_minus(cost) {
+            this.unit().points(this.unit().points() - cost);
+        }
+        prop_level_up(id) {
+            if (this.equipment().prop_level_up(id)) {
+                this.points_minus(this.cost().prop_level_up);
+            }
         }
     }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_craft.prototype, "unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_craft.prototype, "equipment", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_craft.prototype, "cost", null);
     $.$gen_engine_craft = $gen_engine_craft;
 })($ || ($ = {}));
 //gen/engine/craft/craft.ts
@@ -11898,9 +11963,15 @@ var $;
             obj.click = (next) => this.prop_level_up(next);
             return obj;
         }
+        prop_open(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Prop_open() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Открыть свойство. 5пт";
+            obj.click = (next) => this.prop_open(next);
             return obj;
         }
         Prop_level_down() {
@@ -12135,6 +12206,9 @@ var $;
     ], $gen_app_craft.prototype, "Prop_level_up", null);
     __decorate([
         $mol_mem
+    ], $gen_app_craft.prototype, "prop_open", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_craft.prototype, "Prop_open", null);
     __decorate([
         $mol_mem
@@ -12259,21 +12333,28 @@ var $;
                 return hero;
             }
             equipment(next) {
-                return next ?? new $gen_engine_item_equipment;
+                return next ?? this.unit().equipments()[0];
             }
             points_title() {
                 return `пт: ${this.unit().points()}`;
             }
             craft(next) {
-                const craft = next ?? new $gen_engine_craft;
-                craft?.unit(this.unit());
-                craft?.equipment(this.equipment());
+                if (next)
+                    return next;
+                const craft = new $gen_engine_craft;
+                craft.unit(this.unit());
+                craft.equipment(this.equipment());
+                console.log('set unit');
                 return craft;
             }
+            prop_list() {
+                return this.equipment().props().map(prop => this.Prop(prop.id));
+            }
+            prop_open(next) {
+                console.log(this.equipment().props().length);
+                this.craft().prop_add(new $gen_engine_item_prop);
+            }
             prop_level_up(next) {
-                this.craft().prop_level_up();
-                this.equipment().level(this.equipment().level() + 1);
-                this.craft().equipment().level(23);
             }
         }
         __decorate([
@@ -12397,21 +12478,13 @@ var $;
                     $gen_engine_unit.make({ type: () => 'hero' }),
                 ];
             }
-            craft(next) {
-                if (next)
-                    return next;
-                console.log('next');
-                const craft = new $gen_engine_craft;
-                craft.unit(this.party()[0]);
-                return craft;
+            active_hero(next) {
+                return next ?? this.party()[0];
             }
         }
         __decorate([
             $mol_mem
         ], $gen_app.prototype, "party", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app.prototype, "craft", null);
         $$.$gen_app = $gen_app;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
