@@ -1194,8 +1194,7 @@ $gen_app $mol_page
 		<= Telegram $mol_link_source
 			Icon <= Telegram_icon $mol_icon_telegram
 			uri \https://github.com/Lyumih/gen
-		<= Sources $mol_link_source
-			uri \https://github.com/Lyumih/gen
+		<= Sources $mol_link_source uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2_catalog
 			menu_title \Меню
