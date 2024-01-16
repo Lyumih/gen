@@ -1148,7 +1148,14 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_unit extends $mol_object {
+    class $gen_engine_item_skill extends $gen_engine_item {
+        type(): string;
+        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_unit extends $gen_engine_item {
         id(): string;
         name(next?: string): string;
         type(next?: string): string;
@@ -1156,8 +1163,8 @@ declare namespace $ {
         points(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
-        use_attack(target: $gen_engine_unit): void;
-        use_skill(targets: $gen_engine_unit[], skill: any): void;
+        use_attack(target: $gen_engine_item_unit): void;
+        use_skill(targets: $gen_engine_item_unit[], skill: any): void;
         is_dead(): boolean;
         common_unit(): {
             name: string;
@@ -1165,6 +1172,9 @@ declare namespace $ {
             attack: number;
         };
         equipments(next?: $gen_engine_item_equipment[]): $gen_engine_item_equipment[];
+        skills(next?: $gen_engine_item_skill[]): $gen_engine_item_skill[];
+        inventory(next?: $gen_engine_item[]): $gen_engine_item[];
+        shop(next?: $gen_engine_item[]): $gen_engine_item[];
         next_turn(): void;
         refill(): void;
     }
@@ -1177,7 +1187,7 @@ declare namespace $ {
         prop_remove: number;
     };
     export class $gen_engine_craft extends $mol_object {
-        unit(next?: $gen_engine_unit): $gen_engine_unit;
+        unit(next?: $gen_engine_item_unit): $gen_engine_item_unit;
         equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
         cost(next?: Cost): Cost;
         prop_add(prop: $gen_engine_item_prop): void;
@@ -1475,7 +1485,7 @@ declare namespace $ {
     class $gen_engine_battle extends $mol_object {
         turn(next?: number): number;
         next_turn(): void;
-        init_unit(unit: $gen_engine_unit): void;
+        init_unit(unit: $gen_engine_item_unit): void;
     }
 }
 
@@ -2742,8 +2752,8 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
-        unit(): $gen_engine_unit;
-        target(): $gen_engine_unit;
+        unit(): $gen_engine_item_unit;
+        target(): $gen_engine_item_unit;
         attr(): Record<string, any>;
         rows(): readonly any[];
         type(): string;
@@ -2785,7 +2795,7 @@ declare namespace $.$$ {
             name: string;
             description: string;
             mode: string;
-            use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
+            use: (source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]) => void;
         } | undefined;
         skill_name(id: any): string;
         skill_description(id: any): string;
@@ -2795,7 +2805,7 @@ declare namespace $.$$ {
             name: string;
             description: string;
             mode: string;
-            use: (source: $gen_engine_unit, targets: $gen_engine_unit[]) => void;
+            use: (source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]) => void;
         }[];
     }
 }
@@ -2828,11 +2838,11 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
-        default_units(): $gen_engine_unit[];
-        static call_unit(next?: $gen_engine_unit[]): $gen_engine_unit[];
+        default_units(): $gen_engine_item_unit[];
+        static call_unit(next?: $gen_engine_item_unit[]): $gen_engine_item_unit[];
         turn(): string;
-        hero(): $gen_engine_unit;
-        enemy(): $gen_engine_unit;
+        hero(): $gen_engine_item_unit;
+        enemy(): $gen_engine_item_unit;
         use_hero_attack(next?: any): void;
         use_enemy_attack(next?: any): void;
         restart(): void;
@@ -2854,7 +2864,7 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_item extends $mol_view {
         attr(): Record<string, any>;
-        item(): Record<string, any>;
+        item(): $gen_engine_item;
         sub(): readonly any[];
         type(): string;
         name(): string;
@@ -2887,14 +2897,8 @@ declare namespace $.$$ {
         types_map(type: string): string;
         type_translate(): string;
         type(): string;
-        name(): any;
+        name(): string;
         description(): string;
-        modes_list(): readonly any[];
-        get_mode(id: string): {
-            id: string;
-            name: string;
-        } | undefined;
-        mode_name(id: any): string;
     }
 }
 
@@ -2939,18 +2943,14 @@ declare namespace $ {
     class $gen_app_hero extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(): readonly $gen_engine_unit[];
+        party(): readonly $gen_engine_item_unit[];
         active_hero(next?: any): string;
         body(): readonly any[];
-        start_battle(next?: any): any;
-        Start_battle(): $mol_button_major;
         Party_title(): $$.$mol_section;
         is_active_hero(id: any): boolean;
         party_hero_name(id: any): string;
-        Party_hero_name(id: any): $$.$mol_text;
         party_hero_pick(id: any, next?: any): any;
-        Party_hero_pick(id: any): $mol_button_minor;
-        Party(id: any): $$.$mol_pop_over;
+        Party(id: any): $mol_button_minor;
         party_list(): readonly any[];
         Party_list(): $mol_row;
         name(): string;
@@ -2997,57 +2997,31 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
-        get_active_hero(): $gen_engine_unit | undefined;
+        hero(): $gen_engine_item_unit | undefined;
         active_hero(next?: any): string;
         is_active_hero(id: string): boolean;
-        start_battle(next?: any): void;
         name(): string;
         level(): string;
+        points(): string;
         equipment_list(): readonly any[];
-        get_equipment(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
+        get_equipment(id: string): $gen_engine_item_equipment | undefined;
         equipment_unequip(id: any, next?: any): void;
         skill_points(): string;
-        skills(): string;
         skill_list(): readonly any[];
-        get_skill(id: string): ({
-            id: string;
-            name: string;
-            type: string;
-        } & {
-            level: number;
-            modes: ({
-                id: string;
-                name: string;
-                type: string;
-            } & {
-                type: "mode";
-            })[];
-        }) | undefined;
+        get_skill(id: string): $gen_engine_item_skill | undefined;
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
         skill_add_mode(id: string, next?: any): void;
         skill_unequip(id: any, next?: any): void;
         inventory_list(): readonly any[];
-        get_inventory_item(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
+        get_inventory_item(id: string): $gen_engine_item | undefined;
         inventory_item_sell(id: any, next?: any): void;
         inventory_equip(id: any, next?: any): void;
         shop_list(): readonly any[];
-        get_shop_item(id: string): {
-            id: string;
-            name: string;
-            type: string;
-        } | undefined;
+        get_shop_item(id: string): $gen_engine_item | undefined;
         shop_item_bue(id: any, next?: any): void;
-        party_list(): $mol_pop_over[];
-        get_party_hero(id: string): $gen_engine_unit | undefined;
+        party_list(): $mol_button_minor[];
+        get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_hero_name(id: string): string;
         party_hero_pick(id: string, next?: any): void;
     }
@@ -3387,7 +3361,7 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_craft extends $mol_page {
         equipment(): $gen_engine_item_equipment;
-        unit(): $gen_engine_unit;
+        unit(): $gen_engine_item_unit;
         title(): string;
         body(): readonly any[];
         points_title(): string;
@@ -3446,7 +3420,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_craft extends $.$gen_app_craft {
         equipment_level(): string;
-        unit(next?: $gen_engine_unit): $gen_engine_unit;
+        unit(next?: $gen_engine_item_unit): $gen_engine_item_unit;
         equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
         points_title(): string;
         craft(next?: $gen_engine_craft): $gen_engine_craft;
@@ -3467,13 +3441,6 @@ declare namespace $ {
         Buy_hero(id: any): $mol_button_major;
         Hero_card(id: any): $mol_row;
         Hero_list(): $$.$mol_list;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_skill extends $gen_engine_item {
-        type(): string;
-        use(source: $gen_engine_unit, targets: $gen_engine_unit[]): void;
     }
 }
 
@@ -3536,8 +3503,8 @@ declare namespace $ {
 declare namespace $ {
     class $gen_dev extends $mol_page {
         title(): string;
-        hero(): $gen_engine_unit;
-        enemy(): $gen_engine_unit;
+        hero(): $gen_engine_item_unit;
+        enemy(): $gen_engine_item_unit;
         skills(): $gen_engine_item_skill_all;
         body(): readonly any[];
         Example(): $$.$mol_text_code;
@@ -3566,8 +3533,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_dev extends $.$gen_dev {
-        hero(): $gen_engine_unit;
-        enemy(): $gen_engine_unit;
+        hero(): $gen_engine_item_unit;
+        enemy(): $gen_engine_item_unit;
         test(): void;
         all_skill_list(): readonly any[];
         get_skill(id: string): $gen_engine_item_skill | undefined;
@@ -3903,7 +3870,7 @@ declare namespace $ {
     class $gen_app extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(): readonly $gen_engine_unit[];
+        party(): readonly $gen_engine_item_unit[];
         craft(): $gen_engine_craft;
         tools(): readonly any[];
         body(): readonly any[];
@@ -3913,7 +3880,7 @@ declare namespace $ {
         Battle_page(): $$.$gen_app_battle;
         Hero_page(): $$.$gen_app_hero;
         Talent_page(): $$.$gen_app_talent;
-        active_hero(next?: any): $gen_engine_unit;
+        active_hero(next?: any): $gen_engine_item_unit;
         Craft_page(): $$.$gen_app_craft;
         Auction(): $gen_auction;
         Dev_page(): $$.$gen_dev;
@@ -3926,8 +3893,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
-        party(): readonly $gen_engine_unit[];
-        active_hero(next?: any): $gen_engine_unit;
+        party(): readonly $gen_engine_item_unit[];
+        active_hero(next?: any): $gen_engine_item_unit;
     }
 }
 

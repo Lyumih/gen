@@ -565,8 +565,8 @@ $mol_text_list_item $mol_paragraph
 		mol_text_list_item_index <= index 0
 
 $gen_app_battle_unit $mol_list
-	unit $gen_engine_unit
-	target $gen_engine_unit
+	unit $gen_engine_item_unit
+	target $gen_engine_item_unit
 	attr *
 		^
 		type <= type \
@@ -617,11 +617,7 @@ $gen_app_item $mol_view
 	attr *
 		^
 		type <= type \
-	item *
-		type \
-		name \
-		level 0
-		modes /
+	item $gen_engine_item
 	sub /
 		<= Card $mol_pop_over
 			Anchor <= Name $mol_text text <= name \
@@ -666,23 +662,16 @@ $gen_app_item_shop $gen_app_item
 $gen_app_hero $mol_page
 	title \Персонаж
 	engine $gen_engine
-	party /$gen_engine_unit
+	party /$gen_engine_item_unit
 	active_hero? \
 	body /
-		<= Start_battle $mol_button_major
-			title \Начать битву
-			click? <=> start_battle? null
 		<= Party_title $mol_section title \Отряд
-		<= Party_list $mol_row sub <= party_list / 
-			<= Party*0 $mol_pop_over
+		<= Party_list $mol_row sub <= party_list /
+			<= Party*0 $mol_button_minor
 				attr *
 					active <= is_active_hero* false
-				Anchor <= Party_hero_name* $mol_text 
-					text <= party_hero_name* \Герой
-				bubble_content /
-					<= Party_hero_pick* $mol_button_minor
-						title \Выбрать героя
-						click? <=> party_hero_pick*? null
+				title <= party_hero_name* \Герой
+				click? <=> party_hero_pick*? null
 		<= Name $mol_section title <= name \Имя:
 		<= Level $mol_text text <= level \Уровень:
 		<= Points_hero $mol_text text <= points \Очки пт:
@@ -816,7 +805,7 @@ $mol_check_box $mol_check
 
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
-	unit $gen_engine_unit
+	unit $gen_engine_item_unit
 	title \Крафт
 	body /
 		<= Points $mol_section title <= points_title \
@@ -971,16 +960,16 @@ $mol_textarea_edit $mol_string
 - Список всех умений - это реальный список умений с их логикой
 $gen_dev $mol_page
 	title \Разработка умения
-	hero $gen_engine_unit
-	enemy $gen_engine_unit
+	hero $gen_engine_item_unit
+	enemy $gen_engine_item_unit
 	skills $gen_engine_item_skill_all
 	body /
 		<= Instruction $mol_expander
 			title \Инструкция
 			content /
 				<= Example $mol_text_code text \
-					\source: $gen_engine_unit - Источник
-					\target: $gen_engine_unit[] - возможные цели
+					\source: $gen_engine_item_unit - Источник
+					\target: $gen_engine_item_unit[] - возможные цели
 					\targets[ 0 ] - враг
 					\* Пример 1. Хил себя на 100 *
 					\source.health( source.health() + 100 )
@@ -1188,7 +1177,7 @@ $mol_book2_catalog $mol_book2
 $gen_app $mol_page
 	title \Игра Gen
 	engine $gen_engine
-	party /$gen_engine_unit
+	party /$gen_engine_item_unit
 	craft $gen_engine_craft
 	tools /
 		<= Telegram $mol_link_source
@@ -1206,7 +1195,7 @@ $gen_app $mol_page
 					party <= party
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
-					unit <= active_hero? $gen_engine_unit
+					unit <= active_hero? $gen_engine_item_unit
 				auction_page <= Auction $gen_auction
 				dev_page <= Dev_page $gen_dev
 				game_page <= Game_page $gen_app_game engine <= engine

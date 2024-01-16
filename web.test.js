@@ -3516,8 +3516,23 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    const skill = $gen_engine_item_skill.make({
+        id_root: () => '1',
+    });
+    $mol_test({
+        'skill type'() {
+            $mol_assert_equal(skill.type(), 'skill');
+            $mol_assert_equal(skill.id_root(), '1');
+        }
+    });
+})($ || ($ = {}));
+//gen/engine/item/skill/skill.test.ts
+;
+"use strict";
+var $;
+(function ($) {
     const craft = new $gen_engine_craft;
-    const unit = new $gen_engine_unit;
+    const unit = new $gen_engine_item_unit;
     const equipment = new $gen_engine_item_equipment;
     craft.unit(unit);
     craft.equipment(equipment);
@@ -3605,8 +3620,8 @@ var $;
 var $;
 (function ($) {
     const battle = $gen_engine_battle.make({});
-    const hero = $gen_engine_unit.make({});
-    const enemy = $gen_engine_unit.make({});
+    const hero = $gen_engine_item_unit.make({});
+    const enemy = $gen_engine_item_unit.make({});
     battle.init_unit(hero);
     battle.init_unit(enemy);
     const skill = {
@@ -4096,20 +4111,5 @@ var $;
     });
 })($ || ($ = {}));
 //gen/engine/point/point.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    const skill = $gen_engine_item_skill.make({
-        id_root: () => '1',
-    });
-    $mol_test({
-        'skill type'() {
-            $mol_assert_equal(skill.type(), 'skill');
-            $mol_assert_equal(skill.id_root(), '1');
-        }
-    });
-})($ || ($ = {}));
-//gen/engine/item/skill/skill.test.ts
 
 //# sourceMappingURL=web.test.js.map
