@@ -95,35 +95,12 @@ $mol_link_source $mol_link
 	sub /
 		<= Icon $mol_icon_script_text
 
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 7
-	width_limit +Infinity
-	row_width 0
-	sub / <= title
-
-$mol_section $mol_list
-	level 1
-	rows /
-		<= Head $mol_view
-			sub <= head /
-				<= Title $mol_paragraph
-					dom_name <= title_dom_name \h1
-					title <= title
-				<= Tools $mol_view sub <= tools /
-		<= Content $mol_list
-			rows <= content /
+$mol_book2 $mol_scroll
+	menu_title \
+	sub <= pages /$mol_view
+	minimal_width 0
+	Placeholder $mol_view
+	Gap* $mol_view title \
 
 $mol_speck $mol_view
 	attr *
@@ -163,6 +140,40 @@ $mol_button_major $mol_button_typed
 	attr *
 		^
 		mol_theme \$mol_theme_accent
+
+$mol_row $mol_view
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
+
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit +Infinity
+	row_width 0
+	sub / <= title
+
+$mol_section $mol_list
+	level 1
+	rows /
+		<= Head $mol_view
+			sub <= head /
+				<= Title $mol_paragraph
+					dom_name <= title_dom_name \h1
+					title <= title
+				<= Tools $mol_view sub <= tools /
+		<= Content $mol_list
+			rows <= content /
+
+$mol_button_minor $mol_button_typed
 
 $mol_stack $mol_view
 
@@ -208,8 +219,6 @@ $mol_text_code_row $mol_paragraph
 		needle <= highlight \
 		uri <= token_uri* \
 	find_pos* null
-
-$mol_button_minor $mol_button_typed
 
 $mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
 
@@ -582,7 +591,9 @@ $gen_app_battle_unit $mol_list
 			click? <=> use_attack? null
 		<= Skill_list $mol_list rows <= skill_list /
 			<= Skill*0 $mol_pop_over
-				Anchor <= Skill_name* $mol_text text <= skill_name* \Умение: Сильный удар
+				Anchor <= Skill_name* $mol_button_minor 
+					title <= skill_name* \Умение: Сильный удар
+					click? <=> use_skill*? null
 				bubble_content /
 					<= Skill_bubble_name* $mol_text text <= skill_name*
 					<= Skill_description* $mol_text text <= skill_description* \Описание
@@ -590,34 +601,48 @@ $gen_app_battle_unit $mol_list
 						title \Использовать умение
 						click? <=> use_skill*? null
 
-$gen_app_battle $mol_page
+$gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
 	title \Битва
-	body /
-		<= Field $mol_list rows /
-			<= Turn $mol_section title <= turn \Ход: 0
-			<= Hero $gen_app_battle_unit
-				battle <= battle
-				unit <= hero $gen_engine_item_unit
-				target <= enemy $gen_engine_item_unit
-			<= Enemy $gen_app_battle_unit
-				battle <= battle
-				unit <= enemy $gen_engine_item_unit
-				target <= hero $gen_engine_item_unit
-		<= End $mol_paragraph title <= end \
-		<= Reward $mol_button_major
-			enabled <= is_game_end false
-			title \Получить награду
-			click? <= get_reward? null
-		<= Restart $mol_button_minor
-			title \Начать заново
-			click? <=> restart? null
-		<= History_label $mol_section title \История
-		<= History $mol_text text <= history \
-
-$mol_row $mol_view
+	pages /
+		<= Party_page $mol_page
+			title \Группа
+			body /
+				<= Party_list $mol_row sub <= party_list /
+					<= Party*0 $mol_row sub /
+						<= Party_unit* $mol_button_major
+							title <= party_unit_name* \Герой
+				<= Start_battle $mol_button_major
+					title \Начать битву
+		<= Battle_page $mol_page
+			title \Битва
+			body /
+				<= Field $mol_list rows /
+					<= Turn $mol_section title <= turn \Ход: 0
+					<= Unit_battle_list $mol_row sub <= unit_battle_list /
+						<= Unit*0 $gen_app_battle_unit
+							battle <= battle
+							unit <= source* $gen_engine_item_unit
+							target <= target* $gen_engine_item_unit
+					- <= Enemy $gen_app_battle_unit
+						battle <= battle
+						unit <= enemy $gen_engine_item_unit
+						target <= hero $gen_engine_item_unit
+				<= End $mol_paragraph title <= end \
+				<= Reward $mol_button_major
+					enabled <= is_game_end false
+					title \Получить награду
+					click? <= get_reward? null
+				<= Restart $mol_button_minor
+					title \Начать заново
+					click? <=> restart? null
+		<= History_page $mol_page
+			title \История
+			body /
+				<= History_label $mol_section title \История
+				<= History $mol_text text <= history \
 
 $gen_app_item $mol_view
 	attr *
@@ -1075,13 +1100,6 @@ $gen_app_loot $mol_page
 			click? <=> generate_item? null
 		<= New_item $mol_text text <= new_item \Новый предмет
 		<= History_item $mol_text text <= history_text \История предметов
-
-$mol_book2 $mol_scroll
-	menu_title \
-	sub <= pages /$mol_view
-	minimal_width 0
-	Placeholder $mol_view
-	Gap* $mol_view title \
 
 $mol_nav $mol_plugin
 	cycle? false

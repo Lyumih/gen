@@ -1118,12 +1118,33 @@ declare namespace $ {
     class $gen_engine_item extends $mol_object {
         id_root(next?: string): string;
         id(next?: string): string;
+        config(next?: any): {};
+        log(): void;
         reference(next?: string): string;
         type(next?: string): string;
         part(next?: string): string;
         name(next?: string): string;
         description(next?: string): string;
         level(next?: number): number;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_skill extends $gen_engine_item {
+        type(): string;
+        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_battle extends $mol_object {
+        turn(next?: number): number;
+        next_turn(): void;
+        init_unit(unit: $gen_engine_item_unit): void;
+        history(next?: string[]): string[];
+        log(next: string): void;
+        log_attack(source: $gen_engine_item_unit, target: $gen_engine_item_unit): void;
+        log_skill(source: $gen_engine_item_unit, target: $gen_engine_item_unit, skill: $gen_engine_item_skill): void;
     }
 }
 
@@ -1150,13 +1171,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_skill extends $gen_engine_item {
-        type(): string;
-        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
-    }
-}
-
-declare namespace $ {
     class $gen_engine_item_buff extends $gen_engine_item {
         type(): string;
     }
@@ -1171,8 +1185,8 @@ declare namespace $ {
         points(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
-        use_attack(target: $gen_engine_item_unit): void;
-        use_skill(targets: $gen_engine_item_unit[], skill: any): void;
+        use_attack(target: $gen_engine_item_unit, battle: $gen_engine_battle): void;
+        use_skill(targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle): void;
         is_dead(): boolean;
         common_unit(): {
             name: string;
@@ -1491,93 +1505,22 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_battle extends $mol_object {
-        turn(next?: number): number;
-        next_turn(): void;
-        init_unit(unit: $gen_engine_item_unit): void;
-        history(next?: string[]): string[];
-        log(next: string): void;
-        log_attack(source: $gen_engine_item_unit, target: $gen_engine_item_unit): void;
-        log_skill(source: $gen_engine_item_unit, target: $gen_engine_item_unit, skill: $gen_engine_item_skill): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_list extends $mol_view {
-        render_visible_only(): boolean;
-        render_over(): number;
+    class $mol_book2 extends $mol_scroll {
+        menu_title(): string;
         sub(): readonly $mol_view[];
-        Empty(): $mol_view;
-        Gap_before(): $mol_view;
-        Gap_after(): $mol_view;
-        view_window(): readonly any[];
-        rows(): readonly $mol_view[];
-        gap_before(): number;
-        gap_after(): number;
-    }
-}
-
-declare namespace $ {
-    function $mol_support_css_overflow_anchor(this: $): boolean;
-}
-
-declare namespace $.$$ {
-    class $mol_list extends $.$mol_list {
-        sub(): readonly $mol_view[];
-        render_visible_only(): boolean;
-        view_window(next?: [number, number]): [number, number];
-        gap_before(): number;
-        gap_after(): number;
-        sub_visible(): $mol_view[];
-        minimal_height(): number;
-        force_render(path: Set<$mol_view>): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_paragraph extends $mol_view {
-        line_height(): number;
-        letter_width(): number;
-        width_limit(): number;
-        row_width(): number;
-        sub(): readonly any[];
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_paragraph extends $.$mol_paragraph {
-        maximal_width(): number;
-        width_limit(): number;
         minimal_width(): number;
-        row_width(): number;
-        minimal_height(): number;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_section extends $mol_list {
-        level(): number;
-        rows(): readonly any[];
-        title_dom_name(): string;
-        Title(): $$.$mol_paragraph;
-        tools(): readonly any[];
-        Tools(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        content(): readonly any[];
-        Content(): $$.$mol_list;
+        Placeholder(): $mol_view;
+        Gap(id: any): $mol_view;
+        pages(): readonly $mol_view[];
     }
 }
 
 declare namespace $.$$ {
-    class $mol_section extends $.$mol_section {
-        title_dom_name(): string;
+    class $mol_book2 extends $.$mol_book2 {
+        title(): string;
+        menu_title(): string;
+        sub(): readonly $mol_view[];
+        bring(): void;
     }
 }
 
@@ -1758,6 +1701,104 @@ declare namespace $ {
 declare namespace $ {
     class $mol_button_major extends $mol_button_typed {
         attr(): Record<string, any>;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_row extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_list extends $mol_view {
+        render_visible_only(): boolean;
+        render_over(): number;
+        sub(): readonly $mol_view[];
+        Empty(): $mol_view;
+        Gap_before(): $mol_view;
+        Gap_after(): $mol_view;
+        view_window(): readonly any[];
+        rows(): readonly $mol_view[];
+        gap_before(): number;
+        gap_after(): number;
+    }
+}
+
+declare namespace $ {
+    function $mol_support_css_overflow_anchor(this: $): boolean;
+}
+
+declare namespace $.$$ {
+    class $mol_list extends $.$mol_list {
+        sub(): readonly $mol_view[];
+        render_visible_only(): boolean;
+        view_window(next?: [number, number]): [number, number];
+        gap_before(): number;
+        gap_after(): number;
+        sub_visible(): $mol_view[];
+        minimal_height(): number;
+        force_render(path: Set<$mol_view>): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_paragraph extends $mol_view {
+        line_height(): number;
+        letter_width(): number;
+        width_limit(): number;
+        row_width(): number;
+        sub(): readonly any[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_paragraph extends $.$mol_paragraph {
+        maximal_width(): number;
+        width_limit(): number;
+        minimal_width(): number;
+        row_width(): number;
+        minimal_height(): number;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_section extends $mol_list {
+        level(): number;
+        rows(): readonly any[];
+        title_dom_name(): string;
+        Title(): $$.$mol_paragraph;
+        tools(): readonly any[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_section extends $.$mol_section {
+        title_dom_name(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_button_minor extends $mol_button_typed {
     }
 }
 
@@ -2039,14 +2080,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $mol_button_minor extends $mol_button_typed {
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -2782,11 +2815,11 @@ declare namespace $ {
         use_attack(next?: any): any;
         Attack_button(): $mol_button_major;
         skill_name(id: any): string;
-        Skill_name(id: any): $$.$mol_text;
+        use_skill(id: any, next?: any): any;
+        Skill_name(id: any): $mol_button_minor;
         Skill_bubble_name(id: any): $$.$mol_text;
         skill_description(id: any): string;
         Skill_description(id: any): $$.$mol_text;
-        use_skill(id: any, next?: any): any;
         Skill_use(id: any): $mol_button_minor;
         Skill(id: any): $$.$mol_pop_over;
         skill_list(): readonly any[];
@@ -2816,18 +2849,26 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_app_battle extends $mol_page {
+    class $gen_app_battle extends $mol_book2 {
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
         party(): readonly $gen_engine_item_unit[];
         title(): string;
-        body(): readonly any[];
+        pages(): readonly any[];
+        party_unit_name(id: any): string;
+        Party_unit(id: any): $mol_button_major;
+        Party(id: any): $mol_row;
+        party_list(): readonly any[];
+        Party_list(): $mol_row;
+        Start_battle(): $mol_button_major;
+        Party_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
-        hero(): $gen_engine_item_unit;
-        enemy(): $gen_engine_item_unit;
-        Hero(): $$.$gen_app_battle_unit;
-        Enemy(): $$.$gen_app_battle_unit;
+        source(id: any): $gen_engine_item_unit;
+        target(id: any): $gen_engine_item_unit;
+        Unit(id: any): $$.$gen_app_battle_unit;
+        unit_battle_list(): readonly any[];
+        Unit_battle_list(): $mol_row;
         Field(): $$.$mol_list;
         end(): string;
         End(): $$.$mol_paragraph;
@@ -2836,32 +2877,25 @@ declare namespace $ {
         Reward(): $mol_button_major;
         restart(next?: any): any;
         Restart(): $mol_button_minor;
+        Battle_page(): $mol_page;
         History_label(): $$.$mol_section;
         history(): string;
         History(): $$.$mol_text;
+        History_page(): $mol_page;
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
         turn(): string;
-        hero(): $gen_engine_item_unit;
-        enemy(): $gen_engine_item_unit;
         restart(): void;
-        is_game_continue(): boolean;
-        is_game_end(): boolean;
-        end(): string;
+        party_list(): readonly any[];
+        get_party_hero(id: string): $gen_engine_item_unit | undefined;
+        party_unit_name(id: string): string;
+        unit_battle_list(): readonly any[];
         get_reward(next?: any): void;
         history(): string;
     }
-}
-
-declare namespace $ {
-    class $mol_row extends $mol_view {
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -3536,6 +3570,7 @@ declare namespace $.$$ {
     class $gen_dev extends $.$gen_dev {
         hero(): $gen_engine_item_unit;
         enemy(): $gen_engine_item_unit;
+        battle(): $gen_engine_battle;
         test(): void;
         all_skill_list(): readonly any[];
         get_skill(id: string): $gen_engine_item_skill | undefined;
@@ -3690,29 +3725,6 @@ declare namespace $.$$ {
         new_item(): string;
         history_text(): string;
     }
-}
-
-declare namespace $ {
-    class $mol_book2 extends $mol_scroll {
-        menu_title(): string;
-        sub(): readonly $mol_view[];
-        minimal_width(): number;
-        Placeholder(): $mol_view;
-        Gap(id: any): $mol_view;
-        pages(): readonly $mol_view[];
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_book2 extends $.$mol_book2 {
-        title(): string;
-        menu_title(): string;
-        sub(): readonly $mol_view[];
-        bring(): void;
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
