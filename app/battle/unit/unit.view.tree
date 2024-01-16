@@ -1,4 +1,5 @@
 $gen_app_battle_unit $mol_list
+	battle $gen_engine_battle
 	unit $gen_engine_item_unit
 	target $gen_engine_item_unit
 	attr *

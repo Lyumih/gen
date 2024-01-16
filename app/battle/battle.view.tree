@@ -1,16 +1,19 @@
 $gen_app_battle $mol_page
 	engine $gen_engine
 	battle $gen_engine_battle
+	party /$gen_engine_item_unit
 	title \Битва
 	body /
 		<= Field $mol_list rows /
 			<= Turn $mol_section title <= turn \Ход: 0
 			<= Hero $gen_app_battle_unit
-				unit <= hero null
-				target <= enemy null
+				battle <= battle
+				unit <= hero $gen_engine_item_unit
+				target <= enemy $gen_engine_item_unit
 			<= Enemy $gen_app_battle_unit
-				unit <= enemy null
-				target <= hero null
+				battle <= battle
+				unit <= enemy $gen_engine_item_unit
+				target <= hero $gen_engine_item_unit
 		<= End $mol_paragraph title <= end \
 		<= Reward $mol_button_major
 			enabled <= is_game_end false
@@ -19,3 +22,5 @@ $gen_app_battle $mol_page
 		<= Restart $mol_button_minor
 			title \Начать заново
 			click? <=> restart? null
+		<= History_label $mol_section title \История
+		<= History $mol_text text <= history \

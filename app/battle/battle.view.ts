@@ -1,43 +1,17 @@
 namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
-
-		default_units() {
-			const units = [
-				...$gen_app_battle.call_unit(),
-				$gen_engine_item_unit.make( {} ),
-				$gen_engine_item_unit.make( {} )
-			]
-			units.forEach( unit => unit.next_turn = () => this.battle().next_turn() )
-			return units
-		}
-
-		@$mol_mem
-		static call_unit( next?: $gen_engine_item_unit[] ) {
-			return next ?? []
-		}
-
 		turn(): string {
 			return `Ход: ${ this.battle().turn() }`
 		}
 
 		@$mol_mem
 		hero() {
-			return this.default_units()[ 0 ]
+			return this.party()[ 1 ]
 		}
 
 		@$mol_mem
 		enemy() {
-			return $gen_engine_item_unit.make( {
-				next_turn: () => this.battle().next_turn(),
-			} )
-		}
-
-		use_hero_attack( next?: any ) {
-			this.hero().use_attack( this.enemy() )
-		}
-
-		use_enemy_attack( next?: any ) {
-			this.enemy().use_attack( this.hero() )
+			return this.party()[ 2 ]
 		}
 
 		restart() {
@@ -61,6 +35,11 @@ namespace $.$$ {
 		get_reward( next?: any ) {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )
 			this.restart()
+		}
+
+		history(): string {
+			console.log( this.battle().history() )
+			return this.battle().history().join( '\n' )
 		}
 
 	}

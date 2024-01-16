@@ -36,6 +36,7 @@ namespace $ {
 		 */
 		jin() {
 			const unit = new $gen_engine_item_unit()
+			unit.reference( 'https://t.me/nin_jin' )
 			unit.name( 'Jin' )
 			unit.level( 1 )
 			unit.points( 1 )
@@ -47,6 +48,7 @@ namespace $ {
 
 		mario() {
 			const unit = new $gen_engine_item_unit()
+			unit.reference( 'https://t.me/fkusnyahin' )
 			unit.name( 'Mario' )
 			unit.level( 333 )
 			unit.points( 333 )

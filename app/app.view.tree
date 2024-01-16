@@ -13,7 +13,9 @@ $gen_app $mol_page
 			menu_title \Меню
 			param \page
 			spreads *
-				battle_page <= Battle_page $gen_app_battle engine <= engine
+				battle_page <= Battle_page $gen_app_battle 
+					engine <= engine
+					party <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party

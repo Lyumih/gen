@@ -15,6 +15,12 @@ namespace $ {
 			return next ?? $mol_guid()
 		}
 
+		/** Источник вдохновения */
+		@$mol_mem
+		reference( next?: string ) {
+			return next ?? 'Gen'
+		}
+
 
 		@$mol_mem
 		type( next?: string ) {
@@ -28,6 +34,7 @@ namespace $ {
 
 		@$mol_mem
 		name( next?: string ) {
+			console.log( 'name', next )
 			return next ?? 'no name'
 		}
 

@@ -27,6 +27,7 @@ namespace $ {
 
 		strong_attack() {
 			const skill = new $gen_engine_item_skill()
+			skill.level( 12 )
 			skill.name( 'Сильный удар' )
 			skill.description( 'Урон x2' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
@@ -38,6 +39,7 @@ namespace $ {
 		strong_attack_and_heal() {
 			const skill = new $gen_engine_item_skill()
 			skill.name( 'Сильный удар и самолечение' )
+			skill.level( 44 )
 			skill.description( 'Урон x4 и лечение себя на 10' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
@@ -48,14 +50,16 @@ namespace $ {
 
 		hyperfocal_madness_wind_generator() {
 			const skill = new $gen_engine_item_skill()
+			skill.reference( 'nin-jin' )
 			skill.name( 'Гиперфокальный ветрогенератор безумия' )
+			skill.level( 5 )
 			skill.description( '5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
-				const debuff_mem = new $gen_engine_item_buff()
-				debuff_mem.name( 'mem' )
-				debuff_mem.part( 'debuff' )
-				targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
-				if( Math.random() < 0.05 ) {
+				const debuff_mem = new this.$.$gen_engine_item_skill
+				// debuff_mem.name( 'mem' )
+				// debuff_mem.part( 'debuff' )
+				// targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
+				if( Math.random() < 0.25 ) {
 					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 999 )
 				}
 			}

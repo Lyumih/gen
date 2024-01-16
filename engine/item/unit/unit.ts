@@ -65,6 +65,7 @@ namespace $ {
 
 		@$mol_mem
 		skills( next?: $gen_engine_item_skill[] ): $gen_engine_item_skill[] {
+			console.log( 'hero skills', next )
 			return next ?? []
 		}
 

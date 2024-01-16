@@ -15,20 +15,24 @@ namespace $.$$ {
 			return this.types_map( this.item().type() )
 		}
 
+		@$mol_mem
 		type(): string {
 			return this.item().type()
 		}
 
+		@$mol_mem
 		name() {
-			return this.item().name()
+			return this.item().name() + this.item().level()
 		}
 
+		@$mol_mem
 		level(): string {
 			return `Ур. ${ this.item().level() }`
 		}
 
-		description(): string {
-			return this.item().description() ? `${ this.item().description() }` : ''
+		@$mol_mem
+		description( next?: string ): string {
+			return next ?? this.item().description() ? `${ this.item().description() }` : ''
 		}
 
 		// modes_list(): readonly any[] {

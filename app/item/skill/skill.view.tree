@@ -1,4 +1,5 @@
 $gen_app_item_skill $gen_app_item
+	item $gen_engine_item_skill
 	add_mode? null
 	add_title \+ ур
 	remove_title \Снять
