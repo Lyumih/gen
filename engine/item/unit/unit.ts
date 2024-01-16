@@ -69,6 +69,11 @@ namespace $ {
 		}
 
 		@$mol_mem
+		buffs( next?: $gen_engine_item_buff[] ): $gen_engine_item_buff[] {
+			return next ?? []
+		}
+
+		@$mol_mem
 		inventory( next?: $gen_engine_item[] ): $gen_engine_item[] {
 			return next ?? []
 		}

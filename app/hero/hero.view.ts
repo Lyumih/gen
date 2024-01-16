@@ -1,27 +1,38 @@
 namespace $.$$ {
 	export class $gen_app_hero extends $.$gen_app_hero {
 
+		@$mol_mem
+		party_list() {
+			return this.party().map( unit => this.Party( unit.id() ) )
+		}
 
+		get_party_hero( id: string ) {
+			return this.party().find( unit => unit.id() === id )
+		}
+
+		party_hero_name( id: string ): string {
+			return this.get_party_hero( id )?.name() || 'no name'
+		}
+
+		party_hero_pick( id: string, next?: any ) {
+			console.log( id, next )
+			this.active_hero( id )
+		}
+
+		@$mol_mem
 		hero() {
 			return this.party().find( unit => unit.id() === this.active_hero() )
 		}
 
 		@$mol_mem
 		active_hero( next?: any ): string {
-			return next ?? this.party()[ 0 ]?.id()
+			console.log( next )
+			return next ?? this.party()[ 0 ]?.id() ?? ''
 		}
 
 		is_active_hero( id: string ) {
-			return this.active_hero() === id
+			return this.hero()?.id() === id
 		}
-
-		// start_battle( next?: any ) {
-		// 	console.log( 'start battle' )
-		// 	// Тут надо как-то передать в gen_app_battle 
-		// 	// Выбранного героя
-		// 	const unit = this.hero()
-		// 	unit && this.$.$gen_app_battle.call_unit( [ unit ] )
-		// }
 
 		name(): string {
 			return `Имя: ${ this.hero()?.name() }`
@@ -32,6 +43,7 @@ namespace $.$$ {
 		}
 
 		points(): string {
+			console.log( this.hero()?.points() )
 			return `Очков: ${ this.hero()?.points() }`
 		}
 
@@ -103,22 +115,6 @@ namespace $.$$ {
 			this.engine().shop_buy( id )
 		}
 
-		party_list() {
-			return this.party().map( unit => this.Party( unit.id() ) )
-		}
-
-		get_party_hero( id: string ) {
-			return this.party().find( unit => unit.id() === id )
-		}
-
-		party_hero_name( id: string ): string {
-			return this.get_party_hero( id )?.name() || 'no name'
-		}
-
-		party_hero_pick( id: string, next?: any ) {
-			console.log( id, next )
-			this.active_hero( id )
-		}
 
 	}
 }

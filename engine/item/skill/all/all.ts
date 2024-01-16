@@ -11,32 +11,55 @@ namespace $ {
 
 		resource(): $gen_engine_item_skill[] {
 			return [
-				$gen_engine_item_skill.make( {
-					id_root: () => this.create_id_root( '1' ),
-					name: () => 'Хил',
-					description: () => 'Исцеляет на 10 здоровья',
-					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
-						source.health( source.health() + 10 )
-					}
-				} ),
-				$gen_engine_item_skill.make( {
-					id_root: () => this.create_id_root( '2' ),
-					name: () => 'Сильный удар',
-					description: () => 'Урон x2',
-					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
-						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
-					}
-				} ),
-				$gen_engine_item_skill.make( {
-					id_root: () => this.create_id_root( '3' ),
-					name: () => 'Сильный удар и самолечение',
-					description: () => 'Урон x4 и лечение себя на 10',
-					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
-						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
-						source.health( source.health() + 10 )
-					}
-				} )
+				this.heal(), this.strong_attack(), this.strong_attack_and_heal(), this.hyperfocal_madness_wind_generator(),
 			]
+		}
+
+		heal() {
+			const skill = new $gen_engine_item_skill()
+			skill.name( 'Хил' )
+			skill.description( 'Исцеляет на 10 здоровья' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+				source.health( source.health() + 10 )
+			}
+			return skill
+		}
+
+		strong_attack() {
+			const skill = new $gen_engine_item_skill()
+			skill.name( 'Сильный удар' )
+			skill.description( 'Урон x2' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
+			}
+			return skill
+		}
+
+		strong_attack_and_heal() {
+			const skill = new $gen_engine_item_skill()
+			skill.name( 'Сильный удар и самолечение' )
+			skill.description( 'Урон x4 и лечение себя на 10' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
+				source.health( source.health() + 10 )
+			}
+			return skill
+		}
+
+		hyperfocal_madness_wind_generator() {
+			const skill = new $gen_engine_item_skill()
+			skill.name( 'Гиперфокальный ветрогенератор безумия' )
+			skill.description( '5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+				const debuff_mem = new $gen_engine_item_buff()
+				debuff_mem.name( 'mem' )
+				debuff_mem.part( 'debuff' )
+				targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
+				if( Math.random() < 0.05 ) {
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 999 )
+				}
+			}
+			return skill
 		}
 
 

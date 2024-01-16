@@ -18,7 +18,12 @@ namespace $ {
 
 		@$mol_mem
 		type( next?: string ) {
-			return 'item'
+			return next ?? 'item'
+		}
+
+		@$mol_mem
+		part( next?: string ) {
+			return next ?? 'part'
 		}
 
 		@$mol_mem

@@ -10,8 +10,9 @@ namespace $ {
 		}
 
 		/** Часть снаряжения */
-		part() {
-			return 'equipment'
+		@$mol_mem
+		part( next?: string ): string {
+			return next ?? 'equipment'
 		}
 
 		@$mol_mem
