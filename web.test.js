@@ -3516,42 +3516,39 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    var $$;
-    (function ($$) {
-        const craft = new $gen_engine_craft;
-        const unit = new $gen_engine_unit;
-        const equipment = new $gen_engine_item_equipment;
-        craft.unit(unit);
-        craft.equipment(equipment);
-        const repeat = (times, cb) => {
-            for (let i = 0; i < times; i++) {
-                cb(i);
-            }
-        };
-        $mol_test({
-            "empty user add points (reactivity)"() {
-                $mol_assert_equal(craft.equipment().level(), craft.unit().points(), equipment.props().length, 0);
-                $mol_assert_equal(craft.unit().points(100000), unit.points(), 100000);
-            },
-            "add 10 prop"() {
-                repeat(15, () => craft.prop_add(new $gen_engine_item_prop));
-                $mol_assert_equal(equipment.props().length, 10);
-                $mol_assert_equal(unit.points(), 99950);
-            },
-            "remove 10 prop"() {
-                repeat(10, () => craft.prop_remove(equipment.props()[equipment.props().length - 1]?.id()));
-                $mol_assert_equal(equipment.props().length, 0);
-                $mol_assert_equal(unit.points(), 99850);
-            },
-            "level up all props 10 times"() {
-                repeat(10, () => craft.prop_add(new $gen_engine_item_prop));
-                $mol_assert_equal(unit.points(), 99800);
-                repeat(10, (i) => repeat(10, () => craft.prop_level_up(equipment.props()[i]?.id())));
-                $mol_assert_equal(craft.equipment().props()[0].level(), craft.equipment().props()[9].level(), 10);
-                $mol_assert_equal(unit.points(), 99700);
-            }
-        });
-    })($$ = $.$$ || ($.$$ = {}));
+    const craft = new $gen_engine_craft;
+    const unit = new $gen_engine_unit;
+    const equipment = new $gen_engine_item_equipment;
+    craft.unit(unit);
+    craft.equipment(equipment);
+    const repeat = (times, cb) => {
+        for (let i = 0; i < times; i++) {
+            cb(i);
+        }
+    };
+    $mol_test({
+        "empty user add points (reactivity)"() {
+            $mol_assert_equal(craft.equipment().level(), craft.unit().points(), equipment.props().length, 0);
+            $mol_assert_equal(craft.unit().points(100000), unit.points(), 100000);
+        },
+        "add 10 prop"() {
+            repeat(15, () => craft.prop_add(new $gen_engine_item_prop));
+            $mol_assert_equal(equipment.props().length, 10);
+            $mol_assert_equal(unit.points(), 99950);
+        },
+        "remove 10 prop"() {
+            repeat(10, () => craft.prop_remove(equipment.props()[equipment.props().length - 1]?.id()));
+            $mol_assert_equal(equipment.props().length, 0);
+            $mol_assert_equal(unit.points(), 99850);
+        },
+        "level up all props 10 times"() {
+            repeat(10, () => craft.prop_add(new $gen_engine_item_prop));
+            $mol_assert_equal(unit.points(), 99800);
+            repeat(10, (i) => repeat(10, () => craft.prop_level_up(equipment.props()[i]?.id())));
+            $mol_assert_equal(craft.equipment().props()[0].level(), craft.equipment().props()[9].level(), 10);
+            $mol_assert_equal(unit.points(), 99700);
+        }
+    });
 })($ || ($ = {}));
 //gen/engine/craft/craft.test.ts
 ;
@@ -3603,6 +3600,52 @@ var $;
     });
 })($ || ($ = {}));
 //mol/state/arg/arg.web.test.ts
+;
+"use strict";
+var $;
+(function ($_1) {
+    var $$;
+    (function ($$) {
+        $mol_test({
+            'handle clicks by default'($) {
+                let clicked = false;
+                const clicker = $mol_button.make({
+                    $,
+                    click: (event) => { clicked = true; },
+                });
+                const element = clicker.dom_tree();
+                const event = $mol_dom_context.document.createEvent('mouseevent');
+                event.initEvent('click', true, true);
+                element.dispatchEvent(event);
+                $mol_assert_ok(clicked);
+            },
+            'no handle clicks if disabled'($) {
+                let clicked = false;
+                const clicker = $mol_button.make({
+                    $,
+                    click: (event) => { clicked = true; },
+                    enabled: () => false,
+                });
+                const element = clicker.dom_tree();
+                const event = $mol_dom_context.document.createEvent('mouseevent');
+                event.initEvent('click', true, true);
+                element.dispatchEvent(event);
+                $mol_assert_not(clicked);
+            },
+            async 'Store error'($) {
+                const clicker = $mol_button.make({
+                    $,
+                    click: (event) => $.$mol_fail(new Error('Test error')),
+                });
+                const event = $mol_dom_context.document.createEvent('mouseevent');
+                $mol_assert_fail(() => clicker.event_activate(event), 'Test error');
+                await Promise.resolve();
+                $mol_assert_equal(clicker.status()[0].message, 'Test error');
+            },
+        });
+    })($$ = $_1.$$ || ($_1.$$ = {}));
+})($ || ($ = {}));
+//mol/button/button.test.ts
 ;
 "use strict";
 //mol/type/merge/merge.test.ts
@@ -3976,52 +4019,6 @@ var $;
     });
 })($ || ($ = {}));
 //mol/syntax2/md/md.test.ts
-;
-"use strict";
-var $;
-(function ($_1) {
-    var $$;
-    (function ($$) {
-        $mol_test({
-            'handle clicks by default'($) {
-                let clicked = false;
-                const clicker = $mol_button.make({
-                    $,
-                    click: (event) => { clicked = true; },
-                });
-                const element = clicker.dom_tree();
-                const event = $mol_dom_context.document.createEvent('mouseevent');
-                event.initEvent('click', true, true);
-                element.dispatchEvent(event);
-                $mol_assert_ok(clicked);
-            },
-            'no handle clicks if disabled'($) {
-                let clicked = false;
-                const clicker = $mol_button.make({
-                    $,
-                    click: (event) => { clicked = true; },
-                    enabled: () => false,
-                });
-                const element = clicker.dom_tree();
-                const event = $mol_dom_context.document.createEvent('mouseevent');
-                event.initEvent('click', true, true);
-                element.dispatchEvent(event);
-                $mol_assert_not(clicked);
-            },
-            async 'Store error'($) {
-                const clicker = $mol_button.make({
-                    $,
-                    click: (event) => $.$mol_fail(new Error('Test error')),
-                });
-                const event = $mol_dom_context.document.createEvent('mouseevent');
-                $mol_assert_fail(() => clicker.event_activate(event), 'Test error');
-                await Promise.resolve();
-                $mol_assert_equal(clicker.status()[0].message, 'Test error');
-            },
-        });
-    })($$ = $_1.$$ || ($_1.$$ = {}));
-})($ || ($ = {}));
-//mol/button/button.test.ts
 ;
 "use strict";
 var $;

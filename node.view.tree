@@ -93,6 +93,45 @@ $mol_link_source $mol_link
 	sub /
 		<= Icon $mol_icon_script_text
 
+$mol_speck $mol_view
+	attr *
+		^
+		mol_theme <= theme \$mol_theme_accent
+	style *
+		^
+		minHeight \1em
+	sub /
+		<= value null
+
+$mol_button $mol_view
+	enabled true
+	click?event null
+	event_click?event null
+	event *
+		^
+		click?event <=> event_activate?event null
+		dblclick?event <=> clicks?event null
+		keydown?event <=> event_key_press?event null 
+	attr *
+		^
+		disabled <= disabled false
+		role \button
+		tabindex <= tab_index 0
+		title <= hint_safe <= hint \
+	sub /$mol_view_content
+		<= title
+	Speck $mol_speck
+		value <= error \
+
+$mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
 $mol_list $mol_view
 	render_visible_only true
 	render_over 0
@@ -167,40 +206,6 @@ $mol_text_code_row $mol_paragraph
 		needle <= highlight \
 		uri <= token_uri* \
 	find_pos* null
-
-$mol_speck $mol_view
-	attr *
-		^
-		mol_theme <= theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
-	sub /
-		<= value null
-
-$mol_button $mol_view
-	enabled true
-	click?event null
-	event_click?event null
-	event *
-		^
-		click?event <=> event_activate?event null
-		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
-	attr *
-		^
-		disabled <= disabled false
-		role \button
-		tabindex <= tab_index 0
-		title <= hint_safe <= hint \
-	sub /$mol_view_content
-		<= title
-	Speck $mol_speck
-		value <= error \
-
-$mol_button_typed $mol_button
-	minimal_height 40
-	minimal_width 40
 
 $mol_button_minor $mol_button_typed
 
@@ -545,11 +550,6 @@ $mol_pop_over $mol_pop
 
 $mol_row $mol_view
 
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
-
 $gen_app_item $mol_view
 	attr *
 		^
@@ -620,6 +620,9 @@ $gen_app_hero $mol_page
 	party /$gen_engine_unit
 	active_hero? \
 	body /
+		<= Start_battle $mol_button_major
+			title \Начать битву
+			click? <=> start_battle? null
 		<= Party_title $mol_section title \Отряд
 		<= Party_list $mol_row sub <= party_list / 
 			<= Party*0 $mol_pop_over
@@ -631,11 +634,9 @@ $gen_app_hero $mol_page
 					<= Party_hero_pick* $mol_button_minor
 						title \Выбрать героя
 						click? <=> party_hero_pick*? null
-		<= Start_battle $mol_button_major
-			title \Начать битву
-			click? <=> start_battle? null
 		<= Name $mol_section title <= name \Имя:
-		<= Level $mol_text text <= level \ Уровень 5
+		<= Level $mol_text text <= level \Уровень:
+		<= Points_hero $mol_text text <= points \Очки пт:
 		<= Equipment_label $mol_section title \Экипировка
 		<= Equipment_list $mol_row sub <= equipment_list /
 			<= Equipment*0 $mol_row sub /
@@ -1010,78 +1011,111 @@ $gen_app_craft $mol_page
 		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
 		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
 
-$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
-$mol_number $mol_view
-	precision_view <= precision 1
-	precision_change <= precision 1
-	value_min -Infinity
-	value_max +Infinity
-	value? +NaN
-	enabled true
-	sub /
-		<= String $mol_string
-			- \ we don't want native number controls in mobile devices
-			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
-			type <= type \tel
-			value? <=> value_string? \
-			hint <= hint \ 
-			enabled <= string_enabled <= enabled
-			submit? <=> submit? null
-		<= Dec $mol_button_minor
-			event_click? <=> event_dec? null
-			enabled <= dec_enabled <= enabled
-			sub / <= dec_icon $mol_icon_minus
-		<= Inc $mol_button_minor
-			event_click? <=> event_inc? null
-			enabled <= inc_enabled <= enabled
-			sub / <= inc_icon $mol_icon_plus
-
-$gen_app_game $mol_page
-	title \Генератор битвы
-	engine $gen_engine
-	body /
-		<= Hero_level $mol_labeler
-			title \Ваш уровень героев
-			content / 
-				<= Hero_level_value $mol_number
-					value? <=> hero_level? 20
-		<= Generate $mol_button_major
-			title \Сгенерировать
-			click? <=> generate? null
-		<= Result $mol_text
-			code_sidebar_showed false
-			text <= result \
-
-$gen_app_admin $mol_page 
-	title \Хак панель
-	engine $gen_engine
-	body /
-		<= Win $mol_button_major
-			title \Победить (хак)
-			click? <=> make_win? null
-		<= Add_skill $mol_button_minor 
-			title \Добавить уменее
-			click? <=> add_hero_skill? null
-
-$gen_app_loot $mol_page
-	title \Лут
-	engine $gen_engine
-	body /
-		<= Generate $mol_button_major
-			title \Получить предмет
-			click? <=> generate_item? null
-		<= New_item $mol_text text <= new_item \Новый предмет
-		<= History_item $mol_text text <= history_text \История предметов
-
 $mol_book2 $mol_scroll
 	menu_title \
 	sub <= pages /$mol_view
 	minimal_width 0
 	Placeholder $mol_view
 	Gap* $mol_view title \
+
+$mol_nav $mol_plugin
+	cycle? false
+	-
+	mod_ctrl false
+	mod_shift false
+	mod_alt false
+	-
+	keys_x? /
+	keys_y? /
+	-
+	current_x? null
+	current_y? null
+	-
+	event_up?event null
+	event_down?event null
+	event_left?event null
+	event_right?event null
+	event *
+		^
+		keydown?event <=> event_key?event null
+
+$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_search $mol_pop
+	query? \
+	suggests /string
+	plugins /$mol_plugin
+		^
+		<= Hotkey $mol_hotkey
+			key * escape? <=> clear? null
+		<= Nav $mol_nav
+			keys_y <= nav_components /$mol_view
+			current_y?component <=> nav_focused?component null
+	showed? <=> suggests_showed? false
+	align_hor \right
+	Anchor $mol_view
+		sub <= anchor_content /
+			<= Query $mol_string
+				value? <=> query? \
+				hint <= hint @ \Search...
+				submit?event <=> submit?event null
+				enabled <= enabled true
+				keyboard <= keyboard \search
+				enter <= enter \search
+				bring => bring
+			<= Clear $mol_button_minor
+				hint @ \Clear
+				click?event <=> clear?event null
+				sub /
+					<= Clear_icon $mol_icon_cross
+	bubble_content /$mol_view_content
+		<= Menu $mol_list
+			rows <= menu_items /$mol_view
+	Suggest* $mol_button_minor
+		click?event <=> suggest_select*?event null
+		sub <= suggest_content* /$mol_view_content
+			<= Suggest_label* $mol_dimmer
+				haystack <= suggest_label* \
+				needle <= query? \
+
+$mol_book2_catalog $mol_book2
+	param \
+	spread? \
+	spreads *
+	Spread* $mol_view
+	Spread_default null
+	spread_ids /string
+	menu_filter_enabled false
+	spread_ids_filtered /string
+	menu_tools /
+	addon_tools /
+	pages /
+		<= Menu $mol_page
+			Title => Menu_title
+			title <= menu_title \
+			Tools => Menu_tools
+			tools /
+				^ menu_tools
+				^ addon_tools
+			head <= menu_head /
+				<= Menu_title
+				<= Menu_tools
+			body <= menu_body /
+				<= Menu_filter $mol_search
+					query? <=> menu_filter? \
+				<= Menu_links $mol_list
+					rows <= menu_links /
+						<= Menu_link*0 $mol_link
+							arg <= arg* *
+							sub <= menu_link_content* /
+								<= Menu_link_title* $mol_dimmer
+									needle <= menu_filter
+									haystack <= spread_title* \
+			foot <= menu_foot /
+	Spread_close $mol_link
+		arg <= spread_close_arg *
+		sub /
+			<= Spread_close_icon $mol_icon_cross
 
 $gen_app $mol_page
 	title \Игра Gen
@@ -1092,7 +1126,23 @@ $gen_app $mol_page
 		<= Sources $mol_link_source
 			uri <= sources_uri \https://github.com/Lyumih/gen
 	body /
-		<= Pages $mol_book2
+		<= Pages $mol_book2_catalog
+			menu_title \Меню
+			param \page
+			spreads *
+				hero_page <= Hero_page $gen_app_hero 
+					engine <= engine
+					party <= party
+				battle_page <= Battle_page $gen_app_battle engine <= engine
+				dev_page <= Dev_page $gen_dev
+				auction_page <= Auction $gen_auction
+				talent_page <= Talent_page $gen_app_talent
+				craftt_page <= Craft_page $gen_app_craft
+					unit <= active_hero? $gen_engine_unit
+		- <= Game_page $gen_app_game engine <= engine
+		- <= Hack_page $gen_app_admin engine <= engine
+		- <= Loot_page $gen_app_loot engine <= engine
+		- <= Pages $mol_book2
 			pages <= pages /
 				<= Hero_page $gen_app_hero 
 					engine <= engine
