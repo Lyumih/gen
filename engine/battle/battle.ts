@@ -24,11 +24,11 @@ namespace $ {
 		}
 
 		log_attack( source: $gen_engine_item_unit, target: $gen_engine_item_unit ) {
-			this.log( `${ source.name() } атакует ${ target.name() } на ${ source.attack() } урона` )
+			this.log( `**${ source.name() }** *атакует*` )
 		}
 
 		log_skill( source: $gen_engine_item_unit, target: $gen_engine_item_unit, skill: $gen_engine_item_skill ) {
-			this.log( `${ source.name() } использует ${ skill.name() } на ${ target.name() }` )
+			this.log( `**${ source.name() }** *использует* **${ skill.name() }**` )
 		}
 	}
 }

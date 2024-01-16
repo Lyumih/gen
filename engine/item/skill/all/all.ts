@@ -58,7 +58,7 @@ namespace $ {
 			skill.level( 5 )
 			skill.description( '5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				const debuff_mem = new this.$.$gen_engine_item_skill
+				const debuff_mem = new $gen_engine_item_skill
 				debuff_mem.name( 'mem' )
 				debuff_mem.part( 'debuff' )
 				targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )

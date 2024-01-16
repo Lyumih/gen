@@ -37,7 +37,6 @@ namespace $ {
 		}
 
 		use_attack( target: $gen_engine_item_unit, battle: $gen_engine_battle ) {
-			battle?.log_attack( this, target )
 			target.health( target.health() - this.attack() )
 			this.next_turn()
 		}

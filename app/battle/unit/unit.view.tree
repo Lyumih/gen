@@ -16,7 +16,9 @@ $gen_app_battle_unit $mol_list
 			click? <=> use_attack? null
 		<= Skill_list $mol_list rows <= skill_list /
 			<= Skill*0 $mol_pop_over
-				Anchor <= Skill_name* $mol_text text <= skill_name* \Умение: Сильный удар
+				Anchor <= Skill_name* $mol_button_minor 
+					title <= skill_name* \Умение: Сильный удар
+					click? <=> use_skill*? null
 				bubble_content /
 					<= Skill_bubble_name* $mol_text text <= skill_name*
 					<= Skill_description* $mol_text text <= skill_description* \Описание
