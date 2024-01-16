@@ -1118,6 +1118,7 @@ declare namespace $ {
     class $gen_engine_item extends $mol_object {
         id_root(next?: string): string;
         id(next?: string): string;
+        reference(next?: string): string;
         type(next?: string): string;
         part(next?: string): string;
         name(next?: string): string;
@@ -1158,7 +1159,6 @@ declare namespace $ {
 declare namespace $ {
     class $gen_engine_item_buff extends $gen_engine_item {
         type(): string;
-        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
     }
 }
 
@@ -1495,6 +1495,10 @@ declare namespace $ {
         turn(next?: number): number;
         next_turn(): void;
         init_unit(unit: $gen_engine_item_unit): void;
+        history(next?: string[]): string[];
+        log(next: string): void;
+        log_attack(source: $gen_engine_item_unit, target: $gen_engine_item_unit): void;
+        log_skill(source: $gen_engine_item_unit, target: $gen_engine_item_unit, skill: $gen_engine_item_skill): void;
     }
 }
 
@@ -2761,6 +2765,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
+        battle(): $gen_engine_battle;
         unit(): $gen_engine_item_unit;
         target(): $gen_engine_item_unit;
         attr(): Record<string, any>;
@@ -2799,23 +2804,11 @@ declare namespace $.$$ {
         type(): string;
         use_attack(next?: any): void;
         skill_list(): readonly any[];
-        get_skill(id: string): {
-            id: string;
-            name: string;
-            description: string;
-            mode: string;
-            use: (source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]) => void;
-        } | undefined;
+        get_skill(id: string): $gen_engine_item_skill | undefined;
         skill_name(id: any): string;
         skill_description(id: any): string;
         use_skill(id: string, next?: any): void;
-        skills(): {
-            id: string;
-            name: string;
-            description: string;
-            mode: string;
-            use: (source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]) => void;
-        }[];
+        skills(): $gen_engine_item_skill[];
     }
 }
 
@@ -2826,12 +2819,13 @@ declare namespace $ {
     class $gen_app_battle extends $mol_page {
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
+        party(): readonly $gen_engine_item_unit[];
         title(): string;
         body(): readonly any[];
         turn(): string;
         Turn(): $$.$mol_section;
-        hero(): any;
-        enemy(): any;
+        hero(): $gen_engine_item_unit;
+        enemy(): $gen_engine_item_unit;
         Hero(): $$.$gen_app_battle_unit;
         Enemy(): $$.$gen_app_battle_unit;
         Field(): $$.$mol_list;
@@ -2842,23 +2836,23 @@ declare namespace $ {
         Reward(): $mol_button_major;
         restart(next?: any): any;
         Restart(): $mol_button_minor;
+        History_label(): $$.$mol_section;
+        history(): string;
+        History(): $$.$mol_text;
     }
 }
 
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
-        default_units(): $gen_engine_item_unit[];
-        static call_unit(next?: $gen_engine_item_unit[]): $gen_engine_item_unit[];
         turn(): string;
         hero(): $gen_engine_item_unit;
         enemy(): $gen_engine_item_unit;
-        use_hero_attack(next?: any): void;
-        use_enemy_attack(next?: any): void;
         restart(): void;
         is_game_continue(): boolean;
         is_game_end(): boolean;
         end(): string;
         get_reward(next?: any): void;
+        history(): string;
     }
 }
 
@@ -2905,7 +2899,7 @@ declare namespace $.$$ {
         type(): string;
         name(): string;
         level(): string;
-        description(): string;
+        description(next?: string): string;
     }
 }
 
@@ -2921,14 +2915,10 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_item_skill extends $gen_app_item {
+        item(): $gen_engine_item_skill;
         add_mode(next?: any): any;
         add_title(): string;
         remove_title(): string;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_item_skill extends $.$gen_app_item_skill {
     }
 }
 
@@ -2980,7 +2970,7 @@ declare namespace $ {
         skill_level_up(id: any, next?: any): any;
         skill_unequip(id: any, next?: any): any;
         skill_add_mode(id: any, next?: any): any;
-        Skill_card(id: any): $$.$gen_app_item_skill;
+        Skill_card(id: any): $gen_app_item_skill;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $mol_row;

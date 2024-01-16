@@ -3619,15 +3619,21 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const battle = $gen_engine_battle.make({});
-    const hero = $gen_engine_item_unit.make({});
-    const enemy = $gen_engine_item_unit.make({});
+    const battle = new $gen_engine_battle;
+    const hero = new $gen_engine_item_unit;
+    const enemy = new $gen_engine_item_unit;
     battle.init_unit(hero);
     battle.init_unit(enemy);
     const skill = {
         use: () => { }
     };
     $mol_test({
+        'add log'() {
+            $mol_assert_equal(battle.history().length, 0);
+            battle.history(['test']);
+            battle.log('test me');
+            $mol_assert_equal(battle.history().length, 2);
+        },
         'battle next turn'() {
             $mol_assert_equal(battle.turn(), 0);
             battle.next_turn();
@@ -3643,7 +3649,7 @@ var $;
             hero.use_skill([enemy], skill);
             enemy.use_skill([enemy], skill);
             $mol_assert_equal(battle.turn(), 6);
-        }
+        },
     });
 })($ || ($ = {}));
 //gen/engine/battle/batlle.test.ts

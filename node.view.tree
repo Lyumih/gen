@@ -565,6 +565,7 @@ $mol_text_list_item $mol_paragraph
 		mol_text_list_item_index <= index 0
 
 $gen_app_battle_unit $mol_list
+	battle $gen_engine_battle
 	unit $gen_engine_item_unit
 	target $gen_engine_item_unit
 	attr *
@@ -592,16 +593,19 @@ $gen_app_battle_unit $mol_list
 $gen_app_battle $mol_page
 	engine $gen_engine
 	battle $gen_engine_battle
+	party /$gen_engine_item_unit
 	title \Битва
 	body /
 		<= Field $mol_list rows /
 			<= Turn $mol_section title <= turn \Ход: 0
 			<= Hero $gen_app_battle_unit
-				unit <= hero null
-				target <= enemy null
+				battle <= battle
+				unit <= hero $gen_engine_item_unit
+				target <= enemy $gen_engine_item_unit
 			<= Enemy $gen_app_battle_unit
-				unit <= enemy null
-				target <= hero null
+				battle <= battle
+				unit <= enemy $gen_engine_item_unit
+				target <= hero $gen_engine_item_unit
 		<= End $mol_paragraph title <= end \
 		<= Reward $mol_button_major
 			enabled <= is_game_end false
@@ -610,6 +614,8 @@ $gen_app_battle $mol_page
 		<= Restart $mol_button_minor
 			title \Начать заново
 			click? <=> restart? null
+		<= History_label $mol_section title \История
+		<= History $mol_text text <= history \
 
 $mol_row $mol_view
 
@@ -644,6 +650,7 @@ $gen_app_item_equipment $gen_app_item
 	remove_title \Снять
 
 $gen_app_item_skill $gen_app_item
+	item $gen_engine_item_skill
 	add_mode? null
 	add_title \+ ур
 	remove_title \Снять
@@ -1190,7 +1197,9 @@ $gen_app $mol_page
 			menu_title \Меню
 			param \page
 			spreads *
-				battle_page <= Battle_page $gen_app_battle engine <= engine
+				battle_page <= Battle_page $gen_app_battle 
+					engine <= engine
+					party <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party

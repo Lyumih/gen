@@ -3770,6 +3770,9 @@ var $;
         id(next) {
             return next ?? $mol_guid();
         }
+        reference(next) {
+            return next ?? 'Gen';
+        }
         type(next) {
             return next ?? 'item';
         }
@@ -3777,6 +3780,7 @@ var $;
             return next ?? 'part';
         }
         name(next) {
+            console.log('name', next);
             return next ?? 'no name';
         }
         description(next) {
@@ -3793,6 +3797,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "reference", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "type", null);
@@ -3897,8 +3904,6 @@ var $;
         type() {
             return 'buff';
         }
-        use(source, targets) {
-        }
     }
     $.$gen_engine_item_buff = $gen_engine_item_buff;
 })($ || ($ = {}));
@@ -3951,6 +3956,7 @@ var $;
             return next ?? [];
         }
         skills(next) {
+            console.log('hero skills', next);
             return next ?? [];
         }
         buffs(next) {
@@ -5181,10 +5187,25 @@ var $;
         init_unit(unit) {
             unit.next_turn = () => this.next_turn();
         }
+        history(next) {
+            return next ?? [];
+        }
+        log(next) {
+            this.history([...this.history(), next]);
+        }
+        log_attack(source, target) {
+            this.log(`${source.name()} атакует ${target.name()} на ${source.attack()} урона`);
+        }
+        log_skill(source, target, skill) {
+            this.log(`${source.name()} использует ${skill.name()} на ${target.name()}`);
+        }
     }
     __decorate([
         $mol_mem
     ], $gen_engine_battle.prototype, "turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_battle.prototype, "history", null);
     $.$gen_engine_battle = $gen_engine_battle;
 })($ || ($ = {}));
 //gen/engine/battle/battle.ts
@@ -9360,6 +9381,10 @@ var $;
 var $;
 (function ($) {
     class $gen_app_battle_unit extends $mol_list {
+        battle() {
+            const obj = new this.$.$gen_engine_battle();
+            return obj;
+        }
         unit() {
             const obj = new this.$.$gen_engine_item_unit();
             return obj;
@@ -9487,6 +9512,9 @@ var $;
     }
     __decorate([
         $mol_mem
+    ], $gen_app_battle_unit.prototype, "battle", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_unit.prototype, "unit", null);
     __decorate([
         $mol_mem
@@ -9559,44 +9587,32 @@ var $;
                 return this.unit().type();
             }
             use_attack(next) {
+                this.battle().next_turn();
+                this.battle().log_attack(this.unit(), this.target());
                 this.unit().use_attack(this.target());
             }
             skill_list() {
-                return this.skills().map(skill => this.Skill(skill.id));
+                return this.skills().map(skill => this.Skill(skill.id()));
             }
             get_skill(id) {
-                return this.skills().find(skill => skill.id === id);
+                return this.skills().find(skill => skill.id() === id);
             }
             skill_name(id) {
-                return this.get_skill(id)?.name || 'no name';
+                return this.get_skill(id)?.name() || 'no name';
             }
             skill_description(id) {
-                return this.get_skill(id)?.description || 'no description';
+                return this.get_skill(id)?.description() || 'no description';
             }
             use_skill(id, next) {
-                this.unit().use_skill([this.target()], this.get_skill(id));
+                const skill = this.get_skill(id);
+                if (skill) {
+                    this.battle().next_turn();
+                    this.battle().log_skill(this.unit(), this.target(), skill);
+                    this.unit().use_skill([this.target()], skill);
+                }
             }
             skills() {
-                return [
-                    {
-                        id: 'skill1',
-                        name: 'Хил',
-                        description: 'Исцеляет на 10 здоровья',
-                        mode: 'skill',
-                        use: (source, targets) => {
-                            source.health(source.health() + 10);
-                        }
-                    },
-                    {
-                        id: 'skill2',
-                        name: 'Мощный удар',
-                        description: 'Урон х2',
-                        mode: 'skill',
-                        use: (source, target) => {
-                            target[0].health(target[0].health() - source.attack() * 2);
-                        }
-                    }
-                ];
+                return this.unit().skills();
             }
         }
         __decorate([
@@ -9626,6 +9642,9 @@ var $;
             const obj = new this.$.$gen_engine_battle();
             return obj;
         }
+        party() {
+            return [];
+        }
         title() {
             return "Битва";
         }
@@ -9634,7 +9653,9 @@ var $;
                 this.Field(),
                 this.End(),
                 this.Reward(),
-                this.Restart()
+                this.Restart(),
+                this.History_label(),
+                this.History()
             ];
         }
         turn() {
@@ -9646,19 +9667,23 @@ var $;
             return obj;
         }
         hero() {
-            return null;
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
         }
         enemy() {
-            return null;
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
         }
         Hero() {
             const obj = new this.$.$gen_app_battle_unit();
+            obj.battle = () => this.battle();
             obj.unit = () => this.hero();
             obj.target = () => this.enemy();
             return obj;
         }
         Enemy() {
             const obj = new this.$.$gen_app_battle_unit();
+            obj.battle = () => this.battle();
             obj.unit = () => this.enemy();
             obj.target = () => this.hero();
             return obj;
@@ -9706,6 +9731,19 @@ var $;
             obj.click = (next) => this.restart(next);
             return obj;
         }
+        History_label() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "История";
+            return obj;
+        }
+        history() {
+            return "";
+        }
+        History() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.history();
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -9716,6 +9754,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "hero", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "enemy", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Hero", null);
@@ -9740,6 +9784,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Restart", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History_label", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History", null);
     $.$gen_app_battle = $gen_app_battle;
 })($ || ($ = {}));
 //gen/app/battle/-view.tree/battle.view.tree.ts
@@ -9750,34 +9800,14 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
-            default_units() {
-                const units = [
-                    ...$gen_app_battle.call_unit(),
-                    $gen_engine_item_unit.make({}),
-                    $gen_engine_item_unit.make({})
-                ];
-                units.forEach(unit => unit.next_turn = () => this.battle().next_turn());
-                return units;
-            }
-            static call_unit(next) {
-                return next ?? [];
-            }
             turn() {
                 return `Ход: ${this.battle().turn()}`;
             }
             hero() {
-                return this.default_units()[0];
+                return this.party()[1];
             }
             enemy() {
-                return $gen_engine_item_unit.make({
-                    next_turn: () => this.battle().next_turn(),
-                });
-            }
-            use_hero_attack(next) {
-                this.hero().use_attack(this.enemy());
-            }
-            use_enemy_attack(next) {
-                this.enemy().use_attack(this.hero());
+                return this.party()[2];
             }
             restart() {
                 this.hero().refill();
@@ -9797,6 +9827,10 @@ var $;
                 this.engine().inventory([...this.engine().inventory(), this.engine().reward()]);
                 this.restart();
             }
+            history() {
+                console.log(this.battle().history());
+                return this.battle().history().join('\n');
+            }
         }
         __decorate([
             $mol_mem
@@ -9804,9 +9838,6 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "enemy", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle, "call_unit", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -10016,15 +10047,27 @@ var $;
                 return this.item().type();
             }
             name() {
-                return this.item().name();
+                return this.item().name() + this.item().level();
             }
             level() {
                 return `Ур. ${this.item().level()}`;
             }
-            description() {
-                return this.item().description() ? `${this.item().description()}` : '';
+            description(next) {
+                return next ?? this.item().description() ? `${this.item().description()}` : '';
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_item.prototype, "type", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_item.prototype, "name", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_item.prototype, "level", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_item.prototype, "description", null);
         $$.$gen_app_item = $gen_app_item;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -10056,6 +10099,10 @@ var $;
 var $;
 (function ($) {
     class $gen_app_item_skill extends $gen_app_item {
+        item() {
+            const obj = new this.$.$gen_engine_item_skill();
+            return obj;
+        }
         add_mode(next) {
             if (next !== undefined)
                 return next;
@@ -10070,22 +10117,13 @@ var $;
     }
     __decorate([
         $mol_mem
+    ], $gen_app_item_skill.prototype, "item", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_item_skill.prototype, "add_mode", null);
     $.$gen_app_item_skill = $gen_app_item_skill;
 })($ || ($ = {}));
 //gen/app/item/skill/-view.tree/skill.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_item_skill extends $.$gen_app_item_skill {
-        }
-        $$.$gen_app_item_skill = $gen_app_item_skill;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/item/skill/skill.view.ts
 ;
 "use strict";
 var $;
@@ -12140,6 +12178,7 @@ var $;
         }
         strong_attack() {
             const skill = new $gen_engine_item_skill();
+            skill.level(12);
             skill.name('Сильный удар');
             skill.description('Урон x2');
             skill.use = (source, targets) => {
@@ -12150,6 +12189,7 @@ var $;
         strong_attack_and_heal() {
             const skill = new $gen_engine_item_skill();
             skill.name('Сильный удар и самолечение');
+            skill.level(44);
             skill.description('Урон x4 и лечение себя на 10');
             skill.use = (source, targets) => {
                 targets[0].health(targets[0].health() - source.attack() * 4);
@@ -12159,14 +12199,13 @@ var $;
         }
         hyperfocal_madness_wind_generator() {
             const skill = new $gen_engine_item_skill();
+            skill.reference('nin-jin');
             skill.name('Гиперфокальный ветрогенератор безумия');
+            skill.level(5);
             skill.description('5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.');
             skill.use = (source, targets) => {
-                const debuff_mem = new $gen_engine_item_buff();
-                debuff_mem.name('mem');
-                debuff_mem.part('debuff');
-                targets[0].buffs([...targets[0].buffs(), debuff_mem]);
-                if (Math.random() < 0.05) {
+                const debuff_mem = new this.$.$gen_engine_item_skill;
+                if (Math.random() < 0.25) {
                     targets[0].health(targets[0].health() - source.attack() * 999);
                 }
             };
@@ -14228,6 +14267,7 @@ var $;
         Battle_page() {
             const obj = new this.$.$gen_app_battle();
             obj.engine = () => this.engine();
+            obj.party = () => this.party();
             return obj;
         }
         Hero_page() {
@@ -14400,6 +14440,7 @@ var $;
         }
         jin() {
             const unit = new $gen_engine_item_unit();
+            unit.reference('https://t.me/nin_jin');
             unit.name('Jin');
             unit.level(1);
             unit.points(1);
@@ -14410,6 +14451,7 @@ var $;
         }
         mario() {
             const unit = new $gen_engine_item_unit();
+            unit.reference('https://t.me/fkusnyahin');
             unit.name('Mario');
             unit.level(333);
             unit.points(333);
@@ -18206,15 +18248,21 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const battle = $gen_engine_battle.make({});
-    const hero = $gen_engine_item_unit.make({});
-    const enemy = $gen_engine_item_unit.make({});
+    const battle = new $gen_engine_battle;
+    const hero = new $gen_engine_item_unit;
+    const enemy = new $gen_engine_item_unit;
     battle.init_unit(hero);
     battle.init_unit(enemy);
     const skill = {
         use: () => { }
     };
     $mol_test({
+        'add log'() {
+            $mol_assert_equal(battle.history().length, 0);
+            battle.history(['test']);
+            battle.log('test me');
+            $mol_assert_equal(battle.history().length, 2);
+        },
         'battle next turn'() {
             $mol_assert_equal(battle.turn(), 0);
             battle.next_turn();
@@ -18230,7 +18278,7 @@ var $;
             hero.use_skill([enemy], skill);
             enemy.use_skill([enemy], skill);
             $mol_assert_equal(battle.turn(), 6);
-        }
+        },
     });
 })($ || ($ = {}));
 //gen/engine/battle/batlle.test.ts
