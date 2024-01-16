@@ -124,6 +124,7 @@
     "$gen_engine_item_equipment",
     "$gen_engine_item_prop",
     "$gen_engine_item_skill",
+    "$gen_engine_item_buff",
     "$gen_engine_craft",
     "$mol_icon_telegram",
     "$mol_icon",
@@ -241,7 +242,8 @@
     "$mol_search",
     "$mol_nav",
     "$mol_icon_cross",
-    "$mol_match"
+    "$mol_match",
+    "$gen_engine_item_unit_all"
   ],
   "dependencies": {
     "jsdom": "*",

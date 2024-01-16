@@ -1119,6 +1119,7 @@ declare namespace $ {
         id_root(next?: string): string;
         id(next?: string): string;
         type(next?: string): string;
+        part(next?: string): string;
         name(next?: string): string;
         description(next?: string): string;
         level(next?: number): number;
@@ -1136,7 +1137,7 @@ declare namespace $ {
     };
     export class $gen_engine_item_equipment extends $gen_engine_item {
         type(): string;
-        part(): string;
+        part(next?: string): string;
         config(next?: Config): Config;
         props(next?: $gen_engine_item_prop[]): $gen_engine_item_prop[];
         add_prop(prop: $gen_engine_item_prop): $gen_engine_item_prop[] | undefined;
@@ -1149,6 +1150,13 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_engine_item_skill extends $gen_engine_item {
+        type(): string;
+        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_buff extends $gen_engine_item {
         type(): string;
         use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
     }
@@ -1173,6 +1181,7 @@ declare namespace $ {
         };
         equipments(next?: $gen_engine_item_equipment[]): $gen_engine_item_equipment[];
         skills(next?: $gen_engine_item_skill[]): $gen_engine_item_skill[];
+        buffs(next?: $gen_engine_item_buff[]): $gen_engine_item_buff[];
         inventory(next?: $gen_engine_item[]): $gen_engine_item[];
         shop(next?: $gen_engine_item[]): $gen_engine_item[];
         next_turn(): void;
@@ -2997,6 +3006,10 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
+        party_list(): $mol_button_minor[];
+        get_party_hero(id: string): $gen_engine_item_unit | undefined;
+        party_hero_name(id: string): string;
+        party_hero_pick(id: string, next?: any): void;
         hero(): $gen_engine_item_unit | undefined;
         active_hero(next?: any): string;
         is_active_hero(id: string): boolean;
@@ -3020,10 +3033,6 @@ declare namespace $.$$ {
         shop_list(): readonly any[];
         get_shop_item(id: string): $gen_engine_item | undefined;
         shop_item_bue(id: any, next?: any): void;
-        party_list(): $mol_button_minor[];
-        get_party_hero(id: string): $gen_engine_item_unit | undefined;
-        party_hero_name(id: string): string;
-        party_hero_pick(id: string, next?: any): void;
     }
 }
 
@@ -3449,6 +3458,10 @@ declare namespace $ {
         all(): $gen_engine_item_skill[];
         create_id_root(id_root: string): string;
         resource(): $gen_engine_item_skill[];
+        heal(): $gen_engine_item_skill;
+        strong_attack(): $gen_engine_item_skill;
+        strong_attack_and_heal(): $gen_engine_item_skill;
+        hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
     }
 }
 
@@ -3891,9 +3904,19 @@ declare namespace $ {
     }
 }
 
+declare namespace $ {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all(): $gen_engine_item_unit[];
+        resource(): $gen_engine_item_unit[];
+        milis(): $gen_engine_item_unit;
+        jin(): $gen_engine_item_unit;
+        mario(): $gen_engine_item_unit;
+    }
+}
+
 declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
-        party(): readonly $gen_engine_item_unit[];
+        party(next?: $gen_engine_item_unit[]): readonly $gen_engine_item_unit[];
         active_hero(next?: any): $gen_engine_item_unit;
     }
 }
