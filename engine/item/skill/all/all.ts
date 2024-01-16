@@ -19,8 +19,10 @@ namespace $ {
 			const skill = new $gen_engine_item_skill()
 			skill.name( 'Хил' )
 			skill.description( 'Исцеляет на 10 здоровья' )
-			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+				console.log( battle )
 				source.health( source.health() + 10 )
+				battle.log( `${ source.name() } исцеляется на 10 здоровья` )
 			}
 			return skill
 		}
@@ -30,8 +32,9 @@ namespace $ {
 			skill.level( 12 )
 			skill.name( 'Сильный удар' )
 			skill.description( 'Урон x2' )
-			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
 				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
+				battle.log( `${ source.name() } наносит сильный удар х2` )
 			}
 			return skill
 		}
@@ -41,7 +44,7 @@ namespace $ {
 			skill.name( 'Сильный удар и самолечение' )
 			skill.level( 44 )
 			skill.description( 'Урон x4 и лечение себя на 10' )
-			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
 				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
 				source.health( source.health() + 10 )
 			}
@@ -54,13 +57,16 @@ namespace $ {
 			skill.name( 'Гиперфокальный ветрогенератор безумия' )
 			skill.level( 5 )
 			skill.description( '5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.' )
-			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
 				const debuff_mem = new this.$.$gen_engine_item_skill
-				// debuff_mem.name( 'mem' )
-				// debuff_mem.part( 'debuff' )
-				// targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
-				if( Math.random() < 0.25 ) {
+				debuff_mem.name( 'mem' )
+				debuff_mem.part( 'debuff' )
+				targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
+				if( Math.random() < 0.5 ) {
+					battle.log( `${ source.name() } сделал бум при попытке взаимодействия с меметичными объектами` )
 					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 999 )
+				} else {
+					battle.log( `${ source.name() } не смог сделать бум при попытке взаимодействия с меметичными объектами` )
 				}
 			}
 			return skill

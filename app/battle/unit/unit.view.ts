@@ -29,7 +29,7 @@ namespace $.$$ {
 		use_attack( next?: any ) {
 			this.battle().next_turn()
 			this.battle().log_attack( this.unit(), this.target() )
-			this.unit().use_attack( this.target() )
+			this.unit().use_attack( this.target(), this.battle() )
 		}
 
 
@@ -54,7 +54,7 @@ namespace $.$$ {
 			if( skill ) {
 				this.battle().next_turn()
 				this.battle().log_skill( this.unit(), this.target(), skill )
-				this.unit().use_skill( [ this.target() ], skill )
+				this.unit().use_skill( [ this.target() ], skill, this.battle() )
 			}
 		}
 

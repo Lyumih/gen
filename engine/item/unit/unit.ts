@@ -36,13 +36,14 @@ namespace $ {
 			return next ?? this.common_unit().attack
 		}
 
-		use_attack( target: $gen_engine_item_unit ) {
+		use_attack( target: $gen_engine_item_unit, battle: $gen_engine_battle ) {
+			battle?.log_attack( this, target )
 			target.health( target.health() - this.attack() )
 			this.next_turn()
 		}
 
-		use_skill( targets: $gen_engine_item_unit[], skill: any ) {
-			skill.use( this, targets )
+		use_skill( targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle ) {
+			skill.use( this, targets, battle )
 			this.next_turn()
 		}
 

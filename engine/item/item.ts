@@ -15,6 +15,16 @@ namespace $ {
 			return next ?? $mol_guid()
 		}
 
+		@$mol_mem
+		config( next?: any ) {
+			return {}
+		}
+
+		@$mol_mem
+		log() {
+
+		}
+
 		/** Источник вдохновения */
 		@$mol_mem
 		reference( next?: string ) {

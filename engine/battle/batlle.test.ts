@@ -6,10 +6,7 @@ namespace $ {
 	battle.init_unit( hero )
 	battle.init_unit( enemy )
 
-	const skill = {
-		use: () => {}
-	}
-
+	const skill = new $gen_engine_item_skill
 	$mol_test( {
 		'add log'() {
 			$mol_assert_equal( battle.history().length, 0 )
@@ -26,14 +23,14 @@ namespace $ {
 		},
 
 		'hero/enemy attack turn'() {
-			hero.use_attack( enemy )
-			enemy.use_attack( hero )
+			hero.use_attack( enemy, battle )
+			enemy.use_attack( hero, battle )
 			$mol_assert_equal( battle.turn(), 4 )
 		},
 
 		'hero/enemy use skill turn'() {
-			hero.use_skill( [ enemy ], skill )
-			enemy.use_skill( [ enemy ], skill )
+			hero.use_skill( [ enemy ], skill, battle )
+			enemy.use_skill( [ enemy ], skill, battle )
 			$mol_assert_equal( battle.turn(), 6 )
 		},
 

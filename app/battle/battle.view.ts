@@ -11,7 +11,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		enemy() {
-			return this.party()[ 2 ]
+			return this.party()[ 0 ]
 		}
 
 		restart() {
@@ -39,7 +39,7 @@ namespace $.$$ {
 
 		history(): string {
 			console.log( this.battle().history() )
-			return this.battle().history().join( '\n' )
+			return this.battle().history().reverse().join( '\n' )
 		}
 
 	}
