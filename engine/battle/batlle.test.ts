@@ -1,8 +1,8 @@
 namespace $ {
 
 	const battle = $gen_engine_battle.make( {} )
-	const hero = $gen_engine_unit.make( {} )
-	const enemy = $gen_engine_unit.make( {} )
+	const hero = $gen_engine_item_unit.make( {} )
+	const enemy = $gen_engine_item_unit.make( {} )
 	battle.init_unit( hero )
 	battle.init_unit( enemy )
 

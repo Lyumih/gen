@@ -1,5 +1,5 @@
 namespace $ {
-	export class $gen_engine_unit extends $mol_object {
+	export class $gen_engine_item_unit extends $gen_engine_item {
 
 		@$mol_mem
 		id() {
@@ -18,7 +18,7 @@ namespace $ {
 
 		@$mol_mem
 		level( next?: number ) {
-			return next ?? 1
+			return next ?? 0
 		}
 
 		@$mol_mem
@@ -36,12 +36,12 @@ namespace $ {
 			return next ?? this.common_unit().attack
 		}
 
-		use_attack( target: $gen_engine_unit ) {
+		use_attack( target: $gen_engine_item_unit ) {
 			target.health( target.health() - this.attack() )
 			this.next_turn()
 		}
 
-		use_skill( targets: $gen_engine_unit[], skill: any ) {
+		use_skill( targets: $gen_engine_item_unit[], skill: any ) {
 			skill.use( this, targets )
 			this.next_turn()
 		}
@@ -60,8 +60,22 @@ namespace $ {
 
 		@$mol_mem
 		equipments( next?: $gen_engine_item_equipment[] ) {
-			return next ?? [ new $gen_engine_item_equipment ]
+			return next ?? []
+		}
 
+		@$mol_mem
+		skills( next?: $gen_engine_item_skill[] ): $gen_engine_item_skill[] {
+			return next ?? []
+		}
+
+		@$mol_mem
+		inventory( next?: $gen_engine_item[] ): $gen_engine_item[] {
+			return next ?? []
+		}
+
+		@$mol_mem
+		shop( next?: $gen_engine_item[] ): $gen_engine_item[] {
+			return next ?? []
 		}
 
 		next_turn() {}

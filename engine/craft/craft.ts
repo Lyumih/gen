@@ -8,8 +8,8 @@ namespace $ {
 	export class $gen_engine_craft extends $mol_object {
 
 		@$mol_mem
-		unit( next?: $gen_engine_unit ): $gen_engine_unit {
-			return next ?? new $gen_engine_unit
+		unit( next?: $gen_engine_item_unit ): $gen_engine_item_unit {
+			return next ?? new $gen_engine_item_unit
 		}
 
 		@$mol_mem

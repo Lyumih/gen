@@ -15,7 +15,7 @@ namespace $ {
 					id_root: () => this.create_id_root( '1' ),
 					name: () => 'Хил',
 					description: () => 'Исцеляет на 10 здоровья',
-					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 						source.health( source.health() + 10 )
 					}
 				} ),
@@ -23,7 +23,7 @@ namespace $ {
 					id_root: () => this.create_id_root( '2' ),
 					name: () => 'Сильный удар',
 					description: () => 'Урон x2',
-					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
 					}
 				} ),
@@ -31,7 +31,7 @@ namespace $ {
 					id_root: () => this.create_id_root( '3' ),
 					name: () => 'Сильный удар и самолечение',
 					description: () => 'Урон x4 и лечение себя на 10',
-					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 						targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
 						source.health( source.health() + 10 )
 					}

@@ -1,6 +1,6 @@
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
-	unit $gen_engine_unit
+	unit $gen_engine_item_unit
 	title \Крафт
 	body /
 		<= Points $mol_section title <= points_title \

@@ -2,11 +2,7 @@ $gen_app_item $mol_view
 	attr *
 		^
 		type <= type \
-	item *
-		type \
-		name \
-		level 0
-		modes /
+	item $gen_engine_item
 	sub /
 		<= Card $mol_pop_over
 			Anchor <= Name $mol_text text <= name \

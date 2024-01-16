@@ -6,7 +6,7 @@ namespace $ {
 		}
 
 		/** Метод для использования данного умения */
-		use( source: $gen_engine_unit, targets: $gen_engine_unit[] ) {
+		use( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) {
 		}
 	}
 }

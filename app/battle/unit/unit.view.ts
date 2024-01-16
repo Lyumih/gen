@@ -58,7 +58,7 @@ namespace $.$$ {
 					name: 'Хил',
 					description: 'Исцеляет на 10 здоровья',
 					mode: 'skill',
-					use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+					use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 						source.health( source.health() + 10 )
 					}
 				},
@@ -67,7 +67,7 @@ namespace $.$$ {
 					name: 'Мощный удар',
 					description: 'Урон х2',
 					mode: 'skill',
-					use: ( source: $gen_engine_unit, target: $gen_engine_unit[] ) => {
+					use: ( source: $gen_engine_item_unit, target: $gen_engine_item_unit[] ) => {
 						target[ 0 ].health( target[ 0 ].health() - source.attack() * 2 )
 					}
 

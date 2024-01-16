@@ -10,7 +10,7 @@ namespace $ {
 			this.turn( this.turn() + 1 )
 		}
 
-		init_unit( unit: $gen_engine_unit ) {
+		init_unit( unit: $gen_engine_item_unit ) {
 			unit.next_turn = () => this.next_turn()
 		}
 	}

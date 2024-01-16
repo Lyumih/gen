@@ -2,16 +2,16 @@ namespace $.$$ {
 	export class $gen_dev extends $.$gen_dev {
 
 		@$mol_mem
-		hero(): $gen_engine_unit {
-			return $gen_engine_unit.make( {
+		hero(): $gen_engine_item_unit {
+			return $gen_engine_item_unit.make( {
 				name: () => 'Герой',
 				type: () => 'hero',
 			} )
 		}
 
 		@$mol_mem
-		enemy(): $gen_engine_unit {
-			return $gen_engine_unit.make( {
+		enemy(): $gen_engine_item_unit {
+			return $gen_engine_item_unit.make( {
 				name: () => 'Враг',
 				type: () => 'enemy',
 			} )
@@ -41,7 +41,7 @@ namespace $.$$ {
 
 		skill() {
 			return $gen_engine_item_skill.make( {
-				use: ( source: $gen_engine_unit, targets: $gen_engine_unit[] ) => {
+				use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
 					console.log( 'code', this.code() )
 					eval( this.code() )
 					return 'success use skill'

@@ -1,6 +1,6 @@
 $gen_app_battle_unit $mol_list
-	unit $gen_engine_unit
-	target $gen_engine_unit
+	unit $gen_engine_item_unit
+	target $gen_engine_item_unit
 	attr *
 		^
 		type <= type \

@@ -4,15 +4,15 @@ namespace $.$$ {
 		default_units() {
 			const units = [
 				...$gen_app_battle.call_unit(),
-				$gen_engine_unit.make( {} ),
-				$gen_engine_unit.make( {} )
+				$gen_engine_item_unit.make( {} ),
+				$gen_engine_item_unit.make( {} )
 			]
 			units.forEach( unit => unit.next_turn = () => this.battle().next_turn() )
 			return units
 		}
 
 		@$mol_mem
-		static call_unit( next?: $gen_engine_unit[] ) {
+		static call_unit( next?: $gen_engine_item_unit[] ) {
 			return next ?? []
 		}
 
@@ -27,7 +27,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		enemy() {
-			return $gen_engine_unit.make( {
+			return $gen_engine_item_unit.make( {
 				next_turn: () => this.battle().next_turn(),
 			} )
 		}

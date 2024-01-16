@@ -2,7 +2,7 @@ namespace $.$$ {
 	export class $gen_app_hero extends $.$gen_app_hero {
 
 
-		get_active_hero() {
+		hero() {
 			return this.party().find( unit => unit.id() === this.active_hero() )
 		}
 
@@ -15,27 +15,32 @@ namespace $.$$ {
 			return this.active_hero() === id
 		}
 
-		start_battle( next?: any ) {
-			console.log( 'start battle' )
-			// Тут надо как-то передать в gen_app_battle 
-			// Выбранного героя
-			const unit = this.get_active_hero()
-			unit && this.$.$gen_app_battle.call_unit( [ unit ] )
-		}
+		// start_battle( next?: any ) {
+		// 	console.log( 'start battle' )
+		// 	// Тут надо как-то передать в gen_app_battle 
+		// 	// Выбранного героя
+		// 	const unit = this.hero()
+		// 	unit && this.$.$gen_app_battle.call_unit( [ unit ] )
+		// }
 
 		name(): string {
-			return `Имя: ${ this.get_active_hero()?.name() }`
+			return `Имя: ${ this.hero()?.name() }`
 		}
 
 		level(): string {
-			return `Уровень: ${ this.get_active_hero()?.level() }`
+			return `Уровень: ${ this.hero()?.level() }`
 		}
+
+		points(): string {
+			return `Очков: ${ this.hero()?.points() }`
+		}
+
 		equipment_list(): readonly any[] {
-			return this.engine().hero_equipments().map( item => this.Equipment( item.id ) )
+			return this.hero()?.equipments().map( item => this.Equipment( item.id() ) ) || []
 		}
 
 		get_equipment( id: string ) {
-			return this.engine().hero_equipments().find( item => item.id === id )
+			return this.hero()?.equipments().find( item => item.id() === id )
 		}
 
 		equipment_unequip( id: any, next?: any ) {
@@ -43,19 +48,15 @@ namespace $.$$ {
 		}
 
 		skill_points(): string {
-			return `Очков умений: ${ this.engine().hero().point.skill }`
-		}
-
-		skills() {
-			return `Умения: ${ JSON.stringify( this.engine().hero_skills, null, 2 ) }`
+			return `Очков умений: ${ this.hero()?.points() }`
 		}
 
 		skill_list(): readonly any[] {
-			return this.engine().hero_skills().map( skill => this.Skill( skill.id ) )
+			return this.hero()?.skills()?.map( skill => this.Skill( skill.id() ) ) || []
 		}
 
 		get_skill( id: string ) {
-			return this.engine().hero_skills().find( skill => skill.id === id )
+			return this.hero()?.skills()?.find( skill => skill.id() === id )
 		}
 
 		skill_level_up( id: string, next?: any ) {
@@ -63,7 +64,7 @@ namespace $.$$ {
 		}
 
 		skill_mode( id: any ): string {
-			return this.get_skill( id )?.name || 'no mode'
+			return this.get_skill( id )?.name() || 'no mode'
 		}
 
 		skill_add_mode( id: string, next?: any ) {
@@ -75,11 +76,11 @@ namespace $.$$ {
 		}
 
 		inventory_list(): readonly any[] {
-			return this.engine().inventory().map( item => this.Inventory_item( item.id ) )
+			return this.hero()?.inventory().map( item => this.Inventory_item( item.id() ) ) || []
 		}
 
 		get_inventory_item( id: string ) {
-			return this.engine().inventory().find( item => item.id === id )
+			return this.hero()?.inventory().find( item => item.id() === id )
 		}
 
 		inventory_item_sell( id: any, next?: any ) {
@@ -91,21 +92,16 @@ namespace $.$$ {
 		}
 
 		shop_list(): readonly any[] {
-			return this.engine().shop().map( item => this.Shop_item( item.id ) )
+			return this.hero()?.shop().map( item => this.Shop_item( item.id() ) ) || []
 		}
 
 		get_shop_item( id: string ) {
-			return this.engine().shop().find( item => item.id === id )
+			return this.hero()?.shop().find( item => item.id() === id )
 		}
 
 		shop_item_bue( id: any, next?: any ) {
 			this.engine().shop_buy( id )
 		}
-
-
-		// party() {
-		// 	return this.common_party()
-		// }
 
 		party_list() {
 			return this.party().map( unit => this.Party( unit.id() ) )
@@ -123,15 +119,6 @@ namespace $.$$ {
 			console.log( id, next )
 			this.active_hero( id )
 		}
-
-		// @$mol_mem
-		// common_party() {
-		// 	return [
-		// 		this.$.$gen_engine_unit.make( { name: () => 'Вася' } ),
-		// 		this.$.$gen_engine_unit.make( { name: () => 'Даша', level: () => 10 } ),
-		// 		this.$.$gen_engine_unit.make( {} ),
-		// 	]
-		// }
 
 	}
 }

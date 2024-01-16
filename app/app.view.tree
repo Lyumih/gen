@@ -1,7 +1,7 @@
 $gen_app $mol_page
 	title \Игра Gen
 	engine $gen_engine
-	party /$gen_engine_unit
+	party /$gen_engine_item_unit
 	craft $gen_engine_craft
 	tools /
 		<= Telegram $mol_link_source
@@ -19,7 +19,7 @@ $gen_app $mol_page
 					party <= party
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
-					unit <= active_hero? $gen_engine_unit
+					unit <= active_hero? $gen_engine_item_unit
 				auction_page <= Auction $gen_auction
 				dev_page <= Dev_page $gen_dev
 				game_page <= Game_page $gen_app_game engine <= engine

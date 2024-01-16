@@ -2,16 +2,16 @@
 - Список всех умений - это реальный список умений с их логикой
 $gen_dev $mol_page
 	title \Разработка умения
-	hero $gen_engine_unit
-	enemy $gen_engine_unit
+	hero $gen_engine_item_unit
+	enemy $gen_engine_item_unit
 	skills $gen_engine_item_skill_all
 	body /
 		<= Instruction $mol_expander
 			title \Инструкция
 			content /
 				<= Example $mol_text_code text \
-					\source: $gen_engine_unit - Источник
-					\target: $gen_engine_unit[] - возможные цели
+					\source: $gen_engine_item_unit - Источник
+					\target: $gen_engine_item_unit[] - возможные цели
 					\targets[ 0 ] - враг
 					\* Пример 1. Хил себя на 100 *
 					\source.health( source.health() + 100 )

@@ -1,7 +1,7 @@
 namespace $ {
 
 	const craft = new $gen_engine_craft
-	const unit = new $gen_engine_unit
+	const unit = new $gen_engine_item_unit
 	const equipment = new $gen_engine_item_equipment
 
 	craft.unit( unit )
