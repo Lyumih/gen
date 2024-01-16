@@ -243,7 +243,8 @@
     "$mol_nav",
     "$mol_icon_cross",
     "$mol_match",
-    "$gen_engine_item_unit_all"
+    "$gen_engine_item_unit_all",
+    "$gen_engine_item_equipment_all"
   ],
   "dependencies": {
     "jsdom": "*",

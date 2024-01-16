@@ -2812,14 +2812,11 @@ declare namespace $ {
         Name(): $$.$mol_text;
         type_translate(): string;
         Type(): $$.$mol_text;
+        level(): string;
+        Level(): $$.$mol_text;
         Name_bubble(): $$.$mol_text;
         description(): string;
         Desription(): $$.$mol_text;
-        mode_name(id: any): string;
-        Mode_name(id: any): $$.$mol_text;
-        Mode(id: any): $mol_row;
-        modes_list(): readonly any[];
-        Modes_list(): $$.$mol_list;
         add_title(): string;
         add(next?: any): any;
         Add(): $mol_button_major;
@@ -2839,6 +2836,7 @@ declare namespace $.$$ {
         type_translate(): string;
         type(): string;
         name(): string;
+        level(): string;
         description(): string;
     }
 }
@@ -3833,6 +3831,13 @@ declare namespace $ {
         Hack_page(): $$.$gen_app_admin;
         Loot_page(): $$.$gen_app_loot;
         Pages(): $$.$mol_book2_catalog;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all(): $gen_engine_item_equipment[];
+        sword(): $gen_engine_item_equipment;
     }
 }
 

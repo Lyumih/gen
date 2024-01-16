@@ -9873,6 +9873,14 @@ var $;
             obj.text = () => this.type_translate();
             return obj;
         }
+        level() {
+            return "";
+        }
+        Level() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.level();
+            return obj;
+        }
         Name_bubble() {
             const obj = new this.$.$mol_text();
             obj.text = () => this.name();
@@ -9884,31 +9892,6 @@ var $;
         Desription() {
             const obj = new this.$.$mol_text();
             obj.text = () => this.description();
-            return obj;
-        }
-        mode_name(id) {
-            return "123";
-        }
-        Mode_name(id) {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.mode_name(id);
-            return obj;
-        }
-        Mode(id) {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Mode_name(id)
-            ];
-            return obj;
-        }
-        modes_list() {
-            return [
-                this.Mode("0")
-            ];
-        }
-        Modes_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.modes_list();
             return obj;
         }
         add_title() {
@@ -9964,9 +9947,9 @@ var $;
             obj.Anchor = () => this.Name();
             obj.bubble_content = () => [
                 this.Type(),
+                this.Level(),
                 this.Name_bubble(),
                 this.Desription(),
-                this.Modes_list(),
                 this.Actions_list()
             ];
             return obj;
@@ -9983,19 +9966,13 @@ var $;
     ], $gen_app_item.prototype, "Type", null);
     __decorate([
         $mol_mem
+    ], $gen_app_item.prototype, "Level", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_item.prototype, "Name_bubble", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Desription", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_item.prototype, "Mode_name", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_item.prototype, "Mode", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_item.prototype, "Modes_list", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "add", null);
@@ -10033,10 +10010,11 @@ var $;
             types_map(type) {
                 const types = {
                     skill: 'Навык',
+                    equipment: 'Экипировка',
                     weapon: 'Оружие',
                     armor: 'Броня',
                 };
-                return types[type] || type + '?';
+                return types[type] || (type + '?');
             }
             type_translate() {
                 return this.types_map(this.item().type());
@@ -10047,8 +10025,11 @@ var $;
             name() {
                 return this.item().name();
             }
+            level() {
+                return `Ур. ${this.item().level()}`;
+            }
             description() {
-                return this.item().level ? `Ур. ${this.item().level}` : '';
+                return this.item().description() ? `${this.item().description()}` : '';
             }
         }
         $$.$gen_app_item = $gen_app_item;
@@ -14372,6 +14353,33 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all() {
+            return [
+                $gen_engine_item_equipment.make({
+                    part: () => 'body',
+                })
+            ];
+        }
+        sword() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Меч');
+            equipment.description('Простой меч');
+            equipment.level(10);
+            return equipment;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_equipment_all.prototype, "all", null);
+    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
+})($ || ($ = {}));
+//gen/engine/item/equipment/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_engine_item_unit_all extends $mol_object {
         all() {
             return this.resource();
@@ -14386,6 +14394,9 @@ var $;
             unit.name('Milis');
             unit.level(1000);
             unit.points(1000);
+            unit.equipments([
+                new $gen_engine_item_equipment_all().sword()
+            ]);
             unit.skills([
                 new $gen_engine_item_skill_all().heal(),
                 new $gen_engine_item_skill_all().strong_attack(),

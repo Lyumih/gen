@@ -623,9 +623,10 @@ $gen_app_item $mol_view
 			Anchor <= Name $mol_text text <= name \
 			bubble_content /
 				<= Type $mol_text text <= type_translate \
+				<= Level $mol_text text <= level \
 				<= Name_bubble $mol_text text <= name \
 				<= Desription $mol_text text <= description \
-				<= Modes_list $mol_list rows <= modes_list /
+				- <= Modes_list $mol_list rows <= modes_list /
 					<= Mode*0 $mol_row sub /
 						<= Mode_name* $mol_text text <= mode_name* \123
 				<= Actions_list $mol_list rows /
