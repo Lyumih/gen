@@ -34,27 +34,6 @@ $mol_page $mol_view
 			dom_name \footer
 			sub <= foot /$mol_view
 
-$mol_link $mol_view
-	uri \
-	dom_name \a
-	uri_off \
-	uri_native null
-	external false
-	attr *
-		^
-		href <= uri_toggle \
-		title <= hint_safe <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-		rel <= relation \
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
-
 $mol_svg $mol_view
 	dom_name \svg
 	dom_name_space \http://www.w3.org/2000/svg
@@ -84,6 +63,29 @@ $mol_icon $mol_svg_root
 		<= Path $mol_svg_path
 			geometry <= path \
 
+$mol_icon_telegram $mol_icon path \M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z
+
+$mol_link $mol_view
+	uri \
+	dom_name \a
+	uri_off \
+	uri_native null
+	external false
+	attr *
+		^
+		href <= uri_toggle \
+		title <= hint_safe <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+		rel <= relation \
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click?event <=> click?event <=> event_click?event null
+
 $mol_icon_script $mol_icon path \M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2H8C6.3,2 5,3.3 5,5V16H16V17C16,17.6 16.4,18 17,18H18V5C18,4.4 18.4,4 19,4C19.6,4 20,4.4 20,5V6H22V5C22,3.3 20.7,2 19,2Z
 
 $mol_icon_script_text $mol_icon path \M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2C20.7,2 22,3.3 22,5V6H20V5C20,4.4 19.6,4 19,4C18.4,4 18,4.4 18,5V18H17C16.4,18 16,17.6 16,17V16H5V5C5,3.3 6.3,2 8,2H19M8,6V8H15V6H8M8,10V12H14V10H8Z
@@ -92,6 +94,36 @@ $mol_link_source $mol_link
 	hint @ \Source code
 	sub /
 		<= Icon $mol_icon_script_text
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
+
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit +Infinity
+	row_width 0
+	sub / <= title
+
+$mol_section $mol_list
+	level 1
+	rows /
+		<= Head $mol_view
+			sub <= head /
+				<= Title $mol_paragraph
+					dom_name <= title_dom_name \h1
+					title <= title
+				<= Tools $mol_view sub <= tools /
+		<= Content $mol_list
+			rows <= content /
 
 $mol_speck $mol_view
 	attr *
@@ -131,36 +163,6 @@ $mol_button_major $mol_button_typed
 	attr *
 		^
 		mol_theme \$mol_theme_accent
-
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 7
-	width_limit +Infinity
-	row_width 0
-	sub / <= title
-
-$mol_section $mol_list
-	level 1
-	rows /
-		<= Head $mol_view
-			sub <= head /
-				<= Title $mol_paragraph
-					dom_name <= title_dom_name \h1
-					title <= title
-				<= Tools $mol_view sub <= tools /
-		<= Content $mol_list
-			rows <= content /
 
 $mol_stack $mol_view
 
@@ -548,6 +550,67 @@ $mol_pop_over $mol_pop
 		mouseenter?event <=> event_show?event null
 		mouseleave?event <=> event_hide?event null
 
+$mol_text_list $mol_text
+	auto_scroll null
+	attr *
+		^
+		mol_text_list_type <= type \
+	Paragraph* $mol_text_list_item
+		index <= item_index*
+		sub <= block_content*
+
+$mol_text_list_item $mol_paragraph
+	attr *
+		^
+		mol_text_list_item_index <= index 0
+
+$gen_app_battle_unit $mol_list
+	unit $gen_engine_unit
+	target $gen_engine_unit
+	attr *
+		^
+		type <= type \
+	rows /
+		<= Name $mol_paragraph title <= name \
+		<= Stats $mol_list rows /
+			<= Health $mol_paragraph title <= health \
+			<= Attack $mol_paragraph title <= attack \
+		<= Attack_button $mol_button_major
+			title \Атаковать
+			enabled <= attack_enabled true
+			click? <=> use_attack? null
+		<= Skill_list $mol_list rows <= skill_list /
+			<= Skill*0 $mol_pop_over
+				Anchor <= Skill_name* $mol_text text <= skill_name* \Умение: Сильный удар
+				bubble_content /
+					<= Skill_bubble_name* $mol_text text <= skill_name*
+					<= Skill_description* $mol_text text <= skill_description* \Описание
+					<= Skill_use* $mol_button_minor
+						title \Использовать умение
+						click? <=> use_skill*? null
+
+$gen_app_battle $mol_page
+	engine $gen_engine
+	battle $gen_engine_battle
+	title \Битва
+	body /
+		<= Field $mol_list rows /
+			<= Turn $mol_section title <= turn \Ход: 0
+			<= Hero $gen_app_battle_unit
+				unit <= hero null
+				target <= enemy null
+			<= Enemy $gen_app_battle_unit
+				unit <= enemy null
+				target <= hero null
+		<= End $mol_paragraph title <= end \
+		<= Reward $mol_button_major
+			enabled <= is_game_end false
+			title \Получить награду
+			click? <= get_reward? null
+		<= Restart $mol_button_minor
+			title \Начать заново
+			click? <=> restart? null
+
 $mol_row $mol_view
 
 $gen_app_item $mol_view
@@ -600,20 +663,6 @@ $gen_app_item_shop $gen_app_item
 	Remove null
 	add_title \Купить
 
-$mol_text_list $mol_text
-	auto_scroll null
-	attr *
-		^
-		mol_text_list_type <= type \
-	Paragraph* $mol_text_list_item
-		index <= item_index*
-		sub <= block_content*
-
-$mol_text_list_item $mol_paragraph
-	attr *
-		^
-		mol_text_list_item_index <= index 0
-
 $gen_app_hero $mol_page
 	title \Персонаж
 	engine $gen_engine
@@ -665,53 +714,6 @@ $gen_app_hero $mol_page
 				<= Shop_card* $gen_app_item_shop
 					item <= get_shop_item* null
 					add? <=> shop_item_bue*? null
-
-$gen_app_battle_unit $mol_list
-	unit $gen_engine_unit
-	target $gen_engine_unit
-	attr *
-		^
-		type <= type \
-	rows /
-		<= Name $mol_paragraph title <= name \
-		<= Stats $mol_list rows /
-			<= Health $mol_paragraph title <= health \
-			<= Attack $mol_paragraph title <= attack \
-		<= Attack_button $mol_button_major
-			title \Атаковать
-			enabled <= attack_enabled true
-			click? <=> use_attack? null
-		<= Skill_list $mol_list rows <= skill_list /
-			<= Skill*0 $mol_pop_over
-				Anchor <= Skill_name* $mol_text text <= skill_name* \Умение: Сильный удар
-				bubble_content /
-					<= Skill_bubble_name* $mol_text text <= skill_name*
-					<= Skill_description* $mol_text text <= skill_description* \Описание
-					<= Skill_use* $mol_button_minor
-						title \Использовать умение
-						click? <=> use_skill*? null
-
-$gen_app_battle $mol_page
-	engine $gen_engine
-	battle $gen_engine_battle
-	title \Битва
-	body /
-		<= Field $mol_list rows /
-			<= Turn $mol_section title <= turn \Ход: 0
-			<= Hero $gen_app_battle_unit
-				unit <= hero null
-				target <= enemy null
-			<= Enemy $gen_app_battle_unit
-				unit <= enemy null
-				target <= hero null
-		<= End $mol_paragraph title <= end \
-		<= Reward $mol_button_major
-			enabled <= is_game_end false
-			title \Получить награду
-			click? <= get_reward? null
-		<= Restart $mol_button_minor
-			title \Начать заново
-			click? <=> restart? null
 
 $mol_expander $mol_list
 	rows /
@@ -778,6 +780,118 @@ $mol_labeler $mol_list
 		<= Content $mol_view
 			minimal_height 24
 			sub <= content /
+
+- Дерево талантов.
+- Таланты генерируются случайно. Область открытых талантов +5.
+$gen_app_talent $mol_page
+	title \Дерево талантов
+	body /
+		<= Talent_count $mol_section title <= talent_count \Талантов 23
+		<= Stats_expander $mol_expander
+			title \Статистика
+			content /
+				<= Content $mol_text text <= stats \
+		<= Talent_labeler $mol_labeler 
+			title \Поиск по талантам
+			content /
+				<= Talent_search $mol_string
+					hint \Атака
+					value? <=> talent_search? \
+		<= X $mol_list rows <= x_list /
+			<= Y*0 $mol_row sub <= y_list* /
+				<= Talent*0_0 $mol_pop_over
+					Anchor <= Talent_cell* $mol_button_minor
+						attr *
+							status <= status* \ 
+							search <= is_search* false
+						title <= talent_short_name* \Атака
+						click? <=> talent_click*? null
+					bubble_content /
+						<= Talent_description* $mol_paragraph title <= talent_description* \
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$gen_app_craft $mol_page
+	equipment $gen_engine_item_equipment
+	unit $gen_engine_unit
+	title \Крафт
+	body /
+		<= Points $mol_section title <= points_title \
+		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
+		<= Equipment_level $mol_paragraph title <= equipment_level \
+		<= Prop_stage $mol_section title \Этап 1. Свойства. Макс. 10 свойств 10ур
+		<= Prop_level_up $mol_button_major
+			title \Повысить уровень. 1пт
+			click? <=> prop_level_up? null
+		<= Prop_open $mol_button_major
+			title \Открыть свойство. 5пт
+			click? <=> prop_open? null
+		<= Prop_min_max $mol_expander
+			title \Максимизация базовых свойств
+			content /
+				<= Prop_level_down $mol_button_major
+					title \Понизить уровень. 5пт
+				<= Prop_fix $mol_button_major
+					title \Зафиксировать свойство. 50пт
+				<= Prop_unfix $mol_button_major
+					title \Открепить. 50пт
+				<= Prop_tier_up $mol_button_major
+					title \Повысить тир. 50пт
+				<= Prop_bless_reroll $mol_button_major
+					title \Перебросить благословение. 50пт
+				<= Prop_base_rerolll $mol_button_major
+					title \Перековать основу. 100пт
+				<= Prop_remove $mol_button_major
+					title \Удалить свойство. 10пт
+		<= Prop_list $mol_list rows <= prop_list /
+			<= Prop*0 $mol_row sub /
+				<= Prop_check* $mol_check_box
+				<= Prop_name* $mol_paragraph title <= prop_name* \Свойство 1. Атака + 5 (3-7 разброс)
+				<= Prop_level* $mol_paragraph title <= prop_level* \Уровень 1.
+				<= Prop_luck* $mol_paragraph title <= prop_luck* \Удачно: 3
+				<= Prop_bless* $mol_paragraph title <= prop_unluck* \Благословение: неудачно (-50% эффекта)
+				<= Prop_tier* $mol_paragraph title <= prop_tier* \Тир: 3
+		<= Luck_stage $mol_section title \Этап 2. Удачный скил. 50+ ур.
+		<= Luck_unlock $mol_button_major
+			title \Разблокировать удачный скил. 25пт
+		<= Luck_level_up $mol_button_major
+			title \Повысить уровень умения. 1пт
+		<= Luck_reroll $mol_button_major
+			title \Поменять реликвию. 100пт
+		<= Luck_chance $mol_paragraph title \Шанс при атаке: 1%
+		<= Luck_name $mol_paragraph title \Умение: Мощное исцеление. Уровень 1.
+		<= Relic_stage $mol_section title \Этап 3. Сила реликвии. 100+ ур
+		<= Relic_unlock $mol_button_major
+			title \Разблокировать реликвию. 25пт
+		<= Relic_level_up $mol_button_major
+			title \Поднять уровень реликвии. 1пт
+		<= Relic_reroll $mol_button_major
+			title \Поменять реликвию. 100пт
+		<= Relic_name $mol_paragraph
+			title \Холодная кровь. Ур. 1. Кровотечение также замораживает противника с шансом 1% (+1 за ур.).
+		<= Uniq_stage $mol_section title \Этап 4. Сетовый набор. 150+ ур.
+		<= Uniq_reroll $mol_button_major title \Сменить набор. 20пт
+		<= Uniq_name $mol_paragraph title \Набор крови. 3пр. 25% Шанс игнорировать сопротивление цели к кровотечению
+		<= Power $mol_section title \Этап 5. Максимальная мощь. 200+ ур.
+		<= Power_name $mol_paragraph title \Ваши физические атаки игорируют 100% сопр. врага с шансом 10%
+		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
+		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
+
+$gen_auction $mol_page
+	title \Аукцион
+	body /
+		<= Donat $mol_paragraph title \Монет: 532
+		<= Hero2 $mol_paragraph title \Вася. Ур. 5
+		<= Sell_hero $mol_button_major
+			title \Выставить на аукцион героя
+		<= Hero_list $mol_list rows /
+			<= Hero_card*0 $mol_row sub /
+				<= Hero* $mol_paragraph title \Марио . Ур. 5
+				<= Buy_hero* $mol_button_major
+					title \Купить героя за 100 у.е. руб 
 
 $mol_textarea $mol_stack
 	attr *
@@ -899,117 +1013,71 @@ $gen_dev $mol_page
 				unit <= enemy
 				target <= hero
 
-$gen_auction $mol_page
-	title \Аукцион
+$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_number $mol_view
+	precision_view <= precision 1
+	precision_change <= precision 1
+	value_min -Infinity
+	value_max +Infinity
+	value? +NaN
+	enabled true
+	sub /
+		<= String $mol_string
+			- \ we don't want native number controls in mobile devices
+			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
+			type <= type \tel
+			value? <=> value_string? \
+			hint <= hint \ 
+			enabled <= string_enabled <= enabled
+			submit? <=> submit? null
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_minus
+		<= Inc $mol_button_minor
+			event_click? <=> event_inc? null
+			enabled <= inc_enabled <= enabled
+			sub / <= inc_icon $mol_icon_plus
+
+$gen_app_game $mol_page
+	title \Генератор битвы
+	engine $gen_engine
 	body /
-		<= Donat $mol_paragraph title \Монет: 532
-		<= Hero2 $mol_paragraph title \Вася. Ур. 5
-		<= Sell_hero $mol_button_major
-			title \Выставить на аукцион героя
-		<= Hero_list $mol_list rows /
-			<= Hero_card*0 $mol_row sub /
-				<= Hero* $mol_paragraph title \Марио . Ур. 5
-				<= Buy_hero* $mol_button_major
-					title \Купить героя за 100 у.е. руб 
+		<= Hero_level $mol_labeler
+			title \Ваш уровень героев
+			content / 
+				<= Hero_level_value $mol_number
+					value? <=> hero_level? 20
+		<= Generate $mol_button_major
+			title \Сгенерировать
+			click? <=> generate? null
+		<= Result $mol_text
+			code_sidebar_showed false
+			text <= result \
 
-- Дерево талантов.
-- Таланты генерируются случайно. Область открытых талантов +5.
-$gen_app_talent $mol_page
-	title \Дерево талантов
+$gen_app_admin $mol_page 
+	title \Хак панель
+	engine $gen_engine
 	body /
-		<= Talent_count $mol_section title <= talent_count \Талантов 23
-		<= Stats_expander $mol_expander
-			title \Статистика
-			content /
-				<= Content $mol_text text <= stats \
-		<= Talent_labeler $mol_labeler 
-			title \Поиск по талантам
-			content /
-				<= Talent_search $mol_string
-					hint \Атака
-					value? <=> talent_search? \
-		<= X $mol_list rows <= x_list /
-			<= Y*0 $mol_row sub <= y_list* /
-				<= Talent*0_0 $mol_pop_over
-					Anchor <= Talent_cell* $mol_button_minor
-						attr *
-							status <= status* \ 
-							search <= is_search* false
-						title <= talent_short_name* \Атака
-						click? <=> talent_click*? null
-					bubble_content /
-						<= Talent_description* $mol_paragraph title <= talent_description* \
+		<= Win $mol_button_major
+			title \Победить (хак)
+			click? <=> make_win? null
+		<= Add_skill $mol_button_minor 
+			title \Добавить уменее
+			click? <=> add_hero_skill? null
 
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
-
-$gen_app_craft $mol_page
-	equipment $gen_engine_item_equipment
-	unit $gen_engine_unit
-	title \Крафт
+$gen_app_loot $mol_page
+	title \Лут
+	engine $gen_engine
 	body /
-		<= Points $mol_section title <= points_title \
-		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
-		<= Equipment_level $mol_paragraph title <= equipment_level \
-		<= Prop_stage $mol_section title \Этап 1. Свойства. Макс. 10 свойств 10ур
-		<= Prop_level_up $mol_button_major
-			title \Повысить уровень. 1пт
-			click? <=> prop_level_up? null
-		<= Prop_open $mol_button_major
-			title \Открыть свойство. 5пт
-			click? <=> prop_open? null
-		<= Prop_min_max $mol_expander
-			title \Максимизация базовых свойств
-			content /
-				<= Prop_level_down $mol_button_major
-					title \Понизить уровень. 5пт
-				<= Prop_fix $mol_button_major
-					title \Зафиксировать свойство. 50пт
-				<= Prop_unfix $mol_button_major
-					title \Открепить. 50пт
-				<= Prop_tier_up $mol_button_major
-					title \Повысить тир. 50пт
-				<= Prop_bless_reroll $mol_button_major
-					title \Перебросить благословение. 50пт
-				<= Prop_base_rerolll $mol_button_major
-					title \Перековать основу. 100пт
-				<= Prop_remove $mol_button_major
-					title \Удалить свойство. 10пт
-		<= Prop_list $mol_list rows <= prop_list /
-			<= Prop*0 $mol_row sub /
-				<= Prop_check* $mol_check_box
-				<= Prop_name* $mol_paragraph title <= prop_name* \Свойство 1. Атака + 5 (3-7 разброс)
-				<= Prop_level* $mol_paragraph title <= prop_level* \Уровень 1.
-				<= Prop_luck* $mol_paragraph title <= prop_luck* \Удачно: 3
-				<= Prop_bless* $mol_paragraph title <= prop_unluck* \Благословение: неудачно (-50% эффекта)
-				<= Prop_tier* $mol_paragraph title <= prop_tier* \Тир: 3
-		<= Luck_stage $mol_section title \Этап 2. Удачный скил. 50+ ур.
-		<= Luck_unlock $mol_button_major
-			title \Разблокировать удачный скил. 25пт
-		<= Luck_level_up $mol_button_major
-			title \Повысить уровень умения. 1пт
-		<= Luck_reroll $mol_button_major
-			title \Поменять реликвию. 100пт
-		<= Luck_chance $mol_paragraph title \Шанс при атаке: 1%
-		<= Luck_name $mol_paragraph title \Умение: Мощное исцеление. Уровень 1.
-		<= Relic_stage $mol_section title \Этап 3. Сила реликвии. 100+ ур
-		<= Relic_unlock $mol_button_major
-			title \Разблокировать реликвию. 25пт
-		<= Relic_level_up $mol_button_major
-			title \Поднять уровень реликвии. 1пт
-		<= Relic_reroll $mol_button_major
-			title \Поменять реликвию. 100пт
-		<= Relic_name $mol_paragraph
-			title \Холодная кровь. Ур. 1. Кровотечение также замораживает противника с шансом 1% (+1 за ур.).
-		<= Uniq_stage $mol_section title \Этап 4. Сетовый набор. 150+ ур.
-		<= Uniq_reroll $mol_button_major title \Сменить набор. 20пт
-		<= Uniq_name $mol_paragraph title \Набор крови. 3пр. 25% Шанс игнорировать сопротивление цели к кровотечению
-		<= Power $mol_section title \Этап 5. Максимальная мощь. 200+ ур.
-		<= Power_name $mol_paragraph title \Ваши физические атаки игорируют 100% сопр. врага с шансом 10%
-		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
-		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
+		<= Generate $mol_button_major
+			title \Получить предмет
+			click? <=> generate_item? null
+		<= New_item $mol_text text <= new_item \Новый предмет
+		<= History_item $mol_text text <= history_text \История предметов
 
 $mol_book2 $mol_scroll
 	menu_title \
@@ -1123,36 +1191,25 @@ $gen_app $mol_page
 	party /$gen_engine_unit
 	craft $gen_engine_craft
 	tools /
+		<= Telegram $mol_link_source
+			Icon <= Telegram_icon $mol_icon_telegram
+			uri \https://github.com/Lyumih/gen
 		<= Sources $mol_link_source
-			uri <= sources_uri \https://github.com/Lyumih/gen
+			uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2_catalog
 			menu_title \Меню
 			param \page
 			spreads *
-				hero_page <= Hero_page $gen_app_hero 
+				battle_page <= Battle_page $gen_app_battle engine <= engine
+				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party
-				battle_page <= Battle_page $gen_app_battle engine <= engine
-				dev_page <= Dev_page $gen_dev
-				auction_page <= Auction $gen_auction
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_unit
-		- <= Game_page $gen_app_game engine <= engine
-		- <= Hack_page $gen_app_admin engine <= engine
-		- <= Loot_page $gen_app_loot engine <= engine
-		- <= Pages $mol_book2
-			pages <= pages /
-				<= Hero_page $gen_app_hero 
-					engine <= engine
-					party <= party
-				<= Battle_page $gen_app_battle engine <= engine
-				<= Dev_page $gen_dev
-				<= Auction $gen_auction
-				<= Talent_page $gen_app_talent
-				<= Craft_page $gen_app_craft
-					unit <= active_hero? $gen_engine_unit
-				<= Game_page $gen_app_game engine <= engine
-				<= Hack_page $gen_app_admin engine <= engine
-				<= Loot_page $gen_app_loot engine <= engine
+				auction_page <= Auction $gen_auction
+				dev_page <= Dev_page $gen_dev
+				game_page <= Game_page $gen_app_game engine <= engine
+				hack_page <= Hack_page $gen_app_admin engine <= engine
+				loot_page <= Loot_page $gen_app_loot engine <= engine
