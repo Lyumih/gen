@@ -8,13 +8,6 @@ $mol_scroll $mol_view
 		^
 		scroll?event <=> event_scroll?event null
 
-$mol_book2 $mol_scroll
-	menu_title \
-	sub <= pages /$mol_view
-	minimal_width 0
-	Placeholder $mol_view
-	Gap* $mol_view title \
-
 $mol_page $mol_view
 	dom_name \article
 	field *
@@ -1008,21 +1001,99 @@ $gen_app_craft $mol_page
 		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
 		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
 
-$gen_app $mol_book2
+$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_number $mol_view
+	precision_view <= precision 1
+	precision_change <= precision 1
+	value_min -Infinity
+	value_max +Infinity
+	value? +NaN
+	enabled true
+	sub /
+		<= String $mol_string
+			- \ we don't want native number controls in mobile devices
+			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
+			type <= type \tel
+			value? <=> value_string? \
+			hint <= hint \ 
+			enabled <= string_enabled <= enabled
+			submit? <=> submit? null
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_minus
+		<= Inc $mol_button_minor
+			event_click? <=> event_inc? null
+			enabled <= inc_enabled <= enabled
+			sub / <= inc_icon $mol_icon_plus
+
+$gen_app_game $mol_page
+	title \Генератор битвы
+	engine $gen_engine
+	body /
+		<= Hero_level $mol_labeler
+			title \Ваш уровень героев
+			content / 
+				<= Hero_level_value $mol_number
+					value? <=> hero_level? 20
+		<= Generate $mol_button_major
+			title \Сгенерировать
+			click? <=> generate? null
+		<= Result $mol_text
+			code_sidebar_showed false
+			text <= result \
+
+$gen_app_admin $mol_page 
+	title \Хак панель
+	engine $gen_engine
+	body /
+		<= Win $mol_button_major
+			title \Победить (хак)
+			click? <=> make_win? null
+		<= Add_skill $mol_button_minor 
+			title \Добавить уменее
+			click? <=> add_hero_skill? null
+
+$gen_app_loot $mol_page
+	title \Лут
+	engine $gen_engine
+	body /
+		<= Generate $mol_button_major
+			title \Получить предмет
+			click? <=> generate_item? null
+		<= New_item $mol_text text <= new_item \Новый предмет
+		<= History_item $mol_text text <= history_text \История предметов
+
+$mol_book2 $mol_scroll
+	menu_title \
+	sub <= pages /$mol_view
+	minimal_width 0
+	Placeholder $mol_view
+	Gap* $mol_view title \
+
+$gen_app $mol_page
 	title \Игра Gen
 	engine $gen_engine
 	party /$gen_engine_unit
 	craft $gen_engine_craft
-	pages /
-		<= Hero_page $gen_app_hero 
-			engine <= engine
-			party <= party
-		<= Battle_page $gen_app_battle engine <= engine
-		<= Dev_page $gen_dev
-		<= Auction $gen_auction
-		<= Talent_page $gen_app_talent
-		<= Craft_page $gen_app_craft
-			unit <= active_hero? $gen_engine_unit
-		- <= Game_page $gen_app_game engine <= engine
-		- <= Hack_page $gen_app_admin engine <= engine
-		- <= Loot_page $gen_app_loot engine <= engine
+	body /
+		<= Pages $mol_book2
+			pages /
+				<= Hero_page $gen_app_hero 
+					engine <= engine
+					party <= party
+				<= Battle_page $gen_app_battle engine <= engine
+				<= Dev_page $gen_dev
+				<= Auction $gen_auction
+				<= Talent_page $gen_app_talent
+				<= Craft_page $gen_app_craft
+					unit <= active_hero? $gen_engine_unit
+				<= Game_page $gen_app_game engine <= engine
+				<= Hack_page $gen_app_admin engine <= engine
+				<= Loot_page $gen_app_loot engine <= engine
+				<= Menu_tools $mol_row sub /
+					<= Short_1 $mol_button_major
+					<= Short_2 $mol_button_major

@@ -931,13 +931,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_plugin extends $mol_view {
-        dom_node_external(next?: Element): Element;
-        render(): void;
-    }
-}
-
-declare namespace $ {
     class $mol_scroll extends $mol_view {
         scroll_top(next?: any): number;
         scroll_left(next?: any): number;
@@ -1029,30 +1022,36 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_book2 extends $mol_scroll {
-        menu_title(): string;
-        sub(): readonly $mol_view[];
-        minimal_width(): number;
-        Placeholder(): $mol_view;
-        Gap(id: any): $mol_view;
-        pages(): readonly $mol_view[];
+    class $mol_page extends $mol_view {
+        dom_name(): string;
+        field(): Record<string, any>;
+        sub(): readonly any[];
+        tabindex(): number;
+        Logo(): any;
+        title_content(): readonly any[];
+        Title(): $mol_view;
+        tools(): readonly $mol_view_content[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        body(): readonly $mol_view[];
+        Body_content(): $mol_view;
+        body_content(): readonly any[];
+        body_scroll_top(next?: any): number;
+        Body(): $$.$mol_scroll;
+        foot(): readonly $mol_view[];
+        Foot(): $mol_view;
     }
 }
 
 declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
+    class $mol_plugin extends $mol_view {
+        dom_node_external(next?: Element): Element;
+        render(): void;
+    }
 }
 
 declare namespace $.$$ {
-    class $mol_book2 extends $.$mol_book2 {
-        title(): string;
-        menu_title(): string;
-        sub(): readonly $mol_view[];
-        bring(): void;
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -1190,32 +1189,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_page extends $mol_view {
-        dom_name(): string;
-        field(): Record<string, any>;
-        sub(): readonly any[];
-        tabindex(): number;
-        Logo(): any;
-        title_content(): readonly any[];
-        Title(): $mol_view;
-        tools(): readonly $mol_view_content[];
-        Tools(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        body(): readonly $mol_view[];
-        Body_content(): $mol_view;
-        body_content(): readonly any[];
-        body_scroll_top(next?: any): number;
-        Body(): $$.$mol_scroll;
-        foot(): readonly $mol_view[];
-        Foot(): $mol_view;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
     class $mol_list extends $mol_view {
         render_visible_only(): boolean;
         render_over(): number;
@@ -1232,6 +1205,10 @@ declare namespace $ {
 
 declare namespace $ {
     function $mol_support_css_overflow_anchor(this: $): boolean;
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
 }
 
 declare namespace $.$$ {
@@ -3573,12 +3550,182 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $gen_app extends $mol_book2 {
+    class $mol_icon_minus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_plus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_number extends $mol_view {
+        precision_view(): number;
+        precision_change(): number;
+        value_min(): number;
+        value_max(): number;
+        value(next?: any): number;
+        enabled(): boolean;
+        sub(): readonly any[];
+        precision(): number;
+        type(): string;
+        value_string(next?: any): string;
+        hint(): string;
+        string_enabled(): boolean;
+        submit(next?: any): any;
+        String(): $$.$mol_string;
+        event_dec(next?: any): any;
+        dec_enabled(): boolean;
+        dec_icon(): $mol_icon_minus;
+        Dec(): $mol_button_minor;
+        event_inc(next?: any): any;
+        inc_enabled(): boolean;
+        inc_icon(): $mol_icon_plus;
+        Inc(): $mol_button_minor;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_number extends $.$mol_number {
+        value_limited(next?: any): number;
+        event_dec(next?: Event): void;
+        event_inc(next?: Event): void;
+        value_string(next?: string): string;
+        dec_enabled(): boolean;
+        inc_enabled(): boolean;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_game extends $mol_page {
+        title(): string;
+        engine(): $gen_engine;
+        body(): readonly any[];
+        hero_level(next?: any): number;
+        Hero_level_value(): $$.$mol_number;
+        Hero_level(): $mol_labeler;
+        generate(next?: any): any;
+        Generate(): $mol_button_major;
+        result(): string;
+        Result(): $$.$mol_text;
+    }
+}
+
+declare namespace $ {
+    class $gen_generator extends $mol_object {
+        seed(): string;
+        start(level: number): string;
+        get_enemies(level: number): {
+            name: string;
+            level: number;
+            skills: never[];
+            point: {
+                stats: number;
+                skill: number;
+                equip: number;
+            };
+        }[];
+        get_enemy(level: number): {
+            name: string;
+            level: number;
+            skills: never[];
+            point: {
+                stats: number;
+                skill: number;
+                equip: number;
+            };
+        };
+        random(max: number): number;
+        get_mode(): string;
+        get_terrain(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_game extends $.$gen_app_game {
+        result(next?: any): string;
+        generate(next?: any): string;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_admin extends $mol_page {
+        title(): string;
+        engine(): $gen_engine;
+        body(): readonly any[];
+        make_win(next?: any): any;
+        Win(): $mol_button_major;
+        add_hero_skill(next?: any): any;
+        Add_skill(): $mol_button_minor;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_admin extends $.$gen_app_admin {
+        make_win(next?: any): void;
+        add_hero_skill(next?: any): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_app_loot extends $mol_page {
+        title(): string;
+        engine(): $gen_engine;
+        body(): readonly any[];
+        generate_item(next?: any): any;
+        Generate(): $mol_button_major;
+        new_item(): string;
+        New_item(): $$.$mol_text;
+        history_text(): string;
+        History_item(): $$.$mol_text;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_loot extends $.$gen_app_loot {
+        generate_item(next?: any): void;
+        history(next?: any): any[];
+        new_item(): string;
+        history_text(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_book2 extends $mol_scroll {
+        menu_title(): string;
+        sub(): readonly $mol_view[];
+        minimal_width(): number;
+        Placeholder(): $mol_view;
+        Gap(id: any): $mol_view;
+        pages(): readonly $mol_view[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_book2 extends $.$mol_book2 {
+        title(): string;
+        menu_title(): string;
+        sub(): readonly $mol_view[];
+        bring(): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app extends $mol_page {
         title(): string;
         engine(): $gen_engine;
         party(): readonly $gen_engine_unit[];
         craft(): $gen_engine_craft;
-        pages(): readonly any[];
+        body(): readonly any[];
         Hero_page(): $$.$gen_app_hero;
         Battle_page(): $$.$gen_app_battle;
         Dev_page(): $$.$gen_dev;
@@ -3586,6 +3733,13 @@ declare namespace $ {
         Talent_page(): $$.$gen_app_talent;
         active_hero(next?: any): $gen_engine_unit;
         Craft_page(): $$.$gen_app_craft;
+        Game_page(): $$.$gen_app_game;
+        Hack_page(): $$.$gen_app_admin;
+        Loot_page(): $$.$gen_app_loot;
+        Short_1(): $mol_button_major;
+        Short_2(): $mol_button_major;
+        Menu_tools(): $mol_row;
+        Pages(): $$.$mol_book2;
     }
 }
 

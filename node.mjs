@@ -3078,21 +3078,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_plugin extends $mol_view {
-        dom_node_external(next) {
-            return next ?? $mol_owning_get(this).host.dom_node();
-        }
-        render() {
-            this.dom_node_actual();
-        }
-    }
-    $.$mol_plugin = $mol_plugin;
-})($ || ($ = {}));
-//mol/plugin/plugin.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_scroll extends $mol_view {
         scroll_top(next) {
             if (next !== undefined)
@@ -3413,102 +3398,238 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_book2 extends $mol_scroll {
-        menu_title() {
-            return "";
+    class $mol_page extends $mol_view {
+        dom_name() {
+            return "article";
+        }
+        field() {
+            return {
+                ...super.field(),
+                tabIndex: this.tabindex()
+            };
         }
         sub() {
-            return this.pages();
+            return [
+                this.Head(),
+                this.Body(),
+                this.Foot()
+            ];
         }
-        minimal_width() {
-            return 0;
+        tabindex() {
+            return -1;
         }
-        Placeholder() {
+        Logo() {
+            return null;
+        }
+        title_content() {
+            return [
+                this.Logo(),
+                this.title()
+            ];
+        }
+        Title() {
             const obj = new this.$.$mol_view();
+            obj.dom_name = () => "h1";
+            obj.sub = () => this.title_content();
             return obj;
         }
-        Gap(id) {
-            const obj = new this.$.$mol_view();
-            obj.title = () => "";
-            return obj;
-        }
-        pages() {
+        tools() {
             return [];
+        }
+        Tools() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.tools();
+            return obj;
+        }
+        head() {
+            return [
+                this.Title(),
+                this.Tools()
+            ];
+        }
+        Head() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 64;
+            obj.dom_name = () => "header";
+            obj.sub = () => this.head();
+            return obj;
+        }
+        body() {
+            return [];
+        }
+        Body_content() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.body();
+            return obj;
+        }
+        body_content() {
+            return [
+                this.Body_content()
+            ];
+        }
+        body_scroll_top(next) {
+            return this.Body().scroll_top(next);
+        }
+        Body() {
+            const obj = new this.$.$mol_scroll();
+            obj.sub = () => this.body_content();
+            return obj;
+        }
+        foot() {
+            return [];
+        }
+        Foot() {
+            const obj = new this.$.$mol_view();
+            obj.dom_name = () => "footer";
+            obj.sub = () => this.foot();
+            return obj;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_book2.prototype, "Placeholder", null);
+    ], $mol_page.prototype, "Title", null);
     __decorate([
-        $mol_mem_key
-    ], $mol_book2.prototype, "Gap", null);
-    $.$mol_book2 = $mol_book2;
+        $mol_mem
+    ], $mol_page.prototype, "Tools", null);
+    __decorate([
+        $mol_mem
+    ], $mol_page.prototype, "Head", null);
+    __decorate([
+        $mol_mem
+    ], $mol_page.prototype, "Body_content", null);
+    __decorate([
+        $mol_mem
+    ], $mol_page.prototype, "Body", null);
+    __decorate([
+        $mol_mem
+    ], $mol_page.prototype, "Foot", null);
+    $.$mol_page = $mol_page;
 })($ || ($ = {}));
-//mol/book2/-view.tree/book2.view.tree.ts
+//mol/page/-view.tree/page.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_mem_cached = $mol_wire_probe;
+    class $mol_plugin extends $mol_view {
+        dom_node_external(next) {
+            return next ?? $mol_owning_get(this).host.dom_node();
+        }
+        render() {
+            this.dom_node_actual();
+        }
+    }
+    $.$mol_plugin = $mol_plugin;
 })($ || ($ = {}));
-//mol/mem/cached/cached.ts
+//mol/plugin/plugin.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_book2 extends $.$mol_book2 {
-            title() {
-                return this.pages().map(page => {
-                    try {
-                        return page?.title();
-                    }
-                    catch (error) {
-                        $mol_fail_log(error);
-                    }
-                }).reverse().filter(Boolean).join(' | ');
-            }
-            menu_title() {
-                return this.pages()[0]?.title() || this.title();
-            }
-            sub() {
-                const next = [...this.pages(), this.Placeholder()];
-                const prev = $mol_mem_cached(() => this.sub()) ?? [];
-                for (let i = 1; i++;) {
-                    const p = prev[prev.length - i];
-                    const n = next[next.length - i];
-                    if (!n)
-                        break;
-                    if (p === n)
-                        continue;
-                    n.bring();
-                    break;
-                }
-                return next;
-            }
-            bring() {
-                const pages = this.pages();
-                if (pages.length)
-                    pages[pages.length - 1].bring();
-                else
-                    super.bring();
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_book2.prototype, "sub", null);
-        $$.$mol_book2 = $mol_book2;
+        const { per, rem } = $mol_style_unit;
+        const { calc } = $mol_style_func;
+        $mol_style_define($mol_page, {
+            display: 'flex',
+            flex: {
+                basis: 'auto',
+                direction: 'column',
+            },
+            position: 'relative',
+            alignSelf: 'stretch',
+            maxWidth: per(100),
+            maxHeight: per(100),
+            boxSizing: 'border-box',
+            color: $mol_theme.text,
+            ':focus': {
+                outline: 'none',
+            },
+            Head: {
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'flex-end',
+                flex: 'none',
+                position: 'relative',
+                margin: 0,
+                minHeight: rem(4),
+                padding: $mol_gap.block,
+                background: {
+                    color: $mol_theme.card,
+                },
+                border: {
+                    radius: $mol_gap.round,
+                },
+                boxShadow: `0 0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25)`,
+                zIndex: 2,
+            },
+            Title: {
+                minHeight: rem(2),
+                margin: 0,
+                padding: $mol_gap.text,
+                gap: $mol_gap.text,
+                wordBreak: 'normal',
+                textShadow: '0 0',
+                font: {
+                    size: 'inherit',
+                    weight: 'normal',
+                },
+                flex: {
+                    grow: 1,
+                    shrink: 1,
+                    basis: 'auto',
+                },
+            },
+            Tools: {
+                flex: {
+                    basis: 'auto',
+                    grow: 1000,
+                    shrink: 1,
+                },
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-start',
+                flexWrap: 'wrap',
+            },
+            Body: {
+                flex: {
+                    grow: 1000,
+                    shrink: 1,
+                    basis: per(100),
+                },
+            },
+            Body_content: {
+                padding: $mol_gap.block,
+                flex: {
+                    direction: 'column',
+                    shrink: 1,
+                    grow: 1,
+                },
+                justify: {
+                    self: 'stretch',
+                },
+            },
+            Foot: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                flex: 'none',
+                margin: 0,
+                background: {
+                    color: $mol_theme.card,
+                },
+                border: {
+                    radius: $mol_gap.round,
+                },
+                boxShadow: `0 -0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25)`,
+                zIndex: 1,
+                padding: $mol_gap.block,
+                ':empty': {
+                    display: 'none',
+                },
+            },
+        });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/book2/book2.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\toverflow: overlay;\n\tscroll-snap-type: x mandatory;\n\tpadding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px;\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_focus) 0%,\n\t\tvar(--mol_theme_focus) 15%,\n\t\ttransparent 15%,\n\t\ttransparent 42%,\n\t\tvar(--mol_theme_focus) 42%,\n\t\tvar(--mol_theme_focus) 58%,\n\t\ttransparent 58%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_focus) 85%,\n\t\tvar(--mol_theme_focus) 100%\n\t);\n\topacity: .5;\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -2px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -2px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
-})($ || ($ = {}));
-//mol/book2/-css/book2.view.css.ts
+//mol/page/page.view.css.ts
 ;
 "use strict";
 var $;
@@ -3885,227 +4006,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_page extends $mol_view {
-        dom_name() {
-            return "article";
-        }
-        field() {
-            return {
-                ...super.field(),
-                tabIndex: this.tabindex()
-            };
-        }
-        sub() {
-            return [
-                this.Head(),
-                this.Body(),
-                this.Foot()
-            ];
-        }
-        tabindex() {
-            return -1;
-        }
-        Logo() {
-            return null;
-        }
-        title_content() {
-            return [
-                this.Logo(),
-                this.title()
-            ];
-        }
-        Title() {
-            const obj = new this.$.$mol_view();
-            obj.dom_name = () => "h1";
-            obj.sub = () => this.title_content();
-            return obj;
-        }
-        tools() {
-            return [];
-        }
-        Tools() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.tools();
-            return obj;
-        }
-        head() {
-            return [
-                this.Title(),
-                this.Tools()
-            ];
-        }
-        Head() {
-            const obj = new this.$.$mol_view();
-            obj.minimal_height = () => 64;
-            obj.dom_name = () => "header";
-            obj.sub = () => this.head();
-            return obj;
-        }
-        body() {
-            return [];
-        }
-        Body_content() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.body();
-            return obj;
-        }
-        body_content() {
-            return [
-                this.Body_content()
-            ];
-        }
-        body_scroll_top(next) {
-            return this.Body().scroll_top(next);
-        }
-        Body() {
-            const obj = new this.$.$mol_scroll();
-            obj.sub = () => this.body_content();
-            return obj;
-        }
-        foot() {
-            return [];
-        }
-        Foot() {
-            const obj = new this.$.$mol_view();
-            obj.dom_name = () => "footer";
-            obj.sub = () => this.foot();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Title", null);
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Tools", null);
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Head", null);
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Body_content", null);
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Body", null);
-    __decorate([
-        $mol_mem
-    ], $mol_page.prototype, "Foot", null);
-    $.$mol_page = $mol_page;
-})($ || ($ = {}));
-//mol/page/-view.tree/page.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        const { per, rem } = $mol_style_unit;
-        const { calc } = $mol_style_func;
-        $mol_style_define($mol_page, {
-            display: 'flex',
-            flex: {
-                basis: 'auto',
-                direction: 'column',
-            },
-            position: 'relative',
-            alignSelf: 'stretch',
-            maxWidth: per(100),
-            maxHeight: per(100),
-            boxSizing: 'border-box',
-            color: $mol_theme.text,
-            ':focus': {
-                outline: 'none',
-            },
-            Head: {
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'flex-end',
-                flex: 'none',
-                position: 'relative',
-                margin: 0,
-                minHeight: rem(4),
-                padding: $mol_gap.block,
-                background: {
-                    color: $mol_theme.card,
-                },
-                border: {
-                    radius: $mol_gap.round,
-                },
-                boxShadow: `0 0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25)`,
-                zIndex: 2,
-            },
-            Title: {
-                minHeight: rem(2),
-                margin: 0,
-                padding: $mol_gap.text,
-                gap: $mol_gap.text,
-                wordBreak: 'normal',
-                textShadow: '0 0',
-                font: {
-                    size: 'inherit',
-                    weight: 'normal',
-                },
-                flex: {
-                    grow: 1,
-                    shrink: 1,
-                    basis: 'auto',
-                },
-            },
-            Tools: {
-                flex: {
-                    basis: 'auto',
-                    grow: 1000,
-                    shrink: 1,
-                },
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-start',
-                flexWrap: 'wrap',
-            },
-            Body: {
-                flex: {
-                    grow: 1000,
-                    shrink: 1,
-                    basis: per(100),
-                },
-            },
-            Body_content: {
-                padding: $mol_gap.block,
-                flex: {
-                    direction: 'column',
-                    shrink: 1,
-                    grow: 1,
-                },
-                justify: {
-                    self: 'stretch',
-                },
-            },
-            Foot: {
-                display: 'flex',
-                justifyContent: 'space-between',
-                flex: 'none',
-                margin: 0,
-                background: {
-                    color: $mol_theme.card,
-                },
-                border: {
-                    radius: $mol_gap.round,
-                },
-                boxShadow: `0 -0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25)`,
-                zIndex: 1,
-                padding: $mol_gap.block,
-                ':empty': {
-                    display: 'none',
-                },
-            },
-        });
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/page/page.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_list extends $mol_view {
         render_visible_only() {
             return true;
@@ -4174,6 +4074,13 @@ var $;
     $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
 })($ || ($ = {}));
 //mol/support/css/css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_cached = $mol_wire_probe;
+})($ || ($ = {}));
+//mol/mem/cached/cached.ts
 ;
 "use strict";
 var $;
@@ -12779,7 +12686,663 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_app extends $mol_book2 {
+    class $mol_icon_minus extends $mol_icon {
+        path() {
+            return "M19,13H5V11H19V13Z";
+        }
+    }
+    $.$mol_icon_minus = $mol_icon_minus;
+})($ || ($ = {}));
+//mol/icon/minus/-view.tree/minus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_plus extends $mol_icon {
+        path() {
+            return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
+        }
+    }
+    $.$mol_icon_plus = $mol_icon_plus;
+})($ || ($ = {}));
+//mol/icon/plus/-view.tree/plus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_number extends $mol_view {
+        precision_view() {
+            return this.precision();
+        }
+        precision_change() {
+            return this.precision();
+        }
+        value_min() {
+            return -Infinity;
+        }
+        value_max() {
+            return +Infinity;
+        }
+        value(next) {
+            if (next !== undefined)
+                return next;
+            return +NaN;
+        }
+        enabled() {
+            return true;
+        }
+        sub() {
+            return [
+                this.String(),
+                this.Dec(),
+                this.Inc()
+            ];
+        }
+        precision() {
+            return 1;
+        }
+        type() {
+            return "tel";
+        }
+        value_string(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        hint() {
+            return " ";
+        }
+        string_enabled() {
+            return this.enabled();
+        }
+        submit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        String() {
+            const obj = new this.$.$mol_string();
+            obj.type = () => this.type();
+            obj.value = (next) => this.value_string(next);
+            obj.hint = () => this.hint();
+            obj.enabled = () => this.string_enabled();
+            obj.submit = (next) => this.submit(next);
+            return obj;
+        }
+        event_dec(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        dec_enabled() {
+            return this.enabled();
+        }
+        dec_icon() {
+            const obj = new this.$.$mol_icon_minus();
+            return obj;
+        }
+        Dec() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_dec(next);
+            obj.enabled = () => this.dec_enabled();
+            obj.sub = () => [
+                this.dec_icon()
+            ];
+            return obj;
+        }
+        event_inc(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        inc_enabled() {
+            return this.enabled();
+        }
+        inc_icon() {
+            const obj = new this.$.$mol_icon_plus();
+            return obj;
+        }
+        Inc() {
+            const obj = new this.$.$mol_button_minor();
+            obj.event_click = (next) => this.event_inc(next);
+            obj.enabled = () => this.inc_enabled();
+            obj.sub = () => [
+                this.inc_icon()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "value_string", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "submit", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "String", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "dec_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Dec", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "event_inc", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "inc_icon", null);
+    __decorate([
+        $mol_mem
+    ], $mol_number.prototype, "Inc", null);
+    $.$mol_number = $mol_number;
+})($ || ($ = {}));
+//mol/number/-view.tree/number.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/number/number.css", "[mol_number] {\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tposition: relative;\n\talign-items: stretch;\n\tmax-width: 100%;\n}\n\n[mol_number_string] {\n\tappearance: textfield;\n\tflex: 1 1 7rem;\n\twidth: 7rem;\n}\n\n[mol_number_string]::-webkit-inner-spin-button {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/number/-css/number.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_number extends $.$mol_number {
+            value_limited(next) {
+                if (next === undefined)
+                    return this.value();
+                if (next === '')
+                    return this.value(Number.NaN);
+                const min = this.value_min();
+                const max = this.value_max();
+                const val = Number(next);
+                if (val < min)
+                    return this.value(min);
+                if (val > max)
+                    return this.value(max);
+                return this.value(val);
+            }
+            event_dec(next) {
+                this.value_limited((this.value_limited() || 0) - this.precision_change());
+            }
+            event_inc(next) {
+                this.value_limited((this.value_limited() || 0) + this.precision_change());
+            }
+            value_string(next) {
+                const next_num = this.value_limited(next);
+                const precisionView = this.precision_view();
+                if (next_num === 0)
+                    return '0';
+                if (!next_num)
+                    return '';
+                if (precisionView >= 1) {
+                    return (next_num / precisionView).toFixed();
+                }
+                else {
+                    const fixedNumber = Math.log10(1 / precisionView);
+                    return next_num.toFixed(Math.ceil(fixedNumber));
+                }
+            }
+            dec_enabled() {
+                return this.enabled() && (!((this.value() || 0) <= this.value_min()));
+            }
+            inc_enabled() {
+                return this.enabled() && (!((this.value() || 0) >= this.value_max()));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "dec_enabled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_number.prototype, "inc_enabled", null);
+        $$.$mol_number = $mol_number;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/number/number.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_game extends $mol_page {
+        title() {
+            return "Генератор битвы";
+        }
+        engine() {
+            const obj = new this.$.$gen_engine();
+            return obj;
+        }
+        body() {
+            return [
+                this.Hero_level(),
+                this.Generate(),
+                this.Result()
+            ];
+        }
+        hero_level(next) {
+            if (next !== undefined)
+                return next;
+            return 20;
+        }
+        Hero_level_value() {
+            const obj = new this.$.$mol_number();
+            obj.value = (next) => this.hero_level(next);
+            return obj;
+        }
+        Hero_level() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Ваш уровень героев";
+            obj.content = () => [
+                this.Hero_level_value()
+            ];
+            return obj;
+        }
+        generate(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Generate() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Сгенерировать";
+            obj.click = (next) => this.generate(next);
+            return obj;
+        }
+        result() {
+            return "";
+        }
+        Result() {
+            const obj = new this.$.$mol_text();
+            obj.code_sidebar_showed = () => false;
+            obj.text = () => this.result();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "hero_level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Hero_level_value", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Hero_level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_game.prototype, "Result", null);
+    $.$gen_app_game = $gen_app_game;
+})($ || ($ = {}));
+//gen/app/game/-view.tree/game.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_generator extends $mol_object {
+        seed() {
+            return '1';
+        }
+        start(level) {
+            const enemies = this.get_enemies(level);
+            const format_enemies = enemies.map((enemy, index) => {
+                return `\n**Враг ${index + 1}**\nХарактеристики: ${enemy.point.stats}\nУмения: ${enemy.point.skill}\nПредметы: ${enemy.point.equip}\n`;
+            });
+            return `
+			Местность: ${this.get_terrain()}
+			Режим: ${this.get_mode()}
+			Врагов: ${enemies.length}
+			${format_enemies.join('\n')}
+			`;
+        }
+        get_enemies(level) {
+            const count = $mol_array_lottery([1, 2, 3, 4]);
+            const enemies = [];
+            for (let i = 0; i < count; i++) {
+                enemies.push(this.get_enemy(level));
+            }
+            return enemies;
+        }
+        get_enemy(level) {
+            const stats = level - this.random(level - 2);
+            const skill = this.random(level - stats);
+            const equip = level - stats - skill;
+            return {
+                name: 'Враг',
+                level: level,
+                skills: [],
+                point: {
+                    stats,
+                    skill,
+                    equip,
+                }
+            };
+        }
+        random(max) {
+            return Math.floor(Math.random() * max);
+        }
+        get_mode() {
+            return $mol_array_lottery(['битва', 'все против всех', 'предательство']);
+        }
+        get_terrain() {
+            return $mol_array_lottery(['обычная', 'горы', 'низины', 'горы и низины']);
+        }
+    }
+    $.$gen_generator = $gen_generator;
+})($ || ($ = {}));
+//gen/generator/generator.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_game extends $.$gen_app_game {
+            result(next) {
+                return new $gen_generator().start(this.hero_level());
+            }
+            generate(next) {
+                return this.result(true);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_game.prototype, "result", null);
+        $$.$gen_app_game = $gen_app_game;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/game/game.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_admin extends $mol_page {
+        title() {
+            return "Хак панель";
+        }
+        engine() {
+            const obj = new this.$.$gen_engine();
+            return obj;
+        }
+        body() {
+            return [
+                this.Win(),
+                this.Add_skill()
+            ];
+        }
+        make_win(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Win() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Победить (хак)";
+            obj.click = (next) => this.make_win(next);
+            return obj;
+        }
+        add_hero_skill(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Add_skill() {
+            const obj = new this.$.$mol_button_minor();
+            obj.title = () => "Добавить уменее";
+            obj.click = (next) => this.add_hero_skill(next);
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_admin.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_admin.prototype, "make_win", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_admin.prototype, "Win", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_admin.prototype, "add_hero_skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_admin.prototype, "Add_skill", null);
+    $.$gen_app_admin = $gen_app_admin;
+})($ || ($ = {}));
+//gen/app/admin/-view.tree/admin.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_admin extends $.$gen_app_admin {
+            make_win(next) {
+                this.engine().make_win(true);
+            }
+            add_hero_skill(next) {
+                this.engine().add_hero_skill();
+            }
+        }
+        $$.$gen_app_admin = $gen_app_admin;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/admin/admin.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_loot extends $mol_page {
+        title() {
+            return "Лут";
+        }
+        engine() {
+            const obj = new this.$.$gen_engine();
+            return obj;
+        }
+        body() {
+            return [
+                this.Generate(),
+                this.New_item(),
+                this.History_item()
+            ];
+        }
+        generate_item(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Generate() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Получить предмет";
+            obj.click = (next) => this.generate_item(next);
+            return obj;
+        }
+        new_item() {
+            return "Новый предмет";
+        }
+        New_item() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.new_item();
+            return obj;
+        }
+        history_text() {
+            return "История предметов";
+        }
+        History_item() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.history_text();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_loot.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_loot.prototype, "generate_item", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_loot.prototype, "Generate", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_loot.prototype, "New_item", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_loot.prototype, "History_item", null);
+    $.$gen_app_loot = $gen_app_loot;
+})($ || ($ = {}));
+//gen/app/loot/-view.tree/loot.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_loot extends $.$gen_app_loot {
+            generate_item(next) {
+                const skill = $mol_array_lottery(this.engine().all_skills());
+                const equip = $mol_array_lottery(this.engine().all_equip());
+                const mode = $mol_array_lottery(this.engine().all_mode());
+                const item = $mol_array_lottery([skill, equip, mode]);
+                this.engine().inventory([...this.engine().inventory(), item]);
+                this.history([...this.history(), item]);
+            }
+            history(next) {
+                return next ?? [];
+            }
+            new_item() {
+                const history = this.history();
+                return JSON.stringify(history[history.length - 1] || 'Нет предмета');
+            }
+            history_text() {
+                return 'История:\n' + JSON.stringify(this.history());
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_loot.prototype, "history", null);
+        $$.$gen_app_loot = $gen_app_loot;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/loot/loot.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_book2 extends $mol_scroll {
+        menu_title() {
+            return "";
+        }
+        sub() {
+            return this.pages();
+        }
+        minimal_width() {
+            return 0;
+        }
+        Placeholder() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+        Gap(id) {
+            const obj = new this.$.$mol_view();
+            obj.title = () => "";
+            return obj;
+        }
+        pages() {
+            return [];
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_book2.prototype, "Placeholder", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_book2.prototype, "Gap", null);
+    $.$mol_book2 = $mol_book2;
+})($ || ($ = {}));
+//mol/book2/-view.tree/book2.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_book2 extends $.$mol_book2 {
+            title() {
+                return this.pages().map(page => {
+                    try {
+                        return page?.title();
+                    }
+                    catch (error) {
+                        $mol_fail_log(error);
+                    }
+                }).reverse().filter(Boolean).join(' | ');
+            }
+            menu_title() {
+                return this.pages()[0]?.title() || this.title();
+            }
+            sub() {
+                const next = [...this.pages(), this.Placeholder()];
+                const prev = $mol_mem_cached(() => this.sub()) ?? [];
+                for (let i = 1; i++;) {
+                    const p = prev[prev.length - i];
+                    const n = next[next.length - i];
+                    if (!n)
+                        break;
+                    if (p === n)
+                        continue;
+                    n.bring();
+                    break;
+                }
+                return next;
+            }
+            bring() {
+                const pages = this.pages();
+                if (pages.length)
+                    pages[pages.length - 1].bring();
+                else
+                    super.bring();
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_book2.prototype, "sub", null);
+        $$.$mol_book2 = $mol_book2;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/book2/book2.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\toverflow: overlay;\n\tscroll-snap-type: x mandatory;\n\tpadding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px;\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_focus) 0%,\n\t\tvar(--mol_theme_focus) 15%,\n\t\ttransparent 15%,\n\t\ttransparent 42%,\n\t\tvar(--mol_theme_focus) 42%,\n\t\tvar(--mol_theme_focus) 58%,\n\t\ttransparent 58%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_focus) 85%,\n\t\tvar(--mol_theme_focus) 100%\n\t);\n\topacity: .5;\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -2px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -2px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
+})($ || ($ = {}));
+//mol/book2/-css/book2.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app extends $mol_page {
         title() {
             return "Игра Gen";
         }
@@ -12794,14 +13357,9 @@ var $;
             const obj = new this.$.$gen_engine_craft();
             return obj;
         }
-        pages() {
+        body() {
             return [
-                this.Hero_page(),
-                this.Battle_page(),
-                this.Dev_page(),
-                this.Auction(),
-                this.Talent_page(),
-                this.Craft_page()
+                this.Pages()
             ];
         }
         Hero_page() {
@@ -12838,6 +13396,53 @@ var $;
             obj.unit = () => this.active_hero();
             return obj;
         }
+        Game_page() {
+            const obj = new this.$.$gen_app_game();
+            obj.engine = () => this.engine();
+            return obj;
+        }
+        Hack_page() {
+            const obj = new this.$.$gen_app_admin();
+            obj.engine = () => this.engine();
+            return obj;
+        }
+        Loot_page() {
+            const obj = new this.$.$gen_app_loot();
+            obj.engine = () => this.engine();
+            return obj;
+        }
+        Short_1() {
+            const obj = new this.$.$mol_button_major();
+            return obj;
+        }
+        Short_2() {
+            const obj = new this.$.$mol_button_major();
+            return obj;
+        }
+        Menu_tools() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Short_1(),
+                this.Short_2()
+            ];
+            return obj;
+        }
+        Pages() {
+            const obj = new this.$.$mol_book2();
+            obj.pages = () => [
+                this.Hero_page(),
+                this.Battle_page(),
+                this.Dev_page(),
+                this.Auction(),
+                this.Talent_page(),
+                this.Craft_page(),
+                this.Game_page(),
+                this.Hack_page(),
+                this.Loot_page(),
+                this.Menu_tools()
+            ];
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -12866,6 +13471,27 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "Craft_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Game_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Hack_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Loot_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Short_1", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Short_2", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Menu_tools", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "Pages", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
@@ -12898,7 +13524,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/app.view.css", "[mol_page] {\n\tflex-basis: 30rem;\n}\n\n[gen_app_dev_page] {\n\tflex-basis: 50rem;\n}");
+    $mol_style_attach("gen/app/app.view.css", "");
 })($ || ($ = {}));
 //gen/app/-css/app.view.css.ts
 
