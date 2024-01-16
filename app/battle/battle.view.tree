@@ -1,26 +1,32 @@
-$gen_app_battle $mol_page
+$gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
 	title \Битва
-	body /
-		<= Field $mol_list rows /
-			<= Turn $mol_section title <= turn \Ход: 0
-			<= Hero $gen_app_battle_unit
-				battle <= battle
-				unit <= hero $gen_engine_item_unit
-				target <= enemy $gen_engine_item_unit
-			<= Enemy $gen_app_battle_unit
-				battle <= battle
-				unit <= enemy $gen_engine_item_unit
-				target <= hero $gen_engine_item_unit
-		<= End $mol_paragraph title <= end \
-		<= Reward $mol_button_major
-			enabled <= is_game_end false
-			title \Получить награду
-			click? <= get_reward? null
-		<= Restart $mol_button_minor
-			title \Начать заново
-			click? <=> restart? null
-		<= History_label $mol_section title \История
-		<= History $mol_text text <= history \
+	pages /
+		<= Battle_page $mol_page
+			title \Битва
+			body /
+				<= Field $mol_list rows /
+					<= Turn $mol_section title <= turn \Ход: 0
+					<= Hero $gen_app_battle_unit
+						battle <= battle
+						unit <= hero $gen_engine_item_unit
+						target <= enemy $gen_engine_item_unit
+					<= Enemy $gen_app_battle_unit
+						battle <= battle
+						unit <= enemy $gen_engine_item_unit
+						target <= hero $gen_engine_item_unit
+				<= End $mol_paragraph title <= end \
+				<= Reward $mol_button_major
+					enabled <= is_game_end false
+					title \Получить награду
+					click? <= get_reward? null
+				<= Restart $mol_button_minor
+					title \Начать заново
+					click? <=> restart? null
+		<= History_page $mol_page
+			title \История
+			body /
+				<= History_label $mol_section title \История
+				<= History $mol_text text <= history \
