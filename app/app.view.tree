@@ -7,7 +7,23 @@ $gen_app $mol_page
 		<= Sources $mol_link_source
 			uri <= sources_uri \https://github.com/Lyumih/gen
 	body /
-		<= Pages $mol_book2
+		<= Pages $mol_book2_catalog
+			menu_title \Меню
+			param \page
+			spreads *
+				hero_page <= Hero_page $gen_app_hero 
+					engine <= engine
+					party <= party
+				battle_page <= Battle_page $gen_app_battle engine <= engine
+				dev_page <= Dev_page $gen_dev
+				auction_page <= Auction $gen_auction
+				talent_page <= Talent_page $gen_app_talent
+				craftt_page <= Craft_page $gen_app_craft
+					unit <= active_hero? $gen_engine_unit
+		- <= Game_page $gen_app_game engine <= engine
+		- <= Hack_page $gen_app_admin engine <= engine
+		- <= Loot_page $gen_app_loot engine <= engine
+		- <= Pages $mol_book2
 			pages <= pages /
 				<= Hero_page $gen_app_hero 
 					engine <= engine

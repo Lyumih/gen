@@ -4,6 +4,9 @@ $gen_app_hero $mol_page
 	party /$gen_engine_unit
 	active_hero? \
 	body /
+		<= Start_battle $mol_button_major
+			title \Начать битву
+			click? <=> start_battle? null
 		<= Party_title $mol_section title \Отряд
 		<= Party_list $mol_row sub <= party_list / 
 			<= Party*0 $mol_pop_over
@@ -15,11 +18,9 @@ $gen_app_hero $mol_page
 					<= Party_hero_pick* $mol_button_minor
 						title \Выбрать героя
 						click? <=> party_hero_pick*? null
-		<= Start_battle $mol_button_major
-			title \Начать битву
-			click? <=> start_battle? null
 		<= Name $mol_section title <= name \Имя:
-		<= Level $mol_text text <= level \ Уровень 5
+		<= Level $mol_text text <= level \Уровень:
+		<= Points_hero $mol_text text <= points \Очки пт:
 		<= Equipment_label $mol_section title \Экипировка
 		<= Equipment_list $mol_row sub <= equipment_list /
 			<= Equipment*0 $mol_row sub /

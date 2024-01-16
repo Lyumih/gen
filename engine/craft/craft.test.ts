@@ -1,4 +1,4 @@
-namespace $.$$ {
+namespace $ {
 
 	const craft = new $gen_engine_craft
 	const unit = new $gen_engine_unit
