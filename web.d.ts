@@ -2895,7 +2895,7 @@ declare namespace $ {
         name(): string;
         Name(): $$.$mol_section;
         level(): string;
-        Level(): $$.$mol_text;
+        Level(): $$.$mol_section;
         points(): string;
         Points_hero(): $$.$mol_text;
         Equipment_label(): $$.$mol_section;
@@ -2951,7 +2951,7 @@ declare namespace $.$$ {
         equipment_unequip(id: any, next?: any): void;
         skill_points(): string;
         skill_list(): readonly any[];
-        get_skill(id: string): $gen_engine_item_skill | undefined;
+        get_skill(id?: string): $gen_engine_item_skill | undefined;
         skill_level_up(id: string, next?: any): void;
         skill_mode(id: any): string;
         skill_add_mode(id: string, next?: any): void;

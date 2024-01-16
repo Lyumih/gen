@@ -3780,6 +3780,7 @@ var $;
             return next ?? 'no name';
         }
         description(next) {
+            console.log('description', next);
             return next ?? 'no description';
         }
         level(next) {
@@ -10200,8 +10201,8 @@ var $;
             return "Уровень:";
         }
         Level() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.level();
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.level();
             return obj;
         }
         points() {
@@ -10526,10 +10527,10 @@ var $;
                 return `Очков: ${this.hero()?.points()}`;
             }
             equipment_list() {
-                return this.hero()?.equipments().map(item => this.Equipment(item.id())) || [];
+                return this.hero()?.equipments()?.map(item => this.Equipment(item.id())) || [];
             }
             get_equipment(id) {
-                return this.hero()?.equipments().find(item => item.id() === id);
+                return this.hero()?.equipments()?.find(item => item.id() === id);
             }
             equipment_unequip(id, next) {
                 this.engine().hero_unequip(id);
@@ -10538,6 +10539,7 @@ var $;
                 return `Очков умений: ${this.hero()?.points()}`;
             }
             skill_list() {
+                console.log(this.hero());
                 return this.hero()?.skills()?.map(skill => this.Skill(skill.id())) || [];
             }
             get_skill(id) {
