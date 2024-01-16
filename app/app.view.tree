@@ -3,9 +3,12 @@ $gen_app $mol_page
 	engine $gen_engine
 	party /$gen_engine_unit
 	craft $gen_engine_craft
+	tools /
+		<= Sources $mol_link_source
+			uri <= sources_uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2
-			pages /
+			pages <= pages /
 				<= Hero_page $gen_app_hero 
 					engine <= engine
 					party <= party
@@ -18,6 +21,3 @@ $gen_app $mol_page
 				<= Game_page $gen_app_game engine <= engine
 				<= Hack_page $gen_app_admin engine <= engine
 				<= Loot_page $gen_app_loot engine <= engine
-				<= Menu_tools $mol_row sub /
-					<= Short_1 $mol_button_major
-					<= Short_2 $mol_button_major
