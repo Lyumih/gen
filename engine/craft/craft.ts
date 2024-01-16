@@ -43,7 +43,6 @@ namespace $ {
 		}
 
 		prop_level_up( id: string ) {
-			console.log( 'prop_level_up', id )
 			if( this.equipment().prop_level_up( id ) ) {
 				this.points_minus( this.cost().prop_level_up )
 			}

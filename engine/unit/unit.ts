@@ -58,6 +58,12 @@ namespace $ {
 			}
 		}
 
+		@$mol_mem
+		equipments( next?: $gen_engine_item_equipment[] ) {
+			return next ?? [ new $gen_engine_item_equipment ]
+
+		}
+
 		next_turn() {}
 
 		refill() {

@@ -33,8 +33,7 @@ namespace $ {
 
 		@$mol_mem
 		level( next?: number ) {
-			console.log( 'level', next )
-			return next ?? 1
+			return next ?? 0
 		}
 	}
 }

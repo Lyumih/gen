@@ -15,7 +15,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		equipment( next?: $gen_engine_item_equipment ): $gen_engine_item_equipment {
-			return next ?? new $gen_engine_item_equipment
+			return next ?? this.unit().equipments()[ 0 ]
 		}
 
 		points_title(): string {
@@ -32,8 +32,17 @@ namespace $.$$ {
 			return craft
 		}
 
+		prop_list(): readonly any[] {
+			return this.equipment().props().map( prop => this.Prop( prop.id ) )
+		}
+
+		prop_open( next?: any ) {
+			console.log( this.equipment().props().length )
+			this.craft().prop_add( new $gen_engine_item_prop )
+		}
+
 		prop_level_up( next?: any ) {
-			this.craft().prop_level_up()
+			// this.craft().prop_level_up()
 		}
 
 	}
