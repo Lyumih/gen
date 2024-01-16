@@ -13,6 +13,10 @@ namespace $ {
 		sword() {
 			const equipment = new $gen_engine_item_equipment()
 			equipment.part( 'weapon' )
+			equipment.name( 'Меч' )
+			equipment.description( 'Простой меч' )
+			equipment.level( 10 )
+			return equipment
 		}
 
 	}

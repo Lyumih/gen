@@ -4,10 +4,11 @@ namespace $.$$ {
 		types_map( type: string ) {
 			const types = {
 				skill: 'Навык',
+				equipment: 'Экипировка',
 				weapon: 'Оружие',
 				armor: 'Броня',
 			}
-			return types[ type as keyof typeof types ] || type + '?'
+			return types[ type as keyof typeof types ] || ( type + '?' )
 		}
 
 		type_translate() {
@@ -22,8 +23,12 @@ namespace $.$$ {
 			return this.item().name()
 		}
 
+		level(): string {
+			return `Ур. ${ this.item().level() }`
+		}
+
 		description(): string {
-			return this.item().level ? `Ур. ${ this.item().level }` : ''
+			return this.item().description() ? `${ this.item().description() }` : ''
 		}
 
 		// modes_list(): readonly any[] {

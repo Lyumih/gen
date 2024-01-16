@@ -17,6 +17,9 @@ namespace $ {
 			unit.name( 'Milis' )
 			unit.level( 1000 )
 			unit.points( 1000 )
+			unit.equipments( [
+				new $gen_engine_item_equipment_all().sword()
+			] )
 			unit.skills( [
 				new $gen_engine_item_skill_all().heal(),
 				new $gen_engine_item_skill_all().strong_attack(),
