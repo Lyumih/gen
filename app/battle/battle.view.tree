@@ -25,13 +25,10 @@ $gen_app_battle $mol_book2
 					<= Turn $mol_section title <= turn \Ход: 0
 					<= Unit_battle_list $mol_row sub <= unit_battle_list /
 						<= Unit*0 $gen_app_battle_unit
-							- target_checked? <=> toggle_target_id*? null
-							- battle <= battle*
 							unit <= source* null
 							target_checked? <=> target_checked*? false
 							use_attack? <=> use_attack*? null
 							use_skill? <=> use_skill*? null
-							- targets <= targets* /$gen_engine_item_unit
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false

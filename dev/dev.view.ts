@@ -22,7 +22,6 @@ namespace $.$$ {
 		}
 
 		test() {
-			console.log( 'Использовано тестовое умение' )
 			this.hero().use_skill( [ this.enemy() ], this.skill(), this.battle() )
 		}
 
@@ -46,7 +45,6 @@ namespace $.$$ {
 		skill() {
 			return $gen_engine_item_skill.make( {
 				use: ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) => {
-					console.log( 'code', this.code() )
 					eval( this.code() )
 					return 'success use skill'
 				}

@@ -36,13 +36,13 @@ namespace $ {
 				target.health( target.health() - this.attack() )
 				battle.log_attack( this, [ target ] )
 			} )
-			console.log( 'use_attack', targets )
 			battle.next_turn()
 		}
 
 		use_skill( targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle ) {
+			battle.log_skill( this, targets, skill )
 			skill.use( this, targets, battle )
-			this.next_turn()
+			battle.next_turn()
 		}
 
 		is_dead() {
@@ -64,7 +64,6 @@ namespace $ {
 
 		@$mol_mem
 		skills( next?: $gen_engine_item_skill[] ): $gen_engine_item_skill[] {
-			console.log( 'hero skills', next )
 			return next ?? []
 		}
 

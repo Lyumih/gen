@@ -15,7 +15,6 @@ namespace $.$$ {
 		}
 
 		party_hero_pick( id: string, next?: any ) {
-			console.log( id, next )
 			this.active_hero( id )
 		}
 
@@ -26,7 +25,6 @@ namespace $.$$ {
 
 		@$mol_mem
 		active_hero( next?: any ): string {
-			console.log( next )
 			return next ?? this.party()[ 0 ]?.id() ?? ''
 		}
 
@@ -43,7 +41,6 @@ namespace $.$$ {
 		}
 
 		points(): string {
-			console.log( this.hero()?.points() )
 			return `Очков: ${ this.hero()?.points() }`
 		}
 
@@ -64,7 +61,6 @@ namespace $.$$ {
 		}
 
 		skill_list(): readonly any[] {
-			console.log( this.hero() )
 			return this.hero()?.skills()?.map( skill => this.Skill( skill.id() ) ) || []
 		}
 

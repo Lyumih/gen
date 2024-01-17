@@ -11,3 +11,7 @@
 [gen_app_battle_unit][type='target'] {
 	border-color: orangered;
 }
+
+[gen_app_battle_unit][target='true'] {
+	border-color: orangered;
+}

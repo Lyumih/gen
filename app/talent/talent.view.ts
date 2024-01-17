@@ -98,10 +98,8 @@ namespace $.$$ {
 			const is_nearest_point = point.in_range_points( this.talents_opened() )
 
 			if( is_nearest_point ) {
-				console.log( is_nearest_point, point.simple() )
 				const new_point = this.find_empty_cell( id_y_x )
 				if( new_point ) {
-					console.log( 'add talent' )
 					const new_talent = $mol_array_lottery( new $gen_engine_item_talent_all().all() )
 					new_talent.set_x_y( new_point[ 0 ], new_point[ 1 ] )
 					this.common_talents( [ ...this.common_talents(), new_talent ] )

@@ -71,7 +71,6 @@ namespace $.$$ {
 		}
 
 		history(): string {
-			console.log( this.battle().history() )
 			return this.battle().history().reverse().join( '\n' )
 		}
 

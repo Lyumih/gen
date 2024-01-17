@@ -20,7 +20,6 @@ namespace $ {
 			skill.name( 'Хил' )
 			skill.description( 'Исцеляет на 10 здоровья' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				console.log( battle )
 				source.health( source.health() + 10 )
 				battle.log( `${ source.name() } исцеляется на 10 здоровья` )
 			}
@@ -33,8 +32,11 @@ namespace $ {
 			skill.name( 'Сильный удар' )
 			skill.description( 'Урон x2' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
-				battle.log( `${ source.name() } наносит сильный удар х2` )
+				if( targets[ 0 ] ) {
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
+					battle.log( `${ source.name() } наносит сильный удар х2` )
+				}
+				battle.log( `${ source.name() } нет целей` )
 			}
 			return skill
 		}
@@ -45,8 +47,14 @@ namespace $ {
 			skill.level( 44 )
 			skill.description( 'Урон x4 и лечение себя на 10' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
-				source.health( source.health() + 10 )
+				const target = targets[ 0 ]
+				if( target ) {
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
+					source.health( source.health() + 10 )
+					battle.log( `${ source.name() } наносит сильный удар х4 и лечение себя на 10` )
+				} else {
+					battle.log( `${ source.name() } нет целей` )
+				}
 			}
 			return skill
 		}
@@ -58,15 +66,20 @@ namespace $ {
 			skill.level( 5 )
 			skill.description( '5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				const debuff_mem = new $gen_engine_item_skill
+				const debuff_mem = new $gen_engine_item_buff
 				debuff_mem.name( 'mem' )
 				debuff_mem.part( 'debuff' )
-				targets[ 0 ].buffs( [ ...targets[ 0 ].buffs(), debuff_mem ] )
-				if( Math.random() < 0.5 ) {
-					battle.log( `${ source.name() } сделал бум при попытке взаимодействия с меметичными объектами` )
-					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 999 )
+				const target = targets[ 0 ]
+				if( target ) {
+					target.buffs( [ ...target.buffs(), debuff_mem ] )
+					if( Math.random() < 0.5 ) {
+						battle.log( `${ source.name() } сделал бум при попытке взаимодействия с меметичными объектами` )
+						target.health( target.health() - source.attack() * 999 )
+					} else {
+						battle.log( `${ source.name() } не смог сделать бум при попытке взаимодействия с меметичными объектами` )
+					}
 				} else {
-					battle.log( `${ source.name() } не смог сделать бум при попытке взаимодействия с меметичными объектами` )
+					battle.log( `${ source.name() } нет целей для умения` )
 				}
 			}
 			return skill

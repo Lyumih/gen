@@ -28,7 +28,6 @@ namespace $.$$ {
 			const craft = new $gen_engine_craft
 			craft.unit( this.unit() )
 			craft.equipment( this.equipment() )
-			console.log( 'set unit' )
 			return craft
 		}
 
@@ -37,7 +36,6 @@ namespace $.$$ {
 		}
 
 		prop_open( next?: any ) {
-			console.log( this.equipment().props().length )
 			this.craft().prop_add( new $gen_engine_item_prop )
 		}
 

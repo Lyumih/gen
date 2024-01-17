@@ -1,10 +1,9 @@
 $gen_app_battle_unit $mol_list
-	- battle $gen_engine_battle
 	unit $gen_engine_item_unit
-	- targets /$gen_engine_item_unit
 	attr *
 		^
 		type <= type \
+		target <= target_checked? false
 	rows /
 		<= Source_target_chech_box $mol_row sub /
 			<= Target_check_box $mol_check_box

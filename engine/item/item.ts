@@ -16,8 +16,8 @@ namespace $ {
 		}
 
 		@$mol_mem
-		config( next?: any ) {
-			return {}
+		config( next?: {} ) {
+			return next ?? {}
 		}
 
 		@$mol_mem
@@ -44,13 +44,11 @@ namespace $ {
 
 		@$mol_mem
 		name( next?: string ) {
-			console.log( 'name', next )
 			return next ?? 'no name'
 		}
 
 		@$mol_mem
 		description( next?: string ) {
-			console.log( 'description', next )
 			return next ?? 'no description'
 		}
 
