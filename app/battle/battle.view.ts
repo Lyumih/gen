@@ -22,8 +22,9 @@ namespace $.$$ {
 			return this.get_party_hero( id )?.name() || 'no name'
 		}
 
-		unit_battle_list(): readonly any[] {
-			return this.party().map( unit => this.Unit( unit.id() ) )
+		@$mol_mem
+		unit_battle_list( next?: $gen_app_battle_unit[] ): readonly $gen_app_battle_unit[] {
+			return next ?? this.party().map( unit => this.Unit( unit.id() ) )
 		}
 
 		source( id: string ) {
@@ -59,10 +60,11 @@ namespace $.$$ {
 			return next ?? false
 		}
 
-		targets() {
-			console.log( 'targets' )
-			return this.unit_battle_list().filter( unit => this.targets_id().includes( unit.id() ) )
-		}
+		// @$mol_mem
+		// targets( next?: $gen_engine_item_unit[] ): $gen_engine_item_unit[] {
+		// 	console.log( 'targets', next, this.targets_id() )
+		// 	return this.unit_battle_list().filter( unit => this.targets_id().includes( unit.id() ) )
+		// }
 
 		get_reward( next?: any ) {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )

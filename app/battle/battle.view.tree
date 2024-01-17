@@ -26,9 +26,9 @@ $gen_app_battle $mol_book2
 					<= Unit_battle_list $mol_row sub <= unit_battle_list /
 						<= Unit*0 $gen_app_battle_unit
 							target_checked? <=> toggle_target_id*? null
-							battle <= battle
+							battle <= battle*
 							unit <= source* null
-							targets <= targets* null
+							targets <= targets* /$gen_engine_item_unit
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false

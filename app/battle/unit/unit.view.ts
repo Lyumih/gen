@@ -27,6 +27,7 @@ namespace $.$$ {
 		}
 
 		use_attack( next?: any ) {
+			console.log( 'use_attack12', this.targets() )
 			if( this.targets()?.length > 0 ) {
 				this.battle().next_turn()
 				this.battle().log_attack( this.unit(), this.targets() as $gen_engine_item_unit[] )
