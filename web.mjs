@@ -3365,7 +3365,12 @@ var $;
             this.history([...this.history(), next]);
         }
         log_attack(source, targets) {
-            this.log(`**${source.name()}** *атакует*`);
+            if (targets.length > 0) {
+                this.log(`**${source.name()}** *атакует* ** ${targets.map(target => target.name()).join(', ')} **`);
+            }
+            else {
+                this.log(`**${source.name()}** *атакует* ** ничего **`);
+            }
         }
         log_skill(source, targets, skill) {
             this.log(`**${source.name()}** *использует* **${skill.name()}**`);
@@ -3482,6 +3487,7 @@ var $;
         use_attack(targets, battle) {
             targets.forEach(target => {
                 target.health(target.health() - this.attack());
+                battle.log_attack(this, [target]);
             });
             console.log('use_attack', targets);
             battle.next_turn();
@@ -9680,21 +9686,19 @@ var $;
             source(id) {
                 return this.get_party_hero(id);
             }
-            use_attack(id, next) {
-                console.log('use_attack', id, next);
-                console.log();
-                this.source(id)?.use_attack(this.party(), this.battle());
-            }
             target_checked(id, next) {
-                console.log('target_checked', id, next);
                 return next ?? false;
             }
+            use_attack(id, next) {
+                const targets = this.party().filter(unit => this.target_checked(unit.id()));
+                this.source(id)?.use_attack(targets, this.battle());
+            }
             use_skill(id, skill_id, next) {
-                console.log('use_skill', id, skill_id, next);
                 const source = this.source(id);
                 const skill = source?.skills().find(skill => skill.id() === skill_id);
                 if (source && skill) {
-                    source.use_skill(this.party(), skill, this.battle());
+                    const targets = this.party().filter(unit => this.target_checked(unit.id()));
+                    source.use_skill(targets, skill, this.battle());
                 }
             }
             get_reward(next) {
@@ -9711,10 +9715,10 @@ var $;
         ], $gen_app_battle.prototype, "unit_battle_list", null);
         __decorate([
             $mol_mem_key
-        ], $gen_app_battle.prototype, "use_attack", null);
+        ], $gen_app_battle.prototype, "target_checked", null);
         __decorate([
             $mol_mem_key
-        ], $gen_app_battle.prototype, "target_checked", null);
+        ], $gen_app_battle.prototype, "use_attack", null);
         __decorate([
             $mol_mem_key
         ], $gen_app_battle.prototype, "use_skill", null);

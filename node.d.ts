@@ -2911,8 +2911,8 @@ declare namespace $.$$ {
         party_unit_name(id: string): string;
         unit_battle_list(next?: $gen_app_battle_unit[]): readonly $gen_app_battle_unit[];
         source(id: string): $gen_engine_item_unit | undefined;
+        target_checked(id: string, next?: boolean): boolean;
         use_attack(id: any, next?: any): void;
-        target_checked(id: any, next?: any): boolean;
         use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
