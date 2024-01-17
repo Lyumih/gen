@@ -3801,6 +3801,12 @@ var $;
         level(next) {
             return next ?? 0;
         }
+        x(next) {
+            return next ?? 0;
+        }
+        y(next) {
+            return next ?? 0;
+        }
     }
     __decorate([
         $mol_mem
@@ -3832,6 +3838,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "level", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "x", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "y", null);
     $.$gen_engine_item = $gen_engine_item;
 })($ || ($ = {}));
 //gen/engine/item/item.ts
@@ -3879,6 +3891,9 @@ var $;
         }
         log_skill(source, targets, skill) {
             this.log(`**${source.name()}** *использует* **${skill.name()}**`);
+        }
+        log_targets_not_found(source) {
+            this.log(`**${source.name()}** - целей не найдено`);
         }
     }
     __decorate([
@@ -9509,8 +9524,9 @@ var $;
         rows() {
             return [
                 this.Source_target_chech_box(),
-                this.Id(),
                 this.Name(),
+                this.Id(),
+                this.XY(),
                 this.Stats(),
                 this.Attack_button(),
                 this.Skill_list()
@@ -9537,6 +9553,14 @@ var $;
             ];
             return obj;
         }
+        name() {
+            return "";
+        }
+        Name() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.name();
+            return obj;
+        }
         id() {
             return "";
         }
@@ -9545,12 +9569,12 @@ var $;
             obj.title = () => this.id();
             return obj;
         }
-        name() {
+        xy() {
             return "";
         }
-        Name() {
+        XY() {
             const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.name();
+            obj.title = () => this.xy();
             return obj;
         }
         health() {
@@ -9660,10 +9684,13 @@ var $;
     ], $gen_app_battle_unit.prototype, "Source_target_chech_box", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle_unit.prototype, "Name", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_unit.prototype, "Id", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle_unit.prototype, "Name", null);
+    ], $gen_app_battle_unit.prototype, "XY", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_unit.prototype, "Health", null);
@@ -9716,6 +9743,9 @@ var $;
             id() {
                 return this.unit().id();
             }
+            xy() {
+                return `${this.unit().x()}, ${this.unit().y()}`;
+            }
             health() {
                 return `Здоровье: ${this.unit().health()}`;
             }
@@ -9723,7 +9753,7 @@ var $;
                 return `Атака: ${this.unit().attack()}`;
             }
             name() {
-                return `Имя: ${this.unit().name()}`;
+                return `${this.unit().name()}`;
             }
             type() {
                 return this.unit().type();
@@ -12391,7 +12421,9 @@ var $;
         }
         resource() {
             return [
-                this.heal(), this.strong_attack(), this.strong_attack_and_heal(), this.hyperfocal_madness_wind_generator(),
+                this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
+                this.hyperfocal_madness_wind_generator(),
+                this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
             ];
         }
         heal() {
@@ -12414,7 +12446,7 @@ var $;
                     targets[0].health(targets[0].health() - source.attack() * 2);
                     battle.log(`${source.name()} наносит сильный удар х2`);
                 }
-                battle.log(`${source.name()} нет целей`);
+                battle.log_targets_not_found(source);
             };
             return skill;
         }
@@ -12431,7 +12463,7 @@ var $;
                     battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
                 }
                 else {
-                    battle.log(`${source.name()} нет целей`);
+                    battle.log_targets_not_found(source);
                 }
             };
             return skill;
@@ -12458,7 +12490,69 @@ var $;
                     }
                 }
                 else {
-                    battle.log(`${source.name()} нет целей для умения`);
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        teleport() {
+            const skill = new $gen_engine_item_skill();
+            skill.name('Телепорт');
+            skill.reference('Mario');
+            skill.level(7);
+            skill.description('Телепортация к цели');
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} телепортируется на 2 клетки`);
+                source.x(source.x() + 2);
+                source.y(source.y() + 2);
+            };
+            return skill;
+        }
+        gravity_shield() {
+            const skill = new $gen_engine_item_skill();
+            skill.reference('Mario');
+            skill.name('Гравитационный щит');
+            skill.level(7);
+            skill.description('Щит от воздействия гравитации');
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} получает гравитационный щит`);
+                source.health(source.health() + 50);
+            };
+            return skill;
+        }
+        lightning_spear() {
+            const skill = new $gen_engine_item_skill();
+            skill.reference('Mario');
+            skill.name('Молниеносный копье');
+            skill.level(12);
+            skill.description('Наносит x3 урона копьём молнией');
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    battle.log(`${source.name()} наносит ${source.attack() * 3} урона копьём молнией`);
+                    targets[0].health(targets[0].health() - source.attack() * 3);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        lightning_bolt() {
+            const skill = new $gen_engine_item_skill();
+            skill.reference('Mario');
+            skill.name('Шаровые молнии2');
+            skill.level(16);
+            skill.description('Запускает до 4 шаровых молний в цель');
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    const number_balls = +(Math.random() * 100 % 4).toFixed();
+                    battle.log(`${source.name()} наносит ${source.attack() * number_balls} урона ${number_balls} шаровыми молниями`);
+                    targets[0].health(targets[0].health() - source.attack() * number_balls);
+                }
+                else {
+                    battle.log_targets_not_found(source);
                 }
             };
             return skill;
@@ -14530,9 +14624,7 @@ var $;
     class $gen_engine_item_equipment_all extends $mol_object {
         all() {
             return [
-                $gen_engine_item_equipment.make({
-                    part: () => 'body',
-                })
+                this.sword(), this.staff(), this.whip()
             ];
         }
         sword() {
@@ -14541,6 +14633,22 @@ var $;
             equipment.name('Меч');
             equipment.description('Простой меч');
             equipment.level(10);
+            return equipment;
+        }
+        staff() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Посох');
+            equipment.description('Простой посох');
+            equipment.level(13);
+            return equipment;
+        }
+        whip() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Кнут');
+            equipment.description('Простой кнут');
+            equipment.level(15);
             return equipment;
         }
     }
@@ -14592,9 +14700,19 @@ var $;
         mario() {
             const unit = new $gen_engine_item_unit();
             unit.reference('https://t.me/fkusnyahin');
-            unit.name('Mario');
+            unit.name('Бурь');
             unit.level(333);
             unit.points(333);
+            unit.equipments([
+                new $gen_engine_item_equipment_all().staff(),
+                new $gen_engine_item_equipment_all().whip()
+            ]);
+            unit.skills([
+                new $gen_engine_item_skill_all().teleport(),
+                new $gen_engine_item_skill_all().gravity_shield(),
+                new $gen_engine_item_skill_all().lightning_spear(),
+                new $gen_engine_item_skill_all().lightning_bolt()
+            ]);
             return unit;
         }
     }

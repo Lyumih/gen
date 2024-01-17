@@ -1009,6 +1009,8 @@ declare namespace $ {
         name(next?: string): string;
         description(next?: string): string;
         level(next?: number): number;
+        x(next?: number): number;
+        y(next?: number): number;
     }
 }
 
@@ -1028,6 +1030,7 @@ declare namespace $ {
         log(next: string): void;
         log_attack(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
         log_skill(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill): void;
+        log_targets_not_found(source: $gen_engine_item_unit): void;
     }
 }
 
@@ -2735,10 +2738,12 @@ declare namespace $ {
         target_checked(next?: any): boolean;
         Target_check_box(): $mol_check_box;
         Source_target_chech_box(): $mol_row;
+        name(): string;
+        Name(): $$.$mol_section;
         id(): string;
         Id(): $$.$mol_paragraph;
-        name(): string;
-        Name(): $$.$mol_paragraph;
+        xy(): string;
+        XY(): $$.$mol_paragraph;
         health(): string;
         Health(): $$.$mol_paragraph;
         attack(): string;
@@ -2764,6 +2769,7 @@ declare namespace $.$$ {
     class $gen_app_battle_unit extends $.$gen_app_battle_unit {
         attack_enabled(): boolean;
         id(): string;
+        xy(): string;
         health(): string;
         attack(): string;
         name(): string;
@@ -3422,6 +3428,10 @@ declare namespace $ {
         strong_attack(): $gen_engine_item_skill;
         strong_attack_and_heal(): $gen_engine_item_skill;
         hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
+        teleport(): $gen_engine_item_skill;
+        gravity_shield(): $gen_engine_item_skill;
+        lightning_spear(): $gen_engine_item_skill;
+        lightning_bolt(): $gen_engine_item_skill;
     }
 }
 
@@ -3844,6 +3854,8 @@ declare namespace $ {
     class $gen_engine_item_equipment_all extends $mol_object {
         all(): $gen_engine_item_equipment[];
         sword(): $gen_engine_item_equipment;
+        staff(): $gen_engine_item_equipment;
+        whip(): $gen_engine_item_equipment;
     }
 }
 
