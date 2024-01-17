@@ -3,32 +3,32 @@ namespace $ {
 
 		@$mol_mem
 		name( next?: string ) {
+			$mol_wire_solid()
 			return next ?? 'Unit'
 		}
 
 		@$mol_mem
 		type( next?: string ) {
+			$mol_wire_solid()
 			return next ?? 'unit'
 		}
 
 		@$mol_mem
-		level( next?: number ) {
-			return next ?? 0
-		}
-
-		@$mol_mem
 		points( next?: number ) {
+			$mol_wire_solid()
 			return next ?? 0
 		}
 
 		@$mol_mem
 		health( next?: number ) {
-			return next ?? this.common_unit().health
+			$mol_wire_solid()
+			return next ?? 20
 		}
 
 		@$mol_mem
 		attack( next?: number ) {
-			return next ?? this.common_unit().attack
+			$mol_wire_solid()
+			return next ?? 10
 		}
 
 		use_attack( targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) {
@@ -46,47 +46,45 @@ namespace $ {
 		}
 
 		is_dead() {
+			$mol_wire_solid()
 			return this.health() <= 0
-		}
-
-		common_unit() {
-			return {
-				name: 'Unit',
-				health: 20,
-				attack: 10,
-			}
 		}
 
 		@$mol_mem
 		equipments( next?: $gen_engine_item_equipment[] ) {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		skills( next?: $gen_engine_item_skill[] ): $gen_engine_item_skill[] {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		buffs( next?: $gen_engine_item_buff[] ): $gen_engine_item_buff[] {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		inventory( next?: $gen_engine_item[] ): $gen_engine_item[] {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		shop( next?: $gen_engine_item[] ): $gen_engine_item[] {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
 		next_turn() {}
 
 		refill() {
-			this.health( this.common_unit().health )
-			this.attack( this.common_unit().attack )
+			this.health( undefined )
+			this.attack( undefined )
 		}
 
 	}

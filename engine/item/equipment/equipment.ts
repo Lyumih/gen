@@ -12,11 +12,13 @@ namespace $ {
 		/** Часть снаряжения */
 		@$mol_mem
 		part( next?: string ): string {
+			$mol_wire_solid()
 			return next ?? 'equipment'
 		}
 
 		@$mol_mem
 		config( next?: Config ): Config {
+			$mol_wire_solid()
 			return next ?? {
 				max_props: 10,
 			}
@@ -24,6 +26,7 @@ namespace $ {
 
 		@$mol_mem
 		props( next?: $gen_engine_item_prop[] ): $gen_engine_item_prop[] {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
@@ -47,6 +50,7 @@ namespace $ {
 
 		@$mol_mem
 		level( next?: number | undefined ): number {
+			$mol_wire_solid()
 			const prop_level = this.props().reduce( ( sum, prop ) => sum + prop.level(), 0 )
 			return next ?? prop_level
 		}

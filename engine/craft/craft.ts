@@ -9,16 +9,19 @@ namespace $ {
 
 		@$mol_mem
 		unit( next?: $gen_engine_item_unit ): $gen_engine_item_unit {
+			$mol_wire_solid()
 			return next ?? new $gen_engine_item_unit
 		}
 
 		@$mol_mem
 		equipment( next?: $gen_engine_item_equipment ): $gen_engine_item_equipment {
+			$mol_wire_solid()
 			return next ?? new $gen_engine_item_equipment
 		}
 
 		@$mol_mem
 		cost( next?: Cost ) {
+			$mol_wire_solid()
 			return next ?? {
 				prop_level_up: 1,
 				prop_add: 5,

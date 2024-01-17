@@ -3,6 +3,7 @@ namespace $ {
 
 		@$mol_mem
 		turn( next?: number ) {
+			$mol_wire_solid()
 			return next ?? 0
 		}
 
@@ -16,6 +17,7 @@ namespace $ {
 
 		@$mol_mem
 		history( next?: string[] ) {
+			$mol_wire_solid()
 			return next ?? []
 		}
 
