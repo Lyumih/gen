@@ -3765,38 +3765,49 @@ var $;
 (function ($) {
     class $gen_engine_item extends $mol_object {
         id_root(next) {
+            $mol_wire_solid();
             return next ?? $mol_guid();
         }
         id(next) {
+            $mol_wire_solid();
             return next ?? `${this.type()}-${this.part()}-${$mol_guid(4)}`;
         }
         config(next) {
+            $mol_wire_solid();
             return next ?? {};
         }
         log() {
         }
         reference(next) {
+            $mol_wire_solid();
             return next ?? 'Gen';
         }
         type(next) {
+            $mol_wire_solid();
             return next ?? 'item';
         }
         part(next) {
+            $mol_wire_solid();
             return next ?? 'part';
         }
         name(next) {
+            $mol_wire_solid();
             return next ?? 'no name';
         }
         description(next) {
+            $mol_wire_solid();
             return next ?? 'no description';
         }
         level(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         x(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         y(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
     }
@@ -3859,6 +3870,7 @@ var $;
 (function ($) {
     class $gen_engine_battle extends $mol_object {
         turn(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         next_turn() {
@@ -3868,6 +3880,7 @@ var $;
             unit.next_turn = () => this.next_turn();
         }
         history(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         log(next) {
@@ -3915,14 +3928,17 @@ var $;
             return 'equipment';
         }
         part(next) {
+            $mol_wire_solid();
             return next ?? 'equipment';
         }
         config(next) {
+            $mol_wire_solid();
             return next ?? {
                 max_props: 10,
             };
         }
         props(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         add_prop(prop) {
@@ -3942,6 +3958,7 @@ var $;
             }
         }
         level(next) {
+            $mol_wire_solid();
             const prop_level = this.props().reduce((sum, prop) => sum + prop.level(), 0);
             return next ?? prop_level;
         }
@@ -3967,6 +3984,7 @@ var $;
 (function ($) {
     class $gen_engine_item_buff extends $gen_engine_item {
         type() {
+            $mol_wire_solid();
             return 'buff';
         }
     }
@@ -3979,22 +3997,24 @@ var $;
 (function ($) {
     class $gen_engine_item_unit extends $gen_engine_item {
         name(next) {
+            $mol_wire_solid();
             return next ?? 'Unit';
         }
         type(next) {
+            $mol_wire_solid();
             return next ?? 'unit';
         }
-        level(next) {
-            return next ?? 0;
-        }
         points(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         health(next) {
-            return next ?? this.common_unit().health;
+            $mol_wire_solid();
+            return next ?? 20;
         }
         attack(next) {
-            return next ?? this.common_unit().attack;
+            $mol_wire_solid();
+            return next ?? 10;
         }
         use_attack(targets, battle) {
             targets.forEach(target => {
@@ -4009,34 +4029,33 @@ var $;
             battle.next_turn();
         }
         is_dead() {
+            $mol_wire_solid();
             return this.health() <= 0;
         }
-        common_unit() {
-            return {
-                name: 'Unit',
-                health: 20,
-                attack: 10,
-            };
-        }
         equipments(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         skills(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         buffs(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         inventory(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         shop(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         next_turn() { }
         refill() {
-            this.health(this.common_unit().health);
-            this.attack(this.common_unit().attack);
+            this.health(undefined);
+            this.attack(undefined);
         }
     }
     __decorate([
@@ -4045,9 +4064,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "level", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "points", null);
@@ -4081,12 +4097,15 @@ var $;
 (function ($) {
     class $gen_engine_craft extends $mol_object {
         unit(next) {
+            $mol_wire_solid();
             return next ?? new $gen_engine_item_unit;
         }
         equipment(next) {
+            $mol_wire_solid();
             return next ?? new $gen_engine_item_equipment;
         }
         cost(next) {
+            $mol_wire_solid();
             return next ?? {
                 prop_level_up: 1,
                 prop_add: 5,
@@ -11629,12 +11648,15 @@ var $;
 (function ($) {
     class $gen_engine_item_talent extends $gen_engine_item {
         type() {
+            $mol_wire_solid();
             return 'talent';
         }
         x(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         y(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         set_x_y(x, y) {
@@ -15092,7 +15114,12 @@ var $;
 var $;
 (function ($) {
     function $mol_range2(item = index => index, size = () => Number.POSITIVE_INFINITY) {
-        return new Proxy(new $mol_range2_array(), {
+        const source = typeof item === 'function' ? new $mol_range2_array() : item;
+        if (typeof item !== 'function') {
+            item = index => source[index];
+            size = () => source.length;
+        }
+        return new Proxy(source, {
             get(target, field) {
                 if (typeof field === 'string') {
                     if (field === 'length')
@@ -15105,7 +15132,7 @@ var $;
                     if (index === Math.trunc(index))
                         return item(index);
                 }
-                return target[field];
+                return $mol_range2_array.prototype[field];
             },
             set(target, field) {
                 return $mol_fail(new TypeError(`Lazy range is read only (trying to set field ${JSON.stringify(field)})`));
@@ -15215,7 +15242,7 @@ var $;
         'lazy calls'() {
             let calls = 0;
             const list = $mol_range2(index => (++calls, index), () => 10);
-            $mol_assert_ok(list instanceof Array);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 10);
             $mol_assert_equal(list[-1], undefined);
             $mol_assert_equal(list[0], 0);
@@ -15258,11 +15285,17 @@ var $;
             $mol_range2(i => i, () => 5).forEach(i => log += i);
             $mol_assert_equal(log, '01234');
         },
+        'reduce'() {
+            let calls = 0;
+            const list = $mol_range2().slice(1, 6);
+            $mol_assert_equal(list.reduce((s, v) => s + v), 15);
+            $mol_assert_equal(list.reduce((s, v) => s + v, 5), 20);
+        },
         'lazy concat'() {
             let calls1 = 0;
             let calls2 = 0;
             const list = $mol_range2(index => (++calls1, index), () => 5).concat([0, 1, 2, 3, 4], $mol_range2(index => (++calls2, index), () => 5));
-            $mol_assert_ok(list instanceof Array);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 15);
             $mol_assert_equal(list[0], 0);
             $mol_assert_equal(list[4], 4);
@@ -15274,31 +15307,25 @@ var $;
             $mol_assert_equal(calls1, 2);
             $mol_assert_equal(calls2, 2);
         },
-        'filter'() {
+        'lazy filter'() {
             let calls = 0;
             const list = $mol_range2(index => (++calls, index), () => 15).filter(v => v % 2).slice(0, 3);
-            $mol_assert_ok(list instanceof Array);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 3);
             $mol_assert_equal(list[0], 1);
             $mol_assert_equal(list[2], 5);
             $mol_assert_equal(list[3], undefined);
             $mol_assert_equal(calls, 8);
         },
-        'reverse'() {
+        'lazy reverse'() {
             let calls = 0;
             const list = $mol_range2(index => (++calls, index), () => 10).toReversed().slice(0, 3);
-            $mol_assert_ok(list instanceof Array);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 3);
             $mol_assert_equal(list[0], 9);
             $mol_assert_equal(list[2], 7);
             $mol_assert_equal(list[3], undefined);
             $mol_assert_equal(calls, 2);
-        },
-        'reduce'() {
-            let calls = 0;
-            const list = $mol_range2().slice(1, 6);
-            $mol_assert_equal(list.reduce((s, v) => s + v), 15);
-            $mol_assert_equal(list.reduce((s, v) => s + v, 5), 20);
         },
         'lazy map'() {
             let calls1 = 0;
@@ -15309,7 +15336,7 @@ var $;
                 $mol_assert_equal(source, self);
                 return index + 10;
             }, () => 5);
-            $mol_assert_ok(target instanceof Array);
+            $mol_assert_equal(true, target instanceof Array);
             $mol_assert_equal(target.length, 5);
             $mol_assert_equal(target[0], 10);
             $mol_assert_equal(target[4], 14);
@@ -15320,7 +15347,7 @@ var $;
         'lazy slice'() {
             let calls = 0;
             const list = $mol_range2(index => (++calls, index), () => 10).slice(3, 7);
-            $mol_assert_ok(list instanceof Array);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 4);
             $mol_assert_equal(list[0], 3);
             $mol_assert_equal(list[3], 6);
@@ -15329,22 +15356,22 @@ var $;
         },
         'lazy some'() {
             let calls = 0;
-            $mol_assert_ok($mol_range2(index => (++calls, index), () => 5).some(v => v >= 2));
+            $mol_assert_equal(true, $mol_range2(index => (++calls, index), () => 5).some(v => v >= 2));
             $mol_assert_equal(calls, 3);
-            $mol_assert_not($mol_range2(i => i, () => 0).some(v => true));
-            $mol_assert_ok($mol_range2(i => i).some(v => v > 5));
+            $mol_assert_equal(false, $mol_range2(i => i, () => 0).some(v => true));
+            $mol_assert_equal(true, $mol_range2(i => i).some(v => v > 5));
         },
         'lazy every'() {
             let calls = 0;
-            $mol_assert_not($mol_range2(index => (++calls, index), () => 5).every(v => v < 2));
+            $mol_assert_equal(false, $mol_range2(index => (++calls, index), () => 5).every(v => v < 2));
             $mol_assert_equal(calls, 3);
-            $mol_assert_ok($mol_range2(i => i, () => 0).every(v => false));
-            $mol_assert_not($mol_range2(i => i).every(v => v < 5));
+            $mol_assert_equal(true, $mol_range2(i => i, () => 0).every(v => false));
+            $mol_assert_equal(false, $mol_range2(i => i).every(v => v < 5));
         },
         'lazyfy'() {
             let calls = 0;
-            const list = new $mol_range2_array(...[0, 1, 2, 3, 4, 5]).map(i => (++calls, i + 10)).slice(2);
-            $mol_assert_ok(list instanceof Array);
+            const list = $mol_range2([0, 1, 2, 3, 4, 5]).map(i => (++calls, i + 10)).slice(2);
+            $mol_assert_equal(true, list instanceof Array);
             $mol_assert_equal(list.length, 4);
             $mol_assert_equal(calls, 0);
             $mol_assert_equal(list[0], 12);

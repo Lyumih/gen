@@ -1183,18 +1183,12 @@ declare namespace $ {
     class $gen_engine_item_unit extends $gen_engine_item {
         name(next?: string): string;
         type(next?: string): string;
-        level(next?: number): number;
         points(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
         use_attack(targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
         use_skill(targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle): void;
         is_dead(): boolean;
-        common_unit(): {
-            name: string;
-            health: number;
-            attack: number;
-        };
         equipments(next?: $gen_engine_item_equipment[]): $gen_engine_item_equipment[];
         skills(next?: $gen_engine_item_skill[]): $gen_engine_item_skill[];
         buffs(next?: $gen_engine_item_buff[]): $gen_engine_item_buff[];

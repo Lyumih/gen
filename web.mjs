@@ -3266,38 +3266,49 @@ var $;
 (function ($) {
     class $gen_engine_item extends $mol_object {
         id_root(next) {
+            $mol_wire_solid();
             return next ?? $mol_guid();
         }
         id(next) {
+            $mol_wire_solid();
             return next ?? `${this.type()}-${this.part()}-${$mol_guid(4)}`;
         }
         config(next) {
+            $mol_wire_solid();
             return next ?? {};
         }
         log() {
         }
         reference(next) {
+            $mol_wire_solid();
             return next ?? 'Gen';
         }
         type(next) {
+            $mol_wire_solid();
             return next ?? 'item';
         }
         part(next) {
+            $mol_wire_solid();
             return next ?? 'part';
         }
         name(next) {
+            $mol_wire_solid();
             return next ?? 'no name';
         }
         description(next) {
+            $mol_wire_solid();
             return next ?? 'no description';
         }
         level(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         x(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         y(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
     }
@@ -3360,6 +3371,7 @@ var $;
 (function ($) {
     class $gen_engine_battle extends $mol_object {
         turn(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         next_turn() {
@@ -3369,6 +3381,7 @@ var $;
             unit.next_turn = () => this.next_turn();
         }
         history(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         log(next) {
@@ -3416,14 +3429,17 @@ var $;
             return 'equipment';
         }
         part(next) {
+            $mol_wire_solid();
             return next ?? 'equipment';
         }
         config(next) {
+            $mol_wire_solid();
             return next ?? {
                 max_props: 10,
             };
         }
         props(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         add_prop(prop) {
@@ -3443,6 +3459,7 @@ var $;
             }
         }
         level(next) {
+            $mol_wire_solid();
             const prop_level = this.props().reduce((sum, prop) => sum + prop.level(), 0);
             return next ?? prop_level;
         }
@@ -3468,6 +3485,7 @@ var $;
 (function ($) {
     class $gen_engine_item_buff extends $gen_engine_item {
         type() {
+            $mol_wire_solid();
             return 'buff';
         }
     }
@@ -3480,22 +3498,24 @@ var $;
 (function ($) {
     class $gen_engine_item_unit extends $gen_engine_item {
         name(next) {
+            $mol_wire_solid();
             return next ?? 'Unit';
         }
         type(next) {
+            $mol_wire_solid();
             return next ?? 'unit';
         }
-        level(next) {
-            return next ?? 0;
-        }
         points(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         health(next) {
-            return next ?? this.common_unit().health;
+            $mol_wire_solid();
+            return next ?? 20;
         }
         attack(next) {
-            return next ?? this.common_unit().attack;
+            $mol_wire_solid();
+            return next ?? 10;
         }
         use_attack(targets, battle) {
             targets.forEach(target => {
@@ -3510,34 +3530,33 @@ var $;
             battle.next_turn();
         }
         is_dead() {
+            $mol_wire_solid();
             return this.health() <= 0;
         }
-        common_unit() {
-            return {
-                name: 'Unit',
-                health: 20,
-                attack: 10,
-            };
-        }
         equipments(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         skills(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         buffs(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         inventory(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         shop(next) {
+            $mol_wire_solid();
             return next ?? [];
         }
         next_turn() { }
         refill() {
-            this.health(this.common_unit().health);
-            this.attack(this.common_unit().attack);
+            this.health(undefined);
+            this.attack(undefined);
         }
     }
     __decorate([
@@ -3546,9 +3565,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "level", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "points", null);
@@ -3582,12 +3598,15 @@ var $;
 (function ($) {
     class $gen_engine_craft extends $mol_object {
         unit(next) {
+            $mol_wire_solid();
             return next ?? new $gen_engine_item_unit;
         }
         equipment(next) {
+            $mol_wire_solid();
             return next ?? new $gen_engine_item_equipment;
         }
         cost(next) {
+            $mol_wire_solid();
             return next ?? {
                 prop_level_up: 1,
                 prop_add: 5,
@@ -11232,12 +11251,15 @@ var $;
 (function ($) {
     class $gen_engine_item_talent extends $gen_engine_item {
         type() {
+            $mol_wire_solid();
             return 'talent';
         }
         x(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         y(next) {
+            $mol_wire_solid();
             return next ?? 0;
         }
         set_x_y(x, y) {
