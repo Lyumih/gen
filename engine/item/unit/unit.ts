@@ -2,11 +2,6 @@ namespace $ {
 	export class $gen_engine_item_unit extends $gen_engine_item {
 
 		@$mol_mem
-		id() {
-			return $mol_guid()
-		}
-
-		@$mol_mem
 		name( next?: string ) {
 			return next ?? 'Unit'
 		}
@@ -40,7 +35,8 @@ namespace $ {
 			targets.forEach( target => {
 				target.health( target.health() - this.attack() )
 			} )
-			this.next_turn()
+			console.log( 'use_attack', targets )
+			battle.next_turn()
 		}
 
 		use_skill( targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle ) {

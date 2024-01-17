@@ -12,7 +12,7 @@ namespace $ {
 
 		@$mol_mem
 		id( next?: string ) {
-			return next ?? $mol_guid()
+			return next ?? `${ this.type() }-${ this.part() }-${ $mol_guid( 4 ) }`
 		}
 
 		@$mol_mem
