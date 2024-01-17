@@ -1,8 +1,7 @@
 namespace $ {
 
-	const skill = $gen_engine_item_skill.make( {
-		id_root: () => '1',
-	} )
+	const skill = new $gen_engine_item_skill
+	skill.id_root( '1' )
 
 	$mol_test( {
 		'skill type'() {

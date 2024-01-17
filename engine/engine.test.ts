@@ -1,6 +1,6 @@
 namespace $ {
 
-	const engine = $gen_engine.make( {} )
+	const engine = new $gen_engine
 	let seed = 0
 	engine.uuid = () => {
 		seed += 1

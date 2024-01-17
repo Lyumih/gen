@@ -1,8 +1,8 @@
 $gen_app_battle $mol_book2
+	title \Битва
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	title \Битва
 	pages /
 		<= Party_page $mol_page
 			title \Группа

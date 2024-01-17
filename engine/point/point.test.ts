@@ -1,7 +1,12 @@
 namespace $ {
-	const point = $gen_engine_point.make( {} )
+	const point = new $gen_engine_point
 
-	const make = ( x: number, y: number ) => $gen_engine_point.make( { x: () => x, y: () => y } )
+	const make = ( x: number, y: number ) => {
+		const point = new $gen_engine_point
+		point.x( x )
+		point.y( y )
+		return point
+	}
 	const nearest = [
 		make( -1, 1 ), make( -1, 0 ), make( -1, 1 ),
 		make( 0, -1 ), make( 0, 0 ), make( 0, 1 ),

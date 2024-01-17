@@ -22,6 +22,8 @@ namespace $.$$ {
 
 		@$mol_mem
 		name() {
+
+			$mol_wire_solid()
 			return this.item().name() + this.item().level()
 		}
 
@@ -32,6 +34,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		description( next?: string ): string {
+			$mol_wire_solid()
 			return next ?? this.item().description() ? `${ this.item().description() }` : ''
 		}
 

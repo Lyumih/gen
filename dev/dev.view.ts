@@ -3,18 +3,13 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero(): $gen_engine_item_unit {
-			return $gen_engine_item_unit.make( {
-				name: () => 'Герой',
-				type: () => 'hero',
-			} )
+			return new $gen_engine_item_unit_all().milis()
+
 		}
 
 		@$mol_mem
 		enemy(): $gen_engine_item_unit {
-			return $gen_engine_item_unit.make( {
-				name: () => 'Враг',
-				type: () => 'enemy',
-			} )
+			return new $gen_engine_item_unit_all().mario()
 		}
 
 		battle() {
