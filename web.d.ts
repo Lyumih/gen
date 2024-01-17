@@ -2803,10 +2803,10 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_battle extends $mol_book2 {
+        title(): string;
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
         party(): readonly $gen_engine_item_unit[];
-        title(): string;
         pages(): readonly any[];
         party_unit_name(id: any): string;
         Party_unit(id: any): $mol_button_major;
@@ -2934,9 +2934,7 @@ declare namespace $ {
         title(): string;
         engine(): $gen_engine;
         party(): readonly $gen_engine_item_unit[];
-        active_hero(next?: any): string;
         body(): readonly any[];
-        Party_title(): $$.$mol_section;
         is_active_hero(id: any): boolean;
         party_hero_name(id: any): string;
         party_hero_pick(id: any, next?: any): any;
@@ -2949,14 +2947,14 @@ declare namespace $ {
         Level(): $$.$mol_section;
         points(): string;
         Points_hero(): $$.$mol_text;
-        Equipment_label(): $$.$mol_section;
+        Hero_page(): $mol_page;
         get_equipment(id: any): any;
         equipment_unequip(id: any, next?: any): any;
         Equipment_card(id: any): $gen_app_item_equipment;
         Equipment(id: any): $mol_row;
         equipment_list(): readonly any[];
         Equipment_list(): $mol_row;
-        Skill_label(): $$.$mol_section;
+        Equipment_page(): $mol_page;
         skill_points(): string;
         Points(): $$.$mol_text;
         get_skill(id: any): any;
@@ -2967,7 +2965,7 @@ declare namespace $ {
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $mol_row;
-        Inventory_label(): $$.$mol_section;
+        Skill_page(): $mol_page;
         get_inventory_item(id: any): any;
         inventory_equip(id: any, next?: any): any;
         inventory_item_sell(id: any, next?: any): any;
@@ -2975,13 +2973,15 @@ declare namespace $ {
         Inventory_item(id: any): $mol_row;
         inventory_list(): readonly any[];
         Inventory_list(): $mol_row;
-        Shop_label(): $$.$mol_section;
+        Inventory_page(): $mol_page;
         get_shop_item(id: any): any;
         shop_item_bue(id: any, next?: any): any;
         Shop_card(id: any): $gen_app_item_shop;
         Shop_item(id: any): $mol_row;
         shop_list(): readonly any[];
         Shop_list(): $mol_row;
+        Shop_page(): $mol_page;
+        Unit_page(): $$.$mol_book2;
     }
 }
 
@@ -3512,6 +3512,25 @@ declare namespace $ {
     }
 }
 
+declare namespace $ {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all(): $gen_engine_item_equipment[];
+        sword(): $gen_engine_item_equipment;
+        staff(): $gen_engine_item_equipment;
+        whip(): $gen_engine_item_equipment;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all(): $gen_engine_item_unit[];
+        resource(): $gen_engine_item_unit[];
+        milis(): $gen_engine_item_unit;
+        jin(): $gen_engine_item_unit;
+        mario(): $gen_engine_item_unit;
+    }
+}
+
 declare namespace $.$$ {
     class $gen_dev extends $.$gen_dev {
         hero(): $gen_engine_item_unit;
@@ -3847,25 +3866,6 @@ declare namespace $ {
         Hack_page(): $$.$gen_app_admin;
         Loot_page(): $$.$gen_app_loot;
         Pages(): $$.$mol_book2_catalog;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all(): $gen_engine_item_equipment[];
-        sword(): $gen_engine_item_equipment;
-        staff(): $gen_engine_item_equipment;
-        whip(): $gen_engine_item_equipment;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all(): $gen_engine_item_unit[];
-        resource(): $gen_engine_item_unit[];
-        milis(): $gen_engine_item_unit;
-        jin(): $gen_engine_item_unit;
-        mario(): $gen_engine_item_unit;
     }
 }
 

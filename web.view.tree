@@ -612,10 +612,10 @@ $mol_text_list_item $mol_paragraph
 		mol_text_list_item_index <= index 0
 
 $gen_app_battle $mol_book2
+	title \Битва
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	title \Битва
 	pages /
 		<= Party_page $mol_page
 			title \Группа
@@ -703,46 +703,57 @@ $gen_app_hero $mol_page
 	title \Персонаж
 	engine $gen_engine
 	party /$gen_engine_item_unit
-	active_hero? \
 	body /
-		<= Party_title $mol_section title \Отряд
 		<= Party_list $mol_row sub <= party_list /
 			<= Party*0 $mol_button_minor
 				attr *
 					active <= is_active_hero* false
 				title <= party_hero_name* \Герой
 				click? <=> party_hero_pick*? null
-		<= Name $mol_section title <= name \Имя:
-		<= Level $mol_section title <= level \Уровень:
-		<= Points_hero $mol_text text <= points \Очки пт:
-		<= Equipment_label $mol_section title \Экипировка
-		<= Equipment_list $mol_row sub <= equipment_list /
-			<= Equipment*0 $mol_row sub /
-				<= Equipment_card* $gen_app_item_equipment
-					item <= get_equipment* null
-					remove? <=> equipment_unequip*? null
-		<= Skill_label $mol_section title \Умения
-		<= Points $mol_text text <= skill_points \Очков умений: 10
-		<= Skills $mol_row sub <= skill_list /
-			<= Skill*0 $mol_row sub /
-				<= Skill_card* $gen_app_item_skill
-					item <= get_skill* null
-					add <= skill_level_up*? null
-					remove? <=> skill_unequip*? null
-					add_mode? <=> skill_add_mode*? null
-		<= Inventory_label $mol_section title \Инвентарь
-		<= Inventory_list $mol_row sub <= inventory_list /
-			<= Inventory_item*0 $mol_row sub /
-				<= Inventory_card* $gen_app_item_inventory
-					item <= get_inventory_item* null
-					add? <=> inventory_equip*? null
-					remove? <=> inventory_item_sell*? null
-		<= Shop_label $mol_section title \Магазин
-		<= Shop_list $mol_row sub <= shop_list /
-			<= Shop_item*0 $mol_row sub /
-				<= Shop_card* $gen_app_item_shop
-					item <= get_shop_item* null
-					add? <=> shop_item_bue*? null
+		<= Unit_page $mol_book2
+			pages /
+				<= Hero_page $mol_page
+					title \Характеристики
+					body /
+						<= Name $mol_section title <= name \Имя:
+						<= Level $mol_section title <= level \Уровень:
+						<= Points_hero $mol_text text <= points \Очки пт:
+				<= Equipment_page $mol_page
+					title \Экипировка
+					body /
+						<= Equipment_list $mol_row sub <= equipment_list /
+							<= Equipment*0 $mol_row sub /
+								<= Equipment_card* $gen_app_item_equipment
+									item <= get_equipment* null
+									remove? <=> equipment_unequip*? null
+				<= Skill_page $mol_page
+					title \Умения
+					body /
+						<= Points $mol_text text <= skill_points \Очков умений: 10
+						<= Skills $mol_row sub <= skill_list /
+							<= Skill*0 $mol_row sub /
+								<= Skill_card* $gen_app_item_skill
+									item <= get_skill* null
+									add <= skill_level_up*? null
+									remove? <=> skill_unequip*? null
+									add_mode? <=> skill_add_mode*? null
+				<= Inventory_page $mol_page
+					title \Инвентарь
+					body /
+						<= Inventory_list $mol_row sub <= inventory_list /
+							<= Inventory_item*0 $mol_row sub /
+								<= Inventory_card* $gen_app_item_inventory
+									item <= get_inventory_item* null
+									add? <=> inventory_equip*? null
+									remove? <=> inventory_item_sell*? null
+				<= Shop_page $mol_page
+					title \Магазин
+					body /
+						<= Shop_list $mol_row sub <= shop_list /
+							<= Shop_item*0 $mol_row sub /
+								<= Shop_card* $gen_app_item_shop
+									item <= get_shop_item* null
+									add? <=> shop_item_bue*? null
 
 $mol_expander $mol_list
 	rows /

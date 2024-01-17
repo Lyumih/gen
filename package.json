@@ -231,6 +231,8 @@
     "$gen_dev",
     "$gen_engine_item_skill_all",
     "$mol_textarea",
+    "$gen_engine_item_unit_all",
+    "$gen_engine_item_equipment_all",
     "$gen_app_game",
     "$mol_number",
     "$mol_icon_minus",
@@ -242,9 +244,7 @@
     "$mol_search",
     "$mol_nav",
     "$mol_icon_cross",
-    "$mol_match",
-    "$gen_engine_item_unit_all",
-    "$gen_engine_item_equipment_all"
+    "$mol_match"
   ],
   "dependencies": {
     "jsdom": "*",

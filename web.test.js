@@ -377,13 +377,16 @@ var $;
             return $mol_range2(index => index < this.length ? this[index] : tail[0][index - this.length], () => this.length + tail[0].length);
         }
         filter(check, context) {
-            const filtered = new $mol_range2_array();
-            for (let index = 0; index < this.length; ++index) {
-                const item = this[index];
-                if (check.call(context, item, index, this))
-                    filtered.push(item);
-            }
-            return filtered;
+            const filtered = [];
+            let cursor = -1;
+            return $mol_range2(index => {
+                while (cursor < this.length && index >= filtered.length - 1) {
+                    const val = this[++cursor];
+                    if (check(val, cursor, this))
+                        filtered.push(val);
+                }
+                return filtered[index];
+            }, () => cursor < this.length ? Number.POSITIVE_INFINITY : filtered.length);
         }
         forEach(proceed, context) {
             for (let [key, value] of this.entries())
@@ -504,13 +507,13 @@ var $;
         },
         'filter'() {
             let calls = 0;
-            const list = $mol_range2(index => (++calls, index), () => 10).filter(v => v % 2).slice(0, 3);
+            const list = $mol_range2(index => (++calls, index), () => 15).filter(v => v % 2).slice(0, 3);
             $mol_assert_ok(list instanceof Array);
             $mol_assert_equal(list.length, 3);
             $mol_assert_equal(list[0], 1);
             $mol_assert_equal(list[2], 5);
             $mol_assert_equal(list[3], undefined);
-            $mol_assert_equal(calls, 10);
+            $mol_assert_equal(calls, 8);
         },
         'reverse'() {
             let calls = 0;
@@ -3469,7 +3472,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const engine = $gen_engine.make({});
+    const engine = new $gen_engine;
     let seed = 0;
     engine.uuid = () => {
         seed += 1;
@@ -3516,9 +3519,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const skill = $gen_engine_item_skill.make({
-        id_root: () => '1',
-    });
+    const skill = new $gen_engine_item_skill;
+    skill.id_root('1');
     $mol_test({
         'skill type'() {
             $mol_assert_equal(skill.type(), 'skill');
@@ -4093,8 +4095,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const point = $gen_engine_point.make({});
-    const make = (x, y) => $gen_engine_point.make({ x: () => x, y: () => y });
+    const point = new $gen_engine_point;
+    const make = (x, y) => {
+        const point = new $gen_engine_point;
+        point.x(x);
+        point.y(y);
+        return point;
+    };
     const nearest = [
         make(-1, 1), make(-1, 0), make(-1, 1),
         make(0, -1), make(0, 0), make(0, 1),

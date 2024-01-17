@@ -9434,6 +9434,9 @@ var $;
 var $;
 (function ($) {
     class $gen_app_battle extends $mol_book2 {
+        title() {
+            return "Битва";
+        }
         engine() {
             const obj = new this.$.$gen_engine();
             return obj;
@@ -9444,9 +9447,6 @@ var $;
         }
         party() {
             return [];
-        }
-        title() {
-            return "Битва";
         }
         pages() {
             return [
@@ -9942,12 +9942,14 @@ var $;
                 return this.item().type();
             }
             name() {
+                $mol_wire_solid();
                 return this.item().name() + this.item().level();
             }
             level() {
                 return `Ур. ${this.item().level()}`;
             }
             description(next) {
+                $mol_wire_solid();
                 return next ?? this.item().description() ? `${this.item().description()}` : '';
             }
         }
@@ -10064,33 +10066,11 @@ var $;
         party() {
             return [];
         }
-        active_hero(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
         body() {
             return [
-                this.Party_title(),
                 this.Party_list(),
-                this.Name(),
-                this.Level(),
-                this.Points_hero(),
-                this.Equipment_label(),
-                this.Equipment_list(),
-                this.Skill_label(),
-                this.Points(),
-                this.Skills(),
-                this.Inventory_label(),
-                this.Inventory_list(),
-                this.Shop_label(),
-                this.Shop_list()
+                this.Unit_page()
             ];
-        }
-        Party_title() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Отряд";
-            return obj;
         }
         is_active_hero(id) {
             return false;
@@ -10146,9 +10126,14 @@ var $;
             obj.text = () => this.points();
             return obj;
         }
-        Equipment_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Экипировка";
+        Hero_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Характеристики";
+            obj.body = () => [
+                this.Name(),
+                this.Level(),
+                this.Points_hero()
+            ];
             return obj;
         }
         get_equipment(id) {
@@ -10182,9 +10167,12 @@ var $;
             obj.sub = () => this.equipment_list();
             return obj;
         }
-        Skill_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Умения";
+        Equipment_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Экипировка";
+            obj.body = () => [
+                this.Equipment_list()
+            ];
             return obj;
         }
         skill_points() {
@@ -10238,9 +10226,13 @@ var $;
             obj.sub = () => this.skill_list();
             return obj;
         }
-        Inventory_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Инвентарь";
+        Skill_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Умения";
+            obj.body = () => [
+                this.Points(),
+                this.Skills()
+            ];
             return obj;
         }
         get_inventory_item(id) {
@@ -10280,9 +10272,12 @@ var $;
             obj.sub = () => this.inventory_list();
             return obj;
         }
-        Shop_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Магазин";
+        Inventory_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Инвентарь";
+            obj.body = () => [
+                this.Inventory_list()
+            ];
             return obj;
         }
         get_shop_item(id) {
@@ -10316,16 +10311,29 @@ var $;
             obj.sub = () => this.shop_list();
             return obj;
         }
+        Shop_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Магазин";
+            obj.body = () => [
+                this.Shop_list()
+            ];
+            return obj;
+        }
+        Unit_page() {
+            const obj = new this.$.$mol_book2();
+            obj.pages = () => [
+                this.Hero_page(),
+                this.Equipment_page(),
+                this.Skill_page(),
+                this.Inventory_page(),
+                this.Shop_page()
+            ];
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_hero.prototype, "active_hero", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_hero.prototype, "Party_title", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "party_hero_pick", null);
@@ -10346,7 +10354,7 @@ var $;
     ], $gen_app_hero.prototype, "Points_hero", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Equipment_label", null);
+    ], $gen_app_hero.prototype, "Hero_page", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "equipment_unequip", null);
@@ -10361,7 +10369,7 @@ var $;
     ], $gen_app_hero.prototype, "Equipment_list", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Skill_label", null);
+    ], $gen_app_hero.prototype, "Equipment_page", null);
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Points", null);
@@ -10385,7 +10393,7 @@ var $;
     ], $gen_app_hero.prototype, "Skills", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Inventory_label", null);
+    ], $gen_app_hero.prototype, "Skill_page", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "inventory_equip", null);
@@ -10403,7 +10411,7 @@ var $;
     ], $gen_app_hero.prototype, "Inventory_list", null);
     __decorate([
         $mol_mem
-    ], $gen_app_hero.prototype, "Shop_label", null);
+    ], $gen_app_hero.prototype, "Inventory_page", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "shop_item_bue", null);
@@ -10416,6 +10424,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Shop_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Shop_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Unit_page", null);
     $.$gen_app_hero = $gen_app_hero;
 })($ || ($ = {}));
 //gen/app/hero/-view.tree/hero.view.tree.ts
@@ -12655,20 +12669,119 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all() {
+            return [
+                this.sword(), this.staff(), this.whip()
+            ];
+        }
+        sword() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Меч');
+            equipment.description('Простой меч');
+            equipment.level(10);
+            return equipment;
+        }
+        staff() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Посох');
+            equipment.description('Простой посох');
+            equipment.level(13);
+            return equipment;
+        }
+        whip() {
+            const equipment = new $gen_engine_item_equipment();
+            equipment.part('weapon');
+            equipment.name('Кнут');
+            equipment.description('Простой кнут');
+            equipment.level(15);
+            return equipment;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_equipment_all.prototype, "all", null);
+    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
+})($ || ($ = {}));
+//gen/engine/item/equipment/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        resource() {
+            return [
+                this.milis(), this.jin(), this.mario()
+            ];
+        }
+        milis() {
+            const unit = new $gen_engine_item_unit();
+            unit.name('Milis');
+            unit.level(1000);
+            unit.points(1000);
+            unit.equipments([
+                new $gen_engine_item_equipment_all().sword()
+            ]);
+            unit.skills([
+                new $gen_engine_item_skill_all().heal(),
+                new $gen_engine_item_skill_all().strong_attack(),
+                new $gen_engine_item_skill_all().strong_attack_and_heal()
+            ]);
+            return unit;
+        }
+        jin() {
+            const unit = new $gen_engine_item_unit();
+            unit.reference('https://t.me/nin_jin');
+            unit.name('Jin');
+            unit.level(1);
+            unit.points(1);
+            unit.skills([
+                new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
+            ]);
+            return unit;
+        }
+        mario() {
+            const unit = new $gen_engine_item_unit();
+            unit.reference('https://t.me/fkusnyahin');
+            unit.name('Бурь');
+            unit.level(333);
+            unit.points(333);
+            unit.equipments([
+                new $gen_engine_item_equipment_all().staff(),
+                new $gen_engine_item_equipment_all().whip()
+            ]);
+            unit.skills([
+                new $gen_engine_item_skill_all().teleport(),
+                new $gen_engine_item_skill_all().gravity_shield(),
+                new $gen_engine_item_skill_all().lightning_spear(),
+                new $gen_engine_item_skill_all().lightning_bolt()
+            ]);
+            return unit;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_unit_all.prototype, "all", null);
+    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
+})($ || ($ = {}));
+//gen/engine/item/unit/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
             hero() {
-                return $gen_engine_item_unit.make({
-                    name: () => 'Герой',
-                    type: () => 'hero',
-                });
+                return new $gen_engine_item_unit_all().milis();
             }
             enemy() {
-                return $gen_engine_item_unit.make({
-                    name: () => 'Враг',
-                    type: () => 'enemy',
-                });
+                return new $gen_engine_item_unit_all().mario();
             }
             battle() {
                 return new $gen_engine_battle();
@@ -14212,111 +14325,6 @@ var $;
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all() {
-            return [
-                this.sword(), this.staff(), this.whip()
-            ];
-        }
-        sword() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Меч');
-            equipment.description('Простой меч');
-            equipment.level(10);
-            return equipment;
-        }
-        staff() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Посох');
-            equipment.description('Простой посох');
-            equipment.level(13);
-            return equipment;
-        }
-        whip() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Кнут');
-            equipment.description('Простой кнут');
-            equipment.level(15);
-            return equipment;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_equipment_all.prototype, "all", null);
-    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
-})($ || ($ = {}));
-//gen/engine/item/equipment/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all() {
-            return this.resource();
-        }
-        resource() {
-            return [
-                this.milis(), this.jin(), this.mario()
-            ];
-        }
-        milis() {
-            const unit = new $gen_engine_item_unit();
-            unit.name('Milis');
-            unit.level(1000);
-            unit.points(1000);
-            unit.equipments([
-                new $gen_engine_item_equipment_all().sword()
-            ]);
-            unit.skills([
-                new $gen_engine_item_skill_all().heal(),
-                new $gen_engine_item_skill_all().strong_attack(),
-                new $gen_engine_item_skill_all().strong_attack_and_heal()
-            ]);
-            return unit;
-        }
-        jin() {
-            const unit = new $gen_engine_item_unit();
-            unit.reference('https://t.me/nin_jin');
-            unit.name('Jin');
-            unit.level(1);
-            unit.points(1);
-            unit.skills([
-                new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
-            ]);
-            return unit;
-        }
-        mario() {
-            const unit = new $gen_engine_item_unit();
-            unit.reference('https://t.me/fkusnyahin');
-            unit.name('Бурь');
-            unit.level(333);
-            unit.points(333);
-            unit.equipments([
-                new $gen_engine_item_equipment_all().staff(),
-                new $gen_engine_item_equipment_all().whip()
-            ]);
-            unit.skills([
-                new $gen_engine_item_skill_all().teleport(),
-                new $gen_engine_item_skill_all().gravity_shield(),
-                new $gen_engine_item_skill_all().lightning_spear(),
-                new $gen_engine_item_skill_all().lightning_bolt()
-            ]);
-            return unit;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit_all.prototype, "all", null);
-    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
-})($ || ($ = {}));
-//gen/engine/item/unit/all/all.ts
 ;
 "use strict";
 var $;
