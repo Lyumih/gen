@@ -1061,7 +1061,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_engine_item_unit extends $gen_engine_item {
-        id(): string;
         name(next?: string): string;
         type(next?: string): string;
         level(next?: number): number;
@@ -2729,15 +2728,15 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_app_battle_unit extends $mol_list {
-        battle(): $gen_engine_battle;
         unit(): $gen_engine_item_unit;
-        targets(): readonly $gen_engine_item_unit[];
         attr(): Record<string, any>;
         rows(): readonly any[];
         type(): string;
-        target_checked(id: any, next?: any): boolean;
+        target_checked(next?: any): boolean;
         Target_check_box(): $mol_check_box;
         Source_target_chech_box(): $mol_row;
+        id(): string;
+        Id(): $$.$mol_paragraph;
         name(): string;
         Name(): $$.$mol_paragraph;
         health(): string;
@@ -2763,19 +2762,17 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle_unit extends $.$gen_app_battle_unit {
-        id(): string;
         attack_enabled(): boolean;
+        id(): string;
         health(): string;
         attack(): string;
         name(): string;
         type(): string;
-        use_attack(next?: any): void;
-        use_skill(id: string, next?: any): void;
+        skills(): $gen_engine_item_skill[];
         skill_list(): readonly any[];
         get_skill(id: string): $gen_engine_item_skill | undefined;
         skill_name(id: any): string;
         skill_description(id: any): string;
-        skills(): $gen_engine_item_skill[];
     }
 }
 
@@ -2818,9 +2815,10 @@ declare namespace $ {
         History_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
-        toggle_target_id(id: any, next?: any): any;
         source(id: any): any;
-        targets(id: any): any;
+        target_checked(id: any, next?: any): boolean;
+        use_attack(id: any, next?: any): any;
+        use_skill(id: any, next?: any): any;
         Unit(id: any): $$.$gen_app_battle_unit;
         unit_battle_list(): readonly any[];
         Unit_battle_list(): $mol_row;
@@ -2843,11 +2841,11 @@ declare namespace $.$$ {
         party_list(): readonly any[];
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
-        unit_battle_list(): readonly any[];
+        unit_battle_list(next?: $gen_app_battle_unit[]): readonly $gen_app_battle_unit[];
         source(id: string): $gen_engine_item_unit | undefined;
-        targets_id(next?: string[]): string[];
-        toggle_target_id(id: string, next?: boolean): boolean;
-        targets(): any[];
+        use_attack(id: any, next?: any): void;
+        target_checked(id: any, next?: any): boolean;
+        use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
     }

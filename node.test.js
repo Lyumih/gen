@@ -3768,7 +3768,7 @@ var $;
             return next ?? $mol_guid();
         }
         id(next) {
-            return next ?? $mol_guid();
+            return next ?? `${this.type()}-${this.part()}-${$mol_guid(4)}`;
         }
         config(next) {
             return {};
@@ -3960,9 +3960,6 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_unit extends $gen_engine_item {
-        id() {
-            return $mol_guid();
-        }
         name(next) {
             return next ?? 'Unit';
         }
@@ -3985,7 +3982,8 @@ var $;
             targets.forEach(target => {
                 target.health(target.health() - this.attack());
             });
-            this.next_turn();
+            console.log('use_attack', targets);
+            battle.next_turn();
         }
         use_skill(targets, skill, battle) {
             skill.use(this, targets, battle);
@@ -4023,9 +4021,6 @@ var $;
             this.attack(this.common_unit().attack);
         }
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "id", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "name", null);
@@ -9489,16 +9484,9 @@ var $;
 var $;
 (function ($) {
     class $gen_app_battle_unit extends $mol_list {
-        battle() {
-            const obj = new this.$.$gen_engine_battle();
-            return obj;
-        }
         unit() {
             const obj = new this.$.$gen_engine_item_unit();
             return obj;
-        }
-        targets() {
-            return [];
         }
         attr() {
             return {
@@ -9509,6 +9497,7 @@ var $;
         rows() {
             return [
                 this.Source_target_chech_box(),
+                this.Id(),
                 this.Name(),
                 this.Stats(),
                 this.Attack_button(),
@@ -9518,7 +9507,7 @@ var $;
         type() {
             return "";
         }
-        target_checked(id, next) {
+        target_checked(next) {
             if (next !== undefined)
                 return next;
             return false;
@@ -9526,7 +9515,7 @@ var $;
         Target_check_box() {
             const obj = new this.$.$mol_check_box();
             obj.title = () => "Цель";
-            obj.checked = (id, next) => this.target_checked(id, next);
+            obj.checked = (next) => this.target_checked(next);
             return obj;
         }
         Source_target_chech_box() {
@@ -9534,6 +9523,14 @@ var $;
             obj.sub = () => [
                 this.Target_check_box()
             ];
+            return obj;
+        }
+        id() {
+            return "";
+        }
+        Id() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.id();
             return obj;
         }
         name() {
@@ -9639,12 +9636,9 @@ var $;
     }
     __decorate([
         $mol_mem
-    ], $gen_app_battle_unit.prototype, "battle", null);
-    __decorate([
-        $mol_mem
     ], $gen_app_battle_unit.prototype, "unit", null);
     __decorate([
-        $mol_mem_key
+        $mol_mem
     ], $gen_app_battle_unit.prototype, "target_checked", null);
     __decorate([
         $mol_mem
@@ -9652,6 +9646,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle_unit.prototype, "Source_target_chech_box", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_unit.prototype, "Id", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_unit.prototype, "Name", null);
@@ -9701,11 +9698,11 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle_unit extends $.$gen_app_battle_unit {
-            id() {
-                return $mol_guid();
-            }
             attack_enabled() {
                 return this.unit().health() > 0;
+            }
+            id() {
+                return this.unit().id();
             }
             health() {
                 return `Здоровье: ${this.unit().health()}`;
@@ -9719,20 +9716,8 @@ var $;
             type() {
                 return this.unit().type();
             }
-            use_attack(next) {
-                if (this.targets()?.length > 0) {
-                    this.battle().next_turn();
-                    this.battle().log_attack(this.unit(), this.targets());
-                    this.unit().use_attack(this.targets(), this.battle());
-                }
-            }
-            use_skill(id, next) {
-                const skill = this.get_skill(id);
-                if (skill && this.targets()?.length > 0) {
-                    this.battle().next_turn();
-                    this.battle().log_skill(this.unit(), this.targets(), skill);
-                    this.unit().use_skill(this.targets(), skill, this.battle());
-                }
+            skills() {
+                return this.unit().skills();
             }
             skill_list() {
                 return this.skills().map(skill => this.Skill(skill.id()));
@@ -9741,18 +9726,12 @@ var $;
                 return this.skills().find(skill => skill.id() === id);
             }
             skill_name(id) {
-                return this.get_skill(id)?.name() || 'no name';
+                return `${this.get_skill(id)?.name()}: ${this.get_skill(id)?.id()}` || 'no name';
             }
             skill_description(id) {
                 return this.get_skill(id)?.description() || 'no description';
             }
-            skills() {
-                return this.unit().skills();
-            }
         }
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle_unit.prototype, "id", null);
         $$.$gen_app_battle_unit = $gen_app_battle_unit;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9908,23 +9887,30 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
-        toggle_target_id(id, next) {
+        source(id) {
+            return null;
+        }
+        target_checked(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        use_attack(id, next) {
             if (next !== undefined)
                 return next;
             return null;
         }
-        source(id) {
-            return null;
-        }
-        targets(id) {
+        use_skill(id, next) {
+            if (next !== undefined)
+                return next;
             return null;
         }
         Unit(id) {
             const obj = new this.$.$gen_app_battle_unit();
-            obj.target_checked = (next) => this.toggle_target_id(id, next);
-            obj.battle = () => this.battle();
             obj.unit = () => this.source(id);
-            obj.targets = () => this.targets(id);
+            obj.target_checked = (next) => this.target_checked(id, next);
+            obj.use_attack = (next) => this.use_attack(id, next);
+            obj.use_skill = (next) => this.use_skill(id, next);
             return obj;
         }
         unit_battle_list() {
@@ -10026,7 +10012,13 @@ var $;
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
         $mol_mem_key
-    ], $gen_app_battle.prototype, "toggle_target_id", null);
+    ], $gen_app_battle.prototype, "target_checked", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle.prototype, "use_attack", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle.prototype, "use_skill", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "Unit", null);
@@ -10079,29 +10071,28 @@ var $;
             party_unit_name(id) {
                 return this.get_party_hero(id)?.name() || 'no name';
             }
-            unit_battle_list() {
-                return this.party().map(unit => this.Unit(unit.id()));
+            unit_battle_list(next) {
+                return next ?? this.party().map(unit => this.Unit(unit.id()));
             }
             source(id) {
                 return this.get_party_hero(id);
             }
-            targets_id(next) {
-                console.log(next);
-                return next ?? [];
+            use_attack(id, next) {
+                console.log('use_attack', id, next);
+                console.log();
+                this.source(id)?.use_attack(this.party(), this.battle());
             }
-            toggle_target_id(id, next) {
-                console.log('toggle_target_id2', id, next);
-                if (next) {
-                    this.targets_id([...this.targets_id(), id]);
-                }
-                else {
-                    this.targets_id(this.targets_id().filter(target_id => target_id !== id));
-                }
+            target_checked(id, next) {
+                console.log('target_checked', id, next);
                 return next ?? false;
             }
-            targets() {
-                console.log('targets');
-                return this.unit_battle_list().filter(unit => this.targets_id().includes(unit.id()));
+            use_skill(id, skill_id, next) {
+                console.log('use_skill', id, skill_id, next);
+                const source = this.source(id);
+                const skill = source?.skills().find(skill => skill.id() === skill_id);
+                if (source && skill) {
+                    source.use_skill(this.party(), skill, this.battle());
+                }
             }
             get_reward(next) {
                 this.engine().inventory([...this.engine().inventory(), this.engine().reward()]);
@@ -10114,10 +10105,16 @@ var $;
         }
         __decorate([
             $mol_mem
-        ], $gen_app_battle.prototype, "targets_id", null);
+        ], $gen_app_battle.prototype, "unit_battle_list", null);
         __decorate([
             $mol_mem_key
-        ], $gen_app_battle.prototype, "toggle_target_id", null);
+        ], $gen_app_battle.prototype, "use_attack", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle.prototype, "target_checked", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle.prototype, "use_skill", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

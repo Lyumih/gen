@@ -565,9 +565,9 @@ $mol_pop_over $mol_pop
 		mouseleave?event <=> event_hide?event null
 
 $gen_app_battle_unit $mol_list
-	battle $gen_engine_battle
+	- battle $gen_engine_battle
 	unit $gen_engine_item_unit
-	targets /$gen_engine_item_unit
+	- targets /$gen_engine_item_unit
 	attr *
 		^
 		type <= type \
@@ -575,7 +575,8 @@ $gen_app_battle_unit $mol_list
 		<= Source_target_chech_box $mol_row sub /
 			<= Target_check_box $mol_check_box
 				title \Цель
-				checked*? <=> target_checked*? false
+				checked? <=> target_checked? false
+		<= Id $mol_paragraph title <= id \
 		<= Name $mol_paragraph title <= name \
 		<= Stats $mol_list rows /
 			<= Health $mol_paragraph title <= health \
@@ -637,10 +638,13 @@ $gen_app_battle $mol_book2
 					<= Turn $mol_section title <= turn \Ход: 0
 					<= Unit_battle_list $mol_row sub <= unit_battle_list /
 						<= Unit*0 $gen_app_battle_unit
-							target_checked? <=> toggle_target_id*? null
-							battle <= battle
+							- target_checked? <=> toggle_target_id*? null
+							- battle <= battle*
 							unit <= source* null
-							targets <= targets* null
+							target_checked? <=> target_checked*? false
+							use_attack? <=> use_attack*? null
+							use_skill? <=> use_skill*? null
+							- targets <= targets* /$gen_engine_item_unit
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false
