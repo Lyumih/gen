@@ -135,7 +135,7 @@ namespace $ {
 		lightning_bolt() {
 			const skill = new $gen_engine_item_skill()
 			skill.reference( 'Mario' )
-			skill.name( 'Шаровые молнии2' )
+			skill.name( 'Шаровые молнии' )
 			skill.level( 16 )
 			skill.description( 'Запускает до 4 шаровых молний в цель' )
 			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
