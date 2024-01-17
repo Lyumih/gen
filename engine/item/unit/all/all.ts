@@ -49,9 +49,19 @@ namespace $ {
 		mario() {
 			const unit = new $gen_engine_item_unit()
 			unit.reference( 'https://t.me/fkusnyahin' )
-			unit.name( 'Mario' )
+			unit.name( 'Бурь' )
 			unit.level( 333 )
 			unit.points( 333 )
+			unit.equipments( [
+				new $gen_engine_item_equipment_all().staff(),
+				new $gen_engine_item_equipment_all().whip()
+			] )
+			unit.skills( [
+				new $gen_engine_item_skill_all().teleport(),
+				new $gen_engine_item_skill_all().gravity_shield(),
+				new $gen_engine_item_skill_all().lightning_spear(),
+				new $gen_engine_item_skill_all().lightning_bolt()
+			] )
 			return unit
 		}
 

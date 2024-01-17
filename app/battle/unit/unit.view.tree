@@ -9,8 +9,9 @@ $gen_app_battle_unit $mol_list
 			<= Target_check_box $mol_check_box
 				title \Цель
 				checked? <=> target_checked? false
+		<= Name $mol_section title <= name \
 		<= Id $mol_paragraph title <= id \
-		<= Name $mol_paragraph title <= name \
+		<= XY $mol_paragraph title <= xy \
 		<= Stats $mol_list rows /
 			<= Health $mol_paragraph title <= health \
 			<= Attack $mol_paragraph title <= attack \

@@ -14,6 +14,10 @@ namespace $.$$ {
 			return this.unit().id()
 		}
 
+		xy(): string {
+			return `${ this.unit().x() }, ${ this.unit().y() }`
+		}
+
 		health() {
 			return `Здоровье: ${ this.unit().health() }`
 		}
@@ -23,7 +27,7 @@ namespace $.$$ {
 		}
 
 		name() {
-			return `Имя: ${ this.unit().name() }`
+			return `${ this.unit().name() }`
 		}
 
 		type() {

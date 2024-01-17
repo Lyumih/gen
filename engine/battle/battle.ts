@@ -34,5 +34,9 @@ namespace $ {
 		log_skill( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill ) {
 			this.log( `**${ source.name() }** *использует* **${ skill.name() }**` )
 		}
+
+		log_targets_not_found( source: $gen_engine_item_unit ) {
+			this.log( `**${ source.name() }** - целей не найдено` )
+		}
 	}
 }

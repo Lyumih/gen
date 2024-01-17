@@ -11,7 +11,9 @@ namespace $ {
 
 		resource(): $gen_engine_item_skill[] {
 			return [
-				this.heal(), this.strong_attack(), this.strong_attack_and_heal(), this.hyperfocal_madness_wind_generator(),
+				this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
+				this.hyperfocal_madness_wind_generator(),
+				this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
 			]
 		}
 
@@ -36,7 +38,7 @@ namespace $ {
 					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 2 )
 					battle.log( `${ source.name() } наносит сильный удар х2` )
 				}
-				battle.log( `${ source.name() } нет целей` )
+				battle.log_targets_not_found( source )
 			}
 			return skill
 		}
@@ -53,7 +55,7 @@ namespace $ {
 					source.health( source.health() + 10 )
 					battle.log( `${ source.name() } наносит сильный удар х4 и лечение себя на 10` )
 				} else {
-					battle.log( `${ source.name() } нет целей` )
+					battle.log_targets_not_found( source )
 				}
 			}
 			return skill
@@ -79,12 +81,74 @@ namespace $ {
 						battle.log( `${ source.name() } не смог сделать бум при попытке взаимодействия с меметичными объектами` )
 					}
 				} else {
-					battle.log( `${ source.name() } нет целей для умения` )
+					battle.log_targets_not_found( source )
 				}
 			}
 			return skill
 		}
 
+		teleport() {
+			const skill = new $gen_engine_item_skill()
+			skill.name( 'Телепорт' )
+			skill.reference( 'Mario' )
+			skill.level( 7 )
+			skill.description( 'Телепортация к цели' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+				battle.log( `${ source.name() } телепортируется на 2 клетки` )
+				source.x( source.x() + 2 )
+				source.y( source.y() + 2 )
+			}
+			return skill
+		}
 
+		gravity_shield() {
+			const skill = new $gen_engine_item_skill()
+			skill.reference( 'Mario' )
+			skill.name( 'Гравитационный щит' )
+			skill.level( 7 )
+			skill.description( 'Щит от воздействия гравитации' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+				battle.log( `${ source.name() } получает гравитационный щит` )
+				source.health( source.health() + 50 )
+			}
+			return skill
+		}
+
+		lightning_spear() {
+			const skill = new $gen_engine_item_skill()
+			skill.reference( 'Mario' )
+			skill.name( 'Молниеносный копье' )
+			skill.level( 12 )
+			skill.description( 'Наносит x3 урона копьём молнией' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+				const target = targets[ 0 ]
+				if( target ) {
+					battle.log( `${ source.name() } наносит ${ source.attack() * 3 } урона копьём молнией` )
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 3 )
+				} else {
+					battle.log_targets_not_found( source )
+				}
+			}
+			return skill
+		}
+
+		lightning_bolt() {
+			const skill = new $gen_engine_item_skill()
+			skill.reference( 'Mario' )
+			skill.name( 'Шаровые молнии2' )
+			skill.level( 16 )
+			skill.description( 'Запускает до 4 шаровых молний в цель' )
+			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+				const target = targets[ 0 ]
+				if( target ) {
+					const number_balls = +( Math.random() * 100 % 4 ).toFixed()
+					battle.log( `${ source.name() } наносит ${ source.attack() * number_balls } урона ${ number_balls } шаровыми молниями` )
+					targets[ 0 ].health( targets[ 0 ].health() - source.attack() * number_balls )
+				} else {
+					battle.log_targets_not_found( source )
+				}
+			}
+			return skill
+		}
 	}
 }

@@ -56,5 +56,15 @@ namespace $ {
 		level( next?: number ) {
 			return next ?? 0
 		}
+
+		@$mol_mem
+		x( next?: number ) {
+			return next ?? 0
+		}
+
+		@$mol_mem
+		y( next?: number ) {
+			return next ?? 0
+		}
 	}
 }
