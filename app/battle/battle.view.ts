@@ -26,6 +26,10 @@ namespace $.$$ {
 			return this.party().map( unit => this.Unit( unit.id() ) )
 		}
 
+		source( id: string ) {
+			return this.get_party_hero( id )
+		}
+
 		// is_game_continue() {
 		// 	return !this.hero().is_dead() && !this.enemy().is_dead()
 		// }
@@ -37,6 +41,28 @@ namespace $.$$ {
 		// end(): string {
 		// 	return this.is_game_continue() ? '' : 'Игра закончена'
 		// }
+
+		@$mol_mem
+		targets_id( next?: string[] ) {
+			console.log( next )
+			return next ?? []
+		}
+
+		@$mol_mem_key
+		toggle_target_id( id: string, next?: boolean ): boolean {
+			console.log( 'toggle_target_id2', id, next )
+			if( next ) {
+				this.targets_id( [ ...this.targets_id(), id ] )
+			} else {
+				this.targets_id( this.targets_id().filter( target_id => target_id !== id ) )
+			}
+			return next ?? false
+		}
+
+		targets() {
+			console.log( 'targets' )
+			return this.unit_battle_list().filter( unit => this.targets_id().includes( unit.id() ) )
+		}
 
 		get_reward( next?: any ) {
 			this.engine().inventory( [ ...this.engine().inventory(), this.engine().reward() ] )

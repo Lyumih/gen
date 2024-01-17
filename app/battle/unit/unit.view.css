@@ -4,10 +4,10 @@
 	padding: 1rem;
 }
 
-[gen_app_battle_unit][type='hero'] {
+[gen_app_battle_unit][type='active'] {
 	border-color: greenyellow;
 }
 
-[gen_app_battle_unit][type='enemy'] {
+[gen_app_battle_unit][type='target'] {
 	border-color: orangered;
 }

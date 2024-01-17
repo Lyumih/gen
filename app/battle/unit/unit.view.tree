@@ -1,11 +1,15 @@
 $gen_app_battle_unit $mol_list
 	battle $gen_engine_battle
 	unit $gen_engine_item_unit
-	target $gen_engine_item_unit
+	targets /$gen_engine_item_unit
 	attr *
 		^
 		type <= type \
 	rows /
+		<= Source_target_chech_box $mol_row sub /
+			<= Target_check_box $mol_check_box
+				title \Цель
+				checked*? <=> target_checked*? false
 		<= Name $mol_paragraph title <= name \
 		<= Stats $mol_list rows /
 			<= Health $mol_paragraph title <= health \

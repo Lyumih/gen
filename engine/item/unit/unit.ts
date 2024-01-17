@@ -36,8 +36,10 @@ namespace $ {
 			return next ?? this.common_unit().attack
 		}
 
-		use_attack( target: $gen_engine_item_unit, battle: $gen_engine_battle ) {
-			target.health( target.health() - this.attack() )
+		use_attack( targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) {
+			targets.forEach( target => {
+				target.health( target.health() - this.attack() )
+			} )
 			this.next_turn()
 		}
 

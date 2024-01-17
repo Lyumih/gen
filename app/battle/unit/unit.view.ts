@@ -27,11 +27,21 @@ namespace $.$$ {
 		}
 
 		use_attack( next?: any ) {
-			this.battle().next_turn()
-			this.battle().log_attack( this.unit(), this.target() )
-			this.unit().use_attack( this.target(), this.battle() )
+			if( this.targets()?.length > 0 ) {
+				this.battle().next_turn()
+				this.battle().log_attack( this.unit(), this.targets() as $gen_engine_item_unit[] )
+				this.unit().use_attack( this.targets() as $gen_engine_item_unit[], this.battle() )
+			}
 		}
 
+		use_skill( id: string, next?: any ) {
+			const skill = this.get_skill( id )
+			if( skill && this.targets()?.length > 0 ) {
+				this.battle().next_turn()
+				this.battle().log_skill( this.unit(), this.targets() as $gen_engine_item_unit[], skill )
+				this.unit().use_skill( this.targets() as $gen_engine_item_unit[], skill, this.battle() )
+			}
+		}
 
 		skill_list(): readonly any[] {
 			return this.skills().map( skill => this.Skill( skill.id() ) )
@@ -49,14 +59,6 @@ namespace $.$$ {
 			return this.get_skill( id )?.description() || 'no description'
 		}
 
-		use_skill( id: string, next?: any ) {
-			const skill = this.get_skill( id )
-			if( skill ) {
-				this.battle().next_turn()
-				this.battle().log_skill( this.unit(), this.target(), skill )
-				this.unit().use_skill( [ this.target() ], skill, this.battle() )
-			}
-		}
 
 		skills() {
 			return this.unit().skills()

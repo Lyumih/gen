@@ -23,8 +23,8 @@ namespace $ {
 		},
 
 		'hero/enemy attack turn'() {
-			hero.use_attack( enemy, battle )
-			enemy.use_attack( hero, battle )
+			hero.use_attack( [ enemy ], battle )
+			enemy.use_attack( [ hero ], battle )
 			$mol_assert_equal( battle.turn(), 4 )
 		},
 

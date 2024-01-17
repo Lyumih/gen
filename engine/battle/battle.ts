@@ -23,11 +23,11 @@ namespace $ {
 			this.history( [ ...this.history(), next ] )
 		}
 
-		log_attack( source: $gen_engine_item_unit, target: $gen_engine_item_unit ) {
+		log_attack( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) {
 			this.log( `**${ source.name() }** *атакует*` )
 		}
 
-		log_skill( source: $gen_engine_item_unit, target: $gen_engine_item_unit, skill: $gen_engine_item_skill ) {
+		log_skill( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill ) {
 			this.log( `**${ source.name() }** *использует* **${ skill.name() }**` )
 		}
 	}

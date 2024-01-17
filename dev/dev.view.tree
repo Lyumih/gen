@@ -37,9 +37,9 @@ $gen_dev $mol_page
 			<= Test $mol_button_major
 				title \Тестировать
 				click? <=> test? null
-			<= Hero $gen_app_battle_unit
+			- <= Hero $gen_app_battle_unit
 				unit <= hero
 				target <= enemy
-			<= Enemy $gen_app_battle_unit
+			- <= Enemy $gen_app_battle_unit
 				unit <= enemy
 				target <= hero
