@@ -3272,7 +3272,7 @@ var $;
             return next ?? `${this.type()}-${this.part()}-${$mol_guid(4)}`;
         }
         config(next) {
-            return {};
+            return next ?? {};
         }
         log() {
         }
@@ -3286,11 +3286,9 @@ var $;
             return next ?? 'part';
         }
         name(next) {
-            console.log('name', next);
             return next ?? 'no name';
         }
         description(next) {
-            console.log('description', next);
             return next ?? 'no description';
         }
         level(next) {
@@ -3489,12 +3487,12 @@ var $;
                 target.health(target.health() - this.attack());
                 battle.log_attack(this, [target]);
             });
-            console.log('use_attack', targets);
             battle.next_turn();
         }
         use_skill(targets, skill, battle) {
+            battle.log_skill(this, targets, skill);
             skill.use(this, targets, battle);
-            this.next_turn();
+            battle.next_turn();
         }
         is_dead() {
             return this.health() <= 0;
@@ -3510,7 +3508,6 @@ var $;
             return next ?? [];
         }
         skills(next) {
-            console.log('hero skills', next);
             return next ?? [];
         }
         buffs(next) {
@@ -9100,7 +9097,8 @@ var $;
         attr() {
             return {
                 ...super.attr(),
-                type: this.type()
+                type: this.type(),
+                target: this.target_checked()
             };
         }
         rows() {
@@ -9349,7 +9347,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='active'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='target'] {\n\tborder-color: orangered;\n}");
+    $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='active'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='target'] {\n\tborder-color: orangered;\n}\n\n[gen_app_battle_unit][target='true'] {\n\tborder-color: orangered;\n}");
 })($ || ($ = {}));
 //gen/app/battle/unit/-css/unit.view.css.ts
 ;
@@ -9706,7 +9704,6 @@ var $;
                 this.restart();
             }
             history() {
-                console.log(this.battle().history());
                 return this.battle().history().reverse().join('\n');
             }
         }
@@ -10409,14 +10406,12 @@ var $;
                 return this.get_party_hero(id)?.name() || 'no name';
             }
             party_hero_pick(id, next) {
-                console.log(id, next);
                 this.active_hero(id);
             }
             hero() {
                 return this.party().find(unit => unit.id() === this.active_hero());
             }
             active_hero(next) {
-                console.log(next);
                 return next ?? this.party()[0]?.id() ?? '';
             }
             is_active_hero(id) {
@@ -10429,7 +10424,6 @@ var $;
                 return `Уровень: ${this.hero()?.level()}`;
             }
             points() {
-                console.log(this.hero()?.points());
                 return `Очков: ${this.hero()?.points()}`;
             }
             equipment_list() {
@@ -10445,7 +10439,6 @@ var $;
                 return `Очков умений: ${this.hero()?.points()}`;
             }
             skill_list() {
-                console.log(this.hero());
                 return this.hero()?.skills()?.map(skill => this.Skill(skill.id())) || [];
             }
             get_skill(id) {
@@ -11351,10 +11344,8 @@ var $;
                 const point = this.parse_x_y(id_y_x);
                 const is_nearest_point = point.in_range_points(this.talents_opened());
                 if (is_nearest_point) {
-                    console.log(is_nearest_point, point.simple());
                     const new_point = this.find_empty_cell(id_y_x);
                     if (new_point) {
-                        console.log('add talent');
                         const new_talent = $mol_array_lottery(new $gen_engine_item_talent_all().all());
                         new_talent.set_x_y(new_point[0], new_point[1]);
                         this.common_talents([...this.common_talents(), new_talent]);
@@ -11877,14 +11868,12 @@ var $;
                 const craft = new $gen_engine_craft;
                 craft.unit(this.unit());
                 craft.equipment(this.equipment());
-                console.log('set unit');
                 return craft;
             }
             prop_list() {
                 return this.equipment().props().map(prop => this.Prop(prop.id));
             }
             prop_open(next) {
-                console.log(this.equipment().props().length);
                 this.craft().prop_add(new $gen_engine_item_prop);
             }
             prop_level_up(next) {
@@ -12005,7 +11994,6 @@ var $;
             skill.name('Хил');
             skill.description('Исцеляет на 10 здоровья');
             skill.use = (source, targets, battle) => {
-                console.log(battle);
                 source.health(source.health() + 10);
                 battle.log(`${source.name()} исцеляется на 10 здоровья`);
             };
@@ -12017,8 +12005,11 @@ var $;
             skill.name('Сильный удар');
             skill.description('Урон x2');
             skill.use = (source, targets, battle) => {
-                targets[0].health(targets[0].health() - source.attack() * 2);
-                battle.log(`${source.name()} наносит сильный удар х2`);
+                if (targets[0]) {
+                    targets[0].health(targets[0].health() - source.attack() * 2);
+                    battle.log(`${source.name()} наносит сильный удар х2`);
+                }
+                battle.log(`${source.name()} нет целей`);
             };
             return skill;
         }
@@ -12028,8 +12019,15 @@ var $;
             skill.level(44);
             skill.description('Урон x4 и лечение себя на 10');
             skill.use = (source, targets, battle) => {
-                targets[0].health(targets[0].health() - source.attack() * 4);
-                source.health(source.health() + 10);
+                const target = targets[0];
+                if (target) {
+                    targets[0].health(targets[0].health() - source.attack() * 4);
+                    source.health(source.health() + 10);
+                    battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
+                }
+                else {
+                    battle.log(`${source.name()} нет целей`);
+                }
             };
             return skill;
         }
@@ -12040,16 +12038,22 @@ var $;
             skill.level(5);
             skill.description('5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.');
             skill.use = (source, targets, battle) => {
-                const debuff_mem = new $gen_engine_item_skill;
+                const debuff_mem = new $gen_engine_item_buff;
                 debuff_mem.name('mem');
                 debuff_mem.part('debuff');
-                targets[0].buffs([...targets[0].buffs(), debuff_mem]);
-                if (Math.random() < 0.5) {
-                    battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
-                    targets[0].health(targets[0].health() - source.attack() * 999);
+                const target = targets[0];
+                if (target) {
+                    target.buffs([...target.buffs(), debuff_mem]);
+                    if (Math.random() < 0.5) {
+                        battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
+                        target.health(target.health() - source.attack() * 999);
+                    }
+                    else {
+                        battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
+                    }
                 }
                 else {
-                    battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
+                    battle.log(`${source.name()} нет целей для умения`);
                 }
             };
             return skill;
@@ -12576,7 +12580,6 @@ var $;
                 return new $gen_engine_battle();
             }
             test() {
-                console.log('Использовано тестовое умение');
                 this.hero().use_skill([this.enemy()], this.skill(), this.battle());
             }
             all_skill_list() {
@@ -12594,7 +12597,6 @@ var $;
             skill() {
                 return $gen_engine_item_skill.make({
                     use: (source, targets) => {
-                        console.log('code', this.code());
                         eval(this.code());
                         return 'success use skill';
                     }
@@ -14205,7 +14207,6 @@ var $;
     (function ($$) {
         class $gen_app extends $.$gen_app {
             party(next) {
-                console.log('party');
                 return next ?? new this.$.$gen_engine_item_unit_all().all();
             }
             active_hero(next) {

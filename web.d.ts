@@ -1001,7 +1001,7 @@ declare namespace $ {
     class $gen_engine_item extends $mol_object {
         id_root(next?: string): string;
         id(next?: string): string;
-        config(next?: any): {};
+        config(next?: {}): {};
         log(): void;
         reference(next?: string): string;
         type(next?: string): string;
