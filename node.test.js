@@ -3863,10 +3863,10 @@ var $;
         log(next) {
             this.history([...this.history(), next]);
         }
-        log_attack(source, target) {
+        log_attack(source, targets) {
             this.log(`**${source.name()}** *атакует*`);
         }
-        log_skill(source, target, skill) {
+        log_skill(source, targets, skill) {
             this.log(`**${source.name()}** *использует* **${skill.name()}**`);
         }
     }
@@ -3981,8 +3981,10 @@ var $;
         attack(next) {
             return next ?? this.common_unit().attack;
         }
-        use_attack(target, battle) {
-            target.health(target.health() - this.attack());
+        use_attack(targets, battle) {
+            targets.forEach(target => {
+                target.health(target.health() - this.attack());
+            });
             this.next_turn();
         }
         use_skill(targets, skill, battle) {
@@ -6095,22 +6097,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_button_minor extends $mol_button_typed {
-    }
-    $.$mol_button_minor = $mol_button_minor;
-})($ || ($ = {}));
-//mol/button/minor/-view.tree/minor.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/button/minor/minor.view.css", "[mol_button_minor] {\n\tcolor: var(--mol_theme_control);\n}\n\n[mol_button_minor][disabled] {\n\tcolor: var(--mol_theme_shade);\n}\n");
-})($ || ($ = {}));
-//mol/button/minor/-css/minor.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_stack extends $mol_view {
     }
     $.$mol_stack = $mol_stack;
@@ -6914,6 +6900,22 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/text/code/row/row.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_button_minor extends $mol_button_typed {
+    }
+    $.$mol_button_minor = $mol_button_minor;
+})($ || ($ = {}));
+//mol/button/minor/-view.tree/minor.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/button/minor/minor.view.css", "[mol_button_minor] {\n\tcolor: var(--mol_theme_control);\n}\n\n[mol_button_minor][disabled] {\n\tcolor: var(--mol_theme_shade);\n}\n");
+})($ || ($ = {}));
+//mol/button/minor/-css/minor.view.css.ts
 ;
 "use strict";
 var $;
@@ -9188,6 +9190,41 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_tick extends $mol_icon {
+        path() {
+            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+        }
+    }
+    $.$mol_icon_tick = $mol_icon_tick;
+})($ || ($ = {}));
+//mol/icon/tick/-view.tree/tick.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_check_box extends $mol_check {
+        Icon() {
+            const obj = new this.$.$mol_icon_tick();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_check_box.prototype, "Icon", null);
+    $.$mol_check_box = $mol_check_box;
+})($ || ($ = {}));
+//mol/check/box/-view.tree/box.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+})($ || ($ = {}));
+//mol/check/box/-css/box.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_pop extends $mol_view {
         showed(next) {
             if (next !== undefined)
@@ -9451,55 +9488,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_text_list extends $mol_text {
-        auto_scroll() {
-            return null;
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                mol_text_list_type: this.type()
-            };
-        }
-        Paragraph(id) {
-            const obj = new this.$.$mol_text_list_item();
-            obj.index = () => this.item_index(id);
-            obj.sub = () => this.block_content(id);
-            return obj;
-        }
-        type() {
-            return "";
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_text_list.prototype, "Paragraph", null);
-    $.$mol_text_list = $mol_text_list;
-    class $mol_text_list_item extends $mol_paragraph {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_text_list_item_index: this.index()
-            };
-        }
-        index() {
-            return 0;
-        }
-    }
-    $.$mol_text_list_item = $mol_text_list_item;
-})($ || ($ = {}));
-//mol/text/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
-})($ || ($ = {}));
-//mol/text/list/-css/list.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_app_battle_unit extends $mol_list {
         battle() {
             const obj = new this.$.$gen_engine_battle();
@@ -9509,9 +9497,8 @@ var $;
             const obj = new this.$.$gen_engine_item_unit();
             return obj;
         }
-        target() {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
+        targets() {
+            return [];
         }
         attr() {
             return {
@@ -9521,6 +9508,7 @@ var $;
         }
         rows() {
             return [
+                this.Source_target_chech_box(),
                 this.Name(),
                 this.Stats(),
                 this.Attack_button(),
@@ -9529,6 +9517,24 @@ var $;
         }
         type() {
             return "";
+        }
+        target_checked(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Target_check_box() {
+            const obj = new this.$.$mol_check_box();
+            obj.title = () => "Цель";
+            obj.checked = (id, next) => this.target_checked(id, next);
+            return obj;
+        }
+        Source_target_chech_box() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Target_check_box()
+            ];
+            return obj;
         }
         name() {
             return "";
@@ -9638,8 +9644,14 @@ var $;
         $mol_mem
     ], $gen_app_battle_unit.prototype, "unit", null);
     __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_unit.prototype, "target_checked", null);
+    __decorate([
         $mol_mem
-    ], $gen_app_battle_unit.prototype, "target", null);
+    ], $gen_app_battle_unit.prototype, "Target_check_box", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_unit.prototype, "Source_target_chech_box", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_unit.prototype, "Name", null);
@@ -9708,9 +9720,19 @@ var $;
                 return this.unit().type();
             }
             use_attack(next) {
-                this.battle().next_turn();
-                this.battle().log_attack(this.unit(), this.target());
-                this.unit().use_attack(this.target(), this.battle());
+                if (this.targets()?.length > 0) {
+                    this.battle().next_turn();
+                    this.battle().log_attack(this.unit(), this.targets());
+                    this.unit().use_attack(this.targets(), this.battle());
+                }
+            }
+            use_skill(id, next) {
+                const skill = this.get_skill(id);
+                if (skill && this.targets()?.length > 0) {
+                    this.battle().next_turn();
+                    this.battle().log_skill(this.unit(), this.targets(), skill);
+                    this.unit().use_skill(this.targets(), skill, this.battle());
+                }
             }
             skill_list() {
                 return this.skills().map(skill => this.Skill(skill.id()));
@@ -9723,14 +9745,6 @@ var $;
             }
             skill_description(id) {
                 return this.get_skill(id)?.description() || 'no description';
-            }
-            use_skill(id, next) {
-                const skill = this.get_skill(id);
-                if (skill) {
-                    this.battle().next_turn();
-                    this.battle().log_skill(this.unit(), this.target(), skill);
-                    this.unit().use_skill([this.target()], skill, this.battle());
-                }
             }
             skills() {
                 return this.unit().skills();
@@ -9747,9 +9761,58 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='hero'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='enemy'] {\n\tborder-color: orangered;\n}");
+    $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='active'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='target'] {\n\tborder-color: orangered;\n}");
 })($ || ($ = {}));
 //gen/app/battle/unit/-css/unit.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_text_list extends $mol_text {
+        auto_scroll() {
+            return null;
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                mol_text_list_type: this.type()
+            };
+        }
+        Paragraph(id) {
+            const obj = new this.$.$mol_text_list_item();
+            obj.index = () => this.item_index(id);
+            obj.sub = () => this.block_content(id);
+            return obj;
+        }
+        type() {
+            return "";
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_text_list.prototype, "Paragraph", null);
+    $.$mol_text_list = $mol_text_list;
+    class $mol_text_list_item extends $mol_paragraph {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_text_list_item_index: this.index()
+            };
+        }
+        index() {
+            return 0;
+        }
+    }
+    $.$mol_text_list_item = $mol_text_list_item;
+})($ || ($ = {}));
+//mol/text/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
+})($ || ($ = {}));
+//mol/text/list/-css/list.view.css.ts
 ;
 "use strict";
 var $;
@@ -9772,8 +9835,8 @@ var $;
         pages() {
             return [
                 this.Party_page(),
-                this.Battle_page(),
-                this.History_page()
+                this.History_page(),
+                this.Battle_page()
             ];
         }
         party_unit_name(id) {
@@ -9815,6 +9878,28 @@ var $;
             ];
             return obj;
         }
+        History_label() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "История";
+            return obj;
+        }
+        history() {
+            return "";
+        }
+        History() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.history();
+            return obj;
+        }
+        History_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "История";
+            obj.body = () => [
+                this.History_label(),
+                this.History()
+            ];
+            return obj;
+        }
         turn() {
             return "Ход: 0";
         }
@@ -9823,19 +9908,23 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
-        source(id) {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
+        toggle_target_id(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
         }
-        target(id) {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
+        source(id) {
+            return null;
+        }
+        targets(id) {
+            return null;
         }
         Unit(id) {
             const obj = new this.$.$gen_app_battle_unit();
+            obj.target_checked = (next) => this.toggle_target_id(id, next);
             obj.battle = () => this.battle();
             obj.unit = () => this.source(id);
-            obj.target = () => this.target(id);
+            obj.targets = () => this.targets(id);
             return obj;
         }
         unit_battle_list() {
@@ -9901,28 +9990,6 @@ var $;
             ];
             return obj;
         }
-        History_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "История";
-            return obj;
-        }
-        history() {
-            return "";
-        }
-        History() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.history();
-            return obj;
-        }
-        History_page() {
-            const obj = new this.$.$mol_page();
-            obj.title = () => "История";
-            obj.body = () => [
-                this.History_label(),
-                this.History()
-            ];
-            return obj;
-        }
     }
     __decorate([
         $mol_mem
@@ -9947,13 +10014,19 @@ var $;
     ], $gen_app_battle.prototype, "Party_page", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle.prototype, "History_label", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History_page", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
         $mol_mem_key
-    ], $gen_app_battle.prototype, "source", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "target", null);
+    ], $gen_app_battle.prototype, "toggle_target_id", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "Unit", null);
@@ -9981,15 +10054,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Battle_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History_label", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History_page", null);
     $.$gen_app_battle = $gen_app_battle;
 })($ || ($ = {}));
 //gen/app/battle/-view.tree/battle.view.tree.ts
@@ -10018,6 +10082,27 @@ var $;
             unit_battle_list() {
                 return this.party().map(unit => this.Unit(unit.id()));
             }
+            source(id) {
+                return this.get_party_hero(id);
+            }
+            targets_id(next) {
+                console.log(next);
+                return next ?? [];
+            }
+            toggle_target_id(id, next) {
+                console.log('toggle_target_id2', id, next);
+                if (next) {
+                    this.targets_id([...this.targets_id(), id]);
+                }
+                else {
+                    this.targets_id(this.targets_id().filter(target_id => target_id !== id));
+                }
+                return next ?? false;
+            }
+            targets() {
+                console.log('targets');
+                return this.unit_battle_list().filter(unit => this.targets_id().includes(unit.id()));
+            }
             get_reward(next) {
                 this.engine().inventory([...this.engine().inventory(), this.engine().reward()]);
                 this.restart();
@@ -10027,6 +10112,12 @@ var $;
                 return this.battle().history().reverse().join('\n');
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "targets_id", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle.prototype, "toggle_target_id", null);
         $$.$gen_app_battle = $gen_app_battle;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -11722,41 +11813,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_tick extends $mol_icon {
-        path() {
-            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
-        }
-    }
-    $.$mol_icon_tick = $mol_icon_tick;
-})($ || ($ = {}));
-//mol/icon/tick/-view.tree/tick.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_check_box extends $mol_check {
-        Icon() {
-            const obj = new this.$.$mol_icon_tick();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_check_box.prototype, "Icon", null);
-    $.$mol_check_box = $mol_check_box;
-})($ || ($ = {}));
-//mol/check/box/-view.tree/box.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
-})($ || ($ = {}));
-//mol/check/box/-css/box.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_app_craft extends $mol_page {
         equipment() {
             const obj = new this.$.$gen_engine_item_equipment();
@@ -12823,26 +12879,12 @@ var $;
             obj.click = (next) => this.test(next);
             return obj;
         }
-        Hero() {
-            const obj = new this.$.$gen_app_battle_unit();
-            obj.unit = () => this.hero();
-            obj.target = () => this.enemy();
-            return obj;
-        }
-        Enemy() {
-            const obj = new this.$.$gen_app_battle_unit();
-            obj.unit = () => this.enemy();
-            obj.target = () => this.hero();
-            return obj;
-        }
         Container() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
                 this.Name_labeler(),
                 this.Code_labeler(),
-                this.Test(),
-                this.Hero(),
-                this.Enemy()
+                this.Test()
             ];
             return obj;
         }
@@ -12901,12 +12943,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_dev.prototype, "Test", null);
-    __decorate([
-        $mol_mem
-    ], $gen_dev.prototype, "Hero", null);
-    __decorate([
-        $mol_mem
-    ], $gen_dev.prototype, "Enemy", null);
     __decorate([
         $mol_mem
     ], $gen_dev.prototype, "Container", null);
@@ -18361,8 +18397,8 @@ var $;
             $mol_assert_equal(battle.turn(), 2);
         },
         'hero/enemy attack turn'() {
-            hero.use_attack(enemy, battle);
-            enemy.use_attack(hero, battle);
+            hero.use_attack([enemy], battle);
+            enemy.use_attack([hero], battle);
             $mol_assert_equal(battle.turn(), 4);
         },
         'hero/enemy use skill turn'() {

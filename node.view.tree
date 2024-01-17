@@ -173,8 +173,6 @@ $mol_section $mol_list
 		<= Content $mol_list
 			rows <= content /
 
-$mol_button_minor $mol_button_typed
-
 $mol_stack $mol_view
 
 $mol_dimmer $mol_paragraph
@@ -219,6 +217,8 @@ $mol_text_code_row $mol_paragraph
 		needle <= highlight \
 		uri <= token_uri* \
 	find_pos* null
+
+$mol_button_minor $mol_button_typed
 
 $mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
 
@@ -525,6 +525,11 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
 $mol_pop $mol_view
 	showed? false
 	align_vert \
@@ -559,28 +564,18 @@ $mol_pop_over $mol_pop
 		mouseenter?event <=> event_show?event null
 		mouseleave?event <=> event_hide?event null
 
-$mol_text_list $mol_text
-	auto_scroll null
-	attr *
-		^
-		mol_text_list_type <= type \
-	Paragraph* $mol_text_list_item
-		index <= item_index*
-		sub <= block_content*
-
-$mol_text_list_item $mol_paragraph
-	attr *
-		^
-		mol_text_list_item_index <= index 0
-
 $gen_app_battle_unit $mol_list
 	battle $gen_engine_battle
 	unit $gen_engine_item_unit
-	target $gen_engine_item_unit
+	targets /$gen_engine_item_unit
 	attr *
 		^
 		type <= type \
 	rows /
+		<= Source_target_chech_box $mol_row sub /
+			<= Target_check_box $mol_check_box
+				title \Цель
+				checked*? <=> target_checked*? false
 		<= Name $mol_paragraph title <= name \
 		<= Stats $mol_list rows /
 			<= Health $mol_paragraph title <= health \
@@ -601,6 +596,20 @@ $gen_app_battle_unit $mol_list
 						title \Использовать умение
 						click? <=> use_skill*? null
 
+$mol_text_list $mol_text
+	auto_scroll null
+	attr *
+		^
+		mol_text_list_type <= type \
+	Paragraph* $mol_text_list_item
+		index <= item_index*
+		sub <= block_content*
+
+$mol_text_list_item $mol_paragraph
+	attr *
+		^
+		mol_text_list_item_index <= index 0
+
 $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
@@ -616,6 +625,11 @@ $gen_app_battle $mol_book2
 							title <= party_unit_name* \Герой
 				<= Start_battle $mol_button_major
 					title \Начать битву
+		<= History_page $mol_page
+			title \История
+			body /
+				<= History_label $mol_section title \История
+				<= History $mol_text text <= history \
 		<= Battle_page $mol_page
 			title \Битва
 			body /
@@ -623,13 +637,10 @@ $gen_app_battle $mol_book2
 					<= Turn $mol_section title <= turn \Ход: 0
 					<= Unit_battle_list $mol_row sub <= unit_battle_list /
 						<= Unit*0 $gen_app_battle_unit
+							target_checked? <=> toggle_target_id*? null
 							battle <= battle
-							unit <= source* $gen_engine_item_unit
-							target <= target* $gen_engine_item_unit
-					- <= Enemy $gen_app_battle_unit
-						battle <= battle
-						unit <= enemy $gen_engine_item_unit
-						target <= hero $gen_engine_item_unit
+							unit <= source* null
+							targets <= targets* null
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false
@@ -638,11 +649,6 @@ $gen_app_battle $mol_book2
 				<= Restart $mol_button_minor
 					title \Начать заново
 					click? <=> restart? null
-		<= History_page $mol_page
-			title \История
-			body /
-				<= History_label $mol_section title \История
-				<= History $mol_text text <= history \
 
 $gen_app_item $mol_view
 	attr *
@@ -830,11 +836,6 @@ $gen_app_talent $mol_page
 						click? <=> talent_click*? null
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
-
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
 
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
@@ -1028,10 +1029,10 @@ $gen_dev $mol_page
 			<= Test $mol_button_major
 				title \Тестировать
 				click? <=> test? null
-			<= Hero $gen_app_battle_unit
+			- <= Hero $gen_app_battle_unit
 				unit <= hero
 				target <= enemy
-			<= Enemy $gen_app_battle_unit
+			- <= Enemy $gen_app_battle_unit
 				unit <= enemy
 				target <= hero
 
