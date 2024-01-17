@@ -34,6 +34,7 @@ namespace $ {
 		use_attack( targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) {
 			targets.forEach( target => {
 				target.health( target.health() - this.attack() )
+				battle.log_attack( this, [ target ] )
 			} )
 			console.log( 'use_attack', targets )
 			battle.next_turn()

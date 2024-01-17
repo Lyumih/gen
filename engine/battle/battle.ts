@@ -24,7 +24,11 @@ namespace $ {
 		}
 
 		log_attack( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) {
-			this.log( `**${ source.name() }** *атакует*` )
+			if( targets.length > 0 ) {
+				this.log( `**${ source.name() }** *атакует* ** ${ targets.map( target => target.name() ).join( ', ' ) } **` )
+			} else {
+				this.log( `**${ source.name() }** *атакует* ** ничего **` )
+			}
 		}
 
 		log_skill( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill ) {
