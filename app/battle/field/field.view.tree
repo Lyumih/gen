@@ -1,0 +1,9 @@
+$gen_app_battle_field $mol_view
+	units /$gen_engine_item_unit
+	sub /
+		<= X $mol_list rows <= x_list /
+			<= Y*0 $mol_row sub <= y_list* /
+				<= Cell* $mol_view
+					sub /
+						<= Unit* $mol_button_major
+							title <= cell_content* \Cell
