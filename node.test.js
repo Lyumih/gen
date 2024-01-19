@@ -9222,6 +9222,112 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_app_battle_field extends $mol_view {
+        units() {
+            return [];
+        }
+        sub() {
+            return [
+                this.X()
+            ];
+        }
+        cell_content(id) {
+            return "Cell";
+        }
+        Unit(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => this.cell_content(id);
+            return obj;
+        }
+        Cell(id) {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Unit(id)
+            ];
+            return obj;
+        }
+        y_list(id) {
+            return [
+                this.Cell(id)
+            ];
+        }
+        Y(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.y_list(id);
+            return obj;
+        }
+        x_list() {
+            return [
+                this.Y("0")
+            ];
+        }
+        X() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.x_list();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Unit", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Cell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Y", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "X", null);
+    $.$gen_app_battle_field = $gen_app_battle_field;
+})($ || ($ = {}));
+//gen/app/battle/field/-view.tree/field.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_battle_field extends $.$gen_app_battle_field {
+            x_list(next) {
+                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
+            }
+            y_list(id_x) {
+                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
+            }
+            array_range(length) {
+                return Array.from({ length }, (_, index) => index);
+            }
+            max_x_y(next) {
+                return {
+                    x: 10,
+                    y: 6,
+                };
+            }
+            cell_content(id) {
+                const [id_x, id_y] = id.split('_');
+                const targets = this.units()
+                    .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
+                return targets.map(unit => unit.name()).join(',');
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_field.prototype, "x_list", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_field.prototype, "max_x_y", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle_field.prototype, "cell_content", null);
+        $$.$gen_app_battle_field = $gen_app_battle_field;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/battle/field/field.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_tick extends $mol_icon {
         path() {
             return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
@@ -9800,6 +9906,56 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_hor extends $mol_view {
+    }
+    $.$mol_hor = $mol_hor;
+})($ || ($ = {}));
+//mol/hor/-view.tree/hor.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_hor extends $.$mol_hor {
+            minimal_width() {
+                let min = 0;
+                for (const view of this.sub()) {
+                    if (!(view instanceof $mol_view))
+                        continue;
+                    min += view.minimal_width();
+                }
+                return min;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_hor.prototype, "minimal_width", null);
+        $$.$mol_hor = $mol_hor;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/hor/hor.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_define($mol_hor, {
+        display: 'flex',
+        alignItems: 'flex-start',
+        alignContent: 'flex-start',
+        justifyContent: 'flex-start',
+        flex: {
+            grow: 1,
+            shrink: 0,
+            basis: 'auto',
+        },
+    });
+})($ || ($ = {}));
+//mol/hor/hor.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_text_list extends $mol_text {
         auto_scroll() {
             return null;
@@ -9940,6 +10096,11 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
+        Field() {
+            const obj = new this.$.$gen_app_battle_field();
+            obj.units = () => this.party();
+            return obj;
+        }
         source(id) {
             return null;
         }
@@ -9972,16 +10133,8 @@ var $;
             ];
         }
         Unit_battle_list() {
-            const obj = new this.$.$mol_row();
+            const obj = new this.$.$mol_hor();
             obj.sub = () => this.unit_battle_list();
-            return obj;
-        }
-        Field() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
-                this.Turn(),
-                this.Unit_battle_list()
-            ];
             return obj;
         }
         end() {
@@ -10022,7 +10175,9 @@ var $;
             const obj = new this.$.$mol_page();
             obj.title = () => "Битва";
             obj.body = () => [
+                this.Turn(),
                 this.Field(),
+                this.Unit_battle_list(),
                 this.End(),
                 this.Reward(),
                 this.Restart()
@@ -10064,6 +10219,9 @@ var $;
         $mol_mem
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Field", null);
+    __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "target_checked", null);
     __decorate([
@@ -10078,9 +10236,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Unit_battle_list", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Field", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "End", null);

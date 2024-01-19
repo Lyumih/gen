@@ -525,6 +525,16 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$gen_app_battle_field $mol_view
+	units /$gen_engine_item_unit
+	sub /
+		<= X $mol_list rows <= x_list /
+			<= Y*0 $mol_row sub <= y_list* /
+				<= Cell* $mol_view
+					sub /
+						<= Unit* $mol_button_major
+							title <= cell_content* \Cell
+
 $mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
 $mol_check_box $mol_check
@@ -597,6 +607,8 @@ $gen_app_battle_unit $mol_list
 						title \Использовать умение
 						click? <=> use_skill*? null
 
+$mol_hor $mol_view
+
 $mol_text_list $mol_text
 	auto_scroll null
 	attr *
@@ -634,14 +646,16 @@ $gen_app_battle $mol_book2
 		<= Battle_page $mol_page
 			title \Битва
 			body /
-				<= Field $mol_list rows /
-					<= Turn $mol_section title <= turn \Ход: 0
-					<= Unit_battle_list $mol_row sub <= unit_battle_list /
-						<= Unit*0 $gen_app_battle_unit
-							unit <= source* null
-							target_checked? <=> target_checked*? false
-							use_attack? <=> use_attack*? null
-							use_skill? <=> use_skill*? null
+				<= Turn $mol_section title <= turn \Ход: 0
+				<= Field $gen_app_battle_field
+					units <= party
+				- <= Units $mol_row sub /
+				<= Unit_battle_list $mol_hor sub <= unit_battle_list /
+					<= Unit*0 $gen_app_battle_unit
+						unit <= source* null
+						target_checked? <=> target_checked*? false
+						use_attack? <=> use_attack*? null
+						use_skill? <=> use_skill*? null
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false

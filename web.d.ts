@@ -2635,6 +2635,33 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_app_battle_field extends $mol_view {
+        units(): readonly $gen_engine_item_unit[];
+        sub(): readonly any[];
+        cell_content(id: any): string;
+        Unit(id: any): $mol_button_major;
+        Cell(id: any): $mol_view;
+        y_list(id: any): readonly any[];
+        Y(id: any): $mol_row;
+        x_list(): readonly any[];
+        X(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle_field extends $.$gen_app_battle_field {
+        x_list(next?: any): $mol_row[];
+        y_list(id_x: string): $mol_view[];
+        array_range(length: number): number[];
+        max_x_y(next?: any): {
+            x: number;
+            y: number;
+        };
+        cell_content(id: string): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_tick extends $mol_icon {
         path(): string;
     }
@@ -2780,6 +2807,20 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_hor extends $mol_view {
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_hor extends $.$mol_hor {
+        minimal_width(): number;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_text_list extends $mol_text {
         auto_scroll(): any;
         attr(): Record<string, any>;
@@ -2815,14 +2856,14 @@ declare namespace $ {
         History_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
+        Field(): $$.$gen_app_battle_field;
         source(id: any): any;
         target_checked(id: any, next?: any): boolean;
         use_attack(id: any, next?: any): any;
         use_skill(id: any, next?: any): any;
         Unit(id: any): $$.$gen_app_battle_unit;
         unit_battle_list(): readonly any[];
-        Unit_battle_list(): $mol_row;
-        Field(): $$.$mol_list;
+        Unit_battle_list(): $$.$mol_hor;
         end(): string;
         End(): $$.$mol_paragraph;
         is_game_end(): boolean;
