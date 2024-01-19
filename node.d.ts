@@ -2703,33 +2703,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_app_battle_field extends $mol_view {
-        units(): readonly $gen_engine_item_unit[];
-        sub(): readonly any[];
-        cell_content(id: any): string;
-        Unit(id: any): $mol_button_major;
-        Cell(id: any): $mol_view;
-        y_list(id: any): readonly any[];
-        Y(id: any): $mol_row;
-        x_list(): readonly any[];
-        X(): $$.$mol_list;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_battle_field extends $.$gen_app_battle_field {
-        x_list(next?: any): $mol_row[];
-        y_list(id_x: string): $mol_view[];
-        array_range(length: number): number[];
-        max_x_y(next?: any): {
-            x: number;
-            y: number;
-        };
-        cell_content(id: string): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_tick extends $mol_icon {
         path(): string;
     }
@@ -2875,13 +2848,36 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_hor extends $mol_view {
+    class $gen_app_battle_field extends $mol_view {
+        units(): readonly $gen_engine_item_unit[];
+        sub(): readonly any[];
+        cell_click(id: any, next?: any): any;
+        xy(id: any): string;
+        XY(id: any): $$.$mol_paragraph;
+        cell_unit_name(id: any): string;
+        Unit(id: any): $mol_check_box;
+        cell_unit_list(id: any): readonly any[];
+        Cell_unit_list(id: any): $mol_view;
+        Cell(id: any): $mol_view;
+        y_list(id: any): readonly any[];
+        Y(id: any): $mol_row;
+        x_list(): readonly any[];
+        X(): $$.$mol_list;
     }
 }
 
 declare namespace $.$$ {
-    class $mol_hor extends $.$mol_hor {
-        minimal_width(): number;
+    class $gen_app_battle_field extends $.$gen_app_battle_field {
+        x_list(next?: any): $mol_row[];
+        y_list(id_x: string): $mol_view[];
+        array_range(length: number): number[];
+        max_x_y(next?: any): {
+            x: number;
+            y: number;
+        };
+        cell_unit_list(id: string): readonly any[];
+        xy(id: any): string;
+        cell_unit_name(id: string, next?: any): string;
     }
 }
 
@@ -2922,16 +2918,18 @@ declare namespace $ {
         history(): string;
         History(): $$.$mol_text;
         History_page(): $mol_page;
-        turn(): string;
-        Turn(): $$.$mol_section;
-        Field(): $$.$gen_app_battle_field;
         source(id: any): any;
         target_checked(id: any, next?: any): boolean;
         use_attack(id: any, next?: any): any;
         use_skill(id: any, next?: any): any;
         Unit(id: any): $$.$gen_app_battle_unit;
         unit_battle_list(): readonly any[];
-        Unit_battle_list(): $$.$mol_hor;
+        Unit_battle_list(): $$.$mol_list;
+        Units_page(): $mol_page;
+        turn(): string;
+        Turn(): $$.$mol_section;
+        move(next?: any): any;
+        Field(): $$.$gen_app_battle_field;
         end(): string;
         End(): $$.$mol_paragraph;
         is_game_end(): boolean;
@@ -2957,6 +2955,7 @@ declare namespace $.$$ {
         use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
+        move(id: string, next?: any): void;
     }
 }
 

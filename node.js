@@ -9231,112 +9231,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_app_battle_field extends $mol_view {
-        units() {
-            return [];
-        }
-        sub() {
-            return [
-                this.X()
-            ];
-        }
-        cell_content(id) {
-            return "Cell";
-        }
-        Unit(id) {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => this.cell_content(id);
-            return obj;
-        }
-        Cell(id) {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => [
-                this.Unit(id)
-            ];
-            return obj;
-        }
-        y_list(id) {
-            return [
-                this.Cell(id)
-            ];
-        }
-        Y(id) {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => this.y_list(id);
-            return obj;
-        }
-        x_list() {
-            return [
-                this.Y("0")
-            ];
-        }
-        X() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.x_list();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Unit", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Cell", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Y", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_field.prototype, "X", null);
-    $.$gen_app_battle_field = $gen_app_battle_field;
-})($ || ($ = {}));
-//gen/app/battle/field/-view.tree/field.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_battle_field extends $.$gen_app_battle_field {
-            x_list(next) {
-                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
-            }
-            y_list(id_x) {
-                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
-            }
-            array_range(length) {
-                return Array.from({ length }, (_, index) => index);
-            }
-            max_x_y(next) {
-                return {
-                    x: 10,
-                    y: 6,
-                };
-            }
-            cell_content(id) {
-                const [id_x, id_y] = id.split('_');
-                const targets = this.units()
-                    .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
-                return targets.map(unit => unit.name()).join(',');
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle_field.prototype, "x_list", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle_field.prototype, "max_x_y", null);
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle_field.prototype, "cell_content", null);
-        $$.$gen_app_battle_field = $gen_app_battle_field;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/battle/field/field.view.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_tick extends $mol_icon {
         path() {
             return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
@@ -9915,52 +9809,163 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_hor extends $mol_view {
+    class $gen_app_battle_field extends $mol_view {
+        units() {
+            return [];
+        }
+        sub() {
+            return [
+                this.X()
+            ];
+        }
+        cell_click(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        xy(id) {
+            return "0, 0";
+        }
+        XY(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.xy(id);
+            return obj;
+        }
+        cell_unit_name(id) {
+            return "";
+        }
+        Unit(id) {
+            const obj = new this.$.$mol_check_box();
+            obj.title = () => this.cell_unit_name(id);
+            return obj;
+        }
+        cell_unit_list(id) {
+            return [
+                this.Unit(id)
+            ];
+        }
+        Cell_unit_list(id) {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.cell_unit_list(id);
+            return obj;
+        }
+        Cell(id) {
+            const obj = new this.$.$mol_view();
+            obj.event = () => ({
+                click: (next) => this.cell_click(id, next)
+            });
+            obj.sub = () => [
+                this.XY(id),
+                this.Cell_unit_list(id)
+            ];
+            return obj;
+        }
+        y_list(id) {
+            return [
+                this.Cell("0_0")
+            ];
+        }
+        Y(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.y_list(id);
+            return obj;
+        }
+        x_list() {
+            return [
+                this.Y("0")
+            ];
+        }
+        X() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.x_list();
+            return obj;
+        }
     }
-    $.$mol_hor = $mol_hor;
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "cell_click", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "XY", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Unit", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Cell_unit_list", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Cell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Y", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "X", null);
+    $.$gen_app_battle_field = $gen_app_battle_field;
 })($ || ($ = {}));
-//mol/hor/-view.tree/hor.view.tree.ts
+//gen/app/battle/field/-view.tree/field.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_hor extends $.$mol_hor {
-            minimal_width() {
-                let min = 0;
-                for (const view of this.sub()) {
-                    if (!(view instanceof $mol_view))
-                        continue;
-                    min += view.minimal_width();
-                }
-                return min;
+        class $gen_app_battle_field extends $.$gen_app_battle_field {
+            x_list(next) {
+                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
+            }
+            y_list(id_x) {
+                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
+            }
+            array_range(length) {
+                return Array.from({ length }, (_, index) => index);
+            }
+            max_x_y(next) {
+                return {
+                    x: 6,
+                    y: 6,
+                };
+            }
+            cell_unit_list(id) {
+                const [id_x, id_y] = id.split('_');
+                console.log(id);
+                const units = this.units()
+                    .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
+                return units.map(unit => this.Unit(id + '_' + unit.id()));
+            }
+            xy(id) {
+                const [id_x, id_y] = id.split('_');
+                return `${id_x}, ${id_y}`;
+            }
+            cell_unit_name(id, next) {
+                const [id_x, id_y, id_unit] = id.split('_');
+                console.log(id, next);
+                const unit = this.units()
+                    .find(unit => unit.id() === id_unit);
+                return unit?.name() ?? '';
             }
         }
         __decorate([
             $mol_mem
-        ], $mol_hor.prototype, "minimal_width", null);
-        $$.$mol_hor = $mol_hor;
+        ], $gen_app_battle_field.prototype, "x_list", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_field.prototype, "max_x_y", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle_field.prototype, "cell_unit_name", null);
+        $$.$gen_app_battle_field = $gen_app_battle_field;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/hor/hor.view.ts
+//gen/app/battle/field/field.view.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_define($mol_hor, {
-        display: 'flex',
-        alignItems: 'flex-start',
-        alignContent: 'flex-start',
-        justifyContent: 'flex-start',
-        flex: {
-            grow: 1,
-            shrink: 0,
-            basis: 'auto',
-        },
-    });
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][mol_check_checked='true'] {\n\tborder: 1px solid greenyellow;\n}");
 })($ || ($ = {}));
-//mol/hor/hor.view.css.ts
+//gen/app/battle/field/-css/field.view.css.ts
 ;
 "use strict";
 var $;
@@ -10033,6 +10038,7 @@ var $;
             return [
                 this.Party_page(),
                 this.History_page(),
+                this.Units_page(),
                 this.Battle_page()
             ];
         }
@@ -10097,19 +10103,6 @@ var $;
             ];
             return obj;
         }
-        turn() {
-            return "Ход: 0";
-        }
-        Turn() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => this.turn();
-            return obj;
-        }
-        Field() {
-            const obj = new this.$.$gen_app_battle_field();
-            obj.units = () => this.party();
-            return obj;
-        }
         source(id) {
             return null;
         }
@@ -10142,8 +10135,35 @@ var $;
             ];
         }
         Unit_battle_list() {
-            const obj = new this.$.$mol_hor();
-            obj.sub = () => this.unit_battle_list();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.unit_battle_list();
+            return obj;
+        }
+        Units_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Юниты";
+            obj.body = () => [
+                this.Unit_battle_list()
+            ];
+            return obj;
+        }
+        turn() {
+            return "Ход: 0";
+        }
+        Turn() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.turn();
+            return obj;
+        }
+        move(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Field() {
+            const obj = new this.$.$gen_app_battle_field();
+            obj.units = () => this.party();
+            obj.cell_click = (next) => this.move(next);
             return obj;
         }
         end() {
@@ -10186,7 +10206,6 @@ var $;
             obj.body = () => [
                 this.Turn(),
                 this.Field(),
-                this.Unit_battle_list(),
                 this.End(),
                 this.Reward(),
                 this.Restart()
@@ -10225,12 +10244,6 @@ var $;
         $mol_mem
     ], $gen_app_battle.prototype, "History_page", null);
     __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Turn", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Field", null);
-    __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "target_checked", null);
     __decorate([
@@ -10245,6 +10258,18 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Unit_battle_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Units_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "move", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Field", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "End", null);
@@ -10315,6 +10340,9 @@ var $;
             }
             history() {
                 return this.battle().history().reverse().join('\n');
+            }
+            move(id, next) {
+                console.log('move', id, next);
             }
         }
         __decorate([
@@ -13299,7 +13327,7 @@ var $;
         }
         resource() {
             return [
-                this.milis(), this.jin(), this.mario()
+                this.milis(), this.mario(), this.jin(),
             ];
         }
         milis() {
