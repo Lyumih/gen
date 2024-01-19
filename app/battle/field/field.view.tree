@@ -3,7 +3,11 @@ $gen_app_battle_field $mol_view
 	sub /
 		<= X $mol_list rows <= x_list /
 			<= Y*0 $mol_row sub <= y_list* /
-				<= Cell* $mol_view
+				<= Cell*0_0 $mol_view
+					event *
+						click? <=> cell_click*? null
 					sub /
-						<= Unit* $mol_button_major
-							title <= cell_content* \Cell
+						<= XY* $mol_paragraph title <= xy* \0, 0
+						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
+							<= Unit* $mol_check_box
+								title <= cell_unit_name* \

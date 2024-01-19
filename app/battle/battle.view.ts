@@ -74,5 +74,9 @@ namespace $.$$ {
 			return this.battle().history().reverse().join( '\n' )
 		}
 
+		move( id: string, next?: any ) {
+			console.log( 'move', id, next )
+		}
+
 	}
 }

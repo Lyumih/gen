@@ -8,7 +8,7 @@ namespace $ {
 
 		resource() {
 			return [
-				this.milis(), this.jin(), this.mario()
+				this.milis(), this.mario(), this.jin(),
 			]
 		}
 

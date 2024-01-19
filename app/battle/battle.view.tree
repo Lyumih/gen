@@ -18,19 +18,22 @@ $gen_app_battle $mol_book2
 			body /
 				<= History_label $mol_section title \История
 				<= History $mol_text text <= history \
+		<= Units_page $mol_page
+			title \Юниты
+			body /
+				<= Unit_battle_list $mol_list rows <= unit_battle_list /
+					<= Unit*0 $gen_app_battle_unit
+						unit <= source* null
+						target_checked? <=> target_checked*? false
+						use_attack? <=> use_attack*? null
+						use_skill? <=> use_skill*? null
 		<= Battle_page $mol_page
 			title \Битва
 			body /
 				<= Turn $mol_section title <= turn \Ход: 0
 				<= Field $gen_app_battle_field
 					units <= party
-				- <= Units $mol_row sub /
-				<= Unit_battle_list $mol_hor sub <= unit_battle_list /
-					<= Unit*0 $gen_app_battle_unit
-						unit <= source* null
-						target_checked? <=> target_checked*? false
-						use_attack? <=> use_attack*? null
-						use_skill? <=> use_skill*? null
+					cell_click? <=> move? null
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major
 					enabled <= is_game_end false

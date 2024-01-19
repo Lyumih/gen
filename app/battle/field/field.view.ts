@@ -17,17 +17,37 @@ namespace $.$$ {
 		@$mol_mem
 		max_x_y( next?: any ) {
 			return {
-				x: 10,
+				x: 6,
 				y: 6,
 			}
 		}
 
-		@$mol_mem_key
-		cell_content( id: string ): string {
+		cell_unit_list( id: string ): readonly any[] {
 			const [ id_x, id_y ] = id.split( '_' )
-			const targets = this.units()
+			console.log( id )
+			const units = this.units()
 				.filter( unit => unit.x() === Number( id_x ) && unit.y() === Number( id_y ) )
-			return targets.map( unit => unit.name() ).join( ',' )
+			return units.map( unit => this.Unit( id + '_' + unit.id() ) )
 		}
+
+		xy( id: any ): string {
+			const [ id_x, id_y ] = id.split( '_' )
+			return `${ id_x }, ${ id_y }`
+		}
+
+		@$mol_mem_key
+		cell_unit_name( id: string, next?: any ): string {
+			const [ id_x, id_y, id_unit ] = id.split( '_' )
+			console.log( id, next )
+			const unit = this.units()
+				.find( unit => unit.id() === id_unit )
+			return unit?.name() ?? ''
+		}
+
+		// cell_click( id: any, next?: any ) {
+		// 	console.log( id, next )
+		// }
+
+
 	}
 }

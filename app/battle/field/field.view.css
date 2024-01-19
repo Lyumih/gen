@@ -1,0 +1,16 @@
+[gen_app_battle_field_cell] {
+	flex-direction: column;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	border: 1px solid gray;
+	border-radius: 1rem;
+}
+
+[gen_app_battle_field_cell_unit_list] {
+	flex-direction: column;
+}
+
+[gen_app_battle_field_unit][mol_check_checked='true'] {
+	border: 1px solid greenyellow;
+}
