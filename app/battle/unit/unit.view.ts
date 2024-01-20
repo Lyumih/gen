@@ -7,39 +7,39 @@ namespace $.$$ {
 		// }
 
 		attack_enabled(): boolean {
-			return this.unit().health() > 0
+			return this.unit()?.health() > 0
 		}
 
 		id(): string {
-			return this.unit().id()
+			return this.unit()?.id()
 		}
 
 		xy(): string {
-			return `${ this.unit().x() }, ${ this.unit().y() }`
+			return `${ this.unit()?.x() }, ${ this.unit()?.y() }`
 		}
 
 		health() {
-			return `Здоровье: ${ this.unit().health() }`
+			return `Здоровье: ${ this.unit()?.health() }`
 		}
 
 		attack() {
-			return `Атака: ${ this.unit().attack() }`
+			return `Атака: ${ this.unit()?.attack() }`
 		}
 
 		name() {
-			return `${ this.unit().name() }`
+			return `${ this.unit()?.name() }`
 		}
 
 		type() {
-			return this.unit().type()
+			return this.unit()?.type()
 		}
 
 		skills() {
-			return this.unit().skills()
+			return this.unit()?.skills()
 		}
 
 		skill_list(): readonly any[] {
-			return this.skills().map( skill => this.Skill( skill.id() ) )
+			return this.skills()?.map( skill => this.Skill( skill.id() ) ) ?? []
 		}
 
 		get_skill( id: string ) {

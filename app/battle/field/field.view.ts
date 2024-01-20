@@ -17,8 +17,8 @@ namespace $.$$ {
 		@$mol_mem
 		max_x_y( next?: any ) {
 			return {
-				x: 17,
-				y: 16,
+				x: 10,
+				y: 10,
 			}
 		}
 

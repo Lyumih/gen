@@ -31,6 +31,11 @@ namespace $.$$ {
 			return this.get_party_hero( id )
 		}
 
+		@$mol_mem
+		active_unit( next?: any ) {
+			return next ?? this.get_party_hero( this.active_id() )
+		}
+
 		// is_game_continue() {
 		// 	return !this.hero().is_dead() && !this.enemy().is_dead()
 		// }
@@ -80,5 +85,18 @@ namespace $.$$ {
 			const [ x = 0, y = 0 ] = id.split( '_' )
 			this.party().find( unit => unit.id() === this.active_id() )?.move( +x, +y )
 		}
+
+		end_turn( next?: any ) {
+			const index = this.party().findIndex( unit => unit.id() === this.active_id() )
+			console.log( index )
+			if( index === -1 || index === this.party().length - 1 ) {
+				console.log( 'range' )
+				this.active_id( this.party()[ 0 ].id() )
+			} else {
+				this.active_id( this.party()[ index + 1 ].id() )
+			}
+		}
+
+
 	}
 }

@@ -1,5 +1,5 @@
 $gen_app $mol_page
-	title \Игра Gen
+	title \Игра Gen (beta)
 	engine $gen_engine
 	party /$gen_engine_item_unit
 	craft $gen_engine_craft

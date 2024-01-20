@@ -1,0 +1,18 @@
+$gen_app_battle_panel $mol_view
+	unit $gen_engine_item_unit
+	sub /
+		<= Empty_panel $mol_section title \Выберите героя
+		<= Unit_panel $mol_row
+			sub /
+				- <= Active_id $mol_paragraph title <= active_id?
+				- <= Action_move $mol_button_major title \Движение
+				<= Info $mol_list rows /
+					<= Name $mol_paragraph title <= name \
+					<= Health $mol_paragraph title <= health \
+					<= Attack $mol_paragraph title <= attack \
+				<= Action_attack $mol_button_major title \Атака
+				<= Action_skill $mol_button_major title \Умение 1
+				<= Action_skill2 $mol_button_major title \Умение 2
+				<= Action_end_turn $mol_button_major 
+					title \Закончить ход
+					click? <=> end_turn? null

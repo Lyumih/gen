@@ -33,12 +33,9 @@ $gen_app_battle $mol_book2
 			tools /
 				<= Turn $mol_section title <= turn \Ход: 0
 			foot /
-				<= Active_id $mol_paragraph title <= active_id?
-				<= Action_move $mol_button_major title \Движение
-				<= Action_attack $mol_button_major title \Атака
-				<= Action_skill $mol_button_major title \Умение 1
-				<= Action_skill2 $mol_button_major title \Умение 2
-				<= Action_end_turn $mol_button_major title \Закончить ход
+				<= Panel $gen_app_battle_panel
+					unit <= active_unit /$gen_engine_item_unit
+					end_turn? <=> end_turn? null
 			body /
 				<= Field $gen_app_battle_field
 					units <= party
