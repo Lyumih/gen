@@ -38,5 +38,5 @@
 }
 
 [gen_app_battle_field_cell][attack='true'] {
-	background: rgba(255, 0, 0, 0.2);
+	border-color: red;
 }

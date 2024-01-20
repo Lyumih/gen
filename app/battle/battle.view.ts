@@ -1,5 +1,22 @@
 namespace $.$$ {
 	export class $gen_app_battle extends $.$gen_app_battle {
+
+		pages_list(): readonly any[] {
+			if( this.battle_status() === '' ) {
+				return [ this.Party_page() ]
+			} else {
+				return [ this.History_page(), this.Battle_page() ]
+			}
+		}
+
+		start_battle( next?: any ) {
+			this.battle_status( 'pending' )
+		}
+
+		end_battle( next?: any ) {
+			this.battle_status( '' )
+		}
+
 		turn(): string {
 			return `Ход: ${ this.battle().turn() }`
 		}
@@ -11,11 +28,15 @@ namespace $.$$ {
 		}
 
 		party_list(): readonly any[] {
-			return this.party().map( unit => this.Party( unit.id() ) )
+			return this.party_new().map( unit => this.Party( unit.id() ) )
+		}
+
+		party(): readonly $gen_engine_item_unit[] {
+			return this.party_new().filter( unit => this.party_new_checked( unit.id() ) )
 		}
 
 		get_party_hero( id: string ) {
-			return this.party().find( unit => unit.id() === id )
+			return this.party_new().find( unit => unit.id() === id )
 		}
 
 		party_unit_name( id: string ): string {

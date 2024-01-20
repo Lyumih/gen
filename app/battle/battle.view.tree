@@ -3,19 +3,29 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
+	party_new /$gen_engine_item_unit
 	active_unit? null
 	preview_unit? null
 	preview_cell? \
-	pages /
+	battle_status? \pending
+	pages <= pages_list /
 		<= Party_page $mol_page
 			title \Группа
 			body /
-				<= Party_list $mol_row sub <= party_list /
-					<= Party*0 $mol_row sub /
-						<= Party_unit* $mol_button_major
-							title <= party_unit_name* \Герой
+				<= Field_x_labeler $mol_labeler
+					title \Поле Х ячеек
+					content / <= Field_x $mol_number value? <=> field_max_x? 10
+				<= Field_y_labeler $mol_labeler
+					title \Поле Y ячеек
+					content / <= Field_y $mol_number value? <=> field_max_y? 10
 				<= Start_battle $mol_button_major
 					title \Начать битву
+					click? <=> start_battle? null
+				<= Party_list $mol_row sub <= party_list /
+					<= Party*0 $mol_row sub /
+						<= Party_unit* $mol_check_box
+							title <= party_unit_name* \Герой
+							checked? <=> party_new_checked*? true
 		<= History_page $mol_page
 			title \История
 			body /
@@ -34,6 +44,9 @@ $gen_app_battle $mol_book2
 			title \Битва
 			tools /
 				<= Turn $mol_section title <= turn \Ход: 0
+				<= End_battle $mol_button_minor
+					title \Закончить битву
+					click? <=> end_battle? null
 			foot /
 				<= Panels $mol_list rows /
 					<= Panel_preview $gen_app_battle_panel
@@ -51,16 +64,11 @@ $gen_app_battle $mol_book2
 			body /
 				<= Debug $mol_paragraph title <= debug \Debug
 				<= Field $gen_app_battle_field
+					max_x? <= field_max_x?
+					max_y? <= field_max_y?
 					units <= party
 					active_unit? <=> active_unit?
 					preview_unit? <=> preview_unit?
 					preview_cell? <= preview_cell?
 					cell_click? <=> cell_click? null
 				<= End $mol_paragraph title <= end \
-				- <= Reward $mol_button_major
-					enabled <= is_game_end false
-					title \Получить награду
-					click? <= get_reward? null
-				- <= Restart $mol_button_minor
-					title \Начать заново
-					click? <=> restart? null

@@ -4,8 +4,6 @@
 https://github.com/Lyumih/gen
 https://lyumih.github.io/gen/
 
-https://boardgame.io/documentation/#/
-
 
 Идеи:
 
