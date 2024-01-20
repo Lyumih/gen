@@ -2717,15 +2717,16 @@ declare namespace $ {
         attack(): string;
         Attack(): $$.$mol_paragraph;
         Info(): $$.$mol_list;
-        skill_name(id: any): string;
-        Skill(id: any): $mol_button_major;
-        skill_list(): readonly any[];
-        Skill_list(): $mol_row;
         use_attack(next?: any): any;
         Action_attack(): $mol_button_major;
         end_turn(next?: any): any;
         Action_end_turn(): $mol_button_major;
         Active_actions(): $mol_row;
+        use_skill(id: any, next?: any): any;
+        skill_name(id: any): string;
+        Skill(id: any): $mol_button_major;
+        skill_list(): readonly any[];
+        Skill_list(): $mol_row;
         unit_panel(): readonly any[];
         Unit_panel(): $mol_row;
     }
@@ -2825,9 +2826,10 @@ declare namespace $ {
         History_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
-        active_unit(next?: any): $gen_engine_item_unit;
+        active_unit(next?: any): any;
         end_turn(next?: any): any;
         use_attack(next?: any): any;
+        use_skill(id: any, next?: any): any;
         Panel(): $$.$gen_app_battle_panel;
         preview_unit(next?: any): $gen_engine_item_unit;
         Panel_preview(): $$.$gen_app_battle_panel;
@@ -2855,7 +2857,7 @@ declare namespace $.$$ {
         history(): string;
         move(id: string, next?: any): void;
         active_id(next?: any): string;
-        active_unit(next?: any): any;
+        active_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit | undefined;
         preview_unit(next?: any): any;
         end_turn(next?: any): void;
     }

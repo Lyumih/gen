@@ -9292,25 +9292,6 @@ var $;
             ];
             return obj;
         }
-        skill_name(id) {
-            return "Умение 1";
-        }
-        Skill(id) {
-            const obj = new this.$.$mol_button_major();
-            obj.enabled = (next) => this.active();
-            obj.title = () => this.skill_name(id);
-            return obj;
-        }
-        skill_list() {
-            return [
-                this.Skill("0")
-            ];
-        }
-        Skill_list() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => this.skill_list();
-            return obj;
-        }
         use_attack(next) {
             if (next !== undefined)
                 return next;
@@ -9342,11 +9323,36 @@ var $;
             ];
             return obj;
         }
+        use_skill(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        skill_name(id) {
+            return "Умение 1";
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.enabled = (next) => this.active();
+            obj.click = (next) => this.use_skill(id, next);
+            obj.title = () => this.skill_name(id);
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
+        }
+        Skill_list() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.skill_list();
+            return obj;
+        }
         unit_panel() {
             return [
                 this.Info(),
-                this.Skill_list(),
-                this.Active_actions()
+                this.Active_actions(),
+                this.Skill_list()
             ];
         }
         Unit_panel() {
@@ -9377,12 +9383,6 @@ var $;
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Info", null);
     __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_panel.prototype, "Skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Skill_list", null);
-    __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "use_attack", null);
     __decorate([
@@ -9397,6 +9397,15 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Active_actions", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_panel.prototype, "use_skill", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_panel.prototype, "Skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Skill_list", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Unit_panel", null);
@@ -9431,8 +9440,8 @@ var $;
             unit_panel() {
                 return [
                     this.Info(),
-                    this.Skill_list(),
                     this.active() ? this.Active_actions() : null,
+                    this.Skill_list(),
                 ];
             }
         }
@@ -9813,8 +9822,7 @@ var $;
         active_unit(next) {
             if (next !== undefined)
                 return next;
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
+            return null;
         }
         end_turn(next) {
             if (next !== undefined)
@@ -9826,12 +9834,18 @@ var $;
                 return next;
             return null;
         }
+        use_skill(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Panel() {
             const obj = new this.$.$gen_app_battle_panel();
             obj.active = (next) => true;
             obj.unit = () => this.active_unit();
             obj.end_turn = (next) => this.end_turn(next);
             obj.use_attack = (next) => this.use_attack(next);
+            obj.use_skill = (id, next) => this.use_skill(id, next);
             return obj;
         }
         preview_unit(next) {
@@ -9939,6 +9953,9 @@ var $;
         $mol_mem
     ], $gen_app_battle.prototype, "use_attack", null);
     __decorate([
+        $mol_mem_key
+    ], $gen_app_battle.prototype, "use_skill", null);
+    __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Panel", null);
     __decorate([
@@ -9996,14 +10013,17 @@ var $;
             use_attack(next) {
                 console.log('use_attack', next);
                 const targets = this.party().filter(unit => unit.id() === this.preview_id());
-                this.source(this.active_id())?.use_attack(targets, this.battle());
+                this.active_unit()?.use_attack(targets, this.battle());
+                this.end_turn();
             }
             use_skill(id, skill_id, next) {
-                const source = this.source(id);
-                const skill = source?.skills().find(skill => skill.id() === skill_id);
+                const source = this.active_unit();
+                const skill = source?.skills()?.find(skill => skill.id() === id);
+                console.log('use skill', id, skill_id, next, skill);
                 if (source && skill) {
-                    const targets = this.party().filter(unit => this.target_checked(unit.id()));
+                    const targets = this.party().filter(unit => unit.id() === this.preview_id());
                     source.use_skill(targets, skill, this.battle());
+                    this.end_turn();
                 }
             }
             get_reward(next) {
@@ -10019,10 +10039,11 @@ var $;
                 const [x = 0, y = 0] = id.split('_');
                 const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
                 console.log('target_cell', target_cell, x, y);
-                if (!target_cell) {
-                    this.active_unit().move(+x, +y);
+                const unit = this.active_unit();
+                if (!target_cell && unit) {
+                    unit.move(+x, +y);
                     this.end_turn();
-                    this.battle().log_move(this.active_unit(), +x, +y);
+                    this.battle().log_move(unit, +x, +y);
                 }
             }
             active_id(next) {
