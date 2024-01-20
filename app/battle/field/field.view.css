@@ -25,6 +25,10 @@
 	background: peru;
 }
 
-[gen_app_battle_field_unit][preview='true'] {
+[gen_app_battle_field_cell][preview='true'] {
 	box-shadow: inset 0px 0px 10px 3px red;
+}
+
+[gen_app_battle_field_cell][speed='true'] {
+	background-color: rgb(122 247 120 / 5%);
 }

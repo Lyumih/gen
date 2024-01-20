@@ -1,11 +1,6 @@
 namespace $.$$ {
 	export class $gen_app_battle_unit extends $.$gen_app_battle_unit {
 
-		// @$mol_mem
-		// id() {
-		// 	return thi
-		// }
-
 		attack_enabled(): boolean {
 			return this.unit()?.health() > 0
 		}

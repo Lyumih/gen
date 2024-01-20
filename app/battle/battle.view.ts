@@ -26,16 +26,10 @@ namespace $.$$ {
 			return this.get_party_hero( id )
 		}
 
-		@$mol_mem_key
-		target_checked( id: string, next?: boolean ): boolean {
-			return next ?? false
-		}
-
-
 		@$mol_mem
 		use_attack( next?: any ) {
 			console.log( 'use_attack', next )
-			const targets = this.party().filter( unit => unit.id() === this.preview_id() )
+			const targets = this.party().filter( unit => unit.id() === this.preview_unit()?.id() )
 			this.active_unit()?.use_attack( targets, this.battle() )
 			this.end_turn()
 		}
@@ -46,7 +40,7 @@ namespace $.$$ {
 			const skill = source?.skills()?.find( skill => skill.id() === id )
 			console.log( 'use skill', id, skill_id, next, skill )
 			if( source && skill ) {
-				const targets = this.party().filter( unit => unit.id() === this.preview_id() )
+				const targets = this.party().filter( unit => unit.id() === this.preview_unit()?.id() )
 				source.use_skill( targets, skill, this.battle() )
 				this.end_turn()
 			}
@@ -63,8 +57,8 @@ namespace $.$$ {
 
 		move( id: string, next?: any ) {
 			next?.preventDefault()
-			console.log( 'move', id, next, this.preview_id(), this.active_id() )
-			const [ x = 0, y = 0 ] = id.split( '_' )
+			console.log( 'move', id, next, this.active_unit(), this.preview_unit() )
+			const [ x = 0, y = 0 ] = this.preview_cell().split( '_' )
 			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
 			console.log( 'target_cell', target_cell, x, y )
 			const unit = this.active_unit()
@@ -75,33 +69,58 @@ namespace $.$$ {
 			}
 		}
 
-		@$mol_mem
-		active_id( next?: any ): string {
-			return next ?? this.party()[ 0 ].id()
-		}
+		// @$mol_mem
+		// active_id( next?: any ): string {
+		// 	return next ?? this.party()[ 0 ].id()
+		// }
 
 		@$mol_mem
 		active_unit( next?: $gen_engine_item_unit ) {
-			return next ?? this.get_party_hero( this.active_id() )
+			return next ?? this.party()[ 0 ]
 		}
 
 		@$mol_mem
-		preview_unit( next?: any ) {
-			return next ?? this.get_party_hero( this.preview_id() )
+		preview_unit( next?: $gen_engine_item_unit ) {
+			const [ x, y ] = this.preview_cell().split( '_' )
+			return next ?? this.party().find( unit => unit.x() === + x && unit.y() === + y )
+			// return next ?? this.party()[ 0 ]
 		}
 
 		end_turn( next?: any ) {
-			const index = this.party().findIndex( unit => unit.id() === this.active_id() )
+			const index = this.party().findIndex( unit => unit.id() === this.active_unit()?.id() )
 			console.log( index )
-			let nextId = ''
+			let nextUnit = null
 			if( index === -1 || index === this.party().length - 1 ) {
-				nextId = this.party()[ 0 ].id()
+				nextUnit = this.party()[ 0 ]
 			} else {
-				nextId = this.party()[ index + 1 ].id()
+				nextUnit = this.party()[ index + 1 ]
 			}
-			this.active_id( nextId )
-			this.preview_id( "" )
+			this.active_unit( nextUnit )
+			// this.preview_unit( undefined )
+			this.preview_cell( '' )
+			// this.active_id( nextId )
+			// this.preview_id( "" )
 			this.battle().next_turn()
+		}
+
+		cell_click( next?: any ) {
+			const [ x, y ] = next.split( '_' )
+			console.log( 'cell_click', next, x, y )
+			this.preview_cell( this.preview_cell() === next ? '' : next )
+
+			// const unit_in_cell = this.party().find( unit => unit.x() === +x || unit.y() === +y )
+			// if( unit_in_cell ) {
+			// 	console.log( 'unit в клетке' )
+			// 	this.preview_cell( next )
+			// 	this.preview_unit( unit_in_cell )
+			// } else {
+			// 	console.log( 'пустая клетка' )
+			// 	this.move( next )
+			// }
+		}
+
+		debug(): string {
+			return '' + this.preview_unit()?.x() + this.preview_unit()?.y() + this.preview_cell()
 		}
 
 

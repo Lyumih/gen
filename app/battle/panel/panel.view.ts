@@ -13,6 +13,14 @@ namespace $.$$ {
 			return `Атака: ${ this.unit().attack() }`
 		}
 
+		speed(): string {
+			return `Скорость: ${ this.unit().speed() }`
+		}
+
+		range(): string {
+			return `Дальность: ${ this.unit().range() }`
+		}
+
 		sub(): readonly any[] {
 			return [ this.unit() ? this.Unit_panel() : this.Empty_panel() ]
 		}

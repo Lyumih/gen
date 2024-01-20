@@ -38,25 +38,34 @@ namespace $.$$ {
 		}
 
 		// @$mol_mem_key
-		unit_preview( id: any, next?: any ) {
-			console.log( 'unit_preview', id )
-			const [ , , id_unit ] = id.split( '_' )
-			if( this.preview_id() === id_unit ) {
-				this.preview_id( '' )
-			} else {
-				this.preview_id( id_unit ?? '' )
-			}
-		}
+		// unit_preview( id: any, next?: any ) {
+		// 	console.log( 'unit_preview', id )
+		// 	const [ , , id_unit ] = id.split( '_' )
+		// 	if( this.active_unit()?.id() === id_unit ) {
+		// 		this.preview_unit( undefined )
+		// 	} else {
+		// 		this.preview_id( id_unit ?? '' )
+		// 	}
+		// }
 
 		is_active( id: string, next?: any ): boolean {
 			const [ , , id_unit ] = id.split( '_' )
-			return this.active_id() === id_unit
+			return this.active_unit().id() === id_unit
 		}
 
 		is_preview( id: any, next?: any ): boolean {
-			const [ , , id_unit ] = id.split( '_' )
-			return this.preview_id() === id_unit
+			// console.log( 'is_preview', id, next, this.preview_unit()?.x() )
+			const [ x, y, id_unit ] = id.split( '_' )
+			// return this.preview_unit().x() && this.preview_unit().y()
+			return this.preview_cell() === id
 		}
+
+		// is_speed_range( id: any, next?: any ): boolean {
+		// 	const [ x, y ] = id.split( '_' )
+		// 	console.log( 'is speed range', id, next, x, y )
+		// 	const in_range =
+		// 	return false
+		// }
 
 		// @$mol_mem
 		// active_id( next?: any ): string {

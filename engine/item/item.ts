@@ -70,10 +70,23 @@ namespace $ {
 			return next ?? 0
 		}
 
+
 		@$mol_mem
 		y( next?: number ) {
 			$mol_wire_solid()
 			return next ?? 0
+		}
+
+		@$mol_mem
+		speed( next?: number ) {
+			$mol_wire_solid()
+			return next ?? 2
+		}
+
+		@$mol_mem
+		range( next?: number ) {
+			$mol_wire_solid()
+			return next ?? 3
 		}
 
 		move( x: number, y: number ) {

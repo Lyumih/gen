@@ -3,8 +3,9 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	active_id? \
-	preview_id? \
+	active_unit? null
+	preview_unit? null
+	preview_cell? \
 	pages /
 		<= Party_page $mol_page
 			title \Группа
@@ -39,16 +40,19 @@ $gen_app_battle $mol_book2
 						active? true
 						unit <= active_unit? null
 						end_turn? <=> end_turn? null
+						use_move? <=> move? null
 						use_attack? <=> use_attack? null
 						use_skill*? <=> use_skill*? null
 					<= Panel_preview $gen_app_battle_panel
-						unit <= preview_unit? $gen_engine_item_unit
+						unit <= preview_unit?
 			body /
+				<= Debug $mol_paragraph title <= debug \Debug
 				<= Field $gen_app_battle_field
 					units <= party
-					active_id? <=> active_id?
-					preview_id? <=> preview_id?
-					cell_click? <=> move? null
+					active_unit? <=> active_unit?
+					preview_unit? <=> preview_unit?
+					preview_cell? <= preview_cell?
+					cell_click? <=> cell_click? null
 				<= End $mol_paragraph title <= end \
 				- <= Reward $mol_button_major
 					enabled <= is_game_end false

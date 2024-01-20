@@ -9,10 +9,14 @@ $gen_app_battle_panel $mol_view
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
 					<= Attack $mol_paragraph title <= attack \
+					<= Speed $mol_paragraph title <= speed \Скорость: 0
+					<= Range $mol_paragraph title <= range \Дальность: 0
 				<= Active_actions $mol_row sub /
+					<= Action_move $mol_button_major
+						title \Движение
+						click? <=> use_move? null
 					<= Action_attack $mol_button_major
 						title \Атака
-						enabled? <= active?
 						click? <=> use_attack? null
 					<= Action_end_turn $mol_button_major
 						title \Закончить ход

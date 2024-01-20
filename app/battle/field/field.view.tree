@@ -2,12 +2,16 @@ $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
 	max_x 20
 	max_y 20
-	active_id? \
-	preview_id? \
+	active_unit? null
+	preview_unit? null
+	preview_cell? \
 	sub /
 		<= X $mol_list rows <= x_list /
 			<= Y*0 $mol_row sub <= y_list* /
 				<= Cell*0_0 $mol_view
+					attr *
+						speed <= is_speed_range*? true
+						preview <= is_preview*? true
 					event *
 						click? <=> cell_click*? null
 					sub /
@@ -16,6 +20,6 @@ $gen_app_battle_field $mol_view
 							<= Unit* $mol_button_major
 								attr *
 									active <= is_active*? false
-									preview <= is_preview*? true
+									- preview <= is_preview*? true
 								title <= cell_unit_name* \
-								click? <=> unit_preview*? null
+								- click? <=> unit_preview*? null
