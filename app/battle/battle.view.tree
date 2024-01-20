@@ -34,7 +34,7 @@ $gen_app_battle $mol_book2
 				<= Turn $mol_section title <= turn \Ход: 0
 			foot /
 				<= Panel $gen_app_battle_panel
-					unit <= active_unit /$gen_engine_item_unit
+					unit <= active_unit $gen_engine_item_unit
 					end_turn? <=> end_turn? null
 			body /
 				<= Field $gen_app_battle_field
