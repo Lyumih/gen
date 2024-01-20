@@ -102,6 +102,51 @@ $mol_book2 $mol_scroll
 	Placeholder $mol_view
 	Gap* $mol_view title \
 
+$mol_hotkey $mol_plugin
+	event *
+		^
+		keydown?event <=> keydown?event null
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
+
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection? /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+		<= error_report null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed? <=> value? \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+		enterkeyhint <= enter \go
+	attr *
+		^
+		maxlength <= length_max +Infinity
+		type <= type? \text
+	event *
+		^
+		input?event <=> event_change?event null
+	plugins /
+		<= Submit $mol_hotkey
+			mod_ctrl <= submit_with_ctrl false
+			key * enter?event <=> submit?event null
+
+$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
+
 $mol_speck $mol_view
 	attr *
 		^
@@ -136,12 +181,34 @@ $mol_button_typed $mol_button
 	minimal_height 40
 	minimal_width 40
 
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
+$mol_button_minor $mol_button_typed
 
-$mol_row $mol_view
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_number $mol_view
+	precision_view <= precision 1
+	precision_change <= precision 1
+	value_min -Infinity
+	value_max +Infinity
+	value? +NaN
+	enabled true
+	sub /
+		<= String $mol_string
+			- \ we don't want native number controls in mobile devices
+			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
+			type <= type \tel
+			value? <=> value_string? \
+			hint <= hint \ 
+			enabled <= string_enabled <= enabled
+			submit? <=> submit? null
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_minus
+		<= Inc $mol_button_minor
+			event_click? <=> event_inc? null
+			enabled <= inc_enabled <= enabled
+			sub / <= inc_icon $mol_icon_plus
 
 $mol_list $mol_view
 	render_visible_only true
@@ -153,6 +220,41 @@ $mol_list $mol_view
 	view_window /
 		0
 		0
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$mol_check $mol_button_minor
+	attr *
+		^
+		mol_check_checked <= checked? false
+		aria-checked <= aria_checked \false
+		role <= aria_role \checkbox
+	sub /$mol_view_content
+		<= Icon null
+		<= label /
+			<= Title $mol_view
+				sub /
+					<= title \
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
+
+$mol_row $mol_view
 
 $mol_paragraph $mol_view
 	line_height 24
@@ -218,8 +320,6 @@ $mol_text_code_row $mol_paragraph
 		uri <= token_uri* \
 	find_pos* null
 
-$mol_button_minor $mol_button_typed
-
 $mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
 
 $mol_icon_clipboard_outline $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3M7,7H17V5H19V19H5V5H7V7Z
@@ -265,19 +365,6 @@ $mol_float $mol_view
 	style *
 		^
 		minHeight \auto
-
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked? false
-		aria-checked <= aria_checked \false
-		role <= aria_role \checkbox
-	sub /$mol_view_content
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
 
 $mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
@@ -601,19 +688,29 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
+	party_new /$gen_engine_item_unit
 	active_unit? null
 	preview_unit? null
 	preview_cell? \
-	pages /
+	battle_status? \pending
+	pages <= pages_list /
 		<= Party_page $mol_page
 			title \Группа
 			body /
-				<= Party_list $mol_row sub <= party_list /
-					<= Party*0 $mol_row sub /
-						<= Party_unit* $mol_button_major
-							title <= party_unit_name* \Герой
+				<= Field_x_labeler $mol_labeler
+					title \Поле Х ячеек
+					content / <= Field_x $mol_number value? <=> field_max_x? 10
+				<= Field_y_labeler $mol_labeler
+					title \Поле Y ячеек
+					content / <= Field_y $mol_number value? <=> field_max_y? 10
 				<= Start_battle $mol_button_major
 					title \Начать битву
+					click? <=> start_battle? null
+				<= Party_list $mol_row sub <= party_list /
+					<= Party*0 $mol_row sub /
+						<= Party_unit* $mol_check_box
+							title <= party_unit_name* \Герой
+							checked? <=> party_new_checked*? true
 		<= History_page $mol_page
 			title \История
 			body /
@@ -632,6 +729,9 @@ $gen_app_battle $mol_book2
 			title \Битва
 			tools /
 				<= Turn $mol_section title <= turn \Ход: 0
+				<= End_battle $mol_button_minor
+					title \Закончить битву
+					click? <=> end_battle? null
 			foot /
 				<= Panels $mol_list rows /
 					<= Panel_preview $gen_app_battle_panel
@@ -649,19 +749,14 @@ $gen_app_battle $mol_book2
 			body /
 				<= Debug $mol_paragraph title <= debug \Debug
 				<= Field $gen_app_battle_field
+					max_x? <= field_max_x?
+					max_y? <= field_max_y?
 					units <= party
 					active_unit? <=> active_unit?
 					preview_unit? <=> preview_unit?
 					preview_cell? <= preview_cell?
 					cell_click? <=> cell_click? null
 				<= End $mol_paragraph title <= end \
-				- <= Reward $mol_button_major
-					enabled <= is_game_end false
-					title \Получить награду
-					click? <= get_reward? null
-				- <= Restart $mol_button_minor
-					title \Начать заново
-					click? <=> restart? null
 
 $mol_pop $mol_view
 	showed? false
@@ -814,59 +909,6 @@ $mol_expander $mol_list
 		<= Content $mol_list
 			rows <= content /
 
-$mol_hotkey $mol_plugin
-	event *
-		^
-		keydown?event <=> keydown?event null
-	key *
-	mod_ctrl false
-	mod_alt false
-	mod_shift false
-
-$mol_string $mol_view
-	dom_name \input
-	enabled true
-	minimal_height 40
-	autocomplete false
-	selection? /number
-		0
-		0
-	auto /
-		<= selection_watcher null
-		<= error_report null
-	field *
-		^
-		disabled <= disabled false
-		value <= value_changed? <=> value? \
-		placeholder <= hint_visible <= hint \
-		spellcheck <= spellcheck true
-		autocomplete <= autocomplete_native \
-		selectionEnd <= selection_end 0
-		selectionStart <= selection_start 0
-		inputMode <= keyboard \text
-		enterkeyhint <= enter \go
-	attr *
-		^
-		maxlength <= length_max +Infinity
-		type <= type? \text
-	event *
-		^
-		input?event <=> event_change?event null
-	plugins /
-		<= Submit $mol_hotkey
-			mod_ctrl <= submit_with_ctrl false
-			key * enter?event <=> submit?event null
-
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
-
 - Дерево талантов.
 - Таланты генерируются случайно. Область открытых талантов +5.
 $gen_app_talent $mol_page
@@ -894,11 +936,6 @@ $gen_app_talent $mol_page
 						click? <=> talent_click*? null
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
-
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
 
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
@@ -1099,35 +1136,6 @@ $gen_dev $mol_page
 				unit <= enemy
 				target <= hero
 
-$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
-$mol_number $mol_view
-	precision_view <= precision 1
-	precision_change <= precision 1
-	value_min -Infinity
-	value_max +Infinity
-	value? +NaN
-	enabled true
-	sub /
-		<= String $mol_string
-			- \ we don't want native number controls in mobile devices
-			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
-			type <= type \tel
-			value? <=> value_string? \
-			hint <= hint \ 
-			enabled <= string_enabled <= enabled
-			submit? <=> submit? null
-		<= Dec $mol_button_minor
-			event_click? <=> event_dec? null
-			enabled <= dec_enabled <= enabled
-			sub / <= dec_icon $mol_icon_minus
-		<= Inc $mol_button_minor
-			event_click? <=> event_inc? null
-			enabled <= inc_enabled <= enabled
-			sub / <= inc_icon $mol_icon_plus
-
 $gen_app_game $mol_page
 	title \Генератор битвы
 	engine $gen_engine
@@ -1281,7 +1289,7 @@ $gen_app $mol_page
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
-					party <= party
+					party_new <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party
