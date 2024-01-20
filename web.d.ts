@@ -1032,6 +1032,7 @@ declare namespace $ {
         log_attack(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[]): void;
         log_skill(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill): void;
         log_targets_not_found(source: $gen_engine_item_unit): void;
+        log_move(source: $gen_engine_item_unit, x: number, y: number): void;
     }
 }
 
@@ -2675,8 +2676,13 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
     class $gen_app_battle_field extends $mol_view {
         units(): readonly $gen_engine_item_unit[];
+        max_x(): number;
+        max_y(): number;
         active_id(next?: any): string;
         preview_id(next?: any): string;
         sub(): readonly any[];
@@ -2701,10 +2707,6 @@ declare namespace $.$$ {
         x_list(next?: any): $mol_row[];
         y_list(id_x: string): $mol_view[];
         array_range(length: number): number[];
-        max_x_y(next?: any): {
-            x: number;
-            y: number;
-        };
         cell_unit_list(id: string): readonly any[];
         xy(id: any): string;
         cell_unit_name(id: string, next?: any): string;

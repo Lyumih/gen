@@ -529,11 +529,9 @@ $gen_app_battle_panel $mol_view
 	unit $gen_engine_item_unit
 	active? false
 	sub /
-		<= Empty_panel $mol_section title \Выберите цель
+		<= Empty_panel $mol_section title \Цель
 		<= Unit_panel $mol_row
 			sub <= unit_panel /
-				- <= Active_id $mol_paragraph title <= active_id?
-				- <= Action_move $mol_button_major title \Движение
 				<= Info $mol_list rows /
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
@@ -553,6 +551,8 @@ $gen_app_battle_panel $mol_view
 
 $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
+	max_x 20
+	max_y 20
 	active_id? \
 	preview_id? \
 	sub /
@@ -1246,7 +1246,7 @@ $mol_book2_catalog $mol_book2
 			<= Spread_close_icon $mol_icon_cross
 
 $gen_app $mol_page
-	title \Игра Gen v0.1. (Похожа на героев 4 + ПОЕ. Умения и шмот делает сообщество)
+	title \Игра Gen v0.1. Герои, PoE, моды
 	engine $gen_engine
 	party /$gen_engine_item_unit
 	craft $gen_engine_craft

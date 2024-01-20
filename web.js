@@ -3406,6 +3406,9 @@ var $;
         log_targets_not_found(source) {
             this.log(`**${source.name()}** - целей не найдено`);
         }
+        log_move(source, x, y) {
+            this.log(`**${source.name()}** движется к ${x}, ${y}`);
+        }
     }
     __decorate([
         $mol_mem
@@ -8848,7 +8851,7 @@ var $;
         }
         Empty_panel() {
             const obj = new this.$.$mol_section();
-            obj.title = () => "Выберите цель";
+            obj.title = () => "Цель";
             return obj;
         }
         name() {
@@ -9036,9 +9039,22 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $mol_style_attach("gen/app/battle/panel/panel.view.css", "[gen_app_battle_panel_unit_panel] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_panel_skill_list] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n}");
+})($ || ($ = {}));
+//gen/app/battle/panel/-css/panel.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $gen_app_battle_field extends $mol_view {
         units() {
             return [];
+        }
+        max_x() {
+            return 20;
+        }
+        max_y() {
+            return 20;
         }
         active_id(next) {
             if (next !== undefined)
@@ -9173,19 +9189,13 @@ var $;
     (function ($$) {
         class $gen_app_battle_field extends $.$gen_app_battle_field {
             x_list(next) {
-                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
+                return this.array_range(this.max_x()).map((x) => this.Y(x));
             }
             y_list(id_x) {
-                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
+                return this.array_range(this.max_y()).map((y) => this.Cell(`${id_x}_${y}`));
             }
             array_range(length) {
                 return Array.from({ length }, (_, index) => index);
-            }
-            max_x_y(next) {
-                return {
-                    x: 5,
-                    y: 5,
-                };
             }
             cell_unit_list(id) {
                 const [id_x, id_y] = id.split('_');
@@ -9228,9 +9238,6 @@ var $;
             $mol_mem
         ], $gen_app_battle_field.prototype, "x_list", null);
         __decorate([
-            $mol_mem
-        ], $gen_app_battle_field.prototype, "max_x_y", null);
-        __decorate([
             $mol_mem_key
         ], $gen_app_battle_field.prototype, "cell_unit_name", null);
         $$.$gen_app_battle_field = $gen_app_battle_field;
@@ -9241,7 +9248,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_unit][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}");
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit] {\n\tborder: 1px dashed green;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_unit][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}");
 })($ || ($ = {}));
 //gen/app/battle/field/-css/field.view.css.ts
 ;
@@ -9605,10 +9612,13 @@ var $;
                 next?.preventDefault();
                 console.log('move', id, next, this.preview_id(), this.active_id());
                 const [x = 0, y = 0] = id.split('_');
-                if (this.active_id() === this.preview_id()) {
-                    this.party().find(unit => unit.id() === this.active_id())?.move(+x, +y);
+                const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
+                console.log('target_cell', target_cell, x, y);
+                if (!target_cell) {
+                    this.active_unit().move(+x, +y);
+                    this.end_turn();
+                    this.battle().log_move(this.active_unit(), +x, +y);
                 }
-                this.end_turn();
             }
             active_id(next) {
                 return next ?? this.party()[0].id();
@@ -9630,7 +9640,7 @@ var $;
                     nextId = this.party()[index + 1].id();
                 }
                 this.active_id(nextId);
-                this.preview_id(nextId);
+                this.preview_id("");
                 this.battle().next_turn();
             }
         }
@@ -14371,7 +14381,7 @@ var $;
 (function ($) {
     class $gen_app extends $mol_page {
         title() {
-            return "Игра Gen v0.1. (Похожа на героев 4 + ПОЕ. Умения и шмот делает сообщество)";
+            return "Игра Gen v0.1. Герои, PoE, моды";
         }
         engine() {
             const obj = new this.$.$gen_engine();
