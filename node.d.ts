@@ -2860,9 +2860,11 @@ declare namespace $ {
         attack(): string;
         Attack(): $$.$mol_paragraph;
         Info(): $$.$mol_list;
+        skill_name(id: any): string;
+        Skill(id: any): $mol_button_major;
+        skill_list(): readonly any[];
+        Skill_list(): $mol_view;
         Action_attack(): $mol_button_major;
-        Action_skill(): $mol_button_major;
-        Action_skill2(): $mol_button_major;
         end_turn(next?: any): any;
         Action_end_turn(): $mol_button_major;
         Unit_panel(): $mol_row;
@@ -2871,11 +2873,12 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $gen_app_battle_panel extends $.$gen_app_battle_panel {
-        end_turn(next?: any): void;
         name(): string;
         health(): string;
         attack(): string;
         sub(): readonly any[];
+        skill_list(): readonly any[];
+        skill_name(id: any): string;
     }
 }
 
@@ -2912,7 +2915,7 @@ declare namespace $.$$ {
         xy(id: any): string;
         cell_unit_name(id: string, next?: any): string;
         unit_active(id: any, next?: any): void;
-        is_active(id: any, next?: any): boolean;
+        is_active(id: string, next?: any): boolean;
     }
 }
 

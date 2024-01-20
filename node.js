@@ -9862,19 +9862,27 @@ var $;
             ];
             return obj;
         }
+        skill_name(id) {
+            return "Умение 1";
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => this.skill_name(id);
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
+        }
+        Skill_list() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.skill_list();
+            return obj;
+        }
         Action_attack() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Атака";
-            return obj;
-        }
-        Action_skill() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Умение 1";
-            return obj;
-        }
-        Action_skill2() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Умение 2";
             return obj;
         }
         end_turn(next) {
@@ -9892,9 +9900,8 @@ var $;
             const obj = new this.$.$mol_row();
             obj.sub = () => [
                 this.Info(),
+                this.Skill_list(),
                 this.Action_attack(),
-                this.Action_skill(),
-                this.Action_skill2(),
                 this.Action_end_turn()
             ];
             return obj;
@@ -9919,14 +9926,14 @@ var $;
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Info", null);
     __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_panel.prototype, "Skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Skill_list", null);
+    __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Action_attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Action_skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Action_skill2", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "end_turn", null);
@@ -9946,9 +9953,6 @@ var $;
     var $$;
     (function ($$) {
         class $gen_app_battle_panel extends $.$gen_app_battle_panel {
-            end_turn(next) {
-                console.log('end turn');
-            }
             name() {
                 return this.unit().name() ?? '';
             }
@@ -9959,8 +9963,13 @@ var $;
                 return `Атака: ${this.unit().attack()}`;
             }
             sub() {
-                console.log(this.unit());
                 return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
+            }
+            skill_list() {
+                return this.unit().skills().map(skill => this.Skill(skill.id()));
+            }
+            skill_name(id) {
+                return this.unit().skills().find(skill => skill.id() === id)?.name() ?? '';
             }
         }
         $$.$gen_app_battle_panel = $gen_app_battle_panel;
@@ -10101,8 +10110,8 @@ var $;
             }
             max_x_y(next) {
                 return {
-                    x: 10,
-                    y: 10,
+                    x: 5,
+                    y: 5,
                 };
             }
             cell_unit_list(id) {
@@ -10120,11 +10129,17 @@ var $;
                 console.log(id, next);
                 const unit = this.units()
                     .find(unit => unit.id() === id_unit);
-                return unit?.name() ?? '';
+                const unit_text = unit ? `${unit.name()} ${unit.health()}хп` : '';
+                return unit_text ?? '';
             }
             unit_active(id, next) {
                 const [, , id_unit] = id.split('_');
-                this.active_id(id_unit ?? '');
+                if (this.active_id() === id_unit) {
+                    this.active_id('');
+                }
+                else {
+                    this.active_id(id_unit ?? '');
+                }
             }
             is_active(id, next) {
                 const [, , id_unit] = id.split('_');
@@ -15021,7 +15036,7 @@ var $;
 (function ($) {
     class $gen_app extends $mol_page {
         title() {
-            return "Игра Gen (beta)";
+            return "Игра Gen v0.1. (Похожа на героев 4 + ПОЕ. Умения и шмот делает сообщество)";
         }
         engine() {
             const obj = new this.$.$gen_engine();
