@@ -1011,6 +1011,8 @@ declare namespace $ {
         level(next?: number): number;
         x(next?: number): number;
         y(next?: number): number;
+        xy(): number[];
+        in_range(x: number, y: number, range: number): boolean;
         speed(next?: number): number;
         range(next?: number): number;
         move(x: number, y: number): void;
@@ -2724,6 +2726,7 @@ declare namespace $.$$ {
         cell_unit_name(id: string, next?: any): string;
         is_active(id: string, next?: any): boolean;
         is_preview(id: any, next?: any): boolean;
+        is_speed_range(id: any, next?: any): boolean;
     }
 }
 
@@ -2769,12 +2772,12 @@ declare namespace $ {
         History_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
+        Panel_preview(): $$.$gen_app_battle_panel;
         end_turn(next?: any): any;
         move(next?: any): any;
         use_attack(next?: any): any;
         use_skill(id: any, next?: any): any;
         Panel(): $$.$gen_app_battle_panel;
-        Panel_preview(): $$.$gen_app_battle_panel;
         Panels(): $$.$mol_list;
         debug(): string;
         Debug(): $$.$mol_paragraph;

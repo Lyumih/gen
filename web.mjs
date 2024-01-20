@@ -3312,6 +3312,12 @@ var $;
             $mol_wire_solid();
             return next ?? 0;
         }
+        xy() {
+            return [this.x(), this.y()];
+        }
+        in_range(x, y, range) {
+            return Math.abs(this.x() - x) <= range && Math.abs(this.y() - y) <= range;
+        }
         speed(next) {
             $mol_wire_solid();
             return next ?? 2;
@@ -9300,8 +9306,15 @@ var $;
                 return this.active_unit().id() === id_unit;
             }
             is_preview(id, next) {
-                const [x, y, id_unit] = id.split('_');
                 return this.preview_cell() === id;
+            }
+            is_speed_range(id, next) {
+                const unit = (this.preview_unit() || this.active_unit());
+                if (unit) {
+                    const [cell_x, cell_y] = id.split('_');
+                    return unit.in_range(+cell_x, +cell_y, unit.speed());
+                }
+                return false;
             }
         }
         __decorate([
@@ -9310,6 +9323,9 @@ var $;
         __decorate([
             $mol_mem_key
         ], $gen_app_battle_field.prototype, "cell_unit_name", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle_field.prototype, "is_speed_range", null);
         $$.$gen_app_battle_field = $gen_app_battle_field;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9480,6 +9496,11 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
+        Panel_preview() {
+            const obj = new this.$.$gen_app_battle_panel();
+            obj.unit = () => this.preview_unit();
+            return obj;
+        }
         end_turn(next) {
             if (next !== undefined)
                 return next;
@@ -9510,16 +9531,11 @@ var $;
             obj.use_skill = (id, next) => this.use_skill(id, next);
             return obj;
         }
-        Panel_preview() {
-            const obj = new this.$.$gen_app_battle_panel();
-            obj.unit = () => this.preview_unit();
-            return obj;
-        }
         Panels() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
-                this.Panel(),
-                this.Panel_preview()
+                this.Panel_preview(),
+                this.Panel()
             ];
             return obj;
         }
@@ -9614,6 +9630,9 @@ var $;
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle.prototype, "Panel_preview", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle.prototype, "end_turn", null);
     __decorate([
         $mol_mem
@@ -9627,9 +9646,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Panel", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Panel_preview", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Panels", null);
@@ -9706,7 +9722,8 @@ var $;
                 const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
                 console.log('target_cell', target_cell, x, y);
                 const unit = this.active_unit();
-                if (!target_cell && unit) {
+                const unit_in_range_move = unit.in_range(+x, +y, unit.speed());
+                if (!target_cell && unit && unit_in_range_move) {
                     unit.move(+x, +y);
                     this.end_turn();
                     this.battle().log_move(unit, +x, +y);
@@ -13030,6 +13047,7 @@ var $;
             unit.name('Milis');
             unit.level(1000);
             unit.points(1000);
+            unit.speed(3);
             unit.equipments([
                 new $gen_engine_item_equipment_all().sword()
             ]);
@@ -13046,6 +13064,7 @@ var $;
             unit.name('Jin');
             unit.level(1);
             unit.points(1);
+            unit.speed(1);
             unit.skills([
                 new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
             ]);
@@ -13057,6 +13076,7 @@ var $;
             unit.name('Бурь');
             unit.level(333);
             unit.points(333);
+            unit.range(1);
             unit.equipments([
                 new $gen_engine_item_equipment_all().staff(),
                 new $gen_engine_item_equipment_all().whip()
