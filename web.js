@@ -3265,52 +3265,240 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item extends $mol_object {
+    $.$mol_mem_persist = $mol_wire_solid;
+})($ || ($ = {}));
+//mol/mem/persist/persist.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_cached = $mol_wire_probe;
+})($ || ($ = {}));
+//mol/mem/cached/cached.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_wire_sync(obj) {
+        return new Proxy(obj, {
+            get(obj, field) {
+                const val = obj[field];
+                if (typeof val !== 'function')
+                    return val;
+                const temp = $mol_wire_task.getter(val);
+                return function $mol_wire_sync(...args) {
+                    const fiber = temp(obj, args);
+                    return fiber.sync();
+                };
+            },
+            apply(obj, self, args) {
+                const temp = $mol_wire_task.getter(obj);
+                const fiber = temp(self, args);
+                return fiber.sync();
+            },
+        });
+    }
+    $.$mol_wire_sync = $mol_wire_sync;
+})($ || ($ = {}));
+//mol/wire/sync/sync.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_storage extends $mol_object2 {
+        static native() {
+            return this.$.$mol_dom_context.navigator.storage ?? {
+                persisted: async () => false,
+                persist: async () => false,
+                estimate: async () => ({}),
+                getDirectory: async () => null,
+            };
+        }
+        static persisted(next, cache) {
+            $mol_mem_persist();
+            if (cache)
+                return Boolean(next);
+            const native = this.native();
+            if (next && !$mol_mem_cached(() => this.persisted())) {
+                native.persist().then(actual => {
+                    setTimeout(() => this.persisted(actual, 'cache'), 5000);
+                    if (actual)
+                        this.$.$mol_log3_done({ place: `$mol_storage`, message: `Persist: Yes` });
+                    else
+                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
+                });
+            }
+            return next ?? $mol_wire_sync(native).persisted();
+        }
+        static estimate() {
+            return $mol_wire_sync(this.native() ?? {}).estimate();
+        }
+        static dir() {
+            return $mol_wire_sync(this.native()).getDirectory();
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "native", null);
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "persisted", null);
+    $.$mol_storage = $mol_storage;
+})($ || ($ = {}));
+//mol/storage/storage.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_local extends $mol_object {
+        static 'native()';
+        static native() {
+            if (this['native()'])
+                return this['native()'];
+            check: try {
+                const native = $mol_dom_context.localStorage;
+                if (!native)
+                    break check;
+                native.setItem('', '');
+                native.removeItem('');
+                return this['native()'] = native;
+            }
+            catch (error) {
+                console.warn(error);
+            }
+            return this['native()'] = {
+                getItem(key) {
+                    return this[':' + key];
+                },
+                setItem(key, value) {
+                    this[':' + key] = value;
+                },
+                removeItem(key) {
+                    this[':' + key] = void 0;
+                }
+            };
+        }
+        static changes(next) { return next; }
+        static value(key, next) {
+            this.changes();
+            if (next === void 0)
+                return JSON.parse(this.native().getItem(key) || 'null');
+            if (next === null) {
+                this.native().removeItem(key);
+            }
+            else {
+                this.native().setItem(key, JSON.stringify(next));
+                this.$.$mol_storage.persisted(true);
+            }
+            return next;
+        }
+        prefix() { return ''; }
+        value(key, next) {
+            return $mol_state_local.value(this.prefix() + '.' + key, next);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_state_local, "changes", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_local, "value", null);
+    $.$mol_state_local = $mol_state_local;
+})($ || ($ = {}));
+//mol/state/local/local.ts
+;
+"use strict";
+var $;
+(function ($) {
+    self.addEventListener('storage', event => $.$mol_state_local.changes(event));
+})($ || ($ = {}));
+//mol/state/local/local.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_entity extends $mol_object {
+        id;
+        constructor(id = $mol_guid()) {
+            super();
+            this.id = id;
+        }
+        defaults() {
+            return {};
+        }
+        defaults_patch() {
+            return {};
+        }
+        data(data) {
+            return this.$.$mol_state_local.value(this.id, data)
+                ?? { ...this.defaults(), ...this.defaults_patch() };
+        }
+        value(field, value) {
+            return this.data(value === undefined
+                ? undefined
+                : {
+                    ...this.data(),
+                    [field]: value,
+                })[field];
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_entity.prototype, "data", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_engine_entity.prototype, "value", null);
+    $.$gen_engine_entity = $gen_engine_entity;
+})($ || ($ = {}));
+//gen/engine/entity/entity.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item extends $gen_engine_entity {
+        defaults() {
+            return {
+                id_root: '',
+                reference: '',
+                type: 'item',
+                part: 'part',
+                name: 'no name',
+                description: 'no description',
+                level: 0,
+                x: 0,
+                y: 0,
+                speed: 1,
+                attack_range: 1
+            };
+        }
         id_root(next) {
-            $mol_wire_solid();
-            return next ?? $mol_guid();
-        }
-        id(next) {
-            $mol_wire_solid();
-            return next ?? `${this.type()}-${this.part()}-${$mol_guid(4)}`;
-        }
-        config(next) {
-            $mol_wire_solid();
-            return next ?? {};
+            return this.value('id_root', next);
         }
         log(text) {
         }
         reference(next) {
-            $mol_wire_solid();
-            return next ?? 'Gen';
+            return this.value('reference', next);
         }
         type(next) {
-            $mol_wire_solid();
-            return next ?? 'item';
+            return this.value('type', next);
         }
         part(next) {
-            $mol_wire_solid();
-            return next ?? 'part';
+            return this.value('part', next);
         }
         name(next) {
-            $mol_wire_solid();
-            return next ?? 'no name';
+            return this.value('name', next);
         }
         description(next) {
-            $mol_wire_solid();
-            return next ?? 'no description';
+            return this.value('description', next);
         }
         level(next) {
-            $mol_wire_solid();
-            return next ?? 0;
+            return this.value('level', next);
         }
         x(next) {
-            $mol_wire_solid();
-            return next ?? 0;
+            return this.value('x', next);
         }
         y(next) {
-            $mol_wire_solid();
-            return next ?? 0;
+            return this.value('y', next);
         }
         xy() {
             return [this.x(), this.y()];
@@ -3319,12 +3507,10 @@ var $;
             return Math.abs(this.x() - x) <= range && Math.abs(this.y() - y) <= range;
         }
         speed(next) {
-            $mol_wire_solid();
-            return next ?? 1;
+            return this.value('speed', next);
         }
         attack_range(next) {
-            $mol_wire_solid();
-            return next ?? 1;
+            return this.value('attack_range', next);
         }
         move(x, y) {
             if (this.x() !== x || this.y() !== y) {
@@ -3334,45 +3520,6 @@ var $;
             }
         }
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "id_root", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "id", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "config", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "reference", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "part", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "description", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "level", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "x", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "y", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "speed", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "attack_range", null);
     $.$gen_engine_item = $gen_engine_item;
 })($ || ($ = {}));
 //gen/engine/item/item.ts
@@ -3381,9 +3528,6 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_skill extends $gen_engine_item {
-        type() {
-            return 'skill';
-        }
         use(source, targets, battle) {
         }
     }
@@ -3453,19 +3597,6 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_equipment extends $gen_engine_item {
-        type() {
-            return 'equipment';
-        }
-        part(next) {
-            $mol_wire_solid();
-            return next ?? 'equipment';
-        }
-        config(next) {
-            $mol_wire_solid();
-            return next ?? {
-                max_props: 10,
-            };
-        }
         props(next) {
             $mol_wire_solid();
             return next ?? [];
@@ -3476,34 +3607,20 @@ var $;
             }
         }
         remove_prop(id) {
-            return this.props(this.props().filter(prop => prop.id() !== id)).length >= 0;
+            return this.props(this.props().filter(prop => prop.id !== id)).length >= 0;
         }
         prop_level_up(id) {
-            const prop = this.props().find(prop => prop.id() === id);
+            const prop = this.props().find(prop => prop.id === id);
             if (!prop)
                 return;
             if (prop.level() <= 10) {
                 return prop.level(prop.level() + 1);
             }
         }
-        level(next) {
-            $mol_wire_solid();
-            const prop_level = this.props().reduce((sum, prop) => sum + prop.level(), 0);
-            return next ?? prop_level;
-        }
     }
     __decorate([
         $mol_mem
-    ], $gen_engine_item_equipment.prototype, "part", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_equipment.prototype, "config", null);
-    __decorate([
-        $mol_mem
     ], $gen_engine_item_equipment.prototype, "props", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_equipment.prototype, "level", null);
     $.$gen_engine_item_equipment = $gen_engine_item_equipment;
 })($ || ($ = {}));
 //gen/engine/item/equipment/equipment.ts
@@ -3525,14 +3642,6 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_unit extends $gen_engine_item {
-        name(next) {
-            $mol_wire_solid();
-            return next ?? 'Unit';
-        }
-        type(next) {
-            $mol_wire_solid();
-            return next ?? 'unit';
-        }
         points(next) {
             $mol_wire_solid();
             return next ?? 0;
@@ -3586,13 +3695,11 @@ var $;
             this.health(undefined);
             this.attack(undefined);
         }
+        duplicate() {
+            const clone = new $gen_engine_item_unit;
+            return this;
+        }
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "type", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "points", null);
@@ -4229,158 +4336,6 @@ var $;
     });
 })($ || ($ = {}));
 //mol/link/link.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem_persist = $mol_wire_solid;
-})($ || ($ = {}));
-//mol/mem/persist/persist.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem_cached = $mol_wire_probe;
-})($ || ($ = {}));
-//mol/mem/cached/cached.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_sync(obj) {
-        return new Proxy(obj, {
-            get(obj, field) {
-                const val = obj[field];
-                if (typeof val !== 'function')
-                    return val;
-                const temp = $mol_wire_task.getter(val);
-                return function $mol_wire_sync(...args) {
-                    const fiber = temp(obj, args);
-                    return fiber.sync();
-                };
-            },
-            apply(obj, self, args) {
-                const temp = $mol_wire_task.getter(obj);
-                const fiber = temp(self, args);
-                return fiber.sync();
-            },
-        });
-    }
-    $.$mol_wire_sync = $mol_wire_sync;
-})($ || ($ = {}));
-//mol/wire/sync/sync.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_storage extends $mol_object2 {
-        static native() {
-            return this.$.$mol_dom_context.navigator.storage ?? {
-                persisted: async () => false,
-                persist: async () => false,
-                estimate: async () => ({}),
-                getDirectory: async () => null,
-            };
-        }
-        static persisted(next, cache) {
-            $mol_mem_persist();
-            if (cache)
-                return Boolean(next);
-            const native = this.native();
-            if (next && !$mol_mem_cached(() => this.persisted())) {
-                native.persist().then(actual => {
-                    setTimeout(() => this.persisted(actual, 'cache'), 5000);
-                    if (actual)
-                        this.$.$mol_log3_done({ place: `$mol_storage`, message: `Persist: Yes` });
-                    else
-                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
-                });
-            }
-            return next ?? $mol_wire_sync(native).persisted();
-        }
-        static estimate() {
-            return $mol_wire_sync(this.native() ?? {}).estimate();
-        }
-        static dir() {
-            return $mol_wire_sync(this.native()).getDirectory();
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "native", null);
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "persisted", null);
-    $.$mol_storage = $mol_storage;
-})($ || ($ = {}));
-//mol/storage/storage.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_local extends $mol_object {
-        static 'native()';
-        static native() {
-            if (this['native()'])
-                return this['native()'];
-            check: try {
-                const native = $mol_dom_context.localStorage;
-                if (!native)
-                    break check;
-                native.setItem('', '');
-                native.removeItem('');
-                return this['native()'] = native;
-            }
-            catch (error) {
-                console.warn(error);
-            }
-            return this['native()'] = {
-                getItem(key) {
-                    return this[':' + key];
-                },
-                setItem(key, value) {
-                    this[':' + key] = value;
-                },
-                removeItem(key) {
-                    this[':' + key] = void 0;
-                }
-            };
-        }
-        static changes(next) { return next; }
-        static value(key, next) {
-            this.changes();
-            if (next === void 0)
-                return JSON.parse(this.native().getItem(key) || 'null');
-            if (next === null) {
-                this.native().removeItem(key);
-            }
-            else {
-                this.native().setItem(key, JSON.stringify(next));
-                this.$.$mol_storage.persisted(true);
-            }
-            return next;
-        }
-        prefix() { return ''; }
-        value(key, next) {
-            return $mol_state_local.value(this.prefix() + '.' + key, next);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_state_local, "changes", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_local, "value", null);
-    $.$mol_state_local = $mol_state_local;
-})($ || ($ = {}));
-//mol/state/local/local.ts
-;
-"use strict";
-var $;
-(function ($) {
-    self.addEventListener('storage', event => $.$mol_state_local.changes(event));
-})($ || ($ = {}));
-//mol/state/local/local.web.ts
 ;
 "use strict";
 //mol/charset/encoding/encoding.ts
@@ -9760,10 +9715,10 @@ var $;
                 return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
             }
             skill_list() {
-                return this.unit().skills().map(skill => this.Skill(skill.id()));
+                return this.unit().skills().map(skill => this.Skill(skill.id));
             }
             skill_name(id) {
-                return `🪄 ${this.unit().skills().find(skill => skill.id() === id)?.name()}` ?? '';
+                return `🪄 ${this.unit().skills().find(skill => skill.id === id)?.name()}` ?? '';
             }
             unit_panel() {
                 return [
@@ -9962,7 +9917,7 @@ var $;
                 const [id_x, id_y] = id.split('_');
                 const units = this.units()
                     .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
-                return units.map(unit => this.Unit(id + '_' + unit.id()));
+                return units.map(unit => this.Unit(id + '_' + unit.id));
             }
             xy(id) {
                 const [id_x, id_y] = id.split('_');
@@ -9972,13 +9927,13 @@ var $;
                 const [id_x, id_y, id_unit] = id.split('_');
                 console.log(id, next);
                 const unit = this.units()
-                    .find(unit => unit.id() === id_unit);
-                const unit_text = unit ? `${unit.name()} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
+                    .find(unit => unit.id === id_unit);
+                const unit_text = unit ? `${unit.name() + unit.id} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
                 return unit_text ?? '';
             }
             is_active(id, next) {
                 const [, , id_unit] = id.split('_');
-                return this.active_unit().id() === id_unit;
+                return this.active_unit().id === id_unit;
             }
             is_preview(id, next) {
                 return this.preview_cell() === id;
@@ -10112,7 +10067,7 @@ var $;
         battle_status(next) {
             if (next !== undefined)
                 return next;
-            return "pending";
+            return "";
         }
         pages() {
             return this.pages_list();
@@ -10484,6 +10439,215 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_skill_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        create_id_root(id_root) {
+            return `skill-${id_root}`;
+        }
+        resource() {
+            return [
+                this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
+                this.hyperfocal_madness_wind_generator(),
+                this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
+            ];
+        }
+        heal() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                source.health(source.health() + 10);
+                battle.log(`${source.name()} исцеляется на 10 здоровья`);
+            };
+            return skill;
+        }
+        strong_attack() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                if (targets[0]) {
+                    targets[0].health(targets[0].health() - source.attack() * 2);
+                    battle.log(`${source.name()} наносит сильный удар х2`);
+                }
+                battle.log_targets_not_found(source);
+            };
+            return skill;
+        }
+        strong_attack_and_heal() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    targets[0].health(targets[0].health() - source.attack() * 4);
+                    source.health(source.health() + 10);
+                    battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        hyperfocal_madness_wind_generator() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const debuff_mem = new $gen_engine_item_buff($mol_guid(4));
+                debuff_mem.name('mem');
+                debuff_mem.part('debuff');
+                const target = targets[0];
+                if (target) {
+                    target.buffs([...target.buffs(), debuff_mem]);
+                    if (Math.random() < 0.5) {
+                        battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
+                        target.health(target.health() - source.attack() * 999);
+                    }
+                    else {
+                        battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
+                    }
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        teleport() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} телепортируется на 2 клетки`);
+                source.x(source.x() + 2);
+                source.y(source.y() + 2);
+            };
+            return skill;
+        }
+        gravity_shield() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} получает гравитационный щит`);
+                source.health(source.health() + 50);
+            };
+            return skill;
+        }
+        lightning_spear() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    battle.log(`${source.name()} наносит ${source.attack() * 3} урона копьём молнией`);
+                    targets[0].health(targets[0].health() - source.attack() * 3);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        lightning_bolt() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    const number_balls = +(Math.random() * 100 % 4).toFixed();
+                    battle.log(`${source.name()} наносит ${source.attack() * number_balls} урона ${number_balls} шаровыми молниями`);
+                    targets[0].health(targets[0].health() - source.attack() * number_balls);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_skill_all.prototype, "all", null);
+    $.$gen_engine_item_skill_all = $gen_engine_item_skill_all;
+})($ || ($ = {}));
+//gen/engine/item/skill/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all() {
+            return [
+                this.sword(), this.staff(), this.whip()
+            ];
+        }
+        sword() {
+            const equipment = new $gen_engine_item_equipment();
+            return equipment;
+        }
+        staff() {
+            const equipment = new $gen_engine_item_equipment();
+            return equipment;
+        }
+        whip() {
+            const equipment = new $gen_engine_item_equipment();
+            return equipment;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_equipment_all.prototype, "all", null);
+    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
+})($ || ($ = {}));
+//gen/engine/item/equipment/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        resource() {
+            return [
+                this.milis(),
+            ];
+        }
+        milis() {
+            const unit = $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Milis',
+                    level: 1000,
+                    points: 1000,
+                }),
+                id: 'hero-milis-1'
+            });
+            return unit;
+        }
+        jin() {
+            const unit = new $gen_engine_item_unit();
+            unit.skills([
+                new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
+            ]);
+            return unit;
+        }
+        mario() {
+            const unit = new $gen_engine_item_unit();
+            unit.equipments([
+                new $gen_engine_item_equipment_all().staff(),
+                new $gen_engine_item_equipment_all().whip()
+            ]);
+            unit.skills([
+                new $gen_engine_item_skill_all().teleport(),
+                new $gen_engine_item_skill_all().gravity_shield(),
+                new $gen_engine_item_skill_all().lightning_spear(),
+                new $gen_engine_item_skill_all().lightning_bolt()
+            ]);
+            return unit;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_unit_all.prototype, "all", null);
+    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
+})($ || ($ = {}));
+//gen/engine/item/unit/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
@@ -10507,20 +10671,29 @@ var $;
             restart() {
                 this.battle().turn(0);
             }
-            party_list() {
-                return this.party_new().map(unit => this.Party(unit.id()));
-            }
-            party() {
-                return this.party_new().filter(unit => this.party_new_checked(unit.id()));
+            party_new() {
+                const party_all = new $gen_engine_item_unit_all().all();
+                return party_all;
             }
             get_party_hero(id) {
-                return this.party_new().find(unit => unit.id() === id);
+                return this.party_new().find(unit => unit.id === id);
             }
             party_unit_name(id) {
-                return this.get_party_hero(id)?.name() || 'no name';
+                return this.get_party_hero(id)?.name()
+                    + ' ' + this.get_party_hero(id)?.id
+                    + ' ' + this.get_party_hero(id)?.health()
+                    + ' ' + this.get_party_hero(id)?.x() || 'no name';
+            }
+            party_list() {
+                return this.party_new().map(unit => this.Party(unit.id));
+            }
+            party() {
+                const party_all = new $gen_engine_item_unit_all().all();
+                const party = this.party_new().filter(unit => this.party_new_checked(unit.id));
+                return party;
             }
             source(id) {
-                return this.get_party_hero(id);
+                return this.party().find(unit => unit.id === id);
             }
             attack_enabled(next) {
                 const [x = 0, y = 0] = this.preview_cell().split('_');
@@ -10528,16 +10701,16 @@ var $;
             }
             use_attack(next) {
                 console.log('use_attack', next);
-                const targets = this.party().filter(unit => unit.id() === this.preview_unit()?.id());
+                const targets = this.party().filter(unit => unit.id === this.preview_unit()?.id);
                 this.active_unit()?.use_attack(targets, this.battle());
                 this.end_turn();
             }
             use_skill(id, skill_id, next) {
                 const source = this.active_unit();
-                const skill = source?.skills()?.find(skill => skill.id() === id);
+                const skill = source?.skills()?.find(skill => skill.id === id);
                 console.log('use skill', id, skill_id, next, skill);
                 if (source && skill) {
-                    const targets = this.party().filter(unit => unit.id() === this.preview_unit()?.id());
+                    const targets = this.party().filter(unit => unit.id === this.preview_unit()?.id);
                     source.use_skill(targets, skill, this.battle());
                     this.end_turn();
                 }
@@ -10577,7 +10750,7 @@ var $;
                 return next ?? this.party().find(unit => unit.x() === +x && unit.y() === +y);
             }
             end_turn(next) {
-                const index = this.party().findIndex(unit => unit.id() === this.active_unit()?.id());
+                const index = this.party().findIndex(unit => unit.id === this.active_unit()?.id);
                 console.log(index);
                 let nextUnit = null;
                 if (index === -1 || index === this.party().length - 1) {
@@ -10598,6 +10771,9 @@ var $;
                 return '' + this.preview_unit()?.x() + this.preview_unit()?.y() + this.preview_cell();
             }
         }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "party_new", null);
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "use_attack", null);
@@ -11565,10 +11741,10 @@ var $;
     (function ($$) {
         class $gen_app_hero extends $.$gen_app_hero {
             party_list() {
-                return this.party().map(unit => this.Party(unit.id()));
+                return this.party().map(unit => this.Party(unit.id));
             }
             get_party_hero(id) {
-                return this.party().find(unit => unit.id() === id);
+                return this.party().find(unit => unit.id === id);
             }
             party_hero_name(id) {
                 return this.get_party_hero(id)?.name() || 'no name';
@@ -11577,13 +11753,13 @@ var $;
                 this.active_hero(id);
             }
             hero() {
-                return this.party().find(unit => unit.id() === this.active_hero());
+                return this.party().find(unit => unit.id === this.active_hero());
             }
             active_hero(next) {
-                return next ?? this.party()[0]?.id() ?? '';
+                return next ?? this.party()[0]?.id ?? '';
             }
             is_active_hero(id) {
-                return this.hero()?.id() === id;
+                return this.hero()?.id === id;
             }
             name() {
                 return `Имя: ${this.hero()?.name()}`;
@@ -11595,10 +11771,10 @@ var $;
                 return `Очков: ${this.hero()?.points()}`;
             }
             equipment_list() {
-                return this.hero()?.equipments()?.map(item => this.Equipment(item.id())) || [];
+                return this.hero()?.equipments()?.map(item => this.Equipment(item.id)) || [];
             }
             get_equipment(id) {
-                return this.hero()?.equipments()?.find(item => item.id() === id);
+                return this.hero()?.equipments()?.find(item => item.id === id);
             }
             equipment_unequip(id, next) {
                 this.engine().hero_unequip(id);
@@ -11607,10 +11783,10 @@ var $;
                 return `Очков умений: ${this.hero()?.points()}`;
             }
             skill_list() {
-                return this.hero()?.skills()?.map(skill => this.Skill(skill.id())) || [];
+                return this.hero()?.skills()?.map(skill => this.Skill(skill.id)) || [];
             }
             get_skill(id) {
-                return this.hero()?.skills()?.find(skill => skill.id() === id);
+                return this.hero()?.skills()?.find(skill => skill.id === id);
             }
             skill_level_up(id, next) {
                 this.engine().skill_level_up(id);
@@ -11625,10 +11801,10 @@ var $;
                 this.engine().skill_unequip(id);
             }
             inventory_list() {
-                return this.hero()?.inventory().map(item => this.Inventory_item(item.id())) || [];
+                return this.hero()?.inventory().map(item => this.Inventory_item(item.id)) || [];
             }
             get_inventory_item(id) {
-                return this.hero()?.inventory().find(item => item.id() === id);
+                return this.hero()?.inventory().find(item => item.id === id);
             }
             inventory_item_sell(id, next) {
                 this.engine().inventory_sell(id);
@@ -11637,10 +11813,10 @@ var $;
                 this.engine().inventory_equip(id);
             }
             shop_list() {
-                return this.hero()?.shop().map(item => this.Shop_item(item.id())) || [];
+                return this.hero()?.shop().map(item => this.Shop_item(item.id)) || [];
             }
             get_shop_item(id) {
-                return this.hero()?.shop().find(item => item.id() === id);
+                return this.hero()?.shop().find(item => item.id === id);
             }
             shop_item_bue(id, next) {
                 this.engine().shop_buy(id);
@@ -11984,29 +12160,11 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_talent extends $gen_engine_item {
-        type() {
-            $mol_wire_solid();
-            return 'talent';
-        }
-        x(next) {
-            $mol_wire_solid();
-            return next ?? 0;
-        }
-        y(next) {
-            $mol_wire_solid();
-            return next ?? 0;
-        }
         set_x_y(x, y) {
             this.x(x);
             this.y(y);
         }
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_talent.prototype, "x", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_talent.prototype, "y", null);
     $.$gen_engine_item_talent = $gen_engine_item_talent;
 })($ || ($ = {}));
 //gen/engine/item/talent/telent.ts
@@ -12021,32 +12179,18 @@ var $;
         resource() {
             return [
                 $gen_engine_item_talent.make({
-                    name: () => 'Урон',
-                    description: () => 'Урон +1',
+                    defaults_patch: () => ({
+                        name: 'ХП',
+                        description: 'ХП + 1'
+                    }),
+                    id: 'tal-1'
                 }),
                 $gen_engine_item_talent.make({
-                    name: () => 'ХП',
-                    description: () => 'ХП +1',
-                }),
-                $gen_engine_item_talent.make({
-                    name: () => 'Защ',
-                    description: () => 'Защита +1',
-                }),
-                $gen_engine_item_talent.make({
-                    name: () => 'УрХп',
-                    description: () => 'Урон +1 и ХП +1',
-                }),
-                $gen_engine_item_talent.make({
-                    name: () => 'Крит',
-                    description: () => 'Крит +1',
-                }),
-                $gen_engine_item_talent.make({
-                    name: () => 'КрУр',
-                    description: () => 'Крит урон +1',
-                }),
-                $gen_engine_item_talent.make({
-                    name: () => 'Хил',
-                    description: () => 'Хил +1',
+                    defaults_patch: () => ({
+                        name: 'Защ',
+                        description: 'Защита +1'
+                    }),
+                    id: 'tal-2'
                 }),
             ];
         }
@@ -12777,162 +12921,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_skill_all extends $mol_object {
-        all() {
-            return this.resource();
-        }
-        create_id_root(id_root) {
-            return `skill-${id_root}`;
-        }
-        resource() {
-            return [
-                this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
-                this.hyperfocal_madness_wind_generator(),
-                this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
-            ];
-        }
-        heal() {
-            const skill = new $gen_engine_item_skill();
-            skill.name('Хил');
-            skill.description('Исцеляет на 10 здоровья');
-            skill.use = (source, targets, battle) => {
-                source.health(source.health() + 10);
-                battle.log(`${source.name()} исцеляется на 10 здоровья`);
-            };
-            return skill;
-        }
-        strong_attack() {
-            const skill = new $gen_engine_item_skill();
-            skill.level(12);
-            skill.name('Сильный удар');
-            skill.description('Урон x2');
-            skill.use = (source, targets, battle) => {
-                if (targets[0]) {
-                    targets[0].health(targets[0].health() - source.attack() * 2);
-                    battle.log(`${source.name()} наносит сильный удар х2`);
-                }
-                battle.log_targets_not_found(source);
-            };
-            return skill;
-        }
-        strong_attack_and_heal() {
-            const skill = new $gen_engine_item_skill();
-            skill.name('Сильный удар и самолечение');
-            skill.level(44);
-            skill.description('Урон x4 и лечение себя на 10');
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    targets[0].health(targets[0].health() - source.attack() * 4);
-                    source.health(source.health() + 10);
-                    battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        hyperfocal_madness_wind_generator() {
-            const skill = new $gen_engine_item_skill();
-            skill.reference('nin-jin');
-            skill.name('Гиперфокальный ветрогенератор безумия');
-            skill.level(5);
-            skill.description('5% вероятность сделать бум при попытке взаимодействия с меметичными объектами.');
-            skill.use = (source, targets, battle) => {
-                const debuff_mem = new $gen_engine_item_buff;
-                debuff_mem.name('mem');
-                debuff_mem.part('debuff');
-                const target = targets[0];
-                if (target) {
-                    target.buffs([...target.buffs(), debuff_mem]);
-                    if (Math.random() < 0.5) {
-                        battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
-                        target.health(target.health() - source.attack() * 999);
-                    }
-                    else {
-                        battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
-                    }
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        teleport() {
-            const skill = new $gen_engine_item_skill();
-            skill.name('Телепорт');
-            skill.reference('Mario');
-            skill.level(7);
-            skill.description('Телепортация к цели');
-            skill.use = (source, targets, battle) => {
-                battle.log(`${source.name()} телепортируется на 2 клетки`);
-                source.x(source.x() + 2);
-                source.y(source.y() + 2);
-            };
-            return skill;
-        }
-        gravity_shield() {
-            const skill = new $gen_engine_item_skill();
-            skill.reference('Mario');
-            skill.name('Гравитационный щит');
-            skill.level(7);
-            skill.description('Щит от воздействия гравитации');
-            skill.use = (source, targets, battle) => {
-                battle.log(`${source.name()} получает гравитационный щит`);
-                source.health(source.health() + 50);
-            };
-            return skill;
-        }
-        lightning_spear() {
-            const skill = new $gen_engine_item_skill();
-            skill.reference('Mario');
-            skill.name('Молниеносный копье');
-            skill.level(12);
-            skill.description('Наносит x3 урона копьём молнией');
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    battle.log(`${source.name()} наносит ${source.attack() * 3} урона копьём молнией`);
-                    targets[0].health(targets[0].health() - source.attack() * 3);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        lightning_bolt() {
-            const skill = new $gen_engine_item_skill();
-            skill.reference('Mario');
-            skill.name('Шаровые молнии');
-            skill.level(16);
-            skill.description('Запускает до 4 шаровых молний в цель');
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    const number_balls = +(Math.random() * 100 % 4).toFixed();
-                    battle.log(`${source.name()} наносит ${source.attack() * number_balls} урона ${number_balls} шаровыми молниями`);
-                    targets[0].health(targets[0].health() - source.attack() * number_balls);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_skill_all.prototype, "all", null);
-    $.$gen_engine_item_skill_all = $gen_engine_item_skill_all;
-})($ || ($ = {}));
-//gen/engine/item/skill/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_textarea extends $mol_stack {
         attr() {
             return {
@@ -13425,118 +13413,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all() {
-            return [
-                this.sword(), this.staff(), this.whip()
-            ];
-        }
-        sword() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Меч');
-            equipment.description('Простой меч');
-            equipment.level(10);
-            return equipment;
-        }
-        staff() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Посох');
-            equipment.description('Простой посох');
-            equipment.level(13);
-            return equipment;
-        }
-        whip() {
-            const equipment = new $gen_engine_item_equipment();
-            equipment.part('weapon');
-            equipment.name('Кнут');
-            equipment.description('Простой кнут');
-            equipment.level(15);
-            return equipment;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_equipment_all.prototype, "all", null);
-    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
-})($ || ($ = {}));
-//gen/engine/item/equipment/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all() {
-            return this.resource();
-        }
-        resource() {
-            return [
-                this.milis(), this.mario(), this.jin(),
-            ];
-        }
-        milis() {
-            const unit = new $gen_engine_item_unit();
-            unit.name('Milis');
-            unit.level(1000);
-            unit.points(1000);
-            unit.x(3);
-            unit.y(3);
-            unit.speed(3);
-            unit.equipments([
-                new $gen_engine_item_equipment_all().sword()
-            ]);
-            unit.skills([
-                new $gen_engine_item_skill_all().heal(),
-                new $gen_engine_item_skill_all().strong_attack(),
-                new $gen_engine_item_skill_all().strong_attack_and_heal()
-            ]);
-            return unit;
-        }
-        jin() {
-            const unit = new $gen_engine_item_unit();
-            unit.reference('https://t.me/nin_jin');
-            unit.name('Jin');
-            unit.level(1);
-            unit.points(1);
-            unit.x(2);
-            unit.y(1);
-            unit.speed(1);
-            unit.skills([
-                new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
-            ]);
-            return unit;
-        }
-        mario() {
-            const unit = new $gen_engine_item_unit();
-            unit.reference('https://t.me/fkusnyahin');
-            unit.name('Бурь');
-            unit.level(333);
-            unit.points(333);
-            unit.attack_range(2);
-            unit.equipments([
-                new $gen_engine_item_equipment_all().staff(),
-                new $gen_engine_item_equipment_all().whip()
-            ]);
-            unit.skills([
-                new $gen_engine_item_skill_all().teleport(),
-                new $gen_engine_item_skill_all().gravity_shield(),
-                new $gen_engine_item_skill_all().lightning_spear(),
-                new $gen_engine_item_skill_all().lightning_bolt()
-            ]);
-            return unit;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit_all.prototype, "all", null);
-    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
-})($ || ($ = {}));
-//gen/engine/item/unit/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
@@ -13553,10 +13429,10 @@ var $;
                 this.hero().use_skill([this.enemy()], this.skill(), this.battle());
             }
             all_skill_list() {
-                return this.skills().all().map(skill => this.Skill(skill.id()));
+                return this.skills().all().map(skill => this.Skill(skill.id));
             }
             get_skill(id) {
-                return this.skills().all().find(skill => skill.id() === id);
+                return this.skills().all().find(skill => skill.id === id);
             }
             skill_name(id) {
                 return this.get_skill(id)?.name() || 'no name';
@@ -14743,7 +14619,6 @@ var $;
         Battle_page() {
             const obj = new this.$.$gen_app_battle();
             obj.engine = () => this.engine();
-            obj.party_new = () => this.party();
             return obj;
         }
         Hero_page() {
@@ -14867,6 +14742,7 @@ var $;
     (function ($$) {
         class $gen_app extends $.$gen_app {
             party(next) {
+                console.log('gen app party', next);
                 return next ?? new this.$.$gen_engine_item_unit_all().all();
             }
             active_hero(next) {

@@ -1115,30 +1115,93 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item extends $mol_object {
-        id_root(next?: string): string;
-        id(next?: string): string;
-        config(next?: {}): {};
+    let $mol_mem_persist: typeof $mol_wire_solid;
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
+}
+
+declare namespace $ {
+    export function $mol_wire_sync<Host extends object>(obj: Host): ObjectOrFunctionResultAwaited<Host>;
+    type FunctionResultAwaited<Some> = Some extends (...args: infer Args) => infer Res ? (...args: Args) => Awaited<Res> : Some;
+    type MethodsResultAwaited<Host extends Object> = {
+        [K in keyof Host]: FunctionResultAwaited<Host[K]>;
+    };
+    type ObjectOrFunctionResultAwaited<Some> = (Some extends (...args: any) => unknown ? FunctionResultAwaited<Some> : {}) & (Some extends Object ? MethodsResultAwaited<Some> : Some);
+    export {};
+}
+
+declare namespace $ {
+    class $mol_storage extends $mol_object2 {
+        static native(): StorageManager;
+        static persisted(next?: boolean, cache?: 'cache'): boolean;
+        static estimate(): StorageEstimate;
+        static dir(): FileSystemDirectoryHandle;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_local<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static changes(next?: StorageEvent): StorageEvent | undefined;
+        static value<Value>(key: string, next?: Value | null): Value | null;
+        prefix(): string;
+        value(key: string, next?: Value): Value | null;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_entity extends $mol_object {
+        readonly id: string;
+        constructor(id?: string);
+        defaults(): {};
+        defaults_patch(): Partial<ReturnType<this["defaults"]>>;
+        data(data?: ReturnType<this['defaults']>): ReturnType<this['defaults']>;
+        value<Field extends keyof ReturnType<this['data']>>(field: Field, value?: ReturnType<this['data']>[Field]): ReturnType<this['data']>[Field];
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item extends $gen_engine_entity {
+        defaults(): {
+            id_root: string;
+            reference: string;
+            type: string;
+            part: string;
+            name: string;
+            description: string;
+            level: number;
+            x: number;
+            y: number;
+            speed: number;
+            attack_range: number;
+        };
+        id_root(next?: string): ReturnType<this["data"]>["id_root"];
         log(text: string): void;
-        reference(next?: string): string;
-        type(next?: string): string;
-        part(next?: string): string;
-        name(next?: string): string;
-        description(next?: string): string;
-        level(next?: number): number;
-        x(next?: number): number;
-        y(next?: number): number;
-        xy(): number[];
+        reference(next?: string): ReturnType<this["data"]>["reference"];
+        type(next?: string): ReturnType<this["data"]>["type"];
+        part(next?: string): ReturnType<this["data"]>["part"];
+        name(next?: string): ReturnType<this["data"]>["name"];
+        description(next?: string): ReturnType<this["data"]>["description"];
+        level(next?: number): ReturnType<this["data"]>["level"];
+        x(next?: number): ReturnType<this["data"]>["x"];
+        y(next?: number): ReturnType<this["data"]>["y"];
+        xy(): (ReturnType<this["data"]>["x"] | ReturnType<this["data"]>["y"])[];
         in_range(x: number, y: number, range: number): boolean;
-        speed(next?: number): number;
-        attack_range(next?: number): number;
+        speed(next?: number): ReturnType<this["data"]>["speed"];
+        attack_range(next?: number): ReturnType<this["data"]>["attack_range"];
         move(x: number, y: number): void;
     }
 }
 
 declare namespace $ {
     class $gen_engine_item_skill extends $gen_engine_item {
-        type(): string;
         use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
     }
 }
@@ -1163,20 +1226,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type Config = {
-        max_props: number;
-    };
-    export class $gen_engine_item_equipment extends $gen_engine_item {
-        type(): string;
-        part(next?: string): string;
-        config(next?: Config): Config;
+    class $gen_engine_item_equipment extends $gen_engine_item {
         props(next?: $gen_engine_item_prop[]): $gen_engine_item_prop[];
         add_prop(prop: $gen_engine_item_prop): $gen_engine_item_prop[] | undefined;
         remove_prop(id: string): boolean;
         prop_level_up(id: string): number | undefined;
-        level(next?: number | undefined): number;
     }
-    export {};
 }
 
 declare namespace $ {
@@ -1187,8 +1242,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_engine_item_unit extends $gen_engine_item {
-        name(next?: string): string;
-        type(next?: string): string;
         points(next?: number): number;
         health(next?: number): number;
         attack(next?: number): number;
@@ -1202,6 +1255,7 @@ declare namespace $ {
         shop(next?: $gen_engine_item[]): $gen_engine_item[];
         next_turn(): void;
         refill(): void;
+        duplicate(): $gen_engine_item_unit;
     }
 }
 
@@ -1356,48 +1410,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    let $mol_mem_persist: typeof $mol_wire_solid;
-}
-
-declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
-}
-
-declare namespace $ {
-    export function $mol_wire_sync<Host extends object>(obj: Host): ObjectOrFunctionResultAwaited<Host>;
-    type FunctionResultAwaited<Some> = Some extends (...args: infer Args) => infer Res ? (...args: Args) => Awaited<Res> : Some;
-    type MethodsResultAwaited<Host extends Object> = {
-        [K in keyof Host]: FunctionResultAwaited<Host[K]>;
-    };
-    type ObjectOrFunctionResultAwaited<Some> = (Some extends (...args: any) => unknown ? FunctionResultAwaited<Some> : {}) & (Some extends Object ? MethodsResultAwaited<Some> : Some);
-    export {};
-}
-
-declare namespace $ {
-    class $mol_storage extends $mol_object2 {
-        static native(): StorageManager;
-        static persisted(next?: boolean, cache?: 'cache'): boolean;
-        static estimate(): StorageEstimate;
-        static dir(): FileSystemDirectoryHandle;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_local<Value> extends $mol_object {
-        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-        static native(): Storage | {
-            getItem(key: string): any;
-            setItem(key: string, value: string): void;
-            removeItem(key: string): void;
-        };
-        static changes(next?: StorageEvent): StorageEvent | undefined;
-        static value<Value>(key: string, next?: Value | null): Value | null;
-        prefix(): string;
-        value(key: string, next?: Value): Value | null;
-    }
 }
 
 declare namespace $ {
@@ -3130,6 +3142,41 @@ declare namespace $ {
     }
 }
 
+declare namespace $ {
+    class $gen_engine_item_skill_all extends $mol_object {
+        all(): $gen_engine_item_skill[];
+        create_id_root(id_root: string): string;
+        resource(): $gen_engine_item_skill[];
+        heal(): $gen_engine_item_skill;
+        strong_attack(): $gen_engine_item_skill;
+        strong_attack_and_heal(): $gen_engine_item_skill;
+        hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
+        teleport(): $gen_engine_item_skill;
+        gravity_shield(): $gen_engine_item_skill;
+        lightning_spear(): $gen_engine_item_skill;
+        lightning_bolt(): $gen_engine_item_skill;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_equipment_all extends $mol_object {
+        all(): $gen_engine_item_equipment[];
+        sword(): $gen_engine_item_equipment;
+        staff(): $gen_engine_item_equipment;
+        whip(): $gen_engine_item_equipment;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all(): $gen_engine_item_unit[];
+        resource(): $gen_engine_item_unit[];
+        milis(): $gen_engine_item_unit;
+        jin(): $gen_engine_item_unit;
+        mario(): $gen_engine_item_unit;
+    }
+}
+
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
         pages_list(): readonly any[];
@@ -3137,10 +3184,11 @@ declare namespace $.$$ {
         end_battle(next?: any): void;
         turn(): string;
         restart(): void;
-        party_list(): readonly any[];
-        party(): readonly $gen_engine_item_unit[];
+        party_new(): readonly $gen_engine_item_unit[];
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
+        party_list(): readonly any[];
+        party(): readonly $gen_engine_item_unit[];
         source(id: string): $gen_engine_item_unit | undefined;
         attack_enabled(next?: any): boolean;
         use_attack(next?: any): void;
@@ -3475,9 +3523,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_engine_item_talent extends $gen_engine_item {
-        type(): string;
-        x(next?: number): number;
-        y(next?: number): number;
         set_x_y(x: number, y: number): void;
     }
 }
@@ -3610,22 +3655,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_skill_all extends $mol_object {
-        all(): $gen_engine_item_skill[];
-        create_id_root(id_root: string): string;
-        resource(): $gen_engine_item_skill[];
-        heal(): $gen_engine_item_skill;
-        strong_attack(): $gen_engine_item_skill;
-        strong_attack_and_heal(): $gen_engine_item_skill;
-        hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
-        teleport(): $gen_engine_item_skill;
-        gravity_shield(): $gen_engine_item_skill;
-        lightning_spear(): $gen_engine_item_skill;
-        lightning_bolt(): $gen_engine_item_skill;
-    }
-}
-
-declare namespace $ {
     class $mol_textarea extends $mol_stack {
         attr(): Record<string, any>;
         event(): Record<string, any>;
@@ -3699,25 +3728,6 @@ declare namespace $ {
         test(next?: any): any;
         Test(): $mol_button_major;
         Container(): $$.$mol_list;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all(): $gen_engine_item_equipment[];
-        sword(): $gen_engine_item_equipment;
-        staff(): $gen_engine_item_equipment;
-        whip(): $gen_engine_item_equipment;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all(): $gen_engine_item_unit[];
-        resource(): $gen_engine_item_unit[];
-        milis(): $gen_engine_item_unit;
-        jin(): $gen_engine_item_unit;
-        mario(): $gen_engine_item_unit;
     }
 }
 

@@ -692,7 +692,7 @@ $gen_app_battle $mol_book2
 	active_unit? null
 	preview_unit? null
 	preview_cell? \
-	battle_status? \pending
+	battle_status? \
 	pages <= pages_list /
 		<= Party_page $mol_page
 			title \Группа
@@ -1289,7 +1289,7 @@ $gen_app $mol_page
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
-					party_new <= party
+					- party_new <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party <= party
