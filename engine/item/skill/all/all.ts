@@ -11,22 +11,46 @@ namespace $ {
 
 		resource(): $gen_engine_item_skill[] {
 			return [
-				this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
-				this.hyperfocal_madness_wind_generator(),
-				this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
+				// this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
+				// this.hyperfocal_madness_wind_generator(),
+				// this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
 			]
 		}
 
 		heal() {
-			const skill = new $gen_engine_item_skill( $mol_guid( 4 ) )
-			// skill.name( 'Хил' )
-			// skill.description( 'Исцеляет на 10 здоровья' )
-			skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
-				source.health( source.health() + 10 )
-				battle.log( `${ source.name() } исцеляется на 10 здоровья` )
+			function use_me( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) {
+				console.log( 'FROM EVAL' + source )
+				// source.health( source.health() + 10 )
+				// battle.log( `${ source.name() } исцеляется на 10 здоровья` )
 			}
-			return skill
+			// const use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+			// 	console.log( "FROM EVAL" )
+			// }
+			const text = `
+				console.log( 'FROM EVAL' + source )
+				source.health( source.health() + 10 )
+				battle.log(source.name() + ''+ ' исцеляется на 10 здоровья' )
+			`
+			console.log( 'stringify', use_me.toString() )
+			return $gen_engine_item_skill.make( {
+
+				defaults_patch: () => ( {
+					name: 'Хил',
+					description: 'Исцеляет на 10 здоровья',
+					use_plain: text,
+				} ),
+				id: 'skill-heal-1',
+			} )
 		}
+		// const skill = new $gen_engine_item_skill( $mol_guid( 4 ) )
+		// skill.name( 'Хил' )
+		// skill.description( 'Исцеляет на 10 здоровья' )
+		// skill.use = ( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) => {
+		// 	source.health( source.health() + 10 )
+		// 	battle.log( `${ source.name() } исцеляется на 10 здоровья` )
+		// }
+		// return skill
+		// }
 
 		strong_attack() {
 			const skill = new $gen_engine_item_skill( $mol_guid( 4 ) )

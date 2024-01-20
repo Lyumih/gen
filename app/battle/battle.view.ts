@@ -14,6 +14,7 @@ namespace $.$$ {
 		}
 
 		end_battle( next?: any ) {
+			this.party().map( unit => $mol_state_local.value( unit.id, null ) )
 			this.battle_status( '' )
 		}
 
@@ -49,7 +50,7 @@ namespace $.$$ {
 		}
 
 		party(): readonly $gen_engine_item_unit[] {
-			const party_all = new $gen_engine_item_unit_all().all()
+			// const party_all = new $gen_engine_item_unit_all().all()
 			const party = this.party_new().filter( unit => this.party_new_checked( unit.id ) )
 			// console.log( 'party', party.length )
 			// const party_clone: $gen_engine_item_unit[] = []
@@ -61,7 +62,21 @@ namespace $.$$ {
 			// return [ new $gen_engine_item_unit, new $gen_engine_item_unit ]
 			// return party.map( unit => unit.duplicate() )
 			// return party
-			return party
+			const unit = this.party_new()[ 0 ]
+			const new_unit = $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					...unit.defaults(),
+					name: 'copy'
+				} ),
+
+			} )
+			return party.map( unit => $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					...unit.defaults_patch(),
+				} ),
+				id: 'copy-' + unit.id
+			} ) )
+			// return party
 		}
 
 
@@ -76,7 +91,6 @@ namespace $.$$ {
 
 		@$mol_mem
 		use_attack( next?: any ) {
-			console.log( 'use_attack', next )
 			const targets = this.party().filter( unit => unit.id === this.preview_unit()?.id )
 			this.active_unit()?.use_attack( targets, this.battle() )
 			this.end_turn()
@@ -86,7 +100,6 @@ namespace $.$$ {
 		use_skill( id: any, skill_id: any, next?: any ) {
 			const source = this.active_unit()
 			const skill = source?.skills()?.find( skill => skill.id === id )
-			console.log( 'use skill', id, skill_id, next, skill )
 			if( source && skill ) {
 				const targets = this.party().filter( unit => unit.id === this.preview_unit()?.id )
 				source.use_skill( targets, skill, this.battle() )
@@ -104,7 +117,6 @@ namespace $.$$ {
 		}
 
 		move_enabled( next?: any ): boolean {
-			console.log( 'move_enabled', next )
 			const [ x = 0, y = 0 ] = this.preview_cell().split( '_' )
 			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
 			const unit = this.active_unit()
@@ -138,7 +150,6 @@ namespace $.$$ {
 
 		end_turn( next?: any ) {
 			const index = this.party().findIndex( unit => unit.id === this.active_unit()?.id )
-			console.log( index )
 			let nextUnit = null
 			if( index === -1 || index === this.party().length - 1 ) {
 				nextUnit = this.party()[ 0 ]
@@ -152,7 +163,6 @@ namespace $.$$ {
 
 		cell_click( next?: any ) {
 			const [ x, y ] = next.split( '_' )
-			console.log( 'cell_click', next, x, y )
 			this.preview_cell( this.preview_cell() === next ? '' : next )
 		}
 

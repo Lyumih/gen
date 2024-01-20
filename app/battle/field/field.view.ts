@@ -29,7 +29,6 @@ namespace $.$$ {
 		@$mol_mem_key
 		cell_unit_name( id: string, next?: any ): string {
 			const [ id_x, id_y, id_unit ] = id.split( '_' )
-			console.log( id, next )
 			const unit = this.units()
 				.find( unit => unit.id === id_unit )
 			const unit_text = unit ? `${ unit.name() + unit.id } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''

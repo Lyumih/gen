@@ -183,7 +183,6 @@ namespace $ {
 
 		move( x: number, y: number ) {
 			if( this.x() !== x || this.y() !== y ) {
-				console.log( 'move ' + x + ' ' + y )
 				this.x( x )
 				this.y( y )
 			}

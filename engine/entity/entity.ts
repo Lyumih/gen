@@ -2,8 +2,8 @@ namespace $ {
 
 	export class $gen_engine_entity extends $mol_object {
 		constructor(
-			// readonly base_id = $mol_guid()
-			readonly id = $mol_guid()
+			readonly id = 'no-base-id'
+			// readonly id: string
 		) { super() }
 
 		defaults() {

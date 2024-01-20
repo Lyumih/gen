@@ -8,17 +8,22 @@ namespace $ {
 
 		resource() {
 			return [
-				// this.milis(), this.mario(), this.jin(),
-				this.milis(),
+				this.milis(), this.mario(), this.jin(),
+				// this.milis(),
 			]
 		}
 
 		milis() {
-			const unit = $gen_engine_item_unit.make( {
+			return $gen_engine_item_unit.make( {
 				defaults_patch: () => ( {
 					name: 'Milis',
 					level: 1000,
 					points: 1000,
+					x: 0,
+					y: 0,
+					skills: [
+						new $gen_engine_item_skill_all().heal().defaults_patch() as any,
+					]
 				} ),
 				id: 'hero-milis-1'
 			} )
@@ -37,7 +42,7 @@ namespace $ {
 			// 	new $gen_engine_item_skill_all().strong_attack(),
 			// 	new $gen_engine_item_skill_all().strong_attack_and_heal()
 			// ] )
-			return unit
+			// return unit
 		}
 
 		/**
@@ -47,7 +52,17 @@ namespace $ {
 		 * Навешивает баф "мем"
 		 */
 		jin() {
-			const unit = new $gen_engine_item_unit()
+			return $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					name: 'Jin',
+					level: 3,
+					points: 5,
+					x: 1,
+					y: 3,
+				} ),
+				id: 'hero-jin-2'
+			} )
+			// const unit = new $gen_engine_item_unit()
 			// unit.reference( 'https://t.me/nin_jin' )
 			// unit.name( 'Jin' )
 			// unit.level( 1 )
@@ -55,30 +70,41 @@ namespace $ {
 			// unit.x( 2 )
 			// unit.y( 1 )
 			// unit.speed( 1 )
-			unit.skills( [
-				new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
-			] )
-			return unit
+			// unit.skills( [
+			// 	new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
+			// ] )
+			// return unit
 		}
 
 		mario() {
-			const unit = new $gen_engine_item_unit()
+			return $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					name: 'Бурь',
+					level: 333,
+					points: 544,
+					attack_range: 2,
+					x: 4,
+					y: 2,
+				} ),
+				id: 'hero-mario-3'
+			} )
+			// const unit = new $gen_engine_item_unit()
 			// unit.reference( 'https://t.me/fkusnyahin' )
 			// unit.name( 'Бурь' )
 			// unit.level( 333 )
 			// unit.points( 333 )
 			// unit.attack_range( 2 )
-			unit.equipments( [
-				new $gen_engine_item_equipment_all().staff(),
-				new $gen_engine_item_equipment_all().whip()
-			] )
-			unit.skills( [
-				new $gen_engine_item_skill_all().teleport(),
-				new $gen_engine_item_skill_all().gravity_shield(),
-				new $gen_engine_item_skill_all().lightning_spear(),
-				new $gen_engine_item_skill_all().lightning_bolt()
-			] )
-			return unit
+			// unit.equipments( [
+			// 	new $gen_engine_item_equipment_all().staff(),
+			// 	new $gen_engine_item_equipment_all().whip()
+			// ] )
+			// unit.skills( [
+			// 	new $gen_engine_item_skill_all().teleport(),
+			// 	new $gen_engine_item_skill_all().gravity_shield(),
+			// 	new $gen_engine_item_skill_all().lightning_spear(),
+			// 	new $gen_engine_item_skill_all().lightning_bolt()
+			// ] )
+			// return unit
 		}
 
 	}
