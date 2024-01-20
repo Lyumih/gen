@@ -525,10 +525,124 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+$gen_app_battle_panel $mol_view
+	unit $gen_engine_item_unit
+	active? false
+	sub /
+		<= Empty_panel $mol_section title \Выберите цель
+		<= Unit_panel $mol_row
+			sub <= unit_panel /
+				- <= Active_id $mol_paragraph title <= active_id?
+				- <= Action_move $mol_button_major title \Движение
+				<= Info $mol_list rows /
+					<= Name $mol_paragraph title <= name \
+					<= Health $mol_paragraph title <= health \
+					<= Attack $mol_paragraph title <= attack \
+				<= Skill_list $mol_row sub <= skill_list /
+					<= Skill*0 $mol_button_major
+						enabled? <= active?
+						title <= skill_name* \Умение 1
+				<= Active_actions $mol_row sub /
+					<= Action_attack $mol_button_major
+						title \Атака
+						enabled? <= active?
+						click? <=> use_attack? null
+					<= Action_end_turn $mol_button_major
+						title \Закончить ход
+						click? <=> end_turn? null
 
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
+$gen_app_battle_field $mol_view
+	units /$gen_engine_item_unit
+	active_id? \
+	preview_id? \
+	sub /
+		<= X $mol_list rows <= x_list /
+			<= Y*0 $mol_row sub <= y_list* /
+				<= Cell*0_0 $mol_view
+					event *
+						click? <=> cell_click*? null
+					sub /
+						- <= XY* $mol_paragraph title <= xy* \0, 0
+						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
+							<= Unit* $mol_button_major
+								attr *
+									active <= is_active*? false
+									preview <= is_preview*? true
+								title <= cell_unit_name* \
+								click? <=> unit_preview*? null
+
+$mol_text_list $mol_text
+	auto_scroll null
+	attr *
+		^
+		mol_text_list_type <= type \
+	Paragraph* $mol_text_list_item
+		index <= item_index*
+		sub <= block_content*
+
+$mol_text_list_item $mol_paragraph
+	attr *
+		^
+		mol_text_list_item_index <= index 0
+
+$gen_app_battle $mol_book2
+	title \Битва
+	engine $gen_engine
+	battle $gen_engine_battle
+	party /$gen_engine_item_unit
+	active_id? \
+	preview_id? \
+	pages /
+		<= Party_page $mol_page
+			title \Группа
+			body /
+				<= Party_list $mol_row sub <= party_list /
+					<= Party*0 $mol_row sub /
+						<= Party_unit* $mol_button_major
+							title <= party_unit_name* \Герой
+				<= Start_battle $mol_button_major
+					title \Начать битву
+		<= History_page $mol_page
+			title \История
+			body /
+				<= History_label $mol_section title \История
+				<= History $mol_text text <= history \
+		- <= Units_page $mol_page
+			title \Юниты
+			body /
+				<= Unit_battle_list $mol_list rows <= unit_battle_list /
+					<= Unit*0 $gen_app_battle_unit
+						unit <= source* null
+						target_checked? <=> target_checked*? false
+						use_attack? <=> use_attack*? null
+						use_skill? <=> use_skill*? null
+		<= Battle_page $mol_page
+			title \Битва
+			tools /
+				<= Turn $mol_section title <= turn \Ход: 0
+			foot /
+				<= Panels $mol_list rows /
+					<= Panel $gen_app_battle_panel
+						active? true
+						unit <= active_unit? $gen_engine_item_unit
+						end_turn? <=> end_turn? null
+						use_attack? <=> use_attack? null
+					<= Panel_preview $gen_app_battle_panel
+						unit <= preview_unit? $gen_engine_item_unit
+			body /
+				<= Field $gen_app_battle_field
+					units <= party
+					active_id? <=> active_id?
+					preview_id? <=> preview_id?
+					cell_click? <=> move? null
+				<= End $mol_paragraph title <= end \
+				- <= Reward $mol_button_major
+					enabled <= is_game_end false
+					title \Получить награду
+					click? <= get_reward? null
+				- <= Restart $mol_button_minor
+					title \Начать заново
+					click? <=> restart? null
 
 $mol_pop $mol_view
 	showed? false
@@ -563,143 +677,6 @@ $mol_pop_over $mol_pop
 		^
 		mouseenter?event <=> event_show?event null
 		mouseleave?event <=> event_hide?event null
-
-$gen_app_battle_unit $mol_list
-	unit $gen_engine_item_unit
-	attr *
-		^
-		type <= type \
-		target <= target_checked? false
-	rows /
-		<= Source_target_chech_box $mol_row sub /
-			<= Target_check_box $mol_check_box
-				title \Цель
-				checked? <=> target_checked? false
-		<= Name $mol_section title <= name \
-		<= Id $mol_paragraph title <= id \
-		<= XY $mol_paragraph title <= xy \
-		<= Stats $mol_list rows /
-			<= Health $mol_paragraph title <= health \
-			<= Attack $mol_paragraph title <= attack \
-		<= Attack_button $mol_button_major
-			title \Атаковать
-			enabled <= attack_enabled true
-			click? <=> use_attack? null
-		<= Skill_list $mol_list rows <= skill_list /
-			<= Skill*0 $mol_pop_over
-				Anchor <= Skill_name* $mol_button_minor 
-					title <= skill_name* \Умение: Сильный удар
-					click? <=> use_skill*? null
-				bubble_content /
-					<= Skill_bubble_name* $mol_text text <= skill_name*
-					<= Skill_description* $mol_text text <= skill_description* \Описание
-					<= Skill_use* $mol_button_minor
-						title \Использовать умение
-						click? <=> use_skill*? null
-
-$gen_app_battle_panel $mol_view
-	unit $gen_engine_item_unit
-	sub /
-		<= Empty_panel $mol_section title \Выберите героя
-		<= Unit_panel $mol_row
-			sub /
-				- <= Active_id $mol_paragraph title <= active_id?
-				- <= Action_move $mol_button_major title \Движение
-				<= Info $mol_list rows /
-					<= Name $mol_paragraph title <= name \
-					<= Health $mol_paragraph title <= health \
-					<= Attack $mol_paragraph title <= attack \
-				<= Skill_list $mol_view sub <= skill_list /
-					<= Skill*0 $mol_button_major 
-						title <= skill_name* \Умение 1
-				<= Action_attack $mol_button_major title \Атака
-				<= Action_end_turn $mol_button_major 
-					title \Закончить ход
-					click? <=> end_turn? null
-
-$gen_app_battle_field $mol_view
-	units /$gen_engine_item_unit
-	active_id? \
-	sub /
-		<= X $mol_list rows <= x_list /
-			<= Y*0 $mol_row sub <= y_list* /
-				<= Cell*0_0 $mol_view
-					event *
-						click? <=> cell_click*? null
-					sub /
-						- <= XY* $mol_paragraph title <= xy* \0, 0
-						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
-							<= Unit* $mol_button_major
-								attr *
-									active <= is_active*? false
-								title <= cell_unit_name* \
-								click? <=> unit_active*? null
-
-$mol_text_list $mol_text
-	auto_scroll null
-	attr *
-		^
-		mol_text_list_type <= type \
-	Paragraph* $mol_text_list_item
-		index <= item_index*
-		sub <= block_content*
-
-$mol_text_list_item $mol_paragraph
-	attr *
-		^
-		mol_text_list_item_index <= index 0
-
-$gen_app_battle $mol_book2
-	title \Битва
-	engine $gen_engine
-	battle $gen_engine_battle
-	party /$gen_engine_item_unit
-	active_id? \
-	pages /
-		<= Party_page $mol_page
-			title \Группа
-			body /
-				<= Party_list $mol_row sub <= party_list /
-					<= Party*0 $mol_row sub /
-						<= Party_unit* $mol_button_major
-							title <= party_unit_name* \Герой
-				<= Start_battle $mol_button_major
-					title \Начать битву
-		<= History_page $mol_page
-			title \История
-			body /
-				<= History_label $mol_section title \История
-				<= History $mol_text text <= history \
-		<= Units_page $mol_page
-			title \Юниты
-			body /
-				<= Unit_battle_list $mol_list rows <= unit_battle_list /
-					<= Unit*0 $gen_app_battle_unit
-						unit <= source* null
-						target_checked? <=> target_checked*? false
-						use_attack? <=> use_attack*? null
-						use_skill? <=> use_skill*? null
-		<= Battle_page $mol_page
-			title \Битва
-			tools /
-				<= Turn $mol_section title <= turn \Ход: 0
-			foot /
-				<= Panel $gen_app_battle_panel
-					unit <= active_unit $gen_engine_item_unit
-					end_turn? <=> end_turn? null
-			body /
-				<= Field $gen_app_battle_field
-					units <= party
-					active_id? <=> active_id?
-					cell_click? <=> move? null
-				<= End $mol_paragraph title <= end \
-				<= Reward $mol_button_major
-					enabled <= is_game_end false
-					title \Получить награду
-					click? <= get_reward? null
-				<= Restart $mol_button_minor
-					title \Начать заново
-					click? <=> restart? null
 
 $gen_app_item $mol_view
 	attr *
@@ -898,6 +875,11 @@ $gen_app_talent $mol_page
 						click? <=> talent_click*? null
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
+
+$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
+
+$mol_check_box $mol_check
+	Icon $mol_icon_tick
 
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment

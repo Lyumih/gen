@@ -8830,37 +8830,832 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_tick extends $mol_icon {
-        path() {
-            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+    class $gen_app_battle_panel extends $mol_view {
+        unit() {
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
         }
-    }
-    $.$mol_icon_tick = $mol_icon_tick;
-})($ || ($ = {}));
-//mol/icon/tick/-view.tree/tick.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_check_box extends $mol_check {
-        Icon() {
-            const obj = new this.$.$mol_icon_tick();
+        active(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        sub() {
+            return [
+                this.Empty_panel(),
+                this.Unit_panel()
+            ];
+        }
+        Empty_panel() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Выберите цель";
+            return obj;
+        }
+        name() {
+            return "";
+        }
+        Name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.name();
+            return obj;
+        }
+        health() {
+            return "";
+        }
+        Health() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.health();
+            return obj;
+        }
+        attack() {
+            return "";
+        }
+        Attack() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.attack();
+            return obj;
+        }
+        Info() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Name(),
+                this.Health(),
+                this.Attack()
+            ];
+            return obj;
+        }
+        skill_name(id) {
+            return "Умение 1";
+        }
+        Skill(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.enabled = (next) => this.active();
+            obj.title = () => this.skill_name(id);
+            return obj;
+        }
+        skill_list() {
+            return [
+                this.Skill("0")
+            ];
+        }
+        Skill_list() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.skill_list();
+            return obj;
+        }
+        use_attack(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Action_attack() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Атака";
+            obj.enabled = (next) => this.active();
+            obj.click = (next) => this.use_attack(next);
+            return obj;
+        }
+        end_turn(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Action_end_turn() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Закончить ход";
+            obj.click = (next) => this.end_turn(next);
+            return obj;
+        }
+        Active_actions() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Action_attack(),
+                this.Action_end_turn()
+            ];
+            return obj;
+        }
+        unit_panel() {
+            return [
+                this.Info(),
+                this.Skill_list(),
+                this.Active_actions()
+            ];
+        }
+        Unit_panel() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.unit_panel();
             return obj;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_check_box.prototype, "Icon", null);
-    $.$mol_check_box = $mol_check_box;
+    ], $gen_app_battle_panel.prototype, "unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "active", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Empty_panel", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Info", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_panel.prototype, "Skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Skill_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "use_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "end_turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_end_turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Active_actions", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Unit_panel", null);
+    $.$gen_app_battle_panel = $gen_app_battle_panel;
 })($ || ($ = {}));
-//mol/check/box/-view.tree/box.view.tree.ts
+//gen/app/battle/panel/-view.tree/panel.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+    var $$;
+    (function ($$) {
+        class $gen_app_battle_panel extends $.$gen_app_battle_panel {
+            name() {
+                return this.unit().name() ?? '';
+            }
+            health() {
+                return `ХП: ${this.unit().health()}`;
+            }
+            attack() {
+                return `Атака: ${this.unit().attack()}`;
+            }
+            sub() {
+                return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
+            }
+            skill_list() {
+                return this.unit().skills().map(skill => this.Skill(skill.id()));
+            }
+            skill_name(id) {
+                return this.unit().skills().find(skill => skill.id() === id)?.name() ?? '';
+            }
+            unit_panel() {
+                return [
+                    this.Info(),
+                    this.Skill_list(),
+                    this.active() ? this.Active_actions() : null,
+                ];
+            }
+        }
+        $$.$gen_app_battle_panel = $gen_app_battle_panel;
+    })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/check/box/-css/box.view.css.ts
+//gen/app/battle/panel/panel.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_battle_field extends $mol_view {
+        units() {
+            return [];
+        }
+        active_id(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        preview_id(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        sub() {
+            return [
+                this.X()
+            ];
+        }
+        cell_click(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        is_active(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        is_preview(id, next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
+        cell_unit_name(id) {
+            return "";
+        }
+        unit_preview(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Unit(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.attr = () => ({
+                active: this.is_active(id),
+                preview: this.is_preview(id)
+            });
+            obj.title = () => this.cell_unit_name(id);
+            obj.click = (next) => this.unit_preview(id, next);
+            return obj;
+        }
+        cell_unit_list(id) {
+            return [
+                this.Unit(id)
+            ];
+        }
+        Cell_unit_list(id) {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.cell_unit_list(id);
+            return obj;
+        }
+        Cell(id) {
+            const obj = new this.$.$mol_view();
+            obj.event = () => ({
+                click: (next) => this.cell_click(id, next)
+            });
+            obj.sub = () => [
+                this.Cell_unit_list(id)
+            ];
+            return obj;
+        }
+        y_list(id) {
+            return [
+                this.Cell("0_0")
+            ];
+        }
+        Y(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.y_list(id);
+            return obj;
+        }
+        x_list() {
+            return [
+                this.Y("0")
+            ];
+        }
+        X() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.x_list();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "active_id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "preview_id", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "cell_click", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "is_active", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "is_preview", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "unit_preview", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Unit", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Cell_unit_list", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Cell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "Y", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "X", null);
+    $.$gen_app_battle_field = $gen_app_battle_field;
+})($ || ($ = {}));
+//gen/app/battle/field/-view.tree/field.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_battle_field extends $.$gen_app_battle_field {
+            x_list(next) {
+                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
+            }
+            y_list(id_x) {
+                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
+            }
+            array_range(length) {
+                return Array.from({ length }, (_, index) => index);
+            }
+            max_x_y(next) {
+                return {
+                    x: 5,
+                    y: 5,
+                };
+            }
+            cell_unit_list(id) {
+                const [id_x, id_y] = id.split('_');
+                const units = this.units()
+                    .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
+                return units.map(unit => this.Unit(id + '_' + unit.id()));
+            }
+            xy(id) {
+                const [id_x, id_y] = id.split('_');
+                return `${id_x}, ${id_y}`;
+            }
+            cell_unit_name(id, next) {
+                const [id_x, id_y, id_unit] = id.split('_');
+                console.log(id, next);
+                const unit = this.units()
+                    .find(unit => unit.id() === id_unit);
+                const unit_text = unit ? `${unit.name()} ${unit.health()}хп` : '';
+                return unit_text ?? '';
+            }
+            unit_preview(id, next) {
+                console.log('unit_preview', id);
+                const [, , id_unit] = id.split('_');
+                if (this.preview_id() === id_unit) {
+                    this.preview_id('');
+                }
+                else {
+                    this.preview_id(id_unit ?? '');
+                }
+            }
+            is_active(id, next) {
+                const [, , id_unit] = id.split('_');
+                return this.active_id() === id_unit;
+            }
+            is_preview(id, next) {
+                const [, , id_unit] = id.split('_');
+                return this.preview_id() === id_unit;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_field.prototype, "x_list", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle_field.prototype, "max_x_y", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle_field.prototype, "cell_unit_name", null);
+        $$.$gen_app_battle_field = $gen_app_battle_field;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/battle/field/field.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_unit][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}");
+})($ || ($ = {}));
+//gen/app/battle/field/-css/field.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_text_list extends $mol_text {
+        auto_scroll() {
+            return null;
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                mol_text_list_type: this.type()
+            };
+        }
+        Paragraph(id) {
+            const obj = new this.$.$mol_text_list_item();
+            obj.index = () => this.item_index(id);
+            obj.sub = () => this.block_content(id);
+            return obj;
+        }
+        type() {
+            return "";
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_text_list.prototype, "Paragraph", null);
+    $.$mol_text_list = $mol_text_list;
+    class $mol_text_list_item extends $mol_paragraph {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_text_list_item_index: this.index()
+            };
+        }
+        index() {
+            return 0;
+        }
+    }
+    $.$mol_text_list_item = $mol_text_list_item;
+})($ || ($ = {}));
+//mol/text/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
+})($ || ($ = {}));
+//mol/text/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_battle extends $mol_book2 {
+        title() {
+            return "Битва";
+        }
+        engine() {
+            const obj = new this.$.$gen_engine();
+            return obj;
+        }
+        battle() {
+            const obj = new this.$.$gen_engine_battle();
+            return obj;
+        }
+        party() {
+            return [];
+        }
+        active_id(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        preview_id(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        pages() {
+            return [
+                this.Party_page(),
+                this.History_page(),
+                this.Battle_page()
+            ];
+        }
+        party_unit_name(id) {
+            return "Герой";
+        }
+        Party_unit(id) {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => this.party_unit_name(id);
+            return obj;
+        }
+        Party(id) {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Party_unit(id)
+            ];
+            return obj;
+        }
+        party_list() {
+            return [
+                this.Party("0")
+            ];
+        }
+        Party_list() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => this.party_list();
+            return obj;
+        }
+        Start_battle() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Начать битву";
+            return obj;
+        }
+        Party_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Группа";
+            obj.body = () => [
+                this.Party_list(),
+                this.Start_battle()
+            ];
+            return obj;
+        }
+        History_label() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "История";
+            return obj;
+        }
+        history() {
+            return "";
+        }
+        History() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.history();
+            return obj;
+        }
+        History_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "История";
+            obj.body = () => [
+                this.History_label(),
+                this.History()
+            ];
+            return obj;
+        }
+        turn() {
+            return "Ход: 0";
+        }
+        Turn() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.turn();
+            return obj;
+        }
+        active_unit(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
+        }
+        end_turn(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        use_attack(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Panel() {
+            const obj = new this.$.$gen_app_battle_panel();
+            obj.active = (next) => true;
+            obj.unit = () => this.active_unit();
+            obj.end_turn = (next) => this.end_turn(next);
+            obj.use_attack = (next) => this.use_attack(next);
+            return obj;
+        }
+        preview_unit(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
+        }
+        Panel_preview() {
+            const obj = new this.$.$gen_app_battle_panel();
+            obj.unit = () => this.preview_unit();
+            return obj;
+        }
+        Panels() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Panel(),
+                this.Panel_preview()
+            ];
+            return obj;
+        }
+        move(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Field() {
+            const obj = new this.$.$gen_app_battle_field();
+            obj.units = () => this.party();
+            obj.active_id = (next) => this.active_id(next);
+            obj.preview_id = (next) => this.preview_id(next);
+            obj.cell_click = (next) => this.move(next);
+            return obj;
+        }
+        end() {
+            return "";
+        }
+        End() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.end();
+            return obj;
+        }
+        Battle_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "Битва";
+            obj.tools = () => [
+                this.Turn()
+            ];
+            obj.foot = () => [
+                this.Panels()
+            ];
+            obj.body = () => [
+                this.Field(),
+                this.End()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "battle", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "active_id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "preview_id", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle.prototype, "Party_unit", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle.prototype, "Party", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Party_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Start_battle", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Party_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History_label", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "History_page", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "active_unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "end_turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "use_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Panel", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "preview_unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Panel_preview", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Panels", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "move", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Field", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "End", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Battle_page", null);
+    $.$gen_app_battle = $gen_app_battle;
+})($ || ($ = {}));
+//gen/app/battle/-view.tree/battle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_battle extends $.$gen_app_battle {
+            turn() {
+                return `Ход: ${this.battle().turn()}`;
+            }
+            restart() {
+                this.battle().turn(0);
+            }
+            party_list() {
+                return this.party().map(unit => this.Party(unit.id()));
+            }
+            get_party_hero(id) {
+                return this.party().find(unit => unit.id() === id);
+            }
+            party_unit_name(id) {
+                return this.get_party_hero(id)?.name() || 'no name';
+            }
+            source(id) {
+                return this.get_party_hero(id);
+            }
+            target_checked(id, next) {
+                return next ?? false;
+            }
+            use_attack(next) {
+                console.log('use_attack', next);
+                const targets = this.party().filter(unit => unit.id() === this.preview_id());
+                this.source(this.active_id())?.use_attack(targets, this.battle());
+            }
+            use_skill(id, skill_id, next) {
+                const source = this.source(id);
+                const skill = source?.skills().find(skill => skill.id() === skill_id);
+                if (source && skill) {
+                    const targets = this.party().filter(unit => this.target_checked(unit.id()));
+                    source.use_skill(targets, skill, this.battle());
+                }
+            }
+            get_reward(next) {
+                this.engine().inventory([...this.engine().inventory(), this.engine().reward()]);
+                this.restart();
+            }
+            history() {
+                return this.battle().history().reverse().join('\n');
+            }
+            move(id, next) {
+                next?.preventDefault();
+                console.log('move', id, next, this.preview_id(), this.active_id());
+                const [x = 0, y = 0] = id.split('_');
+                if (this.active_id() === this.preview_id()) {
+                    this.party().find(unit => unit.id() === this.active_id())?.move(+x, +y);
+                }
+                this.end_turn();
+            }
+            active_id(next) {
+                return next ?? this.party()[0].id();
+            }
+            active_unit(next) {
+                return next ?? this.get_party_hero(this.active_id());
+            }
+            preview_unit(next) {
+                return next ?? this.get_party_hero(this.preview_id());
+            }
+            end_turn(next) {
+                const index = this.party().findIndex(unit => unit.id() === this.active_id());
+                console.log(index);
+                let nextId = '';
+                if (index === -1 || index === this.party().length - 1) {
+                    nextId = this.party()[0].id();
+                }
+                else {
+                    nextId = this.party()[index + 1].id();
+                }
+                this.active_id(nextId);
+                this.preview_id(nextId);
+                this.battle().next_turn();
+            }
+        }
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle.prototype, "target_checked", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "use_attack", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle.prototype, "use_skill", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "active_id", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "active_unit", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "preview_unit", null);
+        $$.$gen_app_battle = $gen_app_battle;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/battle/battle.view.ts
 ;
 "use strict";
 var $;
@@ -9124,1096 +9919,6 @@ var $;
     $mol_style_attach("mol/pop/over/over.view.css", "[mol_pop_over]:focus {\r\n\toutline: none;\r\n}");
 })($ || ($ = {}));
 //mol/pop/over/-css/over.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_battle_unit extends $mol_list {
-        unit() {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                type: this.type(),
-                target: this.target_checked()
-            };
-        }
-        rows() {
-            return [
-                this.Source_target_chech_box(),
-                this.Name(),
-                this.Id(),
-                this.XY(),
-                this.Stats(),
-                this.Attack_button(),
-                this.Skill_list()
-            ];
-        }
-        type() {
-            return "";
-        }
-        target_checked(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        Target_check_box() {
-            const obj = new this.$.$mol_check_box();
-            obj.title = () => "Цель";
-            obj.checked = (next) => this.target_checked(next);
-            return obj;
-        }
-        Source_target_chech_box() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Target_check_box()
-            ];
-            return obj;
-        }
-        name() {
-            return "";
-        }
-        Name() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => this.name();
-            return obj;
-        }
-        id() {
-            return "";
-        }
-        Id() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.id();
-            return obj;
-        }
-        xy() {
-            return "";
-        }
-        XY() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.xy();
-            return obj;
-        }
-        health() {
-            return "";
-        }
-        Health() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.health();
-            return obj;
-        }
-        attack() {
-            return "";
-        }
-        Attack() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.attack();
-            return obj;
-        }
-        Stats() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
-                this.Health(),
-                this.Attack()
-            ];
-            return obj;
-        }
-        attack_enabled() {
-            return true;
-        }
-        use_attack(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Attack_button() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Атаковать";
-            obj.enabled = () => this.attack_enabled();
-            obj.click = (next) => this.use_attack(next);
-            return obj;
-        }
-        skill_name(id) {
-            return "Умение: Сильный удар";
-        }
-        use_skill(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Skill_name(id) {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => this.skill_name(id);
-            obj.click = (next) => this.use_skill(id, next);
-            return obj;
-        }
-        Skill_bubble_name(id) {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.skill_name(id);
-            return obj;
-        }
-        skill_description(id) {
-            return "Описание";
-        }
-        Skill_description(id) {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.skill_description(id);
-            return obj;
-        }
-        Skill_use(id) {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Использовать умение";
-            obj.click = (next) => this.use_skill(id, next);
-            return obj;
-        }
-        Skill(id) {
-            const obj = new this.$.$mol_pop_over();
-            obj.Anchor = () => this.Skill_name(id);
-            obj.bubble_content = () => [
-                this.Skill_bubble_name(id),
-                this.Skill_description(id),
-                this.Skill_use(id)
-            ];
-            return obj;
-        }
-        skill_list() {
-            return [
-                this.Skill("0")
-            ];
-        }
-        Skill_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.skill_list();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "unit", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "target_checked", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Target_check_box", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Source_target_chech_box", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Id", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "XY", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Stats", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "use_attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Attack_button", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "use_skill", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "Skill_name", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "Skill_bubble_name", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "Skill_description", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "Skill_use", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_unit.prototype, "Skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_unit.prototype, "Skill_list", null);
-    $.$gen_app_battle_unit = $gen_app_battle_unit;
-})($ || ($ = {}));
-//gen/app/battle/unit/-view.tree/unit.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_battle_unit extends $.$gen_app_battle_unit {
-            attack_enabled() {
-                return this.unit()?.health() > 0;
-            }
-            id() {
-                return this.unit()?.id();
-            }
-            xy() {
-                return `${this.unit()?.x()}, ${this.unit()?.y()}`;
-            }
-            health() {
-                return `Здоровье: ${this.unit()?.health()}`;
-            }
-            attack() {
-                return `Атака: ${this.unit()?.attack()}`;
-            }
-            name() {
-                return `${this.unit()?.name()}`;
-            }
-            type() {
-                return this.unit()?.type();
-            }
-            skills() {
-                return this.unit()?.skills();
-            }
-            skill_list() {
-                return this.skills()?.map(skill => this.Skill(skill.id())) ?? [];
-            }
-            get_skill(id) {
-                return this.skills().find(skill => skill.id() === id);
-            }
-            skill_name(id) {
-                return `${this.get_skill(id)?.name()}: ${this.get_skill(id)?.id()}` || 'no name';
-            }
-            skill_description(id) {
-                return this.get_skill(id)?.description() || 'no description';
-            }
-        }
-        $$.$gen_app_battle_unit = $gen_app_battle_unit;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/battle/unit/unit.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='active'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='target'] {\n\tborder-color: orangered;\n}\n\n[gen_app_battle_unit][target='true'] {\n\tborder-color: orangered;\n}");
-})($ || ($ = {}));
-//gen/app/battle/unit/-css/unit.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_battle_panel extends $mol_view {
-        unit() {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
-        }
-        sub() {
-            return [
-                this.Empty_panel(),
-                this.Unit_panel()
-            ];
-        }
-        Empty_panel() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Выберите героя";
-            return obj;
-        }
-        name() {
-            return "";
-        }
-        Name() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.name();
-            return obj;
-        }
-        health() {
-            return "";
-        }
-        Health() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.health();
-            return obj;
-        }
-        attack() {
-            return "";
-        }
-        Attack() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.attack();
-            return obj;
-        }
-        Info() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
-                this.Name(),
-                this.Health(),
-                this.Attack()
-            ];
-            return obj;
-        }
-        skill_name(id) {
-            return "Умение 1";
-        }
-        Skill(id) {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => this.skill_name(id);
-            return obj;
-        }
-        skill_list() {
-            return [
-                this.Skill("0")
-            ];
-        }
-        Skill_list() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.skill_list();
-            return obj;
-        }
-        Action_attack() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Атака";
-            return obj;
-        }
-        end_turn(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Action_end_turn() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Закончить ход";
-            obj.click = (next) => this.end_turn(next);
-            return obj;
-        }
-        Unit_panel() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Info(),
-                this.Skill_list(),
-                this.Action_attack(),
-                this.Action_end_turn()
-            ];
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "unit", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Empty_panel", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Name", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Info", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_panel.prototype, "Skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Skill_list", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Action_attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "end_turn", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Action_end_turn", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_panel.prototype, "Unit_panel", null);
-    $.$gen_app_battle_panel = $gen_app_battle_panel;
-})($ || ($ = {}));
-//gen/app/battle/panel/-view.tree/panel.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_battle_panel extends $.$gen_app_battle_panel {
-            name() {
-                return this.unit().name() ?? '';
-            }
-            health() {
-                return `ХП: ${this.unit().health()}`;
-            }
-            attack() {
-                return `Атака: ${this.unit().attack()}`;
-            }
-            sub() {
-                return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
-            }
-            skill_list() {
-                return this.unit().skills().map(skill => this.Skill(skill.id()));
-            }
-            skill_name(id) {
-                return this.unit().skills().find(skill => skill.id() === id)?.name() ?? '';
-            }
-        }
-        $$.$gen_app_battle_panel = $gen_app_battle_panel;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/battle/panel/panel.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_battle_field extends $mol_view {
-        units() {
-            return [];
-        }
-        active_id(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        sub() {
-            return [
-                this.X()
-            ];
-        }
-        cell_click(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        is_active(id, next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        cell_unit_name(id) {
-            return "";
-        }
-        unit_active(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Unit(id) {
-            const obj = new this.$.$mol_button_major();
-            obj.attr = () => ({
-                active: this.is_active(id)
-            });
-            obj.title = () => this.cell_unit_name(id);
-            obj.click = (next) => this.unit_active(id, next);
-            return obj;
-        }
-        cell_unit_list(id) {
-            return [
-                this.Unit(id)
-            ];
-        }
-        Cell_unit_list(id) {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.cell_unit_list(id);
-            return obj;
-        }
-        Cell(id) {
-            const obj = new this.$.$mol_view();
-            obj.event = () => ({
-                click: (next) => this.cell_click(id, next)
-            });
-            obj.sub = () => [
-                this.Cell_unit_list(id)
-            ];
-            return obj;
-        }
-        y_list(id) {
-            return [
-                this.Cell("0_0")
-            ];
-        }
-        Y(id) {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => this.y_list(id);
-            return obj;
-        }
-        x_list() {
-            return [
-                this.Y("0")
-            ];
-        }
-        X() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.x_list();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_field.prototype, "active_id", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "cell_click", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "is_active", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "unit_active", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Unit", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Cell_unit_list", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Cell", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "Y", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle_field.prototype, "X", null);
-    $.$gen_app_battle_field = $gen_app_battle_field;
-})($ || ($ = {}));
-//gen/app/battle/field/-view.tree/field.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_battle_field extends $.$gen_app_battle_field {
-            x_list(next) {
-                return this.array_range(this.max_x_y().y).map((x) => this.Y(x));
-            }
-            y_list(id_x) {
-                return this.array_range(this.max_x_y().x).map((y) => this.Cell(`${id_x}_${y}`));
-            }
-            array_range(length) {
-                return Array.from({ length }, (_, index) => index);
-            }
-            max_x_y(next) {
-                return {
-                    x: 5,
-                    y: 5,
-                };
-            }
-            cell_unit_list(id) {
-                const [id_x, id_y] = id.split('_');
-                const units = this.units()
-                    .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
-                return units.map(unit => this.Unit(id + '_' + unit.id()));
-            }
-            xy(id) {
-                const [id_x, id_y] = id.split('_');
-                return `${id_x}, ${id_y}`;
-            }
-            cell_unit_name(id, next) {
-                const [id_x, id_y, id_unit] = id.split('_');
-                console.log(id, next);
-                const unit = this.units()
-                    .find(unit => unit.id() === id_unit);
-                const unit_text = unit ? `${unit.name()} ${unit.health()}хп` : '';
-                return unit_text ?? '';
-            }
-            unit_active(id, next) {
-                const [, , id_unit] = id.split('_');
-                if (this.active_id() === id_unit) {
-                    this.active_id('');
-                }
-                else {
-                    this.active_id(id_unit ?? '');
-                }
-            }
-            is_active(id, next) {
-                const [, , id_unit] = id.split('_');
-                return this.active_id() === id_unit;
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle_field.prototype, "x_list", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle_field.prototype, "max_x_y", null);
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle_field.prototype, "cell_unit_name", null);
-        $$.$gen_app_battle_field = $gen_app_battle_field;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/battle/field/field.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: darkslategrey;\n}");
-})($ || ($ = {}));
-//gen/app/battle/field/-css/field.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_text_list extends $mol_text {
-        auto_scroll() {
-            return null;
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                mol_text_list_type: this.type()
-            };
-        }
-        Paragraph(id) {
-            const obj = new this.$.$mol_text_list_item();
-            obj.index = () => this.item_index(id);
-            obj.sub = () => this.block_content(id);
-            return obj;
-        }
-        type() {
-            return "";
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_text_list.prototype, "Paragraph", null);
-    $.$mol_text_list = $mol_text_list;
-    class $mol_text_list_item extends $mol_paragraph {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_text_list_item_index: this.index()
-            };
-        }
-        index() {
-            return 0;
-        }
-    }
-    $.$mol_text_list_item = $mol_text_list_item;
-})($ || ($ = {}));
-//mol/text/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/text/list/list.view.css", "[mol_text_list] {\r\n\tpadding-left: 1.75rem;\r\n}\r\n\r\n[mol_text_list_item] {\r\n\tcontain: none;\r\n\tdisplay: list-item;\r\n}\r\n\r\n[mol_text_list_item]::before {\r\n\tcontent: attr( mol_text_list_item_index ) \".\";\r\n\twidth: 1.25rem;\r\n\tdisplay: inline-block;\r\n\tposition: absolute;\r\n\tmargin-left: -1.75rem;\r\n\ttext-align: end;\r\n}\r\n\r\n[mol_text_list_type=\"-\"] > [mol_text_list_item]::before,\r\n[mol_text_list_type=\"*\"] > [mol_text_list_item]::before {\r\n\tcontent: \"•\";\r\n}\r\n");
-})($ || ($ = {}));
-//mol/text/list/-css/list.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_app_battle extends $mol_book2 {
-        title() {
-            return "Битва";
-        }
-        engine() {
-            const obj = new this.$.$gen_engine();
-            return obj;
-        }
-        battle() {
-            const obj = new this.$.$gen_engine_battle();
-            return obj;
-        }
-        party() {
-            return [];
-        }
-        active_id(next) {
-            if (next !== undefined)
-                return next;
-            return "";
-        }
-        pages() {
-            return [
-                this.Party_page(),
-                this.History_page(),
-                this.Units_page(),
-                this.Battle_page()
-            ];
-        }
-        party_unit_name(id) {
-            return "Герой";
-        }
-        Party_unit(id) {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => this.party_unit_name(id);
-            return obj;
-        }
-        Party(id) {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => [
-                this.Party_unit(id)
-            ];
-            return obj;
-        }
-        party_list() {
-            return [
-                this.Party("0")
-            ];
-        }
-        Party_list() {
-            const obj = new this.$.$mol_row();
-            obj.sub = () => this.party_list();
-            return obj;
-        }
-        Start_battle() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Начать битву";
-            return obj;
-        }
-        Party_page() {
-            const obj = new this.$.$mol_page();
-            obj.title = () => "Группа";
-            obj.body = () => [
-                this.Party_list(),
-                this.Start_battle()
-            ];
-            return obj;
-        }
-        History_label() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "История";
-            return obj;
-        }
-        history() {
-            return "";
-        }
-        History() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.history();
-            return obj;
-        }
-        History_page() {
-            const obj = new this.$.$mol_page();
-            obj.title = () => "История";
-            obj.body = () => [
-                this.History_label(),
-                this.History()
-            ];
-            return obj;
-        }
-        source(id) {
-            return null;
-        }
-        target_checked(id, next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        use_attack(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        use_skill(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Unit(id) {
-            const obj = new this.$.$gen_app_battle_unit();
-            obj.unit = () => this.source(id);
-            obj.target_checked = (next) => this.target_checked(id, next);
-            obj.use_attack = (next) => this.use_attack(id, next);
-            obj.use_skill = (next) => this.use_skill(id, next);
-            return obj;
-        }
-        unit_battle_list() {
-            return [
-                this.Unit("0")
-            ];
-        }
-        Unit_battle_list() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.unit_battle_list();
-            return obj;
-        }
-        Units_page() {
-            const obj = new this.$.$mol_page();
-            obj.title = () => "Юниты";
-            obj.body = () => [
-                this.Unit_battle_list()
-            ];
-            return obj;
-        }
-        turn() {
-            return "Ход: 0";
-        }
-        Turn() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => this.turn();
-            return obj;
-        }
-        active_unit() {
-            const obj = new this.$.$gen_engine_item_unit();
-            return obj;
-        }
-        end_turn(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Panel() {
-            const obj = new this.$.$gen_app_battle_panel();
-            obj.unit = () => this.active_unit();
-            obj.end_turn = (next) => this.end_turn(next);
-            return obj;
-        }
-        move(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Field() {
-            const obj = new this.$.$gen_app_battle_field();
-            obj.units = () => this.party();
-            obj.active_id = (next) => this.active_id(next);
-            obj.cell_click = (next) => this.move(next);
-            return obj;
-        }
-        end() {
-            return "";
-        }
-        End() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.end();
-            return obj;
-        }
-        is_game_end() {
-            return false;
-        }
-        get_reward(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Reward() {
-            const obj = new this.$.$mol_button_major();
-            obj.enabled = () => this.is_game_end();
-            obj.title = () => "Получить награду";
-            obj.click = (next) => this.get_reward();
-            return obj;
-        }
-        restart(next) {
-            if (next !== undefined)
-                return next;
-            return null;
-        }
-        Restart() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Начать заново";
-            obj.click = (next) => this.restart(next);
-            return obj;
-        }
-        Battle_page() {
-            const obj = new this.$.$mol_page();
-            obj.title = () => "Битва";
-            obj.tools = () => [
-                this.Turn()
-            ];
-            obj.foot = () => [
-                this.Panel()
-            ];
-            obj.body = () => [
-                this.Field(),
-                this.End(),
-                this.Reward(),
-                this.Restart()
-            ];
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "engine", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "battle", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "active_id", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "Party_unit", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "Party", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Party_list", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Start_battle", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Party_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History_label", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "History_page", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "target_checked", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "use_attack", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "use_skill", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle.prototype, "Unit", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Unit_battle_list", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Units_page", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Turn", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "active_unit", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "end_turn", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Panel", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "move", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Field", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "End", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "get_reward", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Reward", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "restart", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Restart", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Battle_page", null);
-    $.$gen_app_battle = $gen_app_battle;
-})($ || ($ = {}));
-//gen/app/battle/-view.tree/battle.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $gen_app_battle extends $.$gen_app_battle {
-            turn() {
-                return `Ход: ${this.battle().turn()}`;
-            }
-            restart() {
-                this.battle().turn(0);
-            }
-            party_list() {
-                return this.party().map(unit => this.Party(unit.id()));
-            }
-            get_party_hero(id) {
-                return this.party().find(unit => unit.id() === id);
-            }
-            party_unit_name(id) {
-                return this.get_party_hero(id)?.name() || 'no name';
-            }
-            unit_battle_list(next) {
-                return next ?? this.party().map(unit => this.Unit(unit.id()));
-            }
-            source(id) {
-                return this.get_party_hero(id);
-            }
-            active_unit(next) {
-                return next ?? this.get_party_hero(this.active_id());
-            }
-            target_checked(id, next) {
-                return next ?? false;
-            }
-            use_attack(id, next) {
-                const targets = this.party().filter(unit => this.target_checked(unit.id()));
-                this.source(id)?.use_attack(targets, this.battle());
-            }
-            use_skill(id, skill_id, next) {
-                const source = this.source(id);
-                const skill = source?.skills().find(skill => skill.id() === skill_id);
-                if (source && skill) {
-                    const targets = this.party().filter(unit => this.target_checked(unit.id()));
-                    source.use_skill(targets, skill, this.battle());
-                }
-            }
-            get_reward(next) {
-                this.engine().inventory([...this.engine().inventory(), this.engine().reward()]);
-                this.restart();
-            }
-            history() {
-                return this.battle().history().reverse().join('\n');
-            }
-            move(id, next) {
-                next?.preventDefault();
-                console.log('move', id, next);
-                const [x = 0, y = 0] = id.split('_');
-                this.party().find(unit => unit.id() === this.active_id())?.move(+x, +y);
-            }
-            end_turn(next) {
-                const index = this.party().findIndex(unit => unit.id() === this.active_id());
-                console.log(index);
-                if (index === -1 || index === this.party().length - 1) {
-                    console.log('range');
-                    this.active_id(this.party()[0].id());
-                }
-                else {
-                    this.active_id(this.party()[index + 1].id());
-                }
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "unit_battle_list", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "active_unit", null);
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle.prototype, "target_checked", null);
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle.prototype, "use_attack", null);
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle.prototype, "use_skill", null);
-        $$.$gen_app_battle = $gen_app_battle;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//gen/app/battle/battle.view.ts
 ;
 "use strict";
 var $;
@@ -11912,6 +11617,41 @@ var $;
     $mol_style_attach("gen/app/talent/talent.view.css", "[gen_app_talent_x] {\n\toverflow: scroll;\n\twidth: 500px;\n}\n\n[gen_app_talent_page_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_talent_talent_cell] {\n\tborder: 1px dashed gray;\n\tborder-radius: 1rem;\n\twidth: 3.5rem;\n\theight: 3.5rem;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n[gen_app_talent_talent_cell][status='open'] {\n\tborder: 2px dotted darkorange;\n}\n\n[gen_app_talent_talent_cell][status='active'] {\n\tborder: 2px solid darkgreen;\n}\n\n[gen_app_talent_talent_cell][search='true'] {\n\tborder-width: 4px;\n\ttransform: scale(1.4);\n}");
 })($ || ($ = {}));
 //gen/app/talent/-css/talent.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_tick extends $mol_icon {
+        path() {
+            return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
+        }
+    }
+    $.$mol_icon_tick = $mol_icon_tick;
+})($ || ($ = {}));
+//mol/icon/tick/-view.tree/tick.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_check_box extends $mol_check {
+        Icon() {
+            const obj = new this.$.$mol_icon_tick();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_check_box.prototype, "Icon", null);
+    $.$mol_check_box = $mol_check_box;
+})($ || ($ = {}));
+//mol/check/box/-view.tree/box.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
+})($ || ($ = {}));
+//mol/check/box/-css/box.view.css.ts
 ;
 "use strict";
 var $;

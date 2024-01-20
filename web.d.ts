@@ -2636,18 +2636,159 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_tick extends $mol_icon {
-        path(): string;
+    class $gen_app_battle_panel extends $mol_view {
+        unit(): $gen_engine_item_unit;
+        active(next?: any): boolean;
+        sub(): readonly any[];
+        Empty_panel(): $$.$mol_section;
+        name(): string;
+        Name(): $$.$mol_paragraph;
+        health(): string;
+        Health(): $$.$mol_paragraph;
+        attack(): string;
+        Attack(): $$.$mol_paragraph;
+        Info(): $$.$mol_list;
+        skill_name(id: any): string;
+        Skill(id: any): $mol_button_major;
+        skill_list(): readonly any[];
+        Skill_list(): $mol_row;
+        use_attack(next?: any): any;
+        Action_attack(): $mol_button_major;
+        end_turn(next?: any): any;
+        Action_end_turn(): $mol_button_major;
+        Active_actions(): $mol_row;
+        unit_panel(): readonly any[];
+        Unit_panel(): $mol_row;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle_panel extends $.$gen_app_battle_panel {
+        name(): string;
+        health(): string;
+        attack(): string;
+        sub(): readonly any[];
+        skill_list(): readonly any[];
+        skill_name(id: any): string;
+        unit_panel(): readonly any[];
     }
 }
 
 declare namespace $ {
-    class $mol_check_box extends $mol_check {
-        Icon(): $mol_icon_tick;
+    class $gen_app_battle_field extends $mol_view {
+        units(): readonly $gen_engine_item_unit[];
+        active_id(next?: any): string;
+        preview_id(next?: any): string;
+        sub(): readonly any[];
+        cell_click(id: any, next?: any): any;
+        is_active(id: any, next?: any): boolean;
+        is_preview(id: any, next?: any): boolean;
+        cell_unit_name(id: any): string;
+        unit_preview(id: any, next?: any): any;
+        Unit(id: any): $mol_button_major;
+        cell_unit_list(id: any): readonly any[];
+        Cell_unit_list(id: any): $mol_view;
+        Cell(id: any): $mol_view;
+        y_list(id: any): readonly any[];
+        Y(id: any): $mol_row;
+        x_list(): readonly any[];
+        X(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle_field extends $.$gen_app_battle_field {
+        x_list(next?: any): $mol_row[];
+        y_list(id_x: string): $mol_view[];
+        array_range(length: number): number[];
+        max_x_y(next?: any): {
+            x: number;
+            y: number;
+        };
+        cell_unit_list(id: string): readonly any[];
+        xy(id: any): string;
+        cell_unit_name(id: string, next?: any): string;
+        unit_preview(id: any, next?: any): void;
+        is_active(id: string, next?: any): boolean;
+        is_preview(id: any, next?: any): boolean;
     }
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_text_list extends $mol_text {
+        auto_scroll(): any;
+        attr(): Record<string, any>;
+        Paragraph(id: any): $mol_text_list_item;
+        type(): string;
+    }
+    class $mol_text_list_item extends $mol_paragraph {
+        attr(): Record<string, any>;
+        index(): number;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $gen_app_battle extends $mol_book2 {
+        title(): string;
+        engine(): $gen_engine;
+        battle(): $gen_engine_battle;
+        party(): readonly $gen_engine_item_unit[];
+        active_id(next?: any): string;
+        preview_id(next?: any): string;
+        pages(): readonly any[];
+        party_unit_name(id: any): string;
+        Party_unit(id: any): $mol_button_major;
+        Party(id: any): $mol_row;
+        party_list(): readonly any[];
+        Party_list(): $mol_row;
+        Start_battle(): $mol_button_major;
+        Party_page(): $mol_page;
+        History_label(): $$.$mol_section;
+        history(): string;
+        History(): $$.$mol_text;
+        History_page(): $mol_page;
+        turn(): string;
+        Turn(): $$.$mol_section;
+        active_unit(next?: any): $gen_engine_item_unit;
+        end_turn(next?: any): any;
+        use_attack(next?: any): any;
+        Panel(): $$.$gen_app_battle_panel;
+        preview_unit(next?: any): $gen_engine_item_unit;
+        Panel_preview(): $$.$gen_app_battle_panel;
+        Panels(): $$.$mol_list;
+        move(next?: any): any;
+        Field(): $$.$gen_app_battle_field;
+        end(): string;
+        End(): $$.$mol_paragraph;
+        Battle_page(): $mol_page;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle extends $.$gen_app_battle {
+        turn(): string;
+        restart(): void;
+        party_list(): readonly any[];
+        get_party_hero(id: string): $gen_engine_item_unit | undefined;
+        party_unit_name(id: string): string;
+        source(id: string): $gen_engine_item_unit | undefined;
+        target_checked(id: string, next?: boolean): boolean;
+        use_attack(next?: any): void;
+        use_skill(id: any, skill_id: any, next?: any): void;
+        get_reward(next?: any): void;
+        history(): string;
+        move(id: string, next?: any): void;
+        active_id(next?: any): string;
+        active_unit(next?: any): any;
+        preview_unit(next?: any): any;
+        end_turn(next?: any): void;
+    }
 }
 
 declare namespace $ {
@@ -2722,217 +2863,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app_battle_unit extends $mol_list {
-        unit(): $gen_engine_item_unit;
-        attr(): Record<string, any>;
-        rows(): readonly any[];
-        type(): string;
-        target_checked(next?: any): boolean;
-        Target_check_box(): $mol_check_box;
-        Source_target_chech_box(): $mol_row;
-        name(): string;
-        Name(): $$.$mol_section;
-        id(): string;
-        Id(): $$.$mol_paragraph;
-        xy(): string;
-        XY(): $$.$mol_paragraph;
-        health(): string;
-        Health(): $$.$mol_paragraph;
-        attack(): string;
-        Attack(): $$.$mol_paragraph;
-        Stats(): $$.$mol_list;
-        attack_enabled(): boolean;
-        use_attack(next?: any): any;
-        Attack_button(): $mol_button_major;
-        skill_name(id: any): string;
-        use_skill(id: any, next?: any): any;
-        Skill_name(id: any): $mol_button_minor;
-        Skill_bubble_name(id: any): $$.$mol_text;
-        skill_description(id: any): string;
-        Skill_description(id: any): $$.$mol_text;
-        Skill_use(id: any): $mol_button_minor;
-        Skill(id: any): $$.$mol_pop_over;
-        skill_list(): readonly any[];
-        Skill_list(): $$.$mol_list;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_battle_unit extends $.$gen_app_battle_unit {
-        attack_enabled(): boolean;
-        id(): string;
-        xy(): string;
-        health(): string;
-        attack(): string;
-        name(): string;
-        type(): string;
-        skills(): $gen_engine_item_skill[];
-        skill_list(): readonly any[];
-        get_skill(id: string): $gen_engine_item_skill | undefined;
-        skill_name(id: any): string;
-        skill_description(id: any): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app_battle_panel extends $mol_view {
-        unit(): $gen_engine_item_unit;
-        sub(): readonly any[];
-        Empty_panel(): $$.$mol_section;
-        name(): string;
-        Name(): $$.$mol_paragraph;
-        health(): string;
-        Health(): $$.$mol_paragraph;
-        attack(): string;
-        Attack(): $$.$mol_paragraph;
-        Info(): $$.$mol_list;
-        skill_name(id: any): string;
-        Skill(id: any): $mol_button_major;
-        skill_list(): readonly any[];
-        Skill_list(): $mol_view;
-        Action_attack(): $mol_button_major;
-        end_turn(next?: any): any;
-        Action_end_turn(): $mol_button_major;
-        Unit_panel(): $mol_row;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_battle_panel extends $.$gen_app_battle_panel {
-        name(): string;
-        health(): string;
-        attack(): string;
-        sub(): readonly any[];
-        skill_list(): readonly any[];
-        skill_name(id: any): string;
-    }
-}
-
-declare namespace $ {
-    class $gen_app_battle_field extends $mol_view {
-        units(): readonly $gen_engine_item_unit[];
-        active_id(next?: any): string;
-        sub(): readonly any[];
-        cell_click(id: any, next?: any): any;
-        is_active(id: any, next?: any): boolean;
-        cell_unit_name(id: any): string;
-        unit_active(id: any, next?: any): any;
-        Unit(id: any): $mol_button_major;
-        cell_unit_list(id: any): readonly any[];
-        Cell_unit_list(id: any): $mol_view;
-        Cell(id: any): $mol_view;
-        y_list(id: any): readonly any[];
-        Y(id: any): $mol_row;
-        x_list(): readonly any[];
-        X(): $$.$mol_list;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_battle_field extends $.$gen_app_battle_field {
-        x_list(next?: any): $mol_row[];
-        y_list(id_x: string): $mol_view[];
-        array_range(length: number): number[];
-        max_x_y(next?: any): {
-            x: number;
-            y: number;
-        };
-        cell_unit_list(id: string): readonly any[];
-        xy(id: any): string;
-        cell_unit_name(id: string, next?: any): string;
-        unit_active(id: any, next?: any): void;
-        is_active(id: string, next?: any): boolean;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_text_list extends $mol_text {
-        auto_scroll(): any;
-        attr(): Record<string, any>;
-        Paragraph(id: any): $mol_text_list_item;
-        type(): string;
-    }
-    class $mol_text_list_item extends $mol_paragraph {
-        attr(): Record<string, any>;
-        index(): number;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app_battle extends $mol_book2 {
-        title(): string;
-        engine(): $gen_engine;
-        battle(): $gen_engine_battle;
-        party(): readonly $gen_engine_item_unit[];
-        active_id(next?: any): string;
-        pages(): readonly any[];
-        party_unit_name(id: any): string;
-        Party_unit(id: any): $mol_button_major;
-        Party(id: any): $mol_row;
-        party_list(): readonly any[];
-        Party_list(): $mol_row;
-        Start_battle(): $mol_button_major;
-        Party_page(): $mol_page;
-        History_label(): $$.$mol_section;
-        history(): string;
-        History(): $$.$mol_text;
-        History_page(): $mol_page;
-        source(id: any): any;
-        target_checked(id: any, next?: any): boolean;
-        use_attack(id: any, next?: any): any;
-        use_skill(id: any, next?: any): any;
-        Unit(id: any): $$.$gen_app_battle_unit;
-        unit_battle_list(): readonly any[];
-        Unit_battle_list(): $$.$mol_list;
-        Units_page(): $mol_page;
-        turn(): string;
-        Turn(): $$.$mol_section;
-        active_unit(): $gen_engine_item_unit;
-        end_turn(next?: any): any;
-        Panel(): $$.$gen_app_battle_panel;
-        move(next?: any): any;
-        Field(): $$.$gen_app_battle_field;
-        end(): string;
-        End(): $$.$mol_paragraph;
-        is_game_end(): boolean;
-        get_reward(next?: any): any;
-        Reward(): $mol_button_major;
-        restart(next?: any): any;
-        Restart(): $mol_button_minor;
-        Battle_page(): $mol_page;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_battle extends $.$gen_app_battle {
-        turn(): string;
-        restart(): void;
-        party_list(): readonly any[];
-        get_party_hero(id: string): $gen_engine_item_unit | undefined;
-        party_unit_name(id: string): string;
-        unit_battle_list(next?: $gen_app_battle_unit[]): readonly $gen_app_battle_unit[];
-        source(id: string): $gen_engine_item_unit | undefined;
-        active_unit(next?: any): any;
-        target_checked(id: string, next?: boolean): boolean;
-        use_attack(id: any, next?: any): void;
-        use_skill(id: any, skill_id: any, next?: any): void;
-        get_reward(next?: any): void;
-        history(): string;
-        move(id: string, next?: any): void;
-        end_turn(next?: any): void;
-    }
 }
 
 declare namespace $ {
@@ -3405,6 +3335,21 @@ declare namespace $.$$ {
         talent_description(id: any): string;
         stats(): string;
         common_talents(next?: $gen_engine_item_talent[]): $gen_engine_item_talent[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_tick extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_check_box extends $mol_check {
+        Icon(): $mol_icon_tick;
     }
 }
 
