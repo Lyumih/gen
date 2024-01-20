@@ -24,7 +24,7 @@ namespace $.$$ {
 
 		cell_unit_list( id: string ): readonly any[] {
 			const [ id_x, id_y ] = id.split( '_' )
-			console.log( id )
+			// console.log( id )
 			const units = this.units()
 				.filter( unit => unit.x() === Number( id_x ) && unit.y() === Number( id_y ) )
 			return units.map( unit => this.Unit( id + '_' + unit.id() ) )
@@ -44,8 +44,22 @@ namespace $.$$ {
 			return unit?.name() ?? ''
 		}
 
-		// cell_click( id: any, next?: any ) {
-		// 	console.log( id, next )
+		// @$mol_mem_key
+		unit_active( id: any, next?: any ) {
+			const [ , , id_unit ] = id.split( '_' )
+			this.active_id( id_unit ?? '' )
+		}
+
+		is_active( id: any, next?: any ): boolean {
+			const [ , , id_unit ] = id.split( '_' )
+			return this.active_id() === id_unit
+		}
+
+		// @$mol_mem
+		// active_id( next?: any ): string {
+		// 	console.log( 'active_id', next )
+		// 	console.log( this.unit_active( '0_0_' + this.u ) )
+		// 	return 'this.units().'
 		// }
 
 

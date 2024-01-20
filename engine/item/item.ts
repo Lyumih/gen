@@ -23,8 +23,7 @@ namespace $ {
 			return next ?? {}
 		}
 
-		@$mol_mem
-		log() {
+		log( text: string ) {
 		}
 
 		/** Источник вдохновения */
@@ -75,6 +74,14 @@ namespace $ {
 		y( next?: number ) {
 			$mol_wire_solid()
 			return next ?? 0
+		}
+
+		move( x: number, y: number ) {
+			if( this.x() !== x || this.y() !== y ) {
+				console.log( 'move ' + x + ' ' + y )
+				this.x( x )
+				this.y( y )
+			}
 		}
 	}
 }

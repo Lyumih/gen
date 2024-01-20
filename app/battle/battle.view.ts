@@ -75,8 +75,10 @@ namespace $.$$ {
 		}
 
 		move( id: string, next?: any ) {
+			next?.preventDefault()
 			console.log( 'move', id, next )
+			const [ x = 0, y = 0 ] = id.split( '_' )
+			this.party().find( unit => unit.id() === this.active_id() )?.move( +x, +y )
 		}
-
 	}
 }

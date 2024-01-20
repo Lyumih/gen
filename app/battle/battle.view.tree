@@ -3,6 +3,7 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
+	active_id? \battle 123
 	pages /
 		<= Party_page $mol_page
 			title \Группа
@@ -31,8 +32,10 @@ $gen_app_battle $mol_book2
 			title \Битва
 			body /
 				<= Turn $mol_section title <= turn \Ход: 0
+				<= Active_id $mol_paragraph title <= active_id?
 				<= Field $gen_app_battle_field
 					units <= party
+					active_id? <=> active_id?
 					cell_click? <=> move? null
 				<= End $mol_paragraph title <= end \
 				<= Reward $mol_button_major

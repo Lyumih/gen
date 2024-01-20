@@ -1,5 +1,6 @@
 $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
+	active_id? \
 	sub /
 		<= X $mol_list rows <= x_list /
 			<= Y*0 $mol_row sub <= y_list* /
@@ -7,7 +8,10 @@ $gen_app_battle_field $mol_view
 					event *
 						click? <=> cell_click*? null
 					sub /
-						<= XY* $mol_paragraph title <= xy* \0, 0
+						- <= XY* $mol_paragraph title <= xy* \0, 0
 						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
-							<= Unit* $mol_check_box
+							<= Unit* $mol_button_major
+								attr *
+									active <= is_active*? false
 								title <= cell_unit_name* \
+								click? <=> unit_active*? null
