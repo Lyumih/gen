@@ -46,18 +46,24 @@ namespace $.$$ {
 		}
 
 		// @$mol_mem_key
-		unit_active( id: any, next?: any ) {
+		unit_preview( id: any, next?: any ) {
+			console.log( 'unit_preview', id )
 			const [ , , id_unit ] = id.split( '_' )
-			if( this.active_id() === id_unit ) {
-				this.active_id( '' )
+			if( this.preview_id() === id_unit ) {
+				this.preview_id( '' )
 			} else {
-				this.active_id( id_unit ?? '' )
+				this.preview_id( id_unit ?? '' )
 			}
 		}
 
 		is_active( id: string, next?: any ): boolean {
 			const [ , , id_unit ] = id.split( '_' )
 			return this.active_id() === id_unit
+		}
+
+		is_preview( id: any, next?: any ): boolean {
+			const [ , , id_unit ] = id.split( '_' )
+			return this.preview_id() === id_unit
 		}
 
 		// @$mol_mem

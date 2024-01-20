@@ -24,5 +24,13 @@ namespace $.$$ {
 		skill_name( id: any ): string {
 			return this.unit().skills().find( skill => skill.id() === id )?.name() ?? ''
 		}
+
+		unit_panel(): readonly any[] {
+			return [
+				this.Info(),
+				this.Skill_list(),
+				this.active() ? this.Active_actions() : null,
+			]
+		}
 	}
 }

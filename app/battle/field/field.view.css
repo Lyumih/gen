@@ -17,5 +17,9 @@
 }
 
 [gen_app_battle_field_unit][active='true'] {
-	background: darkslategrey;
+	background: peru;
+}
+
+[gen_app_battle_field_unit][preview='true'] {
+	box-shadow: inset 0px 0px 10px 3px red;
 }

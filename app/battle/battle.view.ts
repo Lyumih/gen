@@ -22,18 +22,13 @@ namespace $.$$ {
 			return this.get_party_hero( id )?.name() || 'no name'
 		}
 
-		@$mol_mem
-		unit_battle_list( next?: $gen_app_battle_unit[] ): readonly $gen_app_battle_unit[] {
-			return next ?? this.party().map( unit => this.Unit( unit.id() ) )
-		}
+		// @$mol_mem
+		// unit_battle_list( next?: $gen_app_battle_unit[] ): readonly $gen_app_battle_unit[] {
+		// 	return next ?? this.party().map( unit => this.Unit( unit.id() ) )
+		// }
 
 		source( id: string ) {
 			return this.get_party_hero( id )
-		}
-
-		@$mol_mem
-		active_unit( next?: any ) {
-			return next ?? this.get_party_hero( this.active_id() )
 		}
 
 		// is_game_continue() {
@@ -54,10 +49,11 @@ namespace $.$$ {
 		}
 
 
-		@$mol_mem_key
-		use_attack( id: any, next?: any ) {
-			const targets = this.party().filter( unit => this.target_checked( unit.id() ) )
-			this.source( id )?.use_attack( targets, this.battle() )
+		@$mol_mem
+		use_attack( next?: any ) {
+			console.log( 'use_attack', next )
+			const targets = this.party().filter( unit => unit.id() === this.preview_id() )
+			this.source( this.active_id() )?.use_attack( targets, this.battle() )
 		}
 
 		@$mol_mem_key
@@ -81,20 +77,41 @@ namespace $.$$ {
 
 		move( id: string, next?: any ) {
 			next?.preventDefault()
-			console.log( 'move', id, next )
+			console.log( 'move', id, next, this.preview_id(), this.active_id() )
 			const [ x = 0, y = 0 ] = id.split( '_' )
-			this.party().find( unit => unit.id() === this.active_id() )?.move( +x, +y )
+			if( this.active_id() === this.preview_id() ) {
+				this.party().find( unit => unit.id() === this.active_id() )?.move( +x, +y )
+			}
+			this.end_turn()
+		}
+
+		@$mol_mem
+		active_id( next?: any ): string {
+			return next ?? this.party()[ 0 ].id()
+		}
+
+		@$mol_mem
+		active_unit( next?: any ) {
+			return next ?? this.get_party_hero( this.active_id() )
+		}
+
+		@$mol_mem
+		preview_unit( next?: any ) {
+			return next ?? this.get_party_hero( this.preview_id() )
 		}
 
 		end_turn( next?: any ) {
 			const index = this.party().findIndex( unit => unit.id() === this.active_id() )
 			console.log( index )
+			let nextId = ''
 			if( index === -1 || index === this.party().length - 1 ) {
-				console.log( 'range' )
-				this.active_id( this.party()[ 0 ].id() )
+				nextId = this.party()[ 0 ].id()
 			} else {
-				this.active_id( this.party()[ index + 1 ].id() )
+				nextId = this.party()[ index + 1 ].id()
 			}
+			this.active_id( nextId )
+			this.preview_id( nextId )
+			this.battle().next_turn()
 		}
 
 

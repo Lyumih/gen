@@ -4,6 +4,7 @@ $gen_app_battle $mol_book2
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
 	active_id? \
+	preview_id? \
 	pages /
 		<= Party_page $mol_page
 			title \Группа
@@ -19,7 +20,7 @@ $gen_app_battle $mol_book2
 			body /
 				<= History_label $mol_section title \История
 				<= History $mol_text text <= history \
-		<= Units_page $mol_page
+		- <= Units_page $mol_page
 			title \Юниты
 			body /
 				<= Unit_battle_list $mol_list rows <= unit_battle_list /
@@ -33,19 +34,25 @@ $gen_app_battle $mol_book2
 			tools /
 				<= Turn $mol_section title <= turn \Ход: 0
 			foot /
-				<= Panel $gen_app_battle_panel
-					unit <= active_unit $gen_engine_item_unit
-					end_turn? <=> end_turn? null
+				<= Panels $mol_list rows /
+					<= Panel $gen_app_battle_panel
+						active? true
+						unit <= active_unit? $gen_engine_item_unit
+						end_turn? <=> end_turn? null
+						use_attack? <=> use_attack? null
+					<= Panel_preview $gen_app_battle_panel
+						unit <= preview_unit? $gen_engine_item_unit
 			body /
 				<= Field $gen_app_battle_field
 					units <= party
 					active_id? <=> active_id?
+					preview_id? <=> preview_id?
 					cell_click? <=> move? null
 				<= End $mol_paragraph title <= end \
-				<= Reward $mol_button_major
+				- <= Reward $mol_button_major
 					enabled <= is_game_end false
 					title \Получить награду
 					click? <= get_reward? null
-				<= Restart $mol_button_minor
+				- <= Restart $mol_button_minor
 					title \Начать заново
 					click? <=> restart? null
