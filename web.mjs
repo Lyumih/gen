@@ -9357,31 +9357,31 @@ var $;
     (function ($$) {
         class $gen_app_battle_unit extends $.$gen_app_battle_unit {
             attack_enabled() {
-                return this.unit().health() > 0;
+                return this.unit()?.health() > 0;
             }
             id() {
-                return this.unit().id();
+                return this.unit()?.id();
             }
             xy() {
-                return `${this.unit().x()}, ${this.unit().y()}`;
+                return `${this.unit()?.x()}, ${this.unit()?.y()}`;
             }
             health() {
-                return `Здоровье: ${this.unit().health()}`;
+                return `Здоровье: ${this.unit()?.health()}`;
             }
             attack() {
-                return `Атака: ${this.unit().attack()}`;
+                return `Атака: ${this.unit()?.attack()}`;
             }
             name() {
-                return `${this.unit().name()}`;
+                return `${this.unit()?.name()}`;
             }
             type() {
-                return this.unit().type();
+                return this.unit()?.type();
             }
             skills() {
-                return this.unit().skills();
+                return this.unit()?.skills();
             }
             skill_list() {
-                return this.skills().map(skill => this.Skill(skill.id()));
+                return this.skills()?.map(skill => this.Skill(skill.id())) ?? [];
             }
             get_skill(id) {
                 return this.skills().find(skill => skill.id() === id);
@@ -9404,6 +9404,164 @@ var $;
     $mol_style_attach("gen/app/battle/unit/unit.view.css", "[gen_app_battle_unit] {\n\tborder: 2px solid gray;\n\tborder-radius: 1rem;\n\tpadding: 1rem;\n}\n\n[gen_app_battle_unit][type='active'] {\n\tborder-color: greenyellow;\n}\n\n[gen_app_battle_unit][type='target'] {\n\tborder-color: orangered;\n}\n\n[gen_app_battle_unit][target='true'] {\n\tborder-color: orangered;\n}");
 })($ || ($ = {}));
 //gen/app/battle/unit/-css/unit.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_app_battle_panel extends $mol_view {
+        unit() {
+            const obj = new this.$.$gen_engine_item_unit();
+            return obj;
+        }
+        sub() {
+            return [
+                this.Empty_panel(),
+                this.Unit_panel()
+            ];
+        }
+        Empty_panel() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Выберите героя";
+            return obj;
+        }
+        name() {
+            return "";
+        }
+        Name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.name();
+            return obj;
+        }
+        health() {
+            return "";
+        }
+        Health() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.health();
+            return obj;
+        }
+        attack() {
+            return "";
+        }
+        Attack() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.attack();
+            return obj;
+        }
+        Info() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Name(),
+                this.Health(),
+                this.Attack()
+            ];
+            return obj;
+        }
+        Action_attack() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Атака";
+            return obj;
+        }
+        Action_skill() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Умение 1";
+            return obj;
+        }
+        Action_skill2() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Умение 2";
+            return obj;
+        }
+        end_turn(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Action_end_turn() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Закончить ход";
+            obj.click = (next) => this.end_turn(next);
+            return obj;
+        }
+        Unit_panel() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Info(),
+                this.Action_attack(),
+                this.Action_skill(),
+                this.Action_skill2(),
+                this.Action_end_turn()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Empty_panel", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Health", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Info", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_skill2", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "end_turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_end_turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Unit_panel", null);
+    $.$gen_app_battle_panel = $gen_app_battle_panel;
+})($ || ($ = {}));
+//gen/app/battle/panel/-view.tree/panel.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_battle_panel extends $.$gen_app_battle_panel {
+            end_turn(next) {
+                console.log('end turn');
+            }
+            name() {
+                return this.unit().name() ?? '';
+            }
+            health() {
+                return `ХП: ${this.unit().health()}`;
+            }
+            attack() {
+                return `Атака: ${this.unit().attack()}`;
+            }
+            sub() {
+                console.log(this.unit());
+                return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
+            }
+        }
+        $$.$gen_app_battle_panel = $gen_app_battle_panel;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/battle/panel/panel.view.ts
 ;
 "use strict";
 var $;
@@ -9538,8 +9696,8 @@ var $;
             }
             max_x_y(next) {
                 return {
-                    x: 17,
-                    y: 16,
+                    x: 10,
+                    y: 10,
                 };
             }
             cell_unit_list(id) {
@@ -9782,34 +9940,19 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
-        Active_id() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.active_id();
+        active_unit() {
+            const obj = new this.$.$gen_engine_item_unit();
             return obj;
         }
-        Action_move() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Движение";
-            return obj;
+        end_turn(next) {
+            if (next !== undefined)
+                return next;
+            return null;
         }
-        Action_attack() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Атака";
-            return obj;
-        }
-        Action_skill() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Умение 1";
-            return obj;
-        }
-        Action_skill2() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Умение 2";
-            return obj;
-        }
-        Action_end_turn() {
-            const obj = new this.$.$mol_button_major();
-            obj.title = () => "Закончить ход";
+        Panel() {
+            const obj = new this.$.$gen_app_battle_panel();
+            obj.unit = () => this.active_unit();
+            obj.end_turn = (next) => this.end_turn(next);
             return obj;
         }
         move(next) {
@@ -9865,12 +10008,7 @@ var $;
                 this.Turn()
             ];
             obj.foot = () => [
-                this.Active_id(),
-                this.Action_move(),
-                this.Action_attack(),
-                this.Action_skill(),
-                this.Action_skill2(),
-                this.Action_end_turn()
+                this.Panel()
             ];
             obj.body = () => [
                 this.Field(),
@@ -9937,22 +10075,13 @@ var $;
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "Active_id", null);
+    ], $gen_app_battle.prototype, "active_unit", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "Action_move", null);
+    ], $gen_app_battle.prototype, "end_turn", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "Action_attack", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Action_skill", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Action_skill2", null);
-    __decorate([
-        $mol_mem
-    ], $gen_app_battle.prototype, "Action_end_turn", null);
+    ], $gen_app_battle.prototype, "Panel", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "move", null);
@@ -10008,6 +10137,9 @@ var $;
             source(id) {
                 return this.get_party_hero(id);
             }
+            active_unit(next) {
+                return next ?? this.get_party_hero(this.active_id());
+            }
             target_checked(id, next) {
                 return next ?? false;
             }
@@ -10036,10 +10168,24 @@ var $;
                 const [x = 0, y = 0] = id.split('_');
                 this.party().find(unit => unit.id() === this.active_id())?.move(+x, +y);
             }
+            end_turn(next) {
+                const index = this.party().findIndex(unit => unit.id() === this.active_id());
+                console.log(index);
+                if (index === -1 || index === this.party().length - 1) {
+                    console.log('range');
+                    this.active_id(this.party()[0].id());
+                }
+                else {
+                    this.active_id(this.party()[index + 1].id());
+                }
+            }
         }
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "unit_battle_list", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_battle.prototype, "active_unit", null);
         __decorate([
             $mol_mem_key
         ], $gen_app_battle.prototype, "target_checked", null);
@@ -14470,7 +14616,7 @@ var $;
 (function ($) {
     class $gen_app extends $mol_page {
         title() {
-            return "Игра Gen";
+            return "Игра Gen (beta)";
         }
         engine() {
             const obj = new this.$.$gen_engine();

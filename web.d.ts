@@ -2781,6 +2781,37 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_app_battle_panel extends $mol_view {
+        unit(): $gen_engine_item_unit;
+        sub(): readonly any[];
+        Empty_panel(): $$.$mol_section;
+        name(): string;
+        Name(): $$.$mol_paragraph;
+        health(): string;
+        Health(): $$.$mol_paragraph;
+        attack(): string;
+        Attack(): $$.$mol_paragraph;
+        Info(): $$.$mol_list;
+        Action_attack(): $mol_button_major;
+        Action_skill(): $mol_button_major;
+        Action_skill2(): $mol_button_major;
+        end_turn(next?: any): any;
+        Action_end_turn(): $mol_button_major;
+        Unit_panel(): $mol_row;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_battle_panel extends $.$gen_app_battle_panel {
+        end_turn(next?: any): void;
+        name(): string;
+        health(): string;
+        attack(): string;
+        sub(): readonly any[];
+    }
+}
+
+declare namespace $ {
     class $gen_app_battle_field extends $mol_view {
         units(): readonly $gen_engine_item_unit[];
         active_id(next?: any): string;
@@ -2865,12 +2896,9 @@ declare namespace $ {
         Units_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
-        Active_id(): $$.$mol_paragraph;
-        Action_move(): $mol_button_major;
-        Action_attack(): $mol_button_major;
-        Action_skill(): $mol_button_major;
-        Action_skill2(): $mol_button_major;
-        Action_end_turn(): $mol_button_major;
+        active_unit(): $gen_engine_item_unit;
+        end_turn(next?: any): any;
+        Panel(): $$.$gen_app_battle_panel;
         move(next?: any): any;
         Field(): $$.$gen_app_battle_field;
         end(): string;
@@ -2893,12 +2921,14 @@ declare namespace $.$$ {
         party_unit_name(id: string): string;
         unit_battle_list(next?: $gen_app_battle_unit[]): readonly $gen_app_battle_unit[];
         source(id: string): $gen_engine_item_unit | undefined;
+        active_unit(next?: any): any;
         target_checked(id: string, next?: boolean): boolean;
         use_attack(id: any, next?: any): void;
         use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
         move(id: string, next?: any): void;
+        end_turn(next?: any): void;
     }
 }
 

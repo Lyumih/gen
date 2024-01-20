@@ -212,6 +212,7 @@
     "$mol_icon_tick",
     "$mol_pop_over",
     "$mol_pop",
+    "$gen_app_battle_panel",
     "$gen_app_battle_field",
     "$gen_app_hero",
     "$gen_app_item_equipment",
