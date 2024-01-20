@@ -1,0 +1,9 @@
+[gen_app_battle_panel_unit_panel] {
+	overflow: auto;
+	flex-wrap: nowrap;
+}
+
+[gen_app_battle_panel_skill_list] {
+	overflow: auto;
+	flex-wrap: nowrap;
+}

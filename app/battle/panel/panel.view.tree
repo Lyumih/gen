@@ -2,11 +2,9 @@ $gen_app_battle_panel $mol_view
 	unit $gen_engine_item_unit
 	active? false
 	sub /
-		<= Empty_panel $mol_section title \Выберите цель
+		<= Empty_panel $mol_section title \Цель
 		<= Unit_panel $mol_row
 			sub <= unit_panel /
-				- <= Active_id $mol_paragraph title <= active_id?
-				- <= Action_move $mol_button_major title \Движение
 				<= Info $mol_list rows /
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \

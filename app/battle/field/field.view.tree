@@ -1,5 +1,7 @@
 $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
+	max_x 20
+	max_y 20
 	active_id? \
 	preview_id? \
 	sub /

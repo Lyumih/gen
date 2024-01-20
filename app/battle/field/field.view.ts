@@ -3,23 +3,15 @@ namespace $.$$ {
 
 		@$mol_mem
 		x_list( next?: any ) {
-			return this.array_range( this.max_x_y().y ).map( ( x ) => this.Y( x ) )
+			return this.array_range( this.max_x() ).map( ( x ) => this.Y( x ) )
 		}
 
 		y_list( id_x: string ) {
-			return this.array_range( this.max_x_y().x ).map( ( y ) => this.Cell( `${ id_x }_${ y }` ) )
+			return this.array_range( this.max_y() ).map( ( y ) => this.Cell( `${ id_x }_${ y }` ) )
 		}
 
 		array_range( length: number ) {
 			return Array.from( { length }, ( _, index ) => index )
-		}
-
-		@$mol_mem
-		max_x_y( next?: any ) {
-			return {
-				x: 5,
-				y: 5,
-			}
 		}
 
 		cell_unit_list( id: string ): readonly any[] {

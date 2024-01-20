@@ -1,5 +1,5 @@
 $gen_app $mol_page
-	title \Игра Gen v0.1. (Похожа на героев 4 + ПОЕ. Умения и шмот делает сообщество)
+	title \Игра Gen v0.1. Герои, PoE, моды
 	engine $gen_engine
 	party /$gen_engine_item_unit
 	craft $gen_engine_craft

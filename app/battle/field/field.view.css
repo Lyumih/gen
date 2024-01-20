@@ -16,6 +16,11 @@
 	flex-direction: column;
 }
 
+[gen_app_battle_field_unit] {
+	border: 1px dashed green;
+	border-radius: 1rem;
+}
+
 [gen_app_battle_field_unit][active='true'] {
 	background: peru;
 }

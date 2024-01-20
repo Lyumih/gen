@@ -22,26 +22,9 @@ namespace $.$$ {
 			return this.get_party_hero( id )?.name() || 'no name'
 		}
 
-		// @$mol_mem
-		// unit_battle_list( next?: $gen_app_battle_unit[] ): readonly $gen_app_battle_unit[] {
-		// 	return next ?? this.party().map( unit => this.Unit( unit.id() ) )
-		// }
-
 		source( id: string ) {
 			return this.get_party_hero( id )
 		}
-
-		// is_game_continue() {
-		// 	return !this.hero().is_dead() && !this.enemy().is_dead()
-		// }
-
-		// is_game_end() {
-		// 	return !this.is_game_continue()
-		// }
-
-		// end(): string {
-		// 	return this.is_game_continue() ? '' : 'Игра закончена'
-		// }
 
 		@$mol_mem_key
 		target_checked( id: string, next?: boolean ): boolean {
@@ -79,10 +62,13 @@ namespace $.$$ {
 			next?.preventDefault()
 			console.log( 'move', id, next, this.preview_id(), this.active_id() )
 			const [ x = 0, y = 0 ] = id.split( '_' )
-			if( this.active_id() === this.preview_id() ) {
-				this.party().find( unit => unit.id() === this.active_id() )?.move( +x, +y )
+			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
+			console.log( 'target_cell', target_cell, x, y )
+			if( !target_cell ) {
+				this.active_unit().move( +x, +y )
+				this.end_turn()
+				this.battle().log_move( this.active_unit(), +x, +y )
 			}
-			this.end_turn()
 		}
 
 		@$mol_mem
@@ -110,7 +96,7 @@ namespace $.$$ {
 				nextId = this.party()[ index + 1 ].id()
 			}
 			this.active_id( nextId )
-			this.preview_id( nextId )
+			this.preview_id( "" )
 			this.battle().next_turn()
 		}
 

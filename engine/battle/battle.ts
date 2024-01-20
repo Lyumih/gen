@@ -40,5 +40,9 @@ namespace $ {
 		log_targets_not_found( source: $gen_engine_item_unit ) {
 			this.log( `**${ source.name() }** - целей не найдено` )
 		}
+
+		log_move( source: $gen_engine_item_unit, x: number, y: number ) {
+			this.log( `**${ source.name() }** движется к ${ x }, ${ y }` )
+		}
 	}
 }
