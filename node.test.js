@@ -3818,11 +3818,11 @@ var $;
         }
         speed(next) {
             $mol_wire_solid();
-            return next ?? 2;
+            return next ?? 1;
         }
-        range(next) {
+        attack_range(next) {
             $mol_wire_solid();
-            return next ?? 3;
+            return next ?? 1;
         }
         move(x, y) {
             if (this.x() !== x || this.y() !== y) {
@@ -3870,7 +3870,7 @@ var $;
     ], $gen_engine_item.prototype, "speed", null);
     __decorate([
         $mol_mem
-    ], $gen_engine_item.prototype, "range", null);
+    ], $gen_engine_item.prototype, "attack_range", null);
     $.$gen_engine_item = $gen_engine_item;
 })($ || ($ = {}));
 //gen/engine/item/item.ts
@@ -9259,6 +9259,9 @@ var $;
                 return next;
             return false;
         }
+        preview_cell() {
+            return "";
+        }
         sub() {
             return [
                 this.Empty_panel(),
@@ -9267,7 +9270,7 @@ var $;
         }
         Empty_panel() {
             const obj = new this.$.$mol_section();
-            obj.title = () => "Цель";
+            obj.title = () => "";
             return obj;
         }
         name() {
@@ -9295,7 +9298,7 @@ var $;
             return obj;
         }
         speed() {
-            return "Скорость: 0";
+            return "";
         }
         Speed() {
             const obj = new this.$.$mol_paragraph();
@@ -9303,7 +9306,7 @@ var $;
             return obj;
         }
         range() {
-            return "Дальность: 0";
+            return "";
         }
         Range() {
             const obj = new this.$.$mol_paragraph();
@@ -9311,8 +9314,8 @@ var $;
             return obj;
         }
         Info() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
                 this.Name(),
                 this.Health(),
                 this.Attack(),
@@ -9321,6 +9324,11 @@ var $;
             ];
             return obj;
         }
+        move_enabled(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         use_move(next) {
             if (next !== undefined)
                 return next;
@@ -9328,9 +9336,15 @@ var $;
         }
         Action_move() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "Движение";
+            obj.title = () => "👟";
+            obj.enabled = (next) => this.move_enabled();
             obj.click = (next) => this.use_move(next);
             return obj;
+        }
+        attack_enabled(next) {
+            if (next !== undefined)
+                return next;
+            return null;
         }
         use_attack(next) {
             if (next !== undefined)
@@ -9339,7 +9353,8 @@ var $;
         }
         Action_attack() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "Атака";
+            obj.title = () => "⚔️";
+            obj.enabled = (next) => this.attack_enabled();
             obj.click = (next) => this.use_attack(next);
             return obj;
         }
@@ -9350,7 +9365,7 @@ var $;
         }
         Action_end_turn() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "Закончить ход";
+            obj.title = () => "⏳";
             obj.click = (next) => this.end_turn(next);
             return obj;
         }
@@ -9369,7 +9384,7 @@ var $;
             return null;
         }
         skill_name(id) {
-            return "Умение 1";
+            return "";
         }
         Skill(id) {
             const obj = new this.$.$mol_button_major();
@@ -9388,15 +9403,22 @@ var $;
             obj.sub = () => this.skill_list();
             return obj;
         }
-        unit_panel() {
-            return [
-                this.Info(),
+        Panel_actions() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
                 this.Active_actions(),
                 this.Skill_list()
             ];
+            return obj;
+        }
+        unit_panel() {
+            return [
+                this.Info(),
+                this.Panel_actions()
+            ];
         }
         Unit_panel() {
-            const obj = new this.$.$mol_row();
+            const obj = new this.$.$mol_view();
             obj.sub = () => this.unit_panel();
             return obj;
         }
@@ -9430,10 +9452,16 @@ var $;
     ], $gen_app_battle_panel.prototype, "Info", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle_panel.prototype, "move_enabled", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_panel.prototype, "use_move", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "Action_move", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "attack_enabled", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "use_attack", null);
@@ -9460,6 +9488,9 @@ var $;
     ], $gen_app_battle_panel.prototype, "Skill_list", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle_panel.prototype, "Panel_actions", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_panel.prototype, "Unit_panel", null);
     $.$gen_app_battle_panel = $gen_app_battle_panel;
 })($ || ($ = {}));
@@ -9475,16 +9506,16 @@ var $;
                 return this.unit().name() ?? '';
             }
             health() {
-                return `ХП: ${this.unit().health()}`;
+                return `❤️ ${this.unit().health()}`;
             }
             attack() {
-                return `Атака: ${this.unit().attack()}`;
+                return `⚔️ ${this.unit().attack()}`;
             }
             speed() {
-                return `Скорость: ${this.unit().speed()}`;
+                return `👟 ${this.unit().speed()}`;
             }
             range() {
-                return `Дальность: ${this.unit().range()}`;
+                return `🏹: ${this.unit().attack_range()}`;
             }
             sub() {
                 return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
@@ -9493,12 +9524,12 @@ var $;
                 return this.unit().skills().map(skill => this.Skill(skill.id()));
             }
             skill_name(id) {
-                return this.unit().skills().find(skill => skill.id() === id)?.name() ?? '';
+                return `🪄 ${this.unit().skills().find(skill => skill.id() === id)?.name()}` ?? '';
             }
             unit_panel() {
                 return [
                     this.Info(),
-                    this.active() ? this.Active_actions() : null,
+                    this.active() ? this.Panel_actions() : null,
                     this.Skill_list(),
                 ];
             }
@@ -9511,7 +9542,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/panel/panel.view.css", "[gen_app_battle_panel_unit_panel] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_panel_skill_list] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n}");
+    $mol_style_attach("gen/app/battle/panel/panel.view.css", "[gen_app_battle_panel_unit_panel] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n\tflex-direction: column;\n}\n\n[gen_app_battle_panel_skill_list] {\n\toverflow: auto;\n\tflex-wrap: nowrap;\n}");
 })($ || ($ = {}));
 //gen/app/battle/panel/-css/panel.view.css.ts
 ;
@@ -9558,6 +9589,11 @@ var $;
                 return next;
             return true;
         }
+        is_attack_range(id, next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
         cell_click(id, next) {
             if (next !== undefined)
                 return next;
@@ -9593,7 +9629,8 @@ var $;
             const obj = new this.$.$mol_view();
             obj.attr = () => ({
                 speed: this.is_speed_range(id),
-                preview: this.is_preview(id)
+                preview: this.is_preview(id),
+                attack: this.is_attack_range(id)
             });
             obj.event = () => ({
                 click: (next) => this.cell_click(id, next)
@@ -9639,6 +9676,9 @@ var $;
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "is_preview", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "is_attack_range", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "cell_click", null);
@@ -9694,7 +9734,7 @@ var $;
                 console.log(id, next);
                 const unit = this.units()
                     .find(unit => unit.id() === id_unit);
-                const unit_text = unit ? `${unit.name()} ${unit.health()}хп` : '';
+                const unit_text = unit ? `${unit.name()} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
                 return unit_text ?? '';
             }
             is_active(id, next) {
@@ -9712,6 +9752,14 @@ var $;
                 }
                 return false;
             }
+            is_attack_range(id, next) {
+                const unit = (this.active_unit());
+                if (unit) {
+                    const [cell_x, cell_y] = id.split('_');
+                    return unit.in_range(+cell_x, +cell_y, unit.attack_range());
+                }
+                return false;
+            }
         }
         __decorate([
             $mol_mem
@@ -9722,6 +9770,9 @@ var $;
         __decorate([
             $mol_mem_key
         ], $gen_app_battle_field.prototype, "is_speed_range", null);
+        __decorate([
+            $mol_mem_key
+        ], $gen_app_battle_field.prototype, "is_attack_range", null);
         $$.$gen_app_battle_field = $gen_app_battle_field;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9730,7 +9781,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit] {\n\tborder: 1px dashed green;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_cell][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}\n\n[gen_app_battle_field_cell][speed='true'] {\n\tbackground-color: rgb(122 247 120 / 5%);\n}");
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit] {\n\tborder: 2px dashed green;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_cell][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}\n\n[gen_app_battle_field_cell][speed='true'] {\n\tbackground-color: rgba(71, 180, 58, 0.2);\n}\n\n[gen_app_battle_field_cell][attack='true'][speed='true'] {\n\tbackground: linear-gradient(180deg, rgba(71, 180, 58, 0.2) 30%, rgba(255, 0, 0, 0.2) 100%);\n}\n\n[gen_app_battle_field_cell][attack='true'] {\n\tbackground: rgba(255, 0, 0, 0.2);\n}");
 })($ || ($ = {}));
 //gen/app/battle/field/-css/field.view.css.ts
 ;
@@ -9897,6 +9948,16 @@ var $;
             obj.unit = () => this.preview_unit();
             return obj;
         }
+        move_enabled(next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
+        attack_enabled(next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
         end_turn(next) {
             if (next !== undefined)
                 return next;
@@ -9920,6 +9981,9 @@ var $;
         Panel() {
             const obj = new this.$.$gen_app_battle_panel();
             obj.active = (next) => true;
+            obj.preview_cell = (next) => this.preview_cell();
+            obj.move_enabled = (next) => this.move_enabled();
+            obj.attack_enabled = (next) => this.attack_enabled();
             obj.unit = () => this.active_unit();
             obj.end_turn = (next) => this.end_turn(next);
             obj.use_move = (next) => this.move(next);
@@ -10029,6 +10093,12 @@ var $;
     ], $gen_app_battle.prototype, "Panel_preview", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle.prototype, "move_enabled", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "attack_enabled", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle.prototype, "end_turn", null);
     __decorate([
         $mol_mem
@@ -10088,6 +10158,10 @@ var $;
             source(id) {
                 return this.get_party_hero(id);
             }
+            attack_enabled(next) {
+                const [x = 0, y = 0] = this.preview_cell().split('_');
+                return Boolean(this.preview_unit() && this.active_unit().in_range(+x, +y, this.active_unit().attack_range()));
+            }
             use_attack(next) {
                 console.log('use_attack', next);
                 const targets = this.party().filter(unit => unit.id() === this.preview_unit()?.id());
@@ -10111,12 +10185,18 @@ var $;
             history() {
                 return this.battle().history().reverse().join('\n');
             }
-            move(id, next) {
-                next?.preventDefault();
-                console.log('move', id, next, this.active_unit(), this.preview_unit());
+            move_enabled(next) {
+                console.log('move_enabled', next);
                 const [x = 0, y = 0] = this.preview_cell().split('_');
                 const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
-                console.log('target_cell', target_cell, x, y);
+                const unit = this.active_unit();
+                const unit_in_range_move = unit.in_range(+x, +y, unit.speed());
+                return Boolean(!target_cell && unit && unit_in_range_move);
+            }
+            move(id, next) {
+                next?.preventDefault();
+                const [x = 0, y = 0] = this.preview_cell().split('_');
+                const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
                 const unit = this.active_unit();
                 const unit_in_range_move = unit.in_range(+x, +y, unit.speed());
                 if (!target_cell && unit && unit_in_range_move) {
@@ -10144,7 +10224,6 @@ var $;
                 }
                 this.active_unit(nextUnit);
                 this.preview_cell('');
-                this.battle().next_turn();
             }
             cell_click(next) {
                 const [x, y] = next.split('_');
@@ -13443,6 +13522,8 @@ var $;
             unit.name('Milis');
             unit.level(1000);
             unit.points(1000);
+            unit.x(3);
+            unit.y(3);
             unit.speed(3);
             unit.equipments([
                 new $gen_engine_item_equipment_all().sword()
@@ -13460,6 +13541,8 @@ var $;
             unit.name('Jin');
             unit.level(1);
             unit.points(1);
+            unit.x(2);
+            unit.y(1);
             unit.speed(1);
             unit.skills([
                 new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
@@ -13472,7 +13555,7 @@ var $;
             unit.name('Бурь');
             unit.level(333);
             unit.points(333);
-            unit.range(1);
+            unit.attack_range(2);
             unit.equipments([
                 new $gen_engine_item_equipment_all().staff(),
                 new $gen_engine_item_equipment_all().whip()

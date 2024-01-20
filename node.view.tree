@@ -528,31 +528,35 @@ $mol_text_span $mol_paragraph
 $gen_app_battle_panel $mol_view
 	unit $gen_engine_item_unit
 	active? false
+	preview_cell \
 	sub /
-		<= Empty_panel $mol_section title \Цель
-		<= Unit_panel $mol_row
+		<= Empty_panel $mol_section title \
+		<= Unit_panel $mol_view
 			sub <= unit_panel /
-				<= Info $mol_list rows /
+				<= Info $mol_row sub /
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
 					<= Attack $mol_paragraph title <= attack \
-					<= Speed $mol_paragraph title <= speed \Скорость: 0
-					<= Range $mol_paragraph title <= range \Дальность: 0
-				<= Active_actions $mol_row sub /
-					<= Action_move $mol_button_major
-						title \Движение
-						click? <=> use_move? null
-					<= Action_attack $mol_button_major
-						title \Атака
-						click? <=> use_attack? null
-					<= Action_end_turn $mol_button_major
-						title \Закончить ход
-						click? <=> end_turn? null
-				<= Skill_list $mol_row sub <= skill_list /
-					<= Skill*0 $mol_button_major
-						enabled? <= active?
-						click? <=> use_skill*? null
-						title <= skill_name* \Умение 1
+					<= Speed $mol_paragraph title <= speed \
+					<= Range $mol_paragraph title <= range \
+				<= Panel_actions $mol_view sub /
+					<= Active_actions $mol_row sub /
+						<= Action_move $mol_button_major
+							title \👟
+							enabled? <= move_enabled? null
+							click? <=> use_move? null
+						<= Action_attack $mol_button_major
+							title \⚔️
+							enabled? <= attack_enabled? null
+							click? <=> use_attack? null
+						<= Action_end_turn $mol_button_major
+							title \⏳
+							click? <=> end_turn? null
+					<= Skill_list $mol_row sub <= skill_list /
+						<= Skill*0 $mol_button_major
+							enabled? <= active?
+							click? <=> use_skill*? null
+							title <= skill_name* \
 
 $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
@@ -568,17 +572,15 @@ $gen_app_battle_field $mol_view
 					attr *
 						speed <= is_speed_range*? true
 						preview <= is_preview*? true
+						attack <= is_attack_range*? true
 					event *
 						click? <=> cell_click*? null
 					sub /
-						- <= XY* $mol_paragraph title <= xy* \0, 0
 						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
 							<= Unit* $mol_button_major
 								attr *
 									active <= is_active*? false
-									- preview <= is_preview*? true
 								title <= cell_unit_name* \
-								- click? <=> unit_preview*? null
 
 $mol_text_list $mol_text
 	auto_scroll null
@@ -636,6 +638,9 @@ $gen_app_battle $mol_book2
 						unit <= preview_unit?
 					<= Panel $gen_app_battle_panel
 						active? true
+						preview_cell? <= preview_cell?
+						move_enabled? <= move_enabled? true
+						attack_enabled? <= attack_enabled? true
 						unit <= active_unit? null
 						end_turn? <=> end_turn? null
 						use_move? <=> move? null

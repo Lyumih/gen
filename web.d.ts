@@ -1014,7 +1014,7 @@ declare namespace $ {
         xy(): number[];
         in_range(x: number, y: number, range: number): boolean;
         speed(next?: number): number;
-        range(next?: number): number;
+        attack_range(next?: number): number;
         move(x: number, y: number): void;
     }
 }
@@ -2644,6 +2644,7 @@ declare namespace $ {
     class $gen_app_battle_panel extends $mol_view {
         unit(): $gen_engine_item_unit;
         active(next?: any): boolean;
+        preview_cell(): string;
         sub(): readonly any[];
         Empty_panel(): $$.$mol_section;
         name(): string;
@@ -2656,9 +2657,11 @@ declare namespace $ {
         Speed(): $$.$mol_paragraph;
         range(): string;
         Range(): $$.$mol_paragraph;
-        Info(): $$.$mol_list;
+        Info(): $mol_row;
+        move_enabled(next?: any): any;
         use_move(next?: any): any;
         Action_move(): $mol_button_major;
+        attack_enabled(next?: any): any;
         use_attack(next?: any): any;
         Action_attack(): $mol_button_major;
         end_turn(next?: any): any;
@@ -2669,8 +2672,9 @@ declare namespace $ {
         Skill(id: any): $mol_button_major;
         skill_list(): readonly any[];
         Skill_list(): $mol_row;
+        Panel_actions(): $mol_view;
         unit_panel(): readonly any[];
-        Unit_panel(): $mol_row;
+        Unit_panel(): $mol_view;
     }
 }
 
@@ -2702,6 +2706,7 @@ declare namespace $ {
         sub(): readonly any[];
         is_speed_range(id: any, next?: any): boolean;
         is_preview(id: any, next?: any): boolean;
+        is_attack_range(id: any, next?: any): boolean;
         cell_click(id: any, next?: any): any;
         is_active(id: any, next?: any): boolean;
         cell_unit_name(id: any): string;
@@ -2727,6 +2732,7 @@ declare namespace $.$$ {
         is_active(id: string, next?: any): boolean;
         is_preview(id: any, next?: any): boolean;
         is_speed_range(id: any, next?: any): boolean;
+        is_attack_range(id: any, next?: any): boolean;
     }
 }
 
@@ -2773,6 +2779,8 @@ declare namespace $ {
         turn(): string;
         Turn(): $$.$mol_section;
         Panel_preview(): $$.$gen_app_battle_panel;
+        move_enabled(next?: any): boolean;
+        attack_enabled(next?: any): boolean;
         end_turn(next?: any): any;
         move(next?: any): any;
         use_attack(next?: any): any;
@@ -2797,10 +2805,12 @@ declare namespace $.$$ {
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
         source(id: string): $gen_engine_item_unit | undefined;
+        attack_enabled(next?: any): boolean;
         use_attack(next?: any): void;
         use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
+        move_enabled(next?: any): boolean;
         move(id: string, next?: any): void;
         active_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit;
         preview_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit | undefined;
