@@ -17,8 +17,8 @@ namespace $.$$ {
 		@$mol_mem
 		max_x_y( next?: any ) {
 			return {
-				x: 10,
-				y: 10,
+				x: 5,
+				y: 5,
 			}
 		}
 
@@ -41,16 +41,21 @@ namespace $.$$ {
 			console.log( id, next )
 			const unit = this.units()
 				.find( unit => unit.id() === id_unit )
-			return unit?.name() ?? ''
+			const unit_text = unit ? `${ unit.name() } ${ unit.health() }хп` : ''
+			return unit_text ?? ''
 		}
 
 		// @$mol_mem_key
 		unit_active( id: any, next?: any ) {
 			const [ , , id_unit ] = id.split( '_' )
-			this.active_id( id_unit ?? '' )
+			if( this.active_id() === id_unit ) {
+				this.active_id( '' )
+			} else {
+				this.active_id( id_unit ?? '' )
+			}
 		}
 
-		is_active( id: any, next?: any ): boolean {
+		is_active( id: string, next?: any ): boolean {
 			const [ , , id_unit ] = id.split( '_' )
 			return this.active_id() === id_unit
 		}

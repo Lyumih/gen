@@ -10,9 +10,10 @@ $gen_app_battle_panel $mol_view
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
 					<= Attack $mol_paragraph title <= attack \
+				<= Skill_list $mol_view sub <= skill_list /
+					<= Skill*0 $mol_button_major 
+						title <= skill_name* \Умение 1
 				<= Action_attack $mol_button_major title \Атака
-				<= Action_skill $mol_button_major title \Умение 1
-				<= Action_skill2 $mol_button_major title \Умение 2
 				<= Action_end_turn $mol_button_major 
 					title \Закончить ход
 					click? <=> end_turn? null
