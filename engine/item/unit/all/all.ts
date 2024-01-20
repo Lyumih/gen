@@ -17,6 +17,8 @@ namespace $ {
 			unit.name( 'Milis' )
 			unit.level( 1000 )
 			unit.points( 1000 )
+			unit.x( 3 )
+			unit.y( 3 )
 			unit.speed( 3 )
 			unit.equipments( [
 				new $gen_engine_item_equipment_all().sword()
@@ -41,6 +43,8 @@ namespace $ {
 			unit.name( 'Jin' )
 			unit.level( 1 )
 			unit.points( 1 )
+			unit.x( 2 )
+			unit.y( 1 )
 			unit.speed( 1 )
 			unit.skills( [
 				new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
@@ -54,7 +58,7 @@ namespace $ {
 			unit.name( 'Бурь' )
 			unit.level( 333 )
 			unit.points( 333 )
-			unit.range( 1 )
+			unit.attack_range( 2 )
 			unit.equipments( [
 				new $gen_engine_item_equipment_all().staff(),
 				new $gen_engine_item_equipment_all().whip()

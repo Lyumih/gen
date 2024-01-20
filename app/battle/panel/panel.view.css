@@ -1,6 +1,7 @@
 [gen_app_battle_panel_unit_panel] {
 	overflow: auto;
 	flex-wrap: nowrap;
+	flex-direction: column;
 }
 
 [gen_app_battle_panel_skill_list] {

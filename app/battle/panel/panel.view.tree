@@ -1,28 +1,32 @@
 $gen_app_battle_panel $mol_view
 	unit $gen_engine_item_unit
 	active? false
+	preview_cell \
 	sub /
-		<= Empty_panel $mol_section title \Цель
-		<= Unit_panel $mol_row
+		<= Empty_panel $mol_section title \
+		<= Unit_panel $mol_view
 			sub <= unit_panel /
-				<= Info $mol_list rows /
+				<= Info $mol_row sub /
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
 					<= Attack $mol_paragraph title <= attack \
-					<= Speed $mol_paragraph title <= speed \Скорость: 0
-					<= Range $mol_paragraph title <= range \Дальность: 0
-				<= Active_actions $mol_row sub /
-					<= Action_move $mol_button_major
-						title \Движение
-						click? <=> use_move? null
-					<= Action_attack $mol_button_major
-						title \Атака
-						click? <=> use_attack? null
-					<= Action_end_turn $mol_button_major
-						title \Закончить ход
-						click? <=> end_turn? null
-				<= Skill_list $mol_row sub <= skill_list /
-					<= Skill*0 $mol_button_major
-						enabled? <= active?
-						click? <=> use_skill*? null
-						title <= skill_name* \Умение 1
+					<= Speed $mol_paragraph title <= speed \
+					<= Range $mol_paragraph title <= range \
+				<= Panel_actions $mol_view sub /
+					<= Active_actions $mol_row sub /
+						<= Action_move $mol_button_major
+							title \👟
+							enabled? <= move_enabled? null
+							click? <=> use_move? null
+						<= Action_attack $mol_button_major
+							title \⚔️
+							enabled? <= attack_enabled? null
+							click? <=> use_attack? null
+						<= Action_end_turn $mol_button_major
+							title \⏳
+							click? <=> end_turn? null
+					<= Skill_list $mol_row sub <= skill_list /
+						<= Skill*0 $mol_button_major
+							enabled? <= active?
+							click? <=> use_skill*? null
+							title <= skill_name* \

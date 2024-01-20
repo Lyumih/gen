@@ -87,13 +87,13 @@ namespace $ {
 		@$mol_mem
 		speed( next?: number ) {
 			$mol_wire_solid()
-			return next ?? 2
+			return next ?? 1
 		}
 
 		@$mol_mem
-		range( next?: number ) {
+		attack_range( next?: number ) {
 			$mol_wire_solid()
-			return next ?? 3
+			return next ?? 1
 		}
 
 		move( x: number, y: number ) {

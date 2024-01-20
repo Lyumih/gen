@@ -26,6 +26,11 @@ namespace $.$$ {
 			return this.get_party_hero( id )
 		}
 
+		attack_enabled( next?: any ): boolean {
+			const [ x = 0, y = 0 ] = this.preview_cell().split( '_' )
+			return Boolean( this.preview_unit() && this.active_unit().in_range( +x, +y, this.active_unit().attack_range() ) )
+		}
+
 		@$mol_mem
 		use_attack( next?: any ) {
 			console.log( 'use_attack', next )
@@ -55,12 +60,19 @@ namespace $.$$ {
 			return this.battle().history().reverse().join( '\n' )
 		}
 
-		move( id: string, next?: any ) {
-			next?.preventDefault()
-			console.log( 'move', id, next, this.active_unit(), this.preview_unit() )
+		move_enabled( next?: any ): boolean {
+			console.log( 'move_enabled', next )
 			const [ x = 0, y = 0 ] = this.preview_cell().split( '_' )
 			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
-			console.log( 'target_cell', target_cell, x, y )
+			const unit = this.active_unit()
+			const unit_in_range_move = unit.in_range( +x, +y, unit.speed() )
+			return Boolean( !target_cell && unit && unit_in_range_move )
+		}
+
+		move( id: string, next?: any ) {
+			next?.preventDefault()
+			const [ x = 0, y = 0 ] = this.preview_cell().split( '_' )
+			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
 			const unit = this.active_unit()
 			const unit_in_range_move = unit.in_range( +x, +y, unit.speed() )
 			if( !target_cell && unit && unit_in_range_move ) {
@@ -69,6 +81,7 @@ namespace $.$$ {
 				this.battle().log_move( unit, +x, +y )
 			}
 		}
+
 		@$mol_mem
 		active_unit( next?: $gen_engine_item_unit ) {
 			return next ?? this.party()[ 0 ]
@@ -90,27 +103,14 @@ namespace $.$$ {
 				nextUnit = this.party()[ index + 1 ]
 			}
 			this.active_unit( nextUnit )
-			// this.preview_unit( undefined )
 			this.preview_cell( '' )
-			// this.active_id( nextId )
-			// this.preview_id( "" )
-			this.battle().next_turn()
+			// this.battle().next_turn()
 		}
 
 		cell_click( next?: any ) {
 			const [ x, y ] = next.split( '_' )
 			console.log( 'cell_click', next, x, y )
 			this.preview_cell( this.preview_cell() === next ? '' : next )
-
-			// const unit_in_cell = this.party().find( unit => unit.x() === +x || unit.y() === +y )
-			// if( unit_in_cell ) {
-			// 	console.log( 'unit в клетке' )
-			// 	this.preview_cell( next )
-			// 	this.preview_unit( unit_in_cell )
-			// } else {
-			// 	console.log( 'пустая клетка' )
-			// 	this.move( next )
-			// }
 		}
 
 		debug(): string {

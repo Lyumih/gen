@@ -16,7 +16,6 @@ namespace $.$$ {
 
 		cell_unit_list( id: string ): readonly any[] {
 			const [ id_x, id_y ] = id.split( '_' )
-			// console.log( id )
 			const units = this.units()
 				.filter( unit => unit.x() === Number( id_x ) && unit.y() === Number( id_y ) )
 			return units.map( unit => this.Unit( id + '_' + unit.id() ) )
@@ -33,7 +32,7 @@ namespace $.$$ {
 			console.log( id, next )
 			const unit = this.units()
 				.find( unit => unit.id() === id_unit )
-			const unit_text = unit ? `${ unit.name() } ${ unit.health() }хп` : ''
+			const unit_text = unit ? `${ unit.name() } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
 			return unit_text ?? ''
 		}
 
@@ -57,13 +56,15 @@ namespace $.$$ {
 			return false
 		}
 
-		// @$mol_mem
-		// active_id( next?: any ): string {
-		// 	console.log( 'active_id', next )
-		// 	console.log( this.unit_active( '0_0_' + this.u ) )
-		// 	return 'this.units().'
-		// }
-
+		@$mol_mem_key
+		is_attack_range( id: any, next?: any ): boolean {
+			const unit = ( this.active_unit() ) as $gen_engine_item_unit | undefined
+			if( unit ) {
+				const [ cell_x, cell_y ] = id.split( '_' )
+				return unit.in_range( +cell_x, +cell_y, unit.attack_range() )
+			}
+			return false
+		}
 
 	}
 }

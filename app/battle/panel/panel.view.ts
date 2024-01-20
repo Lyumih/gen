@@ -6,19 +6,19 @@ namespace $.$$ {
 		}
 
 		health(): string {
-			return `ХП: ${ this.unit().health() }`
+			return `❤️ ${ this.unit().health() }`
 		}
 
 		attack(): string {
-			return `Атака: ${ this.unit().attack() }`
+			return `⚔️ ${ this.unit().attack() }`
 		}
 
 		speed(): string {
-			return `Скорость: ${ this.unit().speed() }`
+			return `👟 ${ this.unit().speed() }`
 		}
 
 		range(): string {
-			return `Дальность: ${ this.unit().range() }`
+			return `🏹: ${ this.unit().attack_range() }`
 		}
 
 		sub(): readonly any[] {
@@ -30,13 +30,13 @@ namespace $.$$ {
 		}
 
 		skill_name( id: any ): string {
-			return this.unit().skills().find( skill => skill.id() === id )?.name() ?? ''
+			return `🪄 ${ this.unit().skills().find( skill => skill.id() === id )?.name() }` ?? ''
 		}
 
 		unit_panel(): readonly any[] {
 			return [
 				this.Info(),
-				this.active() ? this.Active_actions() : null,
+				this.active() ? this.Panel_actions() : null,
 				this.Skill_list(),
 			]
 		}

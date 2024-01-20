@@ -12,14 +12,12 @@ $gen_app_battle_field $mol_view
 					attr *
 						speed <= is_speed_range*? true
 						preview <= is_preview*? true
+						attack <= is_attack_range*? true
 					event *
 						click? <=> cell_click*? null
 					sub /
-						- <= XY* $mol_paragraph title <= xy* \0, 0
 						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
 							<= Unit* $mol_button_major
 								attr *
 									active <= is_active*? false
-									- preview <= is_preview*? true
 								title <= cell_unit_name* \
-								- click? <=> unit_preview*? null

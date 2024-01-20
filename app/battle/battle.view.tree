@@ -40,6 +40,9 @@ $gen_app_battle $mol_book2
 						unit <= preview_unit?
 					<= Panel $gen_app_battle_panel
 						active? true
+						preview_cell? <= preview_cell?
+						move_enabled? <= move_enabled? true
+						attack_enabled? <= attack_enabled? true
 						unit <= active_unit? null
 						end_turn? <=> end_turn? null
 						use_move? <=> move? null
