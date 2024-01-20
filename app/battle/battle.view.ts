@@ -36,16 +36,19 @@ namespace $.$$ {
 		use_attack( next?: any ) {
 			console.log( 'use_attack', next )
 			const targets = this.party().filter( unit => unit.id() === this.preview_id() )
-			this.source( this.active_id() )?.use_attack( targets, this.battle() )
+			this.active_unit()?.use_attack( targets, this.battle() )
+			this.end_turn()
 		}
 
 		@$mol_mem_key
 		use_skill( id: any, skill_id: any, next?: any ) {
-			const source = this.source( id )
-			const skill = source?.skills().find( skill => skill.id() === skill_id )
+			const source = this.active_unit()
+			const skill = source?.skills()?.find( skill => skill.id() === id )
+			console.log( 'use skill', id, skill_id, next, skill )
 			if( source && skill ) {
-				const targets = this.party().filter( unit => this.target_checked( unit.id() ) )
+				const targets = this.party().filter( unit => unit.id() === this.preview_id() )
 				source.use_skill( targets, skill, this.battle() )
+				this.end_turn()
 			}
 		}
 
@@ -64,10 +67,11 @@ namespace $.$$ {
 			const [ x = 0, y = 0 ] = id.split( '_' )
 			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
 			console.log( 'target_cell', target_cell, x, y )
-			if( !target_cell ) {
-				this.active_unit().move( +x, +y )
+			const unit = this.active_unit()
+			if( !target_cell && unit ) {
+				unit.move( +x, +y )
 				this.end_turn()
-				this.battle().log_move( this.active_unit(), +x, +y )
+				this.battle().log_move( unit, +x, +y )
 			}
 		}
 
@@ -77,7 +81,7 @@ namespace $.$$ {
 		}
 
 		@$mol_mem
-		active_unit( next?: any ) {
+		active_unit( next?: $gen_engine_item_unit ) {
 			return next ?? this.get_party_hero( this.active_id() )
 		}
 

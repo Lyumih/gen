@@ -28,8 +28,8 @@ namespace $.$$ {
 		unit_panel(): readonly any[] {
 			return [
 				this.Info(),
-				this.Skill_list(),
 				this.active() ? this.Active_actions() : null,
+				this.Skill_list(),
 			]
 		}
 	}
