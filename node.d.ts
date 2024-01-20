@@ -2934,6 +2934,11 @@ declare namespace $ {
         turn(): string;
         Turn(): $$.$mol_section;
         Active_id(): $$.$mol_paragraph;
+        Action_move(): $mol_button_major;
+        Action_attack(): $mol_button_major;
+        Action_skill(): $mol_button_major;
+        Action_skill2(): $mol_button_major;
+        Action_end_turn(): $mol_button_major;
         move(next?: any): any;
         Field(): $$.$gen_app_battle_field;
         end(): string;

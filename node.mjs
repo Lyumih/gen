@@ -9943,8 +9943,8 @@ var $;
             }
             max_x_y(next) {
                 return {
-                    x: 6,
-                    y: 6,
+                    x: 17,
+                    y: 16,
                 };
             }
             cell_unit_list(id) {
@@ -9990,7 +9990,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: darkslategrey;\n}");
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: darkslategrey;\n}");
 })($ || ($ = {}));
 //gen/app/battle/field/-css/field.view.css.ts
 ;
@@ -10064,7 +10064,7 @@ var $;
         active_id(next) {
             if (next !== undefined)
                 return next;
-            return "battle 123";
+            return "";
         }
         pages() {
             return [
@@ -10192,6 +10192,31 @@ var $;
             obj.title = () => this.active_id();
             return obj;
         }
+        Action_move() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Движение";
+            return obj;
+        }
+        Action_attack() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Атака";
+            return obj;
+        }
+        Action_skill() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Умение 1";
+            return obj;
+        }
+        Action_skill2() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Умение 2";
+            return obj;
+        }
+        Action_end_turn() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Закончить ход";
+            return obj;
+        }
         move(next) {
             if (next !== undefined)
                 return next;
@@ -10241,9 +10266,18 @@ var $;
         Battle_page() {
             const obj = new this.$.$mol_page();
             obj.title = () => "Битва";
-            obj.body = () => [
-                this.Turn(),
+            obj.tools = () => [
+                this.Turn()
+            ];
+            obj.foot = () => [
                 this.Active_id(),
+                this.Action_move(),
+                this.Action_attack(),
+                this.Action_skill(),
+                this.Action_skill2(),
+                this.Action_end_turn()
+            ];
+            obj.body = () => [
                 this.Field(),
                 this.End(),
                 this.Reward(),
@@ -10309,6 +10343,21 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Active_id", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Action_move", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Action_attack", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Action_skill", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Action_skill2", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Action_end_turn", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "move", null);
