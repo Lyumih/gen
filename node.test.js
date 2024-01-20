@@ -3910,7 +3910,7 @@ var $;
 (function ($) {
     class $gen_engine_entity extends $mol_object {
         id;
-        constructor(id = $mol_guid()) {
+        constructor(id = 'no-base-id') {
             super();
             this.id = id;
         }
@@ -4005,7 +4005,6 @@ var $;
         }
         move(x, y) {
             if (this.x() !== x || this.y() !== y) {
-                console.log('move ' + x + ' ' + y);
                 this.x(x);
                 this.y(y);
             }
@@ -4018,13 +4017,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_skill extends $gen_engine_item {
-        use(source, targets, battle) {
-        }
-    }
-    $.$gen_engine_item_skill = $gen_engine_item_skill;
+    $.$mol_action = $mol_wire_method;
 })($ || ($ = {}));
-//gen/engine/item/skill/skill.ts
+//mol/action/action.ts
 ;
 "use strict";
 var $;
@@ -4074,6 +4069,31 @@ var $;
     $.$gen_engine_battle = $gen_engine_battle;
 })($ || ($ = {}));
 //gen/engine/battle/battle.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_item_skill extends $gen_engine_item {
+        defaults() {
+            return {
+                ...super.defaults(),
+                use_plain: '',
+            };
+        }
+        use_plain(next) {
+            return this.value('use_plain', next);
+        }
+        use(source, targets, battle) {
+            console.log("USE", this.use_plain(), source, targets);
+            eval(this.use_plain());
+        }
+    }
+    __decorate([
+        $mol_action
+    ], $gen_engine_item_skill.prototype, "use", null);
+    $.$gen_engine_item_skill = $gen_engine_item_skill;
+})($ || ($ = {}));
+//gen/engine/item/skill/skill.ts
 ;
 "use strict";
 var $;
@@ -4137,13 +4157,20 @@ var $;
             $mol_wire_solid();
             return next ?? 0;
         }
+        defaults() {
+            const skill = new $gen_engine_item_skill().defaults();
+            return {
+                ...super.defaults(),
+                health: 20,
+                attack: 10,
+                skills: []
+            };
+        }
         health(next) {
-            $mol_wire_solid();
-            return next ?? 20;
+            return this.value('health', next);
         }
         attack(next) {
-            $mol_wire_solid();
-            return next ?? 10;
+            return this.value('attack', next);
         }
         use_attack(targets, battle) {
             targets.forEach(target => {
@@ -4166,8 +4193,16 @@ var $;
             return next ?? [];
         }
         skills(next) {
-            $mol_wire_solid();
-            return next ?? [];
+            const skills = next ?? [];
+            console.log('skills', next, skills[0]?.defaults_patch(), this);
+            const value = this.value('skills', next?.map(skill => skill.defaults()));
+            console.log(value);
+            return value.map(skill => $gen_engine_item_skill.make({
+                defaults_patch: () => ({
+                    ...skill
+                }),
+                id: 'restored-skill-heal'
+            }));
         }
         buffs(next) {
             $mol_wire_solid();
@@ -4196,16 +4231,7 @@ var $;
     ], $gen_engine_item_unit.prototype, "points", null);
     __decorate([
         $mol_mem
-    ], $gen_engine_item_unit.prototype, "health", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "attack", null);
-    __decorate([
-        $mol_mem
     ], $gen_engine_item_unit.prototype, "equipments", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "skills", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "buffs", null);
@@ -4545,13 +4571,6 @@ var $;
 ;
 "use strict";
 //mol/state/arg/arg.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_action = $mol_wire_method;
-})($ || ($ = {}));
-//mol/action/action.ts
 ;
 "use strict";
 var $;
@@ -10321,7 +10340,6 @@ var $;
             }
             cell_unit_name(id, next) {
                 const [id_x, id_y, id_unit] = id.split('_');
-                console.log(id, next);
                 const unit = this.units()
                     .find(unit => unit.id === id_unit);
                 const unit_text = unit ? `${unit.name() + unit.id} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
@@ -10843,19 +10861,26 @@ var $;
             return `skill-${id_root}`;
         }
         resource() {
-            return [
-                this.heal(), this.strong_attack(), this.strong_attack_and_heal(),
-                this.hyperfocal_madness_wind_generator(),
-                this.teleport(), this.gravity_shield(), this.lightning_spear(), this.lightning_bolt()
-            ];
+            return [];
         }
         heal() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                source.health(source.health() + 10);
-                battle.log(`${source.name()} исцеляется на 10 здоровья`);
-            };
-            return skill;
+            function use_me(source, targets, battle) {
+                console.log('FROM EVAL' + source);
+            }
+            const text = `
+				console.log( 'FROM EVAL' + source )
+				source.health( source.health() + 10 )
+				battle.log(source.name() + ''+ ' исцеляется на 10 здоровья' )
+			`;
+            console.log('stringify', use_me.toString());
+            return $gen_engine_item_skill.make({
+                defaults_patch: () => ({
+                    name: 'Хил',
+                    description: 'Исцеляет на 10 здоровья',
+                    use_plain: text,
+                }),
+                id: 'skill-heal-1',
+            });
         }
         strong_attack() {
             const skill = new $gen_engine_item_skill($mol_guid(4));
@@ -10963,75 +10988,54 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all() {
-            return [
-                this.sword(), this.staff(), this.whip()
-            ];
-        }
-        sword() {
-            const equipment = new $gen_engine_item_equipment();
-            return equipment;
-        }
-        staff() {
-            const equipment = new $gen_engine_item_equipment();
-            return equipment;
-        }
-        whip() {
-            const equipment = new $gen_engine_item_equipment();
-            return equipment;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_equipment_all.prototype, "all", null);
-    $.$gen_engine_item_equipment_all = $gen_engine_item_equipment_all;
-})($ || ($ = {}));
-//gen/engine/item/equipment/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $gen_engine_item_unit_all extends $mol_object {
         all() {
             return this.resource();
         }
         resource() {
             return [
-                this.milis(),
+                this.milis(), this.mario(), this.jin(),
             ];
         }
         milis() {
-            const unit = $gen_engine_item_unit.make({
+            return $gen_engine_item_unit.make({
                 defaults_patch: () => ({
                     name: 'Milis',
                     level: 1000,
                     points: 1000,
+                    x: 0,
+                    y: 0,
+                    skills: [
+                        new $gen_engine_item_skill_all().heal().defaults_patch(),
+                    ]
                 }),
                 id: 'hero-milis-1'
             });
-            return unit;
         }
         jin() {
-            const unit = new $gen_engine_item_unit();
-            unit.skills([
-                new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
-            ]);
-            return unit;
+            return $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Jin',
+                    level: 3,
+                    points: 5,
+                    x: 1,
+                    y: 3,
+                }),
+                id: 'hero-jin-2'
+            });
         }
         mario() {
-            const unit = new $gen_engine_item_unit();
-            unit.equipments([
-                new $gen_engine_item_equipment_all().staff(),
-                new $gen_engine_item_equipment_all().whip()
-            ]);
-            unit.skills([
-                new $gen_engine_item_skill_all().teleport(),
-                new $gen_engine_item_skill_all().gravity_shield(),
-                new $gen_engine_item_skill_all().lightning_spear(),
-                new $gen_engine_item_skill_all().lightning_bolt()
-            ]);
-            return unit;
+            return $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Бурь',
+                    level: 333,
+                    points: 544,
+                    attack_range: 2,
+                    x: 4,
+                    y: 2,
+                }),
+                id: 'hero-mario-3'
+            });
         }
     }
     __decorate([
@@ -11059,6 +11063,7 @@ var $;
                 this.battle_status('pending');
             }
             end_battle(next) {
+                this.party().map(unit => $mol_state_local.value(unit.id, null));
                 this.battle_status('');
             }
             turn() {
@@ -11084,9 +11089,20 @@ var $;
                 return this.party_new().map(unit => this.Party(unit.id));
             }
             party() {
-                const party_all = new $gen_engine_item_unit_all().all();
                 const party = this.party_new().filter(unit => this.party_new_checked(unit.id));
-                return party;
+                const unit = this.party_new()[0];
+                const new_unit = $gen_engine_item_unit.make({
+                    defaults_patch: () => ({
+                        ...unit.defaults(),
+                        name: 'copy'
+                    }),
+                });
+                return party.map(unit => $gen_engine_item_unit.make({
+                    defaults_patch: () => ({
+                        ...unit.defaults_patch(),
+                    }),
+                    id: 'copy-' + unit.id
+                }));
             }
             source(id) {
                 return this.party().find(unit => unit.id === id);
@@ -11096,7 +11112,6 @@ var $;
                 return Boolean(this.preview_unit() && this.active_unit().in_range(+x, +y, this.active_unit().attack_range()));
             }
             use_attack(next) {
-                console.log('use_attack', next);
                 const targets = this.party().filter(unit => unit.id === this.preview_unit()?.id);
                 this.active_unit()?.use_attack(targets, this.battle());
                 this.end_turn();
@@ -11104,7 +11119,6 @@ var $;
             use_skill(id, skill_id, next) {
                 const source = this.active_unit();
                 const skill = source?.skills()?.find(skill => skill.id === id);
-                console.log('use skill', id, skill_id, next, skill);
                 if (source && skill) {
                     const targets = this.party().filter(unit => unit.id === this.preview_unit()?.id);
                     source.use_skill(targets, skill, this.battle());
@@ -11119,7 +11133,6 @@ var $;
                 return this.battle().history().reverse().join('\n');
             }
             move_enabled(next) {
-                console.log('move_enabled', next);
                 const [x = 0, y = 0] = this.preview_cell().split('_');
                 const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
                 const unit = this.active_unit();
@@ -11147,7 +11160,6 @@ var $;
             }
             end_turn(next) {
                 const index = this.party().findIndex(unit => unit.id === this.active_unit()?.id);
-                console.log(index);
                 let nextUnit = null;
                 if (index === -1 || index === this.party().length - 1) {
                     nextUnit = this.party()[0];
@@ -11160,7 +11172,6 @@ var $;
             }
             cell_click(next) {
                 const [x, y] = next.split('_');
-                console.log('cell_click', next, x, y);
                 this.preview_cell(this.preview_cell() === next ? '' : next);
             }
             debug() {

@@ -1087,9 +1087,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $gen_engine_item_skill extends $gen_engine_item {
-        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
-    }
+    let $mol_action: typeof $mol_wire_method;
 }
 
 declare namespace $ {
@@ -1103,6 +1101,27 @@ declare namespace $ {
         log_skill(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill): void;
         log_targets_not_found(source: $gen_engine_item_unit): void;
         log_move(source: $gen_engine_item_unit, x: number, y: number): void;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_skill extends $gen_engine_item {
+        defaults(): {
+            use_plain: string;
+            id_root: string;
+            reference: string;
+            type: string;
+            part: string;
+            name: string;
+            description: string;
+            level: number;
+            x: number;
+            y: number;
+            speed: number;
+            attack_range: number;
+        };
+        use_plain(next?: string): ReturnType<this["data"]>["use_plain"];
+        use(source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
     }
 }
 
@@ -1129,8 +1148,37 @@ declare namespace $ {
 declare namespace $ {
     class $gen_engine_item_unit extends $gen_engine_item {
         points(next?: number): number;
-        health(next?: number): number;
-        attack(next?: number): number;
+        defaults(): {
+            health: number;
+            attack: number;
+            skills: {
+                use_plain: string;
+                id_root: string;
+                reference: string;
+                type: string;
+                part: string;
+                name: string;
+                description: string;
+                level: number;
+                x: number;
+                y: number;
+                speed: number;
+                attack_range: number;
+            }[];
+            id_root: string;
+            reference: string;
+            type: string;
+            part: string;
+            name: string;
+            description: string;
+            level: number;
+            x: number;
+            y: number;
+            speed: number;
+            attack_range: number;
+        };
+        health(next?: number): ReturnType<this["data"]>["health"];
+        attack(next?: number): ReturnType<this["data"]>["attack"];
         use_attack(targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
         use_skill(targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle): void;
         is_dead(): boolean;
@@ -1259,10 +1307,6 @@ declare namespace $ {
         event_click(event?: any): any;
         click(event?: any): any;
     }
-}
-
-declare namespace $ {
-    let $mol_action: typeof $mol_wire_method;
 }
 
 declare namespace $ {
@@ -3087,15 +3131,6 @@ declare namespace $ {
         gravity_shield(): $gen_engine_item_skill;
         lightning_spear(): $gen_engine_item_skill;
         lightning_bolt(): $gen_engine_item_skill;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_equipment_all extends $mol_object {
-        all(): $gen_engine_item_equipment[];
-        sword(): $gen_engine_item_equipment;
-        staff(): $gen_engine_item_equipment;
-        whip(): $gen_engine_item_equipment;
     }
 }
 
