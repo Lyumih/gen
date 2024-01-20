@@ -1,17 +1,17 @@
 namespace $ {
 	export class $gen_engine_item_unit extends $gen_engine_item {
 
-		@$mol_mem
-		name( next?: string ) {
-			$mol_wire_solid()
-			return next ?? 'Unit'
-		}
+		// @$mol_mem
+		// name( next?: string ) {
+		// 	$mol_wire_solid()
+		// 	return next ?? 'Unit'
+		// }
 
-		@$mol_mem
-		type( next?: string ) {
-			$mol_wire_solid()
-			return next ?? 'unit'
-		}
+		// @$mol_mem
+		// type( next?: string ) {
+		// 	$mol_wire_solid()
+		// 	return next ?? 'unit'
+		// }
 
 		@$mol_mem
 		points( next?: number ) {
@@ -85,6 +85,12 @@ namespace $ {
 		refill() {
 			this.health( undefined )
 			this.attack( undefined )
+		}
+
+		duplicate(): $gen_engine_item_unit {
+			const clone = new $gen_engine_item_unit
+
+			return this
 		}
 
 	}

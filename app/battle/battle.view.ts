@@ -27,24 +27,46 @@ namespace $.$$ {
 			this.battle().turn( 0 )
 		}
 
-		party_list(): readonly any[] {
-			return this.party_new().map( unit => this.Party( unit.id() ) )
-		}
-
-		party(): readonly $gen_engine_item_unit[] {
-			return this.party_new().filter( unit => this.party_new_checked( unit.id() ) )
+		@$mol_mem
+		party_new(): readonly $gen_engine_item_unit[] {
+			const party_all = new $gen_engine_item_unit_all().all()
+			return party_all
 		}
 
 		get_party_hero( id: string ) {
-			return this.party_new().find( unit => unit.id() === id )
+			return this.party_new().find( unit => unit.id === id )
 		}
 
 		party_unit_name( id: string ): string {
-			return this.get_party_hero( id )?.name() || 'no name'
+			return this.get_party_hero( id )?.name()
+				+ ' ' + this.get_party_hero( id )?.id
+				+ ' ' + this.get_party_hero( id )?.health()
+				+ ' ' + this.get_party_hero( id )?.x() || 'no name'
 		}
 
+		party_list(): readonly any[] {
+			return this.party_new().map( unit => this.Party( unit.id ) )
+		}
+
+		party(): readonly $gen_engine_item_unit[] {
+			const party_all = new $gen_engine_item_unit_all().all()
+			const party = this.party_new().filter( unit => this.party_new_checked( unit.id ) )
+			// console.log( 'party', party.length )
+			// const party_clone: $gen_engine_item_unit[] = []
+			// for( let i = 0; i < 2; i++ ) {
+			// 	console.log( 'party push', i, party[ i ] )
+			// 	// party.push( party[ i ] )
+			// 	party.push( new $gen_engine_item_unit )
+			// }
+			// return [ new $gen_engine_item_unit, new $gen_engine_item_unit ]
+			// return party.map( unit => unit.duplicate() )
+			// return party
+			return party
+		}
+
+
 		source( id: string ) {
-			return this.get_party_hero( id )
+			return this.party().find( unit => unit.id === id )
 		}
 
 		attack_enabled( next?: any ): boolean {
@@ -55,7 +77,7 @@ namespace $.$$ {
 		@$mol_mem
 		use_attack( next?: any ) {
 			console.log( 'use_attack', next )
-			const targets = this.party().filter( unit => unit.id() === this.preview_unit()?.id() )
+			const targets = this.party().filter( unit => unit.id === this.preview_unit()?.id )
 			this.active_unit()?.use_attack( targets, this.battle() )
 			this.end_turn()
 		}
@@ -63,10 +85,10 @@ namespace $.$$ {
 		@$mol_mem_key
 		use_skill( id: any, skill_id: any, next?: any ) {
 			const source = this.active_unit()
-			const skill = source?.skills()?.find( skill => skill.id() === id )
+			const skill = source?.skills()?.find( skill => skill.id === id )
 			console.log( 'use skill', id, skill_id, next, skill )
 			if( source && skill ) {
-				const targets = this.party().filter( unit => unit.id() === this.preview_unit()?.id() )
+				const targets = this.party().filter( unit => unit.id === this.preview_unit()?.id )
 				source.use_skill( targets, skill, this.battle() )
 				this.end_turn()
 			}
@@ -115,7 +137,7 @@ namespace $.$$ {
 		}
 
 		end_turn( next?: any ) {
-			const index = this.party().findIndex( unit => unit.id() === this.active_unit()?.id() )
+			const index = this.party().findIndex( unit => unit.id === this.active_unit()?.id )
 			console.log( index )
 			let nextUnit = null
 			if( index === -1 || index === this.party().length - 1 ) {

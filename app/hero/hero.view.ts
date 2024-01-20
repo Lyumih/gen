@@ -3,11 +3,11 @@ namespace $.$$ {
 
 		@$mol_mem
 		party_list() {
-			return this.party().map( unit => this.Party( unit.id() ) )
+			return this.party().map( unit => this.Party( unit.id ) )
 		}
 
 		get_party_hero( id: string ) {
-			return this.party().find( unit => unit.id() === id )
+			return this.party().find( unit => unit.id === id )
 		}
 
 		party_hero_name( id: string ): string {
@@ -20,16 +20,16 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero() {
-			return this.party().find( unit => unit.id() === this.active_hero() )
+			return this.party().find( unit => unit.id === this.active_hero() )
 		}
 
 		@$mol_mem
 		active_hero( next?: any ): string {
-			return next ?? this.party()[ 0 ]?.id() ?? ''
+			return next ?? this.party()[ 0 ]?.id ?? ''
 		}
 
 		is_active_hero( id: string ) {
-			return this.hero()?.id() === id
+			return this.hero()?.id === id
 		}
 
 		name(): string {
@@ -45,11 +45,11 @@ namespace $.$$ {
 		}
 
 		equipment_list(): readonly any[] {
-			return this.hero()?.equipments()?.map( item => this.Equipment( item.id() ) ) || []
+			return this.hero()?.equipments()?.map( item => this.Equipment( item.id ) ) || []
 		}
 
 		get_equipment( id: string ) {
-			return this.hero()?.equipments()?.find( item => item.id() === id )
+			return this.hero()?.equipments()?.find( item => item.id === id )
 		}
 
 		equipment_unequip( id: any, next?: any ) {
@@ -61,11 +61,11 @@ namespace $.$$ {
 		}
 
 		skill_list(): readonly any[] {
-			return this.hero()?.skills()?.map( skill => this.Skill( skill.id() ) ) || []
+			return this.hero()?.skills()?.map( skill => this.Skill( skill.id ) ) || []
 		}
 
 		get_skill( id?: string ) {
-			return this.hero()?.skills()?.find( skill => skill.id() === id )
+			return this.hero()?.skills()?.find( skill => skill.id === id )
 		}
 
 		skill_level_up( id: string, next?: any ) {
@@ -85,11 +85,11 @@ namespace $.$$ {
 		}
 
 		inventory_list(): readonly any[] {
-			return this.hero()?.inventory().map( item => this.Inventory_item( item.id() ) ) || []
+			return this.hero()?.inventory().map( item => this.Inventory_item( item.id ) ) || []
 		}
 
 		get_inventory_item( id: string ) {
-			return this.hero()?.inventory().find( item => item.id() === id )
+			return this.hero()?.inventory().find( item => item.id === id )
 		}
 
 		inventory_item_sell( id: any, next?: any ) {
@@ -101,11 +101,11 @@ namespace $.$$ {
 		}
 
 		shop_list(): readonly any[] {
-			return this.hero()?.shop().map( item => this.Shop_item( item.id() ) ) || []
+			return this.hero()?.shop().map( item => this.Shop_item( item.id ) ) || []
 		}
 
 		get_shop_item( id: string ) {
-			return this.hero()?.shop().find( item => item.id() === id )
+			return this.hero()?.shop().find( item => item.id === id )
 		}
 
 		shop_item_bue( id: any, next?: any ) {

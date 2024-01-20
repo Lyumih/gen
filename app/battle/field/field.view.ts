@@ -18,7 +18,7 @@ namespace $.$$ {
 			const [ id_x, id_y ] = id.split( '_' )
 			const units = this.units()
 				.filter( unit => unit.x() === Number( id_x ) && unit.y() === Number( id_y ) )
-			return units.map( unit => this.Unit( id + '_' + unit.id() ) )
+			return units.map( unit => this.Unit( id + '_' + unit.id ) )
 		}
 
 		xy( id: any ): string {
@@ -31,15 +31,15 @@ namespace $.$$ {
 			const [ id_x, id_y, id_unit ] = id.split( '_' )
 			console.log( id, next )
 			const unit = this.units()
-				.find( unit => unit.id() === id_unit )
-			const unit_text = unit ? `${ unit.name() } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
+				.find( unit => unit.id === id_unit )
+			const unit_text = unit ? `${ unit.name() + unit.id } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
 			return unit_text ?? ''
 		}
 
 
 		is_active( id: string, next?: any ): boolean {
 			const [ , , id_unit ] = id.split( '_' )
-			return this.active_unit().id() === id_unit
+			return this.active_unit().id === id_unit
 		}
 
 		is_preview( id: any, next?: any ): boolean {

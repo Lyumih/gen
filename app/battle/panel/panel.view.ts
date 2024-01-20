@@ -26,11 +26,11 @@ namespace $.$$ {
 		}
 
 		skill_list(): readonly any[] {
-			return this.unit().skills().map( skill => this.Skill( skill.id() ) )
+			return this.unit().skills().map( skill => this.Skill( skill.id ) )
 		}
 
 		skill_name( id: any ): string {
-			return `🪄 ${ this.unit().skills().find( skill => skill.id() === id )?.name() }` ?? ''
+			return `🪄 ${ this.unit().skills().find( skill => skill.id === id )?.name() }` ?? ''
 		}
 
 		unit_panel(): readonly any[] {

@@ -101,6 +101,7 @@ namespace $.$$ {
 				const new_point = this.find_empty_cell( id_y_x )
 				if( new_point ) {
 					const new_talent = $mol_array_lottery( new $gen_engine_item_talent_all().all() )
+					// new_talent.base_id = '123'
 					new_talent.set_x_y( new_point[ 0 ], new_point[ 1 ] )
 					this.common_talents( [ ...this.common_talents(), new_talent ] )
 				}

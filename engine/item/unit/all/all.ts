@@ -8,26 +8,35 @@ namespace $ {
 
 		resource() {
 			return [
-				this.milis(), this.mario(), this.jin(),
+				// this.milis(), this.mario(), this.jin(),
+				this.milis(),
 			]
 		}
 
 		milis() {
-			const unit = new $gen_engine_item_unit()
-			unit.name( 'Milis' )
-			unit.level( 1000 )
-			unit.points( 1000 )
-			unit.x( 3 )
-			unit.y( 3 )
-			unit.speed( 3 )
-			unit.equipments( [
-				new $gen_engine_item_equipment_all().sword()
-			] )
-			unit.skills( [
-				new $gen_engine_item_skill_all().heal(),
-				new $gen_engine_item_skill_all().strong_attack(),
-				new $gen_engine_item_skill_all().strong_attack_and_heal()
-			] )
+			const unit = $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					name: 'Milis',
+					level: 1000,
+					points: 1000,
+				} ),
+				id: 'hero-milis-1'
+			} )
+			// const unit = new $gen_engine_item_unit( '123' )
+			// unit.name( 'Milis' )
+			// unit.level( 1000 )
+			// unit.points( 1000 )
+			// unit.x( 3 )
+			// unit.y( 3 )
+			// unit.speed( 3 )
+			// unit.equipments( [
+			// 	new $gen_engine_item_equipment_all().sword()
+			// ] )
+			// unit.skills( [
+			// 	new $gen_engine_item_skill_all().heal(),
+			// 	new $gen_engine_item_skill_all().strong_attack(),
+			// 	new $gen_engine_item_skill_all().strong_attack_and_heal()
+			// ] )
 			return unit
 		}
 
@@ -39,13 +48,13 @@ namespace $ {
 		 */
 		jin() {
 			const unit = new $gen_engine_item_unit()
-			unit.reference( 'https://t.me/nin_jin' )
-			unit.name( 'Jin' )
-			unit.level( 1 )
-			unit.points( 1 )
-			unit.x( 2 )
-			unit.y( 1 )
-			unit.speed( 1 )
+			// unit.reference( 'https://t.me/nin_jin' )
+			// unit.name( 'Jin' )
+			// unit.level( 1 )
+			// unit.points( 1 )
+			// unit.x( 2 )
+			// unit.y( 1 )
+			// unit.speed( 1 )
 			unit.skills( [
 				new $gen_engine_item_skill_all().hyperfocal_madness_wind_generator()
 			] )
@@ -54,11 +63,11 @@ namespace $ {
 
 		mario() {
 			const unit = new $gen_engine_item_unit()
-			unit.reference( 'https://t.me/fkusnyahin' )
-			unit.name( 'Бурь' )
-			unit.level( 333 )
-			unit.points( 333 )
-			unit.attack_range( 2 )
+			// unit.reference( 'https://t.me/fkusnyahin' )
+			// unit.name( 'Бурь' )
+			// unit.level( 333 )
+			// unit.points( 333 )
+			// unit.attack_range( 2 )
 			unit.equipments( [
 				new $gen_engine_item_equipment_all().staff(),
 				new $gen_engine_item_equipment_all().whip()

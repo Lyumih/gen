@@ -6,7 +6,7 @@ namespace $.$$ {
 		}
 
 		id(): string {
-			return this.unit()?.id()
+			return this.unit()?.id
 		}
 
 		xy(): string {
@@ -34,15 +34,15 @@ namespace $.$$ {
 		}
 
 		skill_list(): readonly any[] {
-			return this.skills()?.map( skill => this.Skill( skill.id() ) ) ?? []
+			return this.skills()?.map( skill => this.Skill( skill.id ) ) ?? []
 		}
 
 		get_skill( id: string ) {
-			return this.skills().find( skill => skill.id() === id )
+			return this.skills().find( skill => skill.id === id )
 		}
 
 		skill_name( id: any ): string {
-			return `${ this.get_skill( id )?.name() }: ${ this.get_skill( id )?.id() }` || 'no name'
+			return `${ this.get_skill( id )?.name() }: ${ this.get_skill( id )?.id }` || 'no name'
 		}
 
 		skill_description( id: any ): string {

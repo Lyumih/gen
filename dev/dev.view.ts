@@ -22,11 +22,11 @@ namespace $.$$ {
 
 		@$mol_mem
 		all_skill_list(): readonly any[] {
-			return this.skills().all().map( skill => this.Skill( skill.id() ) )
+			return this.skills().all().map( skill => this.Skill( skill.id ) )
 		}
 
 		get_skill( id: string ) {
-			return this.skills().all().find( skill => skill.id() === id )
+			return this.skills().all().find( skill => skill.id === id )
 		}
 
 		skill_name( id: any ): string {
