@@ -1011,6 +1011,8 @@ declare namespace $ {
         level(next?: number): number;
         x(next?: number): number;
         y(next?: number): number;
+        speed(next?: number): number;
+        range(next?: number): number;
         move(x: number, y: number): void;
     }
 }
@@ -2648,7 +2650,13 @@ declare namespace $ {
         Health(): $$.$mol_paragraph;
         attack(): string;
         Attack(): $$.$mol_paragraph;
+        speed(): string;
+        Speed(): $$.$mol_paragraph;
+        range(): string;
+        Range(): $$.$mol_paragraph;
         Info(): $$.$mol_list;
+        use_move(next?: any): any;
+        Action_move(): $mol_button_major;
         use_attack(next?: any): any;
         Action_attack(): $mol_button_major;
         end_turn(next?: any): any;
@@ -2669,6 +2677,8 @@ declare namespace $.$$ {
         name(): string;
         health(): string;
         attack(): string;
+        speed(): string;
+        range(): string;
         sub(): readonly any[];
         skill_list(): readonly any[];
         skill_name(id: any): string;
@@ -2684,14 +2694,15 @@ declare namespace $ {
         units(): readonly $gen_engine_item_unit[];
         max_x(): number;
         max_y(): number;
-        active_id(next?: any): string;
-        preview_id(next?: any): string;
+        active_unit(next?: any): any;
+        preview_unit(next?: any): any;
+        preview_cell(next?: any): string;
         sub(): readonly any[];
+        is_speed_range(id: any, next?: any): boolean;
+        is_preview(id: any, next?: any): boolean;
         cell_click(id: any, next?: any): any;
         is_active(id: any, next?: any): boolean;
-        is_preview(id: any, next?: any): boolean;
         cell_unit_name(id: any): string;
-        unit_preview(id: any, next?: any): any;
         Unit(id: any): $mol_button_major;
         cell_unit_list(id: any): readonly any[];
         Cell_unit_list(id: any): $mol_view;
@@ -2711,7 +2722,6 @@ declare namespace $.$$ {
         cell_unit_list(id: string): readonly any[];
         xy(id: any): string;
         cell_unit_name(id: string, next?: any): string;
-        unit_preview(id: any, next?: any): void;
         is_active(id: string, next?: any): boolean;
         is_preview(id: any, next?: any): boolean;
     }
@@ -2742,8 +2752,9 @@ declare namespace $ {
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
         party(): readonly $gen_engine_item_unit[];
-        active_id(next?: any): string;
-        preview_id(next?: any): string;
+        active_unit(next?: any): any;
+        preview_unit(next?: any): any;
+        preview_cell(next?: any): string;
         pages(): readonly any[];
         party_unit_name(id: any): string;
         Party_unit(id: any): $mol_button_major;
@@ -2758,15 +2769,16 @@ declare namespace $ {
         History_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
-        active_unit(next?: any): any;
         end_turn(next?: any): any;
+        move(next?: any): any;
         use_attack(next?: any): any;
         use_skill(id: any, next?: any): any;
         Panel(): $$.$gen_app_battle_panel;
-        preview_unit(next?: any): $gen_engine_item_unit;
         Panel_preview(): $$.$gen_app_battle_panel;
         Panels(): $$.$mol_list;
-        move(next?: any): any;
+        debug(): string;
+        Debug(): $$.$mol_paragraph;
+        cell_click(next?: any): any;
         Field(): $$.$gen_app_battle_field;
         end(): string;
         End(): $$.$mol_paragraph;
@@ -2782,16 +2794,16 @@ declare namespace $.$$ {
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
         source(id: string): $gen_engine_item_unit | undefined;
-        target_checked(id: string, next?: boolean): boolean;
         use_attack(next?: any): void;
         use_skill(id: any, skill_id: any, next?: any): void;
         get_reward(next?: any): void;
         history(): string;
         move(id: string, next?: any): void;
-        active_id(next?: any): string;
-        active_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit | undefined;
-        preview_unit(next?: any): any;
+        active_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit;
+        preview_unit(next?: $gen_engine_item_unit): $gen_engine_item_unit | undefined;
         end_turn(next?: any): void;
+        cell_click(next?: any): void;
+        debug(): string;
     }
 }
 

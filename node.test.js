@@ -3810,6 +3810,14 @@ var $;
             $mol_wire_solid();
             return next ?? 0;
         }
+        speed(next) {
+            $mol_wire_solid();
+            return next ?? 2;
+        }
+        range(next) {
+            $mol_wire_solid();
+            return next ?? 3;
+        }
         move(x, y) {
             if (this.x() !== x || this.y() !== y) {
                 console.log('move ' + x + ' ' + y);
@@ -3851,6 +3859,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "y", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "speed", null);
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item.prototype, "range", null);
     $.$gen_engine_item = $gen_engine_item;
 })($ || ($ = {}));
 //gen/engine/item/item.ts
@@ -9274,13 +9288,42 @@ var $;
             obj.title = () => this.attack();
             return obj;
         }
+        speed() {
+            return "Скорость: 0";
+        }
+        Speed() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.speed();
+            return obj;
+        }
+        range() {
+            return "Дальность: 0";
+        }
+        Range() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.range();
+            return obj;
+        }
         Info() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
                 this.Name(),
                 this.Health(),
-                this.Attack()
+                this.Attack(),
+                this.Speed(),
+                this.Range()
             ];
+            return obj;
+        }
+        use_move(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Action_move() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Движение";
+            obj.click = (next) => this.use_move(next);
             return obj;
         }
         use_attack(next) {
@@ -9291,7 +9334,6 @@ var $;
         Action_attack() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Атака";
-            obj.enabled = (next) => this.active();
             obj.click = (next) => this.use_attack(next);
             return obj;
         }
@@ -9309,6 +9351,7 @@ var $;
         Active_actions() {
             const obj = new this.$.$mol_row();
             obj.sub = () => [
+                this.Action_move(),
                 this.Action_attack(),
                 this.Action_end_turn()
             ];
@@ -9372,7 +9415,19 @@ var $;
     ], $gen_app_battle_panel.prototype, "Attack", null);
     __decorate([
         $mol_mem
+    ], $gen_app_battle_panel.prototype, "Speed", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Range", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_battle_panel.prototype, "Info", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "use_move", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_panel.prototype, "Action_move", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle_panel.prototype, "use_attack", null);
@@ -9419,6 +9474,12 @@ var $;
             attack() {
                 return `Атака: ${this.unit().attack()}`;
             }
+            speed() {
+                return `Скорость: ${this.unit().speed()}`;
+            }
+            range() {
+                return `Дальность: ${this.unit().range()}`;
+            }
             sub() {
                 return [this.unit() ? this.Unit_panel() : this.Empty_panel()];
             }
@@ -9461,12 +9522,17 @@ var $;
         max_y() {
             return 20;
         }
-        active_id(next) {
+        active_unit(next) {
             if (next !== undefined)
                 return next;
-            return "";
+            return null;
         }
-        preview_id(next) {
+        preview_unit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        preview_cell(next) {
             if (next !== undefined)
                 return next;
             return "";
@@ -9475,6 +9541,16 @@ var $;
             return [
                 this.X()
             ];
+        }
+        is_speed_range(id, next) {
+            if (next !== undefined)
+                return next;
+            return true;
+        }
+        is_preview(id, next) {
+            if (next !== undefined)
+                return next;
+            return true;
         }
         cell_click(id, next) {
             if (next !== undefined)
@@ -9486,27 +9562,15 @@ var $;
                 return next;
             return false;
         }
-        is_preview(id, next) {
-            if (next !== undefined)
-                return next;
-            return true;
-        }
         cell_unit_name(id) {
             return "";
-        }
-        unit_preview(id, next) {
-            if (next !== undefined)
-                return next;
-            return null;
         }
         Unit(id) {
             const obj = new this.$.$mol_button_major();
             obj.attr = () => ({
-                active: this.is_active(id),
-                preview: this.is_preview(id)
+                active: this.is_active(id)
             });
             obj.title = () => this.cell_unit_name(id);
-            obj.click = (next) => this.unit_preview(id, next);
             return obj;
         }
         cell_unit_list(id) {
@@ -9521,6 +9585,10 @@ var $;
         }
         Cell(id) {
             const obj = new this.$.$mol_view();
+            obj.attr = () => ({
+                speed: this.is_speed_range(id),
+                preview: this.is_preview(id)
+            });
             obj.event = () => ({
                 click: (next) => this.cell_click(id, next)
             });
@@ -9552,22 +9620,25 @@ var $;
     }
     __decorate([
         $mol_mem
-    ], $gen_app_battle_field.prototype, "active_id", null);
+    ], $gen_app_battle_field.prototype, "active_unit", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle_field.prototype, "preview_id", null);
+    ], $gen_app_battle_field.prototype, "preview_unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "preview_cell", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "is_speed_range", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "is_preview", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "cell_click", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "is_active", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "is_preview", null);
-    __decorate([
-        $mol_mem_key
-    ], $gen_app_battle_field.prototype, "unit_preview", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "Unit", null);
@@ -9620,23 +9691,13 @@ var $;
                 const unit_text = unit ? `${unit.name()} ${unit.health()}хп` : '';
                 return unit_text ?? '';
             }
-            unit_preview(id, next) {
-                console.log('unit_preview', id);
-                const [, , id_unit] = id.split('_');
-                if (this.preview_id() === id_unit) {
-                    this.preview_id('');
-                }
-                else {
-                    this.preview_id(id_unit ?? '');
-                }
-            }
             is_active(id, next) {
                 const [, , id_unit] = id.split('_');
-                return this.active_id() === id_unit;
+                return this.active_unit().id() === id_unit;
             }
             is_preview(id, next) {
-                const [, , id_unit] = id.split('_');
-                return this.preview_id() === id_unit;
+                const [x, y, id_unit] = id.split('_');
+                return this.preview_cell() === id;
             }
         }
         __decorate([
@@ -9653,7 +9714,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit] {\n\tborder: 1px dashed green;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_unit][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}");
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_y] {\n\tflex-wrap: nowrap;\n}\n\n[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit] {\n\tborder: 1px dashed green;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: peru;\n}\n\n[gen_app_battle_field_cell][preview='true'] {\n\tbox-shadow: inset 0px 0px 10px 3px red;\n}\n\n[gen_app_battle_field_cell][speed='true'] {\n\tbackground-color: rgb(122 247 120 / 5%);\n}");
 })($ || ($ = {}));
 //gen/app/battle/field/-css/field.view.css.ts
 ;
@@ -9724,12 +9785,17 @@ var $;
         party() {
             return [];
         }
-        active_id(next) {
+        active_unit(next) {
             if (next !== undefined)
                 return next;
-            return "";
+            return null;
         }
-        preview_id(next) {
+        preview_unit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        preview_cell(next) {
             if (next !== undefined)
                 return next;
             return "";
@@ -9810,12 +9876,12 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
-        active_unit(next) {
+        end_turn(next) {
             if (next !== undefined)
                 return next;
             return null;
         }
-        end_turn(next) {
+        move(next) {
             if (next !== undefined)
                 return next;
             return null;
@@ -9835,14 +9901,9 @@ var $;
             obj.active = (next) => true;
             obj.unit = () => this.active_unit();
             obj.end_turn = (next) => this.end_turn(next);
+            obj.use_move = (next) => this.move(next);
             obj.use_attack = (next) => this.use_attack(next);
             obj.use_skill = (id, next) => this.use_skill(id, next);
-            return obj;
-        }
-        preview_unit(next) {
-            if (next !== undefined)
-                return next;
-            const obj = new this.$.$gen_engine_item_unit();
             return obj;
         }
         Panel_preview() {
@@ -9858,7 +9919,15 @@ var $;
             ];
             return obj;
         }
-        move(next) {
+        debug() {
+            return "Debug";
+        }
+        Debug() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.debug();
+            return obj;
+        }
+        cell_click(next) {
             if (next !== undefined)
                 return next;
             return null;
@@ -9866,9 +9935,10 @@ var $;
         Field() {
             const obj = new this.$.$gen_app_battle_field();
             obj.units = () => this.party();
-            obj.active_id = (next) => this.active_id(next);
-            obj.preview_id = (next) => this.preview_id(next);
-            obj.cell_click = (next) => this.move(next);
+            obj.active_unit = (next) => this.active_unit(next);
+            obj.preview_unit = (next) => this.preview_unit(next);
+            obj.preview_cell = (next) => this.preview_cell();
+            obj.cell_click = (next) => this.cell_click(next);
             return obj;
         }
         end() {
@@ -9889,6 +9959,7 @@ var $;
                 this.Panels()
             ];
             obj.body = () => [
+                this.Debug(),
                 this.Field(),
                 this.End()
             ];
@@ -9903,10 +9974,13 @@ var $;
     ], $gen_app_battle.prototype, "battle", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "active_id", null);
+    ], $gen_app_battle.prototype, "active_unit", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "preview_id", null);
+    ], $gen_app_battle.prototype, "preview_unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "preview_cell", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "Party_unit", null);
@@ -9936,10 +10010,10 @@ var $;
     ], $gen_app_battle.prototype, "Turn", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "active_unit", null);
+    ], $gen_app_battle.prototype, "end_turn", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "end_turn", null);
+    ], $gen_app_battle.prototype, "move", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "use_attack", null);
@@ -9951,16 +10025,16 @@ var $;
     ], $gen_app_battle.prototype, "Panel", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "preview_unit", null);
-    __decorate([
-        $mol_mem
     ], $gen_app_battle.prototype, "Panel_preview", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Panels", null);
     __decorate([
         $mol_mem
-    ], $gen_app_battle.prototype, "move", null);
+    ], $gen_app_battle.prototype, "Debug", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "cell_click", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Field", null);
@@ -9998,12 +10072,9 @@ var $;
             source(id) {
                 return this.get_party_hero(id);
             }
-            target_checked(id, next) {
-                return next ?? false;
-            }
             use_attack(next) {
                 console.log('use_attack', next);
-                const targets = this.party().filter(unit => unit.id() === this.preview_id());
+                const targets = this.party().filter(unit => unit.id() === this.preview_unit()?.id());
                 this.active_unit()?.use_attack(targets, this.battle());
                 this.end_turn();
             }
@@ -10012,7 +10083,7 @@ var $;
                 const skill = source?.skills()?.find(skill => skill.id() === id);
                 console.log('use skill', id, skill_id, next, skill);
                 if (source && skill) {
-                    const targets = this.party().filter(unit => unit.id() === this.preview_id());
+                    const targets = this.party().filter(unit => unit.id() === this.preview_unit()?.id());
                     source.use_skill(targets, skill, this.battle());
                     this.end_turn();
                 }
@@ -10026,8 +10097,8 @@ var $;
             }
             move(id, next) {
                 next?.preventDefault();
-                console.log('move', id, next, this.preview_id(), this.active_id());
-                const [x = 0, y = 0] = id.split('_');
+                console.log('move', id, next, this.active_unit(), this.preview_unit());
+                const [x = 0, y = 0] = this.preview_cell().split('_');
                 const target_cell = this.party().some(unit => unit.x() === +x && unit.y() === +y);
                 console.log('target_cell', target_cell, x, y);
                 const unit = this.active_unit();
@@ -10037,42 +10108,42 @@ var $;
                     this.battle().log_move(unit, +x, +y);
                 }
             }
-            active_id(next) {
-                return next ?? this.party()[0].id();
-            }
             active_unit(next) {
-                return next ?? this.get_party_hero(this.active_id());
+                return next ?? this.party()[0];
             }
             preview_unit(next) {
-                return next ?? this.get_party_hero(this.preview_id());
+                const [x, y] = this.preview_cell().split('_');
+                return next ?? this.party().find(unit => unit.x() === +x && unit.y() === +y);
             }
             end_turn(next) {
-                const index = this.party().findIndex(unit => unit.id() === this.active_id());
+                const index = this.party().findIndex(unit => unit.id() === this.active_unit()?.id());
                 console.log(index);
-                let nextId = '';
+                let nextUnit = null;
                 if (index === -1 || index === this.party().length - 1) {
-                    nextId = this.party()[0].id();
+                    nextUnit = this.party()[0];
                 }
                 else {
-                    nextId = this.party()[index + 1].id();
+                    nextUnit = this.party()[index + 1];
                 }
-                this.active_id(nextId);
-                this.preview_id("");
+                this.active_unit(nextUnit);
+                this.preview_cell('');
                 this.battle().next_turn();
             }
+            cell_click(next) {
+                const [x, y] = next.split('_');
+                console.log('cell_click', next, x, y);
+                this.preview_cell(this.preview_cell() === next ? '' : next);
+            }
+            debug() {
+                return '' + this.preview_unit()?.x() + this.preview_unit()?.y() + this.preview_cell();
+            }
         }
-        __decorate([
-            $mol_mem_key
-        ], $gen_app_battle.prototype, "target_checked", null);
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "use_attack", null);
         __decorate([
             $mol_mem_key
         ], $gen_app_battle.prototype, "use_skill", null);
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "active_id", null);
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "active_unit", null);

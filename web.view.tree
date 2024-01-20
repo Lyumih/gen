@@ -536,10 +536,14 @@ $gen_app_battle_panel $mol_view
 					<= Name $mol_paragraph title <= name \
 					<= Health $mol_paragraph title <= health \
 					<= Attack $mol_paragraph title <= attack \
+					<= Speed $mol_paragraph title <= speed \Скорость: 0
+					<= Range $mol_paragraph title <= range \Дальность: 0
 				<= Active_actions $mol_row sub /
+					<= Action_move $mol_button_major
+						title \Движение
+						click? <=> use_move? null
 					<= Action_attack $mol_button_major
 						title \Атака
-						enabled? <= active?
 						click? <=> use_attack? null
 					<= Action_end_turn $mol_button_major
 						title \Закончить ход
@@ -554,12 +558,16 @@ $gen_app_battle_field $mol_view
 	units /$gen_engine_item_unit
 	max_x 20
 	max_y 20
-	active_id? \
-	preview_id? \
+	active_unit? null
+	preview_unit? null
+	preview_cell? \
 	sub /
 		<= X $mol_list rows <= x_list /
 			<= Y*0 $mol_row sub <= y_list* /
 				<= Cell*0_0 $mol_view
+					attr *
+						speed <= is_speed_range*? true
+						preview <= is_preview*? true
 					event *
 						click? <=> cell_click*? null
 					sub /
@@ -568,9 +576,9 @@ $gen_app_battle_field $mol_view
 							<= Unit* $mol_button_major
 								attr *
 									active <= is_active*? false
-									preview <= is_preview*? true
+									- preview <= is_preview*? true
 								title <= cell_unit_name* \
-								click? <=> unit_preview*? null
+								- click? <=> unit_preview*? null
 
 $mol_text_list $mol_text
 	auto_scroll null
@@ -591,8 +599,9 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	active_id? \
-	preview_id? \
+	active_unit? null
+	preview_unit? null
+	preview_cell? \
 	pages /
 		<= Party_page $mol_page
 			title \Группа
@@ -627,16 +636,19 @@ $gen_app_battle $mol_book2
 						active? true
 						unit <= active_unit? null
 						end_turn? <=> end_turn? null
+						use_move? <=> move? null
 						use_attack? <=> use_attack? null
 						use_skill*? <=> use_skill*? null
 					<= Panel_preview $gen_app_battle_panel
-						unit <= preview_unit? $gen_engine_item_unit
+						unit <= preview_unit?
 			body /
+				<= Debug $mol_paragraph title <= debug \Debug
 				<= Field $gen_app_battle_field
 					units <= party
-					active_id? <=> active_id?
-					preview_id? <=> preview_id?
-					cell_click? <=> move? null
+					active_unit? <=> active_unit?
+					preview_unit? <=> preview_unit?
+					preview_cell? <= preview_cell?
+					cell_click? <=> cell_click? null
 				<= End $mol_paragraph title <= end \
 				- <= Reward $mol_button_major
 					enabled <= is_game_end false
