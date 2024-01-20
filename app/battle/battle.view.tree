@@ -36,6 +36,8 @@ $gen_app_battle $mol_book2
 				<= Turn $mol_section title <= turn \Ход: 0
 			foot /
 				<= Panels $mol_list rows /
+					<= Panel_preview $gen_app_battle_panel
+						unit <= preview_unit?
 					<= Panel $gen_app_battle_panel
 						active? true
 						unit <= active_unit? null
@@ -43,8 +45,6 @@ $gen_app_battle $mol_book2
 						use_move? <=> move? null
 						use_attack? <=> use_attack? null
 						use_skill*? <=> use_skill*? null
-					<= Panel_preview $gen_app_battle_panel
-						unit <= preview_unit?
 			body /
 				<= Debug $mol_paragraph title <= debug \Debug
 				<= Field $gen_app_battle_field

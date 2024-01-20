@@ -37,16 +37,6 @@ namespace $.$$ {
 			return unit_text ?? ''
 		}
 
-		// @$mol_mem_key
-		// unit_preview( id: any, next?: any ) {
-		// 	console.log( 'unit_preview', id )
-		// 	const [ , , id_unit ] = id.split( '_' )
-		// 	if( this.active_unit()?.id() === id_unit ) {
-		// 		this.preview_unit( undefined )
-		// 	} else {
-		// 		this.preview_id( id_unit ?? '' )
-		// 	}
-		// }
 
 		is_active( id: string, next?: any ): boolean {
 			const [ , , id_unit ] = id.split( '_' )
@@ -54,18 +44,18 @@ namespace $.$$ {
 		}
 
 		is_preview( id: any, next?: any ): boolean {
-			// console.log( 'is_preview', id, next, this.preview_unit()?.x() )
-			const [ x, y, id_unit ] = id.split( '_' )
-			// return this.preview_unit().x() && this.preview_unit().y()
 			return this.preview_cell() === id
 		}
 
-		// is_speed_range( id: any, next?: any ): boolean {
-		// 	const [ x, y ] = id.split( '_' )
-		// 	console.log( 'is speed range', id, next, x, y )
-		// 	const in_range =
-		// 	return false
-		// }
+		@$mol_mem_key
+		is_speed_range( id: any, next?: any ): boolean {
+			const unit = ( this.preview_unit() || this.active_unit() ) as $gen_engine_item_unit | undefined
+			if( unit ) {
+				const [ cell_x, cell_y ] = id.split( '_' )
+				return unit.in_range( +cell_x, +cell_y, unit.speed() )
+			}
+			return false
+		}
 
 		// @$mol_mem
 		// active_id( next?: any ): string {

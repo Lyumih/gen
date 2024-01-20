@@ -70,11 +70,18 @@ namespace $ {
 			return next ?? 0
 		}
 
-
 		@$mol_mem
 		y( next?: number ) {
 			$mol_wire_solid()
 			return next ?? 0
+		}
+
+		xy() {
+			return [ this.x(), this.y() ]
+		}
+
+		in_range( x: number, y: number, range: number ) {
+			return Math.abs( this.x() - x ) <= range && Math.abs( this.y() - y ) <= range
 		}
 
 		@$mol_mem

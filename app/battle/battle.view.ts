@@ -62,18 +62,13 @@ namespace $.$$ {
 			const target_cell = this.party().some( unit => unit.x() === +x && unit.y() === +y )
 			console.log( 'target_cell', target_cell, x, y )
 			const unit = this.active_unit()
-			if( !target_cell && unit ) {
+			const unit_in_range_move = unit.in_range( +x, +y, unit.speed() )
+			if( !target_cell && unit && unit_in_range_move ) {
 				unit.move( +x, +y )
 				this.end_turn()
 				this.battle().log_move( unit, +x, +y )
 			}
 		}
-
-		// @$mol_mem
-		// active_id( next?: any ): string {
-		// 	return next ?? this.party()[ 0 ].id()
-		// }
-
 		@$mol_mem
 		active_unit( next?: $gen_engine_item_unit ) {
 			return next ?? this.party()[ 0 ]
@@ -83,7 +78,6 @@ namespace $.$$ {
 		preview_unit( next?: $gen_engine_item_unit ) {
 			const [ x, y ] = this.preview_cell().split( '_' )
 			return next ?? this.party().find( unit => unit.x() === + x && unit.y() === + y )
-			// return next ?? this.party()[ 0 ]
 		}
 
 		end_turn( next?: any ) {
