@@ -1119,7 +1119,7 @@ declare namespace $ {
         id_root(next?: string): string;
         id(next?: string): string;
         config(next?: {}): {};
-        log(): void;
+        log(text: string): void;
         reference(next?: string): string;
         type(next?: string): string;
         part(next?: string): string;
@@ -1128,6 +1128,7 @@ declare namespace $ {
         level(next?: number): number;
         x(next?: number): number;
         y(next?: number): number;
+        move(x: number, y: number): void;
     }
 }
 
@@ -2850,12 +2851,13 @@ declare namespace $ {
 declare namespace $ {
     class $gen_app_battle_field extends $mol_view {
         units(): readonly $gen_engine_item_unit[];
+        active_id(next?: any): string;
         sub(): readonly any[];
         cell_click(id: any, next?: any): any;
-        xy(id: any): string;
-        XY(id: any): $$.$mol_paragraph;
+        is_active(id: any, next?: any): boolean;
         cell_unit_name(id: any): string;
-        Unit(id: any): $mol_check_box;
+        unit_active(id: any, next?: any): any;
+        Unit(id: any): $mol_button_major;
         cell_unit_list(id: any): readonly any[];
         Cell_unit_list(id: any): $mol_view;
         Cell(id: any): $mol_view;
@@ -2878,6 +2880,8 @@ declare namespace $.$$ {
         cell_unit_list(id: string): readonly any[];
         xy(id: any): string;
         cell_unit_name(id: string, next?: any): string;
+        unit_active(id: any, next?: any): void;
+        is_active(id: any, next?: any): boolean;
     }
 }
 
@@ -2906,6 +2910,7 @@ declare namespace $ {
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
         party(): readonly $gen_engine_item_unit[];
+        active_id(next?: any): string;
         pages(): readonly any[];
         party_unit_name(id: any): string;
         Party_unit(id: any): $mol_button_major;
@@ -2928,6 +2933,7 @@ declare namespace $ {
         Units_page(): $mol_page;
         turn(): string;
         Turn(): $$.$mol_section;
+        Active_id(): $$.$mol_paragraph;
         move(next?: any): any;
         Field(): $$.$gen_app_battle_field;
         end(): string;

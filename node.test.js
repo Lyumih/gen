@@ -3776,7 +3776,7 @@ var $;
             $mol_wire_solid();
             return next ?? {};
         }
-        log() {
+        log(text) {
         }
         reference(next) {
             $mol_wire_solid();
@@ -3810,6 +3810,13 @@ var $;
             $mol_wire_solid();
             return next ?? 0;
         }
+        move(x, y) {
+            if (this.x() !== x || this.y() !== y) {
+                console.log('move ' + x + ' ' + y);
+                this.x(x);
+                this.y(y);
+            }
+        }
     }
     __decorate([
         $mol_mem
@@ -3820,9 +3827,6 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "config", null);
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item.prototype, "log", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item.prototype, "reference", null);
@@ -9804,6 +9808,11 @@ var $;
         units() {
             return [];
         }
+        active_id(next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
         sub() {
             return [
                 this.X()
@@ -9814,20 +9823,26 @@ var $;
                 return next;
             return null;
         }
-        xy(id) {
-            return "0, 0";
-        }
-        XY(id) {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.xy(id);
-            return obj;
+        is_active(id, next) {
+            if (next !== undefined)
+                return next;
+            return false;
         }
         cell_unit_name(id) {
             return "";
         }
+        unit_active(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Unit(id) {
-            const obj = new this.$.$mol_check_box();
+            const obj = new this.$.$mol_button_major();
+            obj.attr = () => ({
+                active: this.is_active(id)
+            });
             obj.title = () => this.cell_unit_name(id);
+            obj.click = (next) => this.unit_active(id, next);
             return obj;
         }
         cell_unit_list(id) {
@@ -9846,7 +9861,6 @@ var $;
                 click: (next) => this.cell_click(id, next)
             });
             obj.sub = () => [
-                this.XY(id),
                 this.Cell_unit_list(id)
             ];
             return obj;
@@ -9873,11 +9887,17 @@ var $;
         }
     }
     __decorate([
+        $mol_mem
+    ], $gen_app_battle_field.prototype, "active_id", null);
+    __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "cell_click", null);
     __decorate([
         $mol_mem_key
-    ], $gen_app_battle_field.prototype, "XY", null);
+    ], $gen_app_battle_field.prototype, "is_active", null);
+    __decorate([
+        $mol_mem_key
+    ], $gen_app_battle_field.prototype, "unit_active", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle_field.prototype, "Unit", null);
@@ -9920,7 +9940,6 @@ var $;
             }
             cell_unit_list(id) {
                 const [id_x, id_y] = id.split('_');
-                console.log(id);
                 const units = this.units()
                     .filter(unit => unit.x() === Number(id_x) && unit.y() === Number(id_y));
                 return units.map(unit => this.Unit(id + '_' + unit.id()));
@@ -9935,6 +9954,14 @@ var $;
                 const unit = this.units()
                     .find(unit => unit.id() === id_unit);
                 return unit?.name() ?? '';
+            }
+            unit_active(id, next) {
+                const [, , id_unit] = id.split('_');
+                this.active_id(id_unit ?? '');
+            }
+            is_active(id, next) {
+                const [, , id_unit] = id.split('_');
+                return this.active_id() === id_unit;
             }
         }
         __decorate([
@@ -9954,7 +9981,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][mol_check_checked='true'] {\n\tborder: 1px solid greenyellow;\n}");
+    $mol_style_attach("gen/app/battle/field/field.view.css", "[gen_app_battle_field_cell] {\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 80px;\n\theight: 80px;\n\tborder: 1px solid gray;\n\tborder-radius: 1rem;\n}\n\n[gen_app_battle_field_cell_unit_list] {\n\tflex-direction: column;\n}\n\n[gen_app_battle_field_unit][active='true'] {\n\tbackground: darkslategrey;\n}");
 })($ || ($ = {}));
 //gen/app/battle/field/-css/field.view.css.ts
 ;
@@ -10024,6 +10051,11 @@ var $;
         }
         party() {
             return [];
+        }
+        active_id(next) {
+            if (next !== undefined)
+                return next;
+            return "battle 123";
         }
         pages() {
             return [
@@ -10146,6 +10178,11 @@ var $;
             obj.title = () => this.turn();
             return obj;
         }
+        Active_id() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.active_id();
+            return obj;
+        }
         move(next) {
             if (next !== undefined)
                 return next;
@@ -10154,6 +10191,7 @@ var $;
         Field() {
             const obj = new this.$.$gen_app_battle_field();
             obj.units = () => this.party();
+            obj.active_id = (next) => this.active_id(next);
             obj.cell_click = (next) => this.move(next);
             return obj;
         }
@@ -10196,6 +10234,7 @@ var $;
             obj.title = () => "Битва";
             obj.body = () => [
                 this.Turn(),
+                this.Active_id(),
                 this.Field(),
                 this.End(),
                 this.Reward(),
@@ -10210,6 +10249,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "battle", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "active_id", null);
     __decorate([
         $mol_mem_key
     ], $gen_app_battle.prototype, "Party_unit", null);
@@ -10255,6 +10297,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "Turn", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_battle.prototype, "Active_id", null);
     __decorate([
         $mol_mem
     ], $gen_app_battle.prototype, "move", null);
@@ -10333,7 +10378,10 @@ var $;
                 return this.battle().history().reverse().join('\n');
             }
             move(id, next) {
+                next?.preventDefault();
                 console.log('move', id, next);
+                const [x = 0, y = 0] = id.split('_');
+                this.party().find(unit => unit.id() === this.active_id())?.move(+x, +y);
             }
         }
         __decorate([
