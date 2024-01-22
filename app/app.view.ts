@@ -14,5 +14,10 @@ namespace $.$$ {
 		user( next?: $gen_engine_user ): $gen_engine_user {
 			return next ?? new $gen_engine_user_all().misha()
 		}
+
+		clear_storage( next?: any ) {
+			console.log( 'clear storage' )
+			localStorage.clear()
+		}
 	}
 }

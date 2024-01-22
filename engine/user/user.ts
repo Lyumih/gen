@@ -3,7 +3,7 @@ namespace $ {
 
 		defaults() {
 
-			const unit = new $gen_engine_item_unit().defaults()
+			const unit = new $gen_engine_item_unit().defaults_patch()
 			return {
 				...super.defaults(),
 				name: 'no name',

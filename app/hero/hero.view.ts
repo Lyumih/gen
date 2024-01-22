@@ -7,17 +7,27 @@ namespace $.$$ {
 		}
 
 		create_unit( next?: any ) {
-			const unit = $gen_engine_item_unit.make( { id: 'new-unit-' + $mol_guid() } )
+			console.log( $gen_engine_fake.random_name() )
+			const name = $gen_engine_fake.random_name()
+			const unit = $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					name,
+					level: 5,
+				} ),
+				id: 'new-unit-'
+			} )
 			console.log( 'create unit', unit )
 			this.party( [ ...this.party(), unit ] )
+			console.log( this.party() )
 		}
 
 		get_party_hero( id: string ) {
 			return this.party().find( unit => unit.id === id )
 		}
 
-		party_hero_name( id: string ): string {
-			return this.get_party_hero( id )?.icon_name() || 'no name'
+		party_hero_name( id: string, next?: any ): string {
+			console.log( id, next )
+			return this.get_party_hero( id )?.name( next ) || 'no name'
 		}
 
 		party_hero_pick( id: string, next?: any ) {

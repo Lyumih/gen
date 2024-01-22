@@ -5,6 +5,9 @@ $gen_app $mol_page
 	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
+		<= Clear_storage $mol_button_minor
+			title \d
+			click? <=> clear_storage? null
 		<= Telegram $mol_link_source
 			Icon <= Telegram_icon $mol_icon_telegram
 			uri \https://github.com/Lyumih/gen
