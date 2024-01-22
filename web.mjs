@@ -3493,6 +3493,9 @@ var $;
         icon(next) {
             return this.value('icon', next);
         }
+        icon_name(next) {
+            return this.icon() + this.name();
+        }
         description(next) {
             return this.value('description', next);
         }
@@ -3561,20 +3564,20 @@ var $;
         }
         log_attack(source, targets) {
             if (targets.length > 0) {
-                this.log(`**${source.name()}** *атакует* ** ${targets.map(target => target.name()).join(', ')} **`);
+                this.log(`**${source.icon_name()}** *атакует* ** ${targets.map(target => target.icon_name()).join(', ')} **`);
             }
             else {
-                this.log(`**${source.name()}** *атакует* ** ничего **`);
+                this.log(`**${source.icon_name()}** *атакует* ** ничего **`);
             }
         }
         log_skill(source, targets, skill) {
-            this.log(`**${source.name()}** *использует* **${skill.name()}**`);
+            this.log(`**${source.icon_name()}** *использует* **${skill.icon_name()}**`);
         }
         log_targets_not_found(source) {
-            this.log(`**${source.name()}** - целей не найдено`);
+            this.log(`**${source.icon_name()}** - целей не найдено`);
         }
         log_move(source, x, y) {
-            this.log(`**${source.name()}** движется к ${x}, ${y}`);
+            this.log(`**${source.icon_name()}** движется к ${x}, ${y}`);
         }
     }
     __decorate([
@@ -9598,11 +9601,15 @@ var $;
         skill_icon(id) {
             return "";
         }
+        skill_hint(id) {
+            return "";
+        }
         Skill(id) {
             const obj = new this.$.$mol_button_major();
             obj.enabled = (next) => this.active();
             obj.click = (next) => this.use_skill(id, next);
             obj.title = () => this.skill_icon(id);
+            obj.hint = () => this.skill_hint(id);
             return obj;
         }
         skill_list() {
@@ -9715,7 +9722,7 @@ var $;
     (function ($$) {
         class $gen_app_battle_panel extends $.$gen_app_battle_panel {
             name() {
-                return this.unit().name() ?? '';
+                return this.unit().icon() + this.unit().name() ?? '';
             }
             health() {
                 return `❤️ ${this.unit().health()}`;
@@ -9735,11 +9742,17 @@ var $;
             skill_list() {
                 return this.unit().skills().map(skill => this.Skill(skill.id));
             }
+            get_skill(id) {
+                return this.unit().skills().find(skill => skill.id === id);
+            }
             skill_name(id) {
-                return `🪄 ${this.unit().skills().find(skill => skill.id === id)?.name()}` ?? '';
+                return `🪄 ${this.get_skill(id)?.name()}` ?? '';
             }
             skill_icon(id) {
-                return `🪄 ${this.unit().skills().find(skill => skill.id === id)?.icon()}` ?? '';
+                return `${this.get_skill(id)?.icon()}` ?? '';
+            }
+            skill_hint(id) {
+                return `${this.get_skill(id)?.name()}\n${this.get_skill(id)?.description()}`;
             }
             unit_panel() {
                 return [
@@ -10135,7 +10148,7 @@ var $;
         }
         Start_battle() {
             const obj = new this.$.$mol_button_major();
-            obj.title = () => "Начать битву";
+            obj.title = () => "⚔️";
             obj.click = (next) => this.start_battle(next);
             return obj;
         }
@@ -10172,7 +10185,7 @@ var $;
         }
         Party_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Группа";
+            obj.title = () => "⚔️";
             obj.body = () => [
                 this.Field_x_labeler(),
                 this.Field_y_labeler(),
@@ -10183,7 +10196,7 @@ var $;
         }
         History_label() {
             const obj = new this.$.$mol_section();
-            obj.title = () => "История";
+            obj.title = () => "🪶";
             return obj;
         }
         history() {
@@ -10196,7 +10209,7 @@ var $;
         }
         History_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "История";
+            obj.title = () => "🪶";
             obj.body = () => [
                 this.History_label(),
                 this.History()
@@ -10217,8 +10230,8 @@ var $;
             return null;
         }
         End_battle() {
-            const obj = new this.$.$mol_button_minor();
-            obj.title = () => "Закончить битву";
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "🏳️";
             obj.click = (next) => this.end_battle(next);
             return obj;
         }
@@ -10312,7 +10325,7 @@ var $;
         }
         Battle_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Битва";
+            obj.title = () => "⚔️";
             obj.tools = () => [
                 this.Turn(),
                 this.End_battle()
@@ -10474,7 +10487,7 @@ var $;
         heal() {
             const text = `
 				source.health( source.health() + 10 )
-				battle.log(source.name() + ''+ ' исцеляется на 10 здоровья' )
+				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
 			`;
             return $gen_engine_item_skill.make({
                 defaults_patch: () => ({
@@ -11378,7 +11391,7 @@ var $;
 (function ($) {
     class $gen_app_hero extends $mol_page {
         title() {
-            return "Персонаж";
+            return "🕵🏼‍♀️";
         }
         engine() {
             const obj = new this.$.$gen_engine();
@@ -11786,7 +11799,7 @@ var $;
                 return this.party().find(unit => unit.id === id);
             }
             party_hero_name(id) {
-                return this.get_party_hero(id)?.name() || 'no name';
+                return this.get_party_hero(id)?.icon_name() || 'no name';
             }
             party_hero_pick(id, next) {
                 this.active_hero(id);

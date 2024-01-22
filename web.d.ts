@@ -1077,6 +1077,7 @@ declare namespace $ {
         part(next?: string): ReturnType<this["data"]>["part"];
         name(next?: string): ReturnType<this["data"]>["name"];
         icon(next?: string): ReturnType<this["data"]>["icon"];
+        icon_name(next?: string): string;
         description(next?: string): ReturnType<this["data"]>["description"];
         level(next?: number): ReturnType<this["data"]>["level"];
         points(next?: number): ReturnType<this["data"]>["points"];
@@ -2986,6 +2987,7 @@ declare namespace $ {
         Active_actions(): $mol_row;
         use_skill(id: any, next?: any): any;
         skill_icon(id: any): string;
+        skill_hint(id: any): string;
         Skill(id: any): $mol_button_major;
         skill_list(): readonly any[];
         Skill_list(): $mol_row;
@@ -3004,8 +3006,10 @@ declare namespace $.$$ {
         range(): string;
         sub(): readonly any[];
         skill_list(): readonly any[];
-        skill_name(id: any): string;
+        get_skill(id: string): $gen_engine_item_skill | undefined;
+        skill_name(id: string): string;
         skill_icon(id: any): string;
+        skill_hint(id: any): string;
         unit_panel(): readonly any[];
     }
 }
@@ -3107,7 +3111,7 @@ declare namespace $ {
         turn(): string;
         Turn(): $$.$mol_section;
         end_battle(next?: any): any;
-        End_battle(): $mol_button_minor;
+        End_battle(): $mol_button_major;
         Panel_preview(): $$.$gen_app_battle_panel;
         move_enabled(next?: any): boolean;
         attack_enabled(next?: any): boolean;
