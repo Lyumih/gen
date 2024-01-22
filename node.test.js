@@ -4092,7 +4092,6 @@ var $;
             return this.value('use_plain', next);
         }
         use(source, targets, battle) {
-            console.log("USE", this.use_plain(), source, targets);
             eval(this.use_plain());
         }
     }
@@ -10861,18 +10860,15 @@ var $;
             return `skill-${id_root}`;
         }
         resource() {
-            return [];
+            return [
+                this.heal()
+            ];
         }
         heal() {
-            function use_me(source, targets, battle) {
-                console.log('FROM EVAL' + source);
-            }
             const text = `
-				console.log( 'FROM EVAL' + source )
 				source.health( source.health() + 10 )
 				battle.log(source.name() + ''+ ' исцеляется на 10 здоровья' )
 			`;
-            console.log('stringify', use_me.toString());
             return $gen_engine_item_skill.make({
                 defaults_patch: () => ({
                     name: 'Хил',
@@ -12196,7 +12192,6 @@ var $;
                 return `💎 ${this.hero()?.points()}`;
             }
             add_point_hero(next) {
-                console.log('add hero points', this.hero());
                 this.hero()?.points((this.hero()?.points() || 0) + 1);
             }
             equipment_list() {
@@ -15171,7 +15166,6 @@ var $;
     (function ($$) {
         class $gen_app extends $.$gen_app {
             party(next) {
-                console.log('gen app party', next);
                 return next ?? new this.$.$gen_engine_item_unit_all().all();
             }
             active_hero(next) {
