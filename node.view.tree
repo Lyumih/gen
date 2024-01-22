@@ -34,6 +34,42 @@ $mol_page $mol_view
 			dom_name \footer
 			sub <= foot /$mol_view
 
+$mol_speck $mol_view
+	attr *
+		^
+		mol_theme <= theme \$mol_theme_accent
+	style *
+		^
+		minHeight \1em
+	sub /
+		<= value null
+
+$mol_button $mol_view
+	enabled true
+	click?event null
+	event_click?event null
+	event *
+		^
+		click?event <=> event_activate?event null
+		dblclick?event <=> clicks?event null
+		keydown?event <=> event_key_press?event null 
+	attr *
+		^
+		disabled <= disabled false
+		role \button
+		tabindex <= tab_index 0
+		title <= hint_safe <= hint \
+	sub /$mol_view_content
+		<= title
+	Speck $mol_speck
+		value <= error \
+
+$mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
+
+$mol_button_minor $mol_button_typed
+
 $mol_svg $mol_view
 	dom_name \svg
 	dom_name_space \http://www.w3.org/2000/svg
@@ -146,42 +182,6 @@ $mol_string $mol_view
 			key * enter?event <=> submit?event null
 
 $mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
-
-$mol_speck $mol_view
-	attr *
-		^
-		mol_theme <= theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
-	sub /
-		<= value null
-
-$mol_button $mol_view
-	enabled true
-	click?event null
-	event_click?event null
-	event *
-		^
-		click?event <=> event_activate?event null
-		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
-	attr *
-		^
-		disabled <= disabled false
-		role \button
-		tabindex <= tab_index 0
-		title <= hint_safe <= hint \
-	sub /$mol_view_content
-		<= title
-	Speck $mol_speck
-		value <= error \
-
-$mol_button_typed $mol_button
-	minimal_height 40
-	minimal_width 40
-
-$mol_button_minor $mol_button_typed
 
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
@@ -856,11 +856,14 @@ $gen_app_hero $mol_page
 							click? <=> create_unit? null
 					body /
 						<= Party_list $mol_row sub <= party_list /
-							<= Party*0 $mol_button_minor
-								attr *
-									active <= is_active_hero* false
-								title <= party_hero_name* \Герой
-								click? <=> party_hero_pick*? null
+							<= Party*0 $mol_row sub /
+								<= Party_name* $mol_button_minor
+									attr *
+										active <= is_active_hero* false
+									title <= party_hero_name*? \Герой
+									click? <=> party_hero_pick*? null
+								<= Party_name_input* $mol_string
+									value? <=> party_hero_name*?
 				<= Hero_page $mol_page
 					title \📶
 					body /
@@ -1313,6 +1316,9 @@ $gen_app $mol_page
 	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
+		<= Clear_storage $mol_button_minor
+			title \d
+			click? <=> clear_storage? null
 		<= Telegram $mol_link_source
 			Icon <= Telegram_icon $mol_icon_telegram
 			uri \https://github.com/Lyumih/gen
