@@ -5,7 +5,7 @@ namespace $.$$ {
 			return this.user().login()
 		}
 
-		name( next: ?string ): string {
+		name( next?: string ): string {
 			return this.user().name( next )
 		}
 
