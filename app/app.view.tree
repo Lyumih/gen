@@ -1,7 +1,6 @@
 $gen_app $mol_page
 	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
 	engine $gen_engine
-	party? /$gen_engine_item_unit
 	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
@@ -19,12 +18,12 @@ $gen_app $mol_page
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
-					party_new <= party
+					user? <=> user?
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
-					party? <=> party?
+					user? <=> user?
 				talent_page <= Talent_page $gen_app_talent
-				craftt_page <= Craft_page $gen_app_craft
+				- craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
 				auction_page <= Auction $gen_auction
 				dev_page <= Dev_page $gen_dev

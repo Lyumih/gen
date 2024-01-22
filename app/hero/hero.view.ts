@@ -3,7 +3,12 @@ namespace $.$$ {
 
 		@$mol_mem
 		party_list() {
-			return this.party().map( unit => this.Party( unit.id ) )
+			return this.party().map( ( unit ) => this.Party( unit.id_root() ) )
+		}
+
+		@$mol_mem
+		party( next?: $gen_engine_item_unit[] ): $gen_engine_item_unit[] {
+			return this.user().units( next )
 		}
 
 		create_unit( next?: any ) {
@@ -17,12 +22,13 @@ namespace $.$$ {
 				id: 'new-unit-'
 			} )
 			console.log( 'create unit', unit )
-			this.party( [ ...this.party(), unit ] )
-			console.log( this.party() )
+			this.user().add_unit( unit.defaults_patch() )
+			// this.party( [ ...this.party(), unit ] )
+			// console.log( this.party() )
 		}
 
 		get_party_hero( id: string ) {
-			return this.party().find( unit => unit.id === id )
+			return this.party().find( unit => unit.id_root() === id )
 		}
 
 		party_hero_name( id: string, next?: any ): string {
@@ -36,12 +42,12 @@ namespace $.$$ {
 
 		@$mol_mem
 		hero() {
-			return this.party().find( unit => unit.id === this.active_hero() )
+			return this.party().find( unit => unit.id_root() === this.active_hero() )
 		}
 
 		@$mol_mem
 		active_hero( next?: any ): string {
-			return next ?? this.party()[ 0 ]?.id ?? ''
+			return next ?? this.party()[ 0 ]?.id_root() ?? ''
 		}
 
 		is_active_hero( id: string ) {

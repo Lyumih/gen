@@ -28,11 +28,12 @@ namespace $.$$ {
 			this.battle().turn( 0 )
 		}
 
-		// @$mol_mem
-		// party_new(): readonly $gen_engine_item_unit[] {
-		// 	const party_all = new $gen_engine_item_unit_all().all()
-		// 	return party_all
-		// }
+		@$mol_mem
+		party_new(): readonly $gen_engine_item_unit[] {
+			// const party_all = new $gen_engine_item_unit_all().all()
+			// return party_all
+			return this.user().units()
+		}
 
 		get_party_hero( id: string ) {
 			return this.party_new().find( unit => unit.id === id )

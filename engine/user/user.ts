@@ -44,5 +44,9 @@ namespace $ {
 			} ) )
 		}
 
+		add_unit( next?: any ) {
+			this.units( [ ...this.units(), next ] )
+		}
+
 	}
 }

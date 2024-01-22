@@ -3,7 +3,7 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	party_new /$gen_engine_item_unit
+	user? $gen_engine_user
 	active_unit? null
 	preview_unit? null
 	preview_cell? \

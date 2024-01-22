@@ -7,7 +7,7 @@ namespace $ {
 		defaults() {
 			return {
 				// id: $mol_guid(),
-				id_root: $mol_guid(),
+				id_root: 'id-root-' + $mol_guid(),
 				name: 'no name',
 				icon: '📦',
 				reference: '',
