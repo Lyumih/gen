@@ -3,7 +3,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		party( next?: $gen_engine_item_unit[] ): readonly $gen_engine_item_unit[] {
-			return next ?? new this.$.$gen_engine_item_unit_all().all()
+			return this.user().units( next )
 		}
 
 		active_hero( next?: any ): $gen_engine_item_unit {

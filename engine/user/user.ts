@@ -14,6 +14,10 @@ namespace $ {
 			}
 		}
 
+		logout() {
+			console.log( 'Пользователь вышел' )
+		}
+
 		name( next?: string ) {
 			return this.value( 'name', next )
 		}
@@ -36,7 +40,7 @@ namespace $ {
 				defaults_patch: () => ( {
 					...unit
 				} ),
-				id: 'unit-id-fix-me-from-user'
+				id: 'unit-' + $mol_guid(),
 			} ) )
 		}
 

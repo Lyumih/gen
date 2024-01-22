@@ -16,5 +16,10 @@ namespace $.$$ {
 		heroes_length(): string {
 			return '' + this.user().units().length
 		}
+
+		logout( next?: any ) {
+			console.log( 'logout' )
+			this.user().logout()
+		}
 	}
 }

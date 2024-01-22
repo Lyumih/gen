@@ -14,3 +14,6 @@ $gen_app_user $mol_page
 		<= Heroes_length_labeler $mol_labeler
 			title \Кол-во героев
 			content / <= Heroes_length $mol_paragraph title <= heroes_length \0
+		<= Logout $mol_button_major
+			title \Выйти
+			click? <=> logout? null
