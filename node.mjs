@@ -3958,7 +3958,7 @@ var $;
     class $gen_engine_item extends $gen_engine_entity {
         defaults() {
             return {
-                id_root: '',
+                id_root: $mol_guid(),
                 name: 'no name',
                 icon: '📦',
                 reference: '',
