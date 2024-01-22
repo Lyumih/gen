@@ -3502,8 +3502,14 @@ var $;
         level(next) {
             return this.value('level', next);
         }
+        icon_level() {
+            return '⭐' + this.level();
+        }
         points(next) {
             return this.value('points', next);
+        }
+        icon_points() {
+            return '💎' + this.points();
         }
         x(next) {
             return this.value('x', next);
@@ -3520,8 +3526,14 @@ var $;
         speed(next) {
             return this.value('speed', next);
         }
+        icon_speed() {
+            return '👟' + this.speed();
+        }
         attack_range(next) {
             return this.value('attack_range', next);
+        }
+        icon_attack_range() {
+            return '🏹' + this.attack_range();
         }
         move(x, y) {
             if (this.x() !== x || this.y() !== y) {
@@ -3685,8 +3697,14 @@ var $;
         health(next) {
             return this.value('health', next);
         }
+        icon_health() {
+            return '❤️' + this.health();
+        }
         attack(next) {
             return this.value('attack', next);
+        }
+        icon_attack() {
+            return '🗡️' + this.attack();
         }
         use_attack(targets, battle) {
             targets.forEach(target => {
@@ -9752,7 +9770,7 @@ var $;
                 return `${this.get_skill(id)?.icon()}` ?? '';
             }
             skill_hint(id) {
-                return `${this.get_skill(id)?.name()}\n${this.get_skill(id)?.description()}`;
+                return `${this.get_skill(id)?.icon_name()}\n${this.get_skill(id)?.icon_level()}\n${this.get_skill(id)?.description()}`;
             }
             unit_panel() {
                 return [
@@ -10486,7 +10504,7 @@ var $;
         }
         heal() {
             const text = `
-				source.health( source.health() + 10 )
+				source.health( source.health() + 10 + this.level() * 2 )
 				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
 			`;
             return $gen_engine_item_skill.make({
@@ -10495,6 +10513,7 @@ var $;
                     icon: '⚕️',
                     description: 'Исцеляет на 10 здоровья',
                     use_plain: text,
+                    level: 3,
                 }),
                 id: 'skill-heal-1',
             });
@@ -11466,7 +11485,7 @@ var $;
             return null;
         }
         Add_point_hero() {
-            const obj = new this.$.$mol_button_major();
+            const obj = new this.$.$mol_button_minor();
             obj.title = () => "➕";
             obj.click = (next) => this.add_point_hero(next);
             return obj;
@@ -11555,10 +11574,17 @@ var $;
             obj.add_mode = (next) => this.skill_add_mode(id, next);
             return obj;
         }
+        Skill_level_up(id) {
+            const obj = new this.$.$mol_button_minor();
+            obj.title = () => "➕";
+            obj.click = (next) => this.skill_level_up(id, next);
+            return obj;
+        }
         Skill(id) {
             const obj = new this.$.$mol_row();
             obj.sub = () => [
-                this.Skill_card(id)
+                this.Skill_card(id),
+                this.Skill_level_up(id)
             ];
             return obj;
         }
@@ -11739,6 +11765,9 @@ var $;
     ], $gen_app_hero.prototype, "Skill_card", null);
     __decorate([
         $mol_mem_key
+    ], $gen_app_hero.prototype, "Skill_level_up", null);
+    __decorate([
+        $mol_mem_key
     ], $gen_app_hero.prototype, "Skill", null);
     __decorate([
         $mol_mem
@@ -11844,7 +11873,8 @@ var $;
                 return this.hero()?.skills()?.find(skill => skill.id === id);
             }
             skill_level_up(id, next) {
-                this.engine().skill_level_up(id);
+                console.log('skill_level_up', id);
+                this.get_skill(id)?.level((this.get_skill(id)?.level() || 0) + 1);
             }
             skill_mode(id) {
                 return this.get_skill(id)?.name() || 'no mode';

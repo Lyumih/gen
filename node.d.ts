@@ -1194,13 +1194,17 @@ declare namespace $ {
         icon_name(next?: string): string;
         description(next?: string): ReturnType<this["data"]>["description"];
         level(next?: number): ReturnType<this["data"]>["level"];
+        icon_level(): string;
         points(next?: number): ReturnType<this["data"]>["points"];
+        icon_points(): string;
         x(next?: number): ReturnType<this["data"]>["x"];
         y(next?: number): ReturnType<this["data"]>["y"];
         xy(): (ReturnType<this["data"]>["x"] | ReturnType<this["data"]>["y"])[];
         in_range(x: number, y: number, range: number): boolean;
         speed(next?: number): ReturnType<this["data"]>["speed"];
+        icon_speed(): string;
         attack_range(next?: number): ReturnType<this["data"]>["attack_range"];
+        icon_attack_range(): string;
         move(x: number, y: number): void;
     }
 }
@@ -1302,7 +1306,9 @@ declare namespace $ {
             attack_range: number;
         };
         health(next?: number): ReturnType<this["data"]>["health"];
+        icon_health(): string;
         attack(next?: number): ReturnType<this["data"]>["attack"];
+        icon_attack(): string;
         use_attack(targets: $gen_engine_item_unit[], battle: $gen_engine_battle): void;
         use_skill(targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill, battle: $gen_engine_battle): void;
         is_dead(): boolean;
@@ -3421,7 +3427,7 @@ declare namespace $ {
         points(): string;
         Points_hero(): $$.$mol_text;
         add_point_hero(next?: any): any;
-        Add_point_hero(): $mol_button_major;
+        Add_point_hero(): $mol_button_minor;
         Hero_page(): $mol_page;
         get_equipment(id: any): any;
         equipment_unequip(id: any, next?: any): any;
@@ -3437,6 +3443,7 @@ declare namespace $ {
         skill_unequip(id: any, next?: any): any;
         skill_add_mode(id: any, next?: any): any;
         Skill_card(id: any): $gen_app_item_skill;
+        Skill_level_up(id: any): $mol_button_minor;
         Skill(id: any): $mol_row;
         skill_list(): readonly any[];
         Skills(): $mol_row;
