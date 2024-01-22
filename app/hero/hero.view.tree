@@ -1,5 +1,5 @@
 $gen_app_hero $mol_page
-	title \Персонаж
+	title \🕵🏼‍♀️
 	engine $gen_engine
 	party /$gen_engine_item_unit
 	body /

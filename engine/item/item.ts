@@ -52,6 +52,10 @@ namespace $ {
 			return this.value( 'icon', next )
 		}
 
+		icon_name( next?: string ) {
+			return this.icon() + this.name()
+		}
+
 		description( next?: string ) {
 			return this.value( 'description', next )
 		}

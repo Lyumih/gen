@@ -11,7 +11,7 @@ namespace $.$$ {
 		}
 
 		party_hero_name( id: string ): string {
-			return this.get_party_hero( id )?.name() || 'no name'
+			return this.get_party_hero( id )?.icon_name() || 'no name'
 		}
 
 		party_hero_pick( id: string, next?: any ) {

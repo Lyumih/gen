@@ -27,22 +27,22 @@ namespace $ {
 
 		log_attack( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[] ) {
 			if( targets.length > 0 ) {
-				this.log( `**${ source.name() }** *атакует* ** ${ targets.map( target => target.name() ).join( ', ' ) } **` )
+				this.log( `**${ source.icon_name() }** *атакует* ** ${ targets.map( target => target.icon_name() ).join( ', ' ) } **` )
 			} else {
-				this.log( `**${ source.name() }** *атакует* ** ничего **` )
+				this.log( `**${ source.icon_name() }** *атакует* ** ничего **` )
 			}
 		}
 
 		log_skill( source: $gen_engine_item_unit, targets: $gen_engine_item_unit[], skill: $gen_engine_item_skill ) {
-			this.log( `**${ source.name() }** *использует* **${ skill.name() }**` )
+			this.log( `**${ source.icon_name() }** *использует* **${ skill.icon_name() }**` )
 		}
 
 		log_targets_not_found( source: $gen_engine_item_unit ) {
-			this.log( `**${ source.name() }** - целей не найдено` )
+			this.log( `**${ source.icon_name() }** - целей не найдено` )
 		}
 
 		log_move( source: $gen_engine_item_unit, x: number, y: number ) {
-			this.log( `**${ source.name() }** движется к ${ x }, ${ y }` )
+			this.log( `**${ source.icon_name() }** движется к ${ x }, ${ y }` )
 		}
 	}
 }

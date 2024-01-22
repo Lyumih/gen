@@ -10,7 +10,7 @@ $gen_app_battle $mol_book2
 	battle_status? \
 	pages <= pages_list /
 		<= Party_page $mol_page
-			title \Группа
+			title \⚔️
 			body /
 				<= Field_x_labeler $mol_labeler
 					title \Поле Х ячеек
@@ -19,7 +19,7 @@ $gen_app_battle $mol_book2
 					title \Поле Y ячеек
 					content / <= Field_y $mol_number value? <=> field_max_y? 10
 				<= Start_battle $mol_button_major
-					title \Начать битву
+					title \⚔️
 					click? <=> start_battle? null
 				<= Party_list $mol_row sub <= party_list /
 					<= Party*0 $mol_row sub /
@@ -27,9 +27,9 @@ $gen_app_battle $mol_book2
 							title <= party_unit_name* \Герой
 							checked? <=> party_new_checked*? true
 		<= History_page $mol_page
-			title \История
+			title \🪶
 			body /
-				<= History_label $mol_section title \История
+				<= History_label $mol_section title \🪶
 				<= History $mol_text text <= history \
 		- <= Units_page $mol_page
 			title \Юниты
@@ -41,11 +41,11 @@ $gen_app_battle $mol_book2
 						use_attack? <=> use_attack*? null
 						use_skill? <=> use_skill*? null
 		<= Battle_page $mol_page
-			title \Битва
+			title \⚔️
 			tools /
 				<= Turn $mol_section title <= turn \Ход: 0
-				<= End_battle $mol_button_minor
-					title \Закончить битву
+				<= End_battle $mol_button_major
+					title \🏳️
 					click? <=> end_battle? null
 			foot /
 				<= Panels $mol_list rows /

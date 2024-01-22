@@ -2,7 +2,7 @@ namespace $.$$ {
 	export class $gen_app_battle_panel extends $.$gen_app_battle_panel {
 
 		name(): string {
-			return this.unit().name() ?? ''
+			return this.unit().icon() + this.unit().name() ?? ''
 		}
 
 		health(): string {
@@ -29,12 +29,20 @@ namespace $.$$ {
 			return this.unit().skills().map( skill => this.Skill( skill.id ) )
 		}
 
-		skill_name( id: any ): string {
-			return `🪄 ${ this.unit().skills().find( skill => skill.id === id )?.name() }` ?? ''
+		get_skill( id: string ) {
+			return this.unit().skills().find( skill => skill.id === id )
+		}
+
+		skill_name( id: string ): string {
+			return `🪄 ${ this.get_skill( id )?.name() }` ?? ''
 		}
 
 		skill_icon( id: any ): string {
-			return `🪄 ${ this.unit().skills().find( skill => skill.id === id )?.icon() }` ?? ''
+			return `${ this.get_skill( id )?.icon() }` ?? ''
+		}
+
+		skill_hint( id: any ): string {
+			return `${ this.get_skill( id )?.name() }\n${ this.get_skill( id )?.description() }`
 		}
 
 		unit_panel(): readonly any[] {

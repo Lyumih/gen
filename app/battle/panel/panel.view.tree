@@ -30,3 +30,4 @@ $gen_app_battle_panel $mol_view
 							enabled? <= active?
 							click? <=> use_skill*? null
 							title <= skill_icon* \
+							hint <= skill_hint* \

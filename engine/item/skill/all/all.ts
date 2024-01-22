@@ -18,7 +18,7 @@ namespace $ {
 		heal() {
 			const text = `
 				source.health( source.health() + 10 )
-				battle.log(source.name() + ''+ ' исцеляется на 10 здоровья' )
+				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
 			`
 			return $gen_engine_item_skill.make( {
 
