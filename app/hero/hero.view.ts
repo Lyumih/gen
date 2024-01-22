@@ -45,7 +45,6 @@ namespace $.$$ {
 		}
 
 		add_point_hero( next?: any ) {
-			console.log( 'add hero points', this.hero() )
 			this.hero()?.points( ( this.hero()?.points() || 0 ) + 1 )
 		}
 

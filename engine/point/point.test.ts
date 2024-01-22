@@ -20,7 +20,6 @@ namespace $ {
 		},
 
 		"point range"() {
-			// console.log( point.range( 1 )[ 0 ].x )
 			// $mol_assert_equal( point.range( 1 ), nearest )
 		},
 

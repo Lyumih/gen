@@ -50,18 +50,7 @@ namespace $.$$ {
 		}
 
 		party(): readonly $gen_engine_item_unit[] {
-			// const party_all = new $gen_engine_item_unit_all().all()
 			const party = this.party_new().filter( unit => this.party_new_checked( unit.id ) )
-			// console.log( 'party', party.length )
-			// const party_clone: $gen_engine_item_unit[] = []
-			// for( let i = 0; i < 2; i++ ) {
-			// 	console.log( 'party push', i, party[ i ] )
-			// 	// party.push( party[ i ] )
-			// 	party.push( new $gen_engine_item_unit )
-			// }
-			// return [ new $gen_engine_item_unit, new $gen_engine_item_unit ]
-			// return party.map( unit => unit.duplicate() )
-			// return party
 			const unit = this.party_new()[ 0 ]
 			const new_unit = $gen_engine_item_unit.make( {
 				defaults_patch: () => ( {
