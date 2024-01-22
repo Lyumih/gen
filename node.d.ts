@@ -1363,6 +1363,7 @@ declare namespace $ {
                 attack_range: number;
             }[];
         };
+        logout(): void;
         name(next?: string): ReturnType<this["data"]>["name"];
         login(next?: string): ReturnType<this["data"]>["login"];
         email(next?: string): ReturnType<this["data"]>["email"];
@@ -3254,32 +3255,6 @@ declare namespace $ {
     }
 }
 
-declare namespace $ {
-    class $gen_engine_item_skill_all extends $mol_object {
-        all(): $gen_engine_item_skill[];
-        create_id_root(id_root: string): string;
-        resource(): $gen_engine_item_skill[];
-        heal(): $gen_engine_item_skill;
-        strong_attack(): $gen_engine_item_skill;
-        strong_attack_and_heal(): $gen_engine_item_skill;
-        hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
-        teleport(): $gen_engine_item_skill;
-        gravity_shield(): $gen_engine_item_skill;
-        lightning_spear(): $gen_engine_item_skill;
-        lightning_bolt(): $gen_engine_item_skill;
-    }
-}
-
-declare namespace $ {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all(): $gen_engine_item_unit[];
-        resource(): $gen_engine_item_unit[];
-        milis(): $gen_engine_item_unit;
-        jin(): $gen_engine_item_unit;
-        mario(): $gen_engine_item_unit;
-    }
-}
-
 declare namespace $.$$ {
     class $gen_app_battle extends $.$gen_app_battle {
         pages_list(): readonly any[];
@@ -3287,7 +3262,6 @@ declare namespace $.$$ {
         end_battle(next?: any): void;
         turn(): string;
         restart(): void;
-        party_new(): readonly $gen_engine_item_unit[];
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
         party_list(): readonly any[];
@@ -3768,6 +3742,22 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $gen_engine_item_skill_all extends $mol_object {
+        all(): $gen_engine_item_skill[];
+        create_id_root(id_root: string): string;
+        resource(): $gen_engine_item_skill[];
+        heal(): $gen_engine_item_skill;
+        strong_attack(): $gen_engine_item_skill;
+        strong_attack_and_heal(): $gen_engine_item_skill;
+        hyperfocal_madness_wind_generator(): $gen_engine_item_skill;
+        teleport(): $gen_engine_item_skill;
+        gravity_shield(): $gen_engine_item_skill;
+        lightning_spear(): $gen_engine_item_skill;
+        lightning_bolt(): $gen_engine_item_skill;
+    }
+}
+
+declare namespace $ {
     class $mol_textarea extends $mol_stack {
         attr(): Record<string, any>;
         event(): Record<string, any>;
@@ -3841,6 +3831,16 @@ declare namespace $ {
         test(next?: any): any;
         Test(): $mol_button_major;
         Container(): $$.$mol_list;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all(): $gen_engine_item_unit[];
+        resource(): $gen_engine_item_unit[];
+        milis(): $gen_engine_item_unit;
+        jin(): $gen_engine_item_unit;
+        mario(): $gen_engine_item_unit;
     }
 }
 
@@ -3969,6 +3969,8 @@ declare namespace $ {
         heroes_length(): string;
         Heroes_length(): $$.$mol_paragraph;
         Heroes_length_labeler(): $mol_labeler;
+        logout(next?: any): any;
+        Logout(): $mol_button_major;
     }
 }
 
@@ -3978,6 +3980,7 @@ declare namespace $.$$ {
         name(): string;
         email(): string;
         heroes_length(): string;
+        logout(next?: any): void;
     }
 }
 

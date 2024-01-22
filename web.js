@@ -3784,6 +3784,9 @@ var $;
                 units: [],
             };
         }
+        logout() {
+            console.log('Пользователь вышел');
+        }
         name(next) {
             return this.value('name', next);
         }
@@ -3802,7 +3805,7 @@ var $;
                 defaults_patch: () => ({
                     ...unit
                 }),
-                id: 'unit-id-fix-me-from-user'
+                id: 'unit-' + $mol_guid(),
             }));
         }
     }
@@ -10526,202 +10529,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $gen_engine_item_skill_all extends $mol_object {
-        all() {
-            return this.resource();
-        }
-        create_id_root(id_root) {
-            return `skill-${id_root}`;
-        }
-        resource() {
-            return [
-                this.heal()
-            ];
-        }
-        heal() {
-            const text = `
-				source.health( source.health() + 10 + this.level() * 2 )
-				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
-			`;
-            return $gen_engine_item_skill.make({
-                defaults_patch: () => ({
-                    name: 'Хил',
-                    icon: '⚕️',
-                    description: 'Исцеляет на 10 здоровья',
-                    use_plain: text,
-                    level: 3,
-                }),
-                id: 'skill-heal-1',
-            });
-        }
-        strong_attack() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                if (targets[0]) {
-                    targets[0].health(targets[0].health() - source.attack() * 2);
-                    battle.log(`${source.name()} наносит сильный удар х2`);
-                }
-                battle.log_targets_not_found(source);
-            };
-            return skill;
-        }
-        strong_attack_and_heal() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    targets[0].health(targets[0].health() - source.attack() * 4);
-                    source.health(source.health() + 10);
-                    battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        hyperfocal_madness_wind_generator() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                const debuff_mem = new $gen_engine_item_buff($mol_guid(4));
-                debuff_mem.name('mem');
-                debuff_mem.part('debuff');
-                const target = targets[0];
-                if (target) {
-                    target.buffs([...target.buffs(), debuff_mem]);
-                    if (Math.random() < 0.5) {
-                        battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
-                        target.health(target.health() - source.attack() * 999);
-                    }
-                    else {
-                        battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
-                    }
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        teleport() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                battle.log(`${source.name()} телепортируется на 2 клетки`);
-                source.x(source.x() + 2);
-                source.y(source.y() + 2);
-            };
-            return skill;
-        }
-        gravity_shield() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                battle.log(`${source.name()} получает гравитационный щит`);
-                source.health(source.health() + 50);
-            };
-            return skill;
-        }
-        lightning_spear() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    battle.log(`${source.name()} наносит ${source.attack() * 3} урона копьём молнией`);
-                    targets[0].health(targets[0].health() - source.attack() * 3);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-        lightning_bolt() {
-            const skill = new $gen_engine_item_skill($mol_guid(4));
-            skill.use = (source, targets, battle) => {
-                const target = targets[0];
-                if (target) {
-                    const number_balls = +(Math.random() * 100 % 4).toFixed();
-                    battle.log(`${source.name()} наносит ${source.attack() * number_balls} урона ${number_balls} шаровыми молниями`);
-                    targets[0].health(targets[0].health() - source.attack() * number_balls);
-                }
-                else {
-                    battle.log_targets_not_found(source);
-                }
-            };
-            return skill;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_skill_all.prototype, "all", null);
-    $.$gen_engine_item_skill_all = $gen_engine_item_skill_all;
-})($ || ($ = {}));
-//gen/engine/item/skill/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $gen_engine_item_unit_all extends $mol_object {
-        all() {
-            return this.resource();
-        }
-        resource() {
-            return [
-                this.milis(), this.mario(), this.jin(),
-            ];
-        }
-        milis() {
-            return $gen_engine_item_unit.make({
-                defaults_patch: () => ({
-                    name: 'Milis',
-                    icon: '👩🏼‍⚕️',
-                    level: 1000,
-                    points: 1000,
-                    x: 0,
-                    y: 0,
-                    skills: [
-                        new $gen_engine_item_skill_all().heal().defaults_patch(),
-                    ]
-                }),
-                id: 'hero-milis-1'
-            });
-        }
-        jin() {
-            return $gen_engine_item_unit.make({
-                defaults_patch: () => ({
-                    name: 'Jin',
-                    level: 3,
-                    points: 5,
-                    x: 1,
-                    y: 3,
-                }),
-                id: 'hero-jin-2'
-            });
-        }
-        mario() {
-            return $gen_engine_item_unit.make({
-                defaults_patch: () => ({
-                    name: 'Бурь',
-                    icon: '🧙🏼‍♂️',
-                    level: 333,
-                    points: 544,
-                    attack_range: 2,
-                    x: 1,
-                    y: 2,
-                }),
-                id: 'hero-mario-3'
-            });
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit_all.prototype, "all", null);
-    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
-})($ || ($ = {}));
-//gen/engine/item/unit/all/all.ts
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $gen_app_battle extends $.$gen_app_battle {
@@ -10745,10 +10552,6 @@ var $;
             }
             restart() {
                 this.battle().turn(0);
-            }
-            party_new() {
-                const party_all = new $gen_engine_item_unit_all().all();
-                return party_all;
             }
             get_party_hero(id) {
                 return this.party_new().find(unit => unit.id === id);
@@ -10852,9 +10655,6 @@ var $;
                 return '' + this.preview_unit()?.x() + this.preview_unit()?.y() + this.preview_cell();
             }
         }
-        __decorate([
-            $mol_mem
-        ], $gen_app_battle.prototype, "party_new", null);
         __decorate([
             $mol_mem
         ], $gen_app_battle.prototype, "use_attack", null);
@@ -13083,6 +12883,140 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_skill_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        create_id_root(id_root) {
+            return `skill-${id_root}`;
+        }
+        resource() {
+            return [
+                this.heal()
+            ];
+        }
+        heal() {
+            const text = `
+				source.health( source.health() + 10 + this.level() * 2 )
+				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
+			`;
+            return $gen_engine_item_skill.make({
+                defaults_patch: () => ({
+                    name: 'Хил',
+                    icon: '⚕️',
+                    description: 'Исцеляет на 10 здоровья',
+                    use_plain: text,
+                    level: 3,
+                }),
+                id: 'skill-heal-1',
+            });
+        }
+        strong_attack() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                if (targets[0]) {
+                    targets[0].health(targets[0].health() - source.attack() * 2);
+                    battle.log(`${source.name()} наносит сильный удар х2`);
+                }
+                battle.log_targets_not_found(source);
+            };
+            return skill;
+        }
+        strong_attack_and_heal() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    targets[0].health(targets[0].health() - source.attack() * 4);
+                    source.health(source.health() + 10);
+                    battle.log(`${source.name()} наносит сильный удар х4 и лечение себя на 10`);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        hyperfocal_madness_wind_generator() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const debuff_mem = new $gen_engine_item_buff($mol_guid(4));
+                debuff_mem.name('mem');
+                debuff_mem.part('debuff');
+                const target = targets[0];
+                if (target) {
+                    target.buffs([...target.buffs(), debuff_mem]);
+                    if (Math.random() < 0.5) {
+                        battle.log(`${source.name()} сделал бум при попытке взаимодействия с меметичными объектами`);
+                        target.health(target.health() - source.attack() * 999);
+                    }
+                    else {
+                        battle.log(`${source.name()} не смог сделать бум при попытке взаимодействия с меметичными объектами`);
+                    }
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        teleport() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} телепортируется на 2 клетки`);
+                source.x(source.x() + 2);
+                source.y(source.y() + 2);
+            };
+            return skill;
+        }
+        gravity_shield() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                battle.log(`${source.name()} получает гравитационный щит`);
+                source.health(source.health() + 50);
+            };
+            return skill;
+        }
+        lightning_spear() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    battle.log(`${source.name()} наносит ${source.attack() * 3} урона копьём молнией`);
+                    targets[0].health(targets[0].health() - source.attack() * 3);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+        lightning_bolt() {
+            const skill = new $gen_engine_item_skill($mol_guid(4));
+            skill.use = (source, targets, battle) => {
+                const target = targets[0];
+                if (target) {
+                    const number_balls = +(Math.random() * 100 % 4).toFixed();
+                    battle.log(`${source.name()} наносит ${source.attack() * number_balls} урона ${number_balls} шаровыми молниями`);
+                    targets[0].health(targets[0].health() - source.attack() * number_balls);
+                }
+                else {
+                    battle.log_targets_not_found(source);
+                }
+            };
+            return skill;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_skill_all.prototype, "all", null);
+    $.$gen_engine_item_skill_all = $gen_engine_item_skill_all;
+})($ || ($ = {}));
+//gen/engine/item/skill/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_textarea extends $mol_stack {
         attr() {
             return {
@@ -13575,6 +13509,68 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_engine_item_unit_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        resource() {
+            return [
+                this.milis(), this.mario(), this.jin(),
+            ];
+        }
+        milis() {
+            return $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Milis',
+                    icon: '👩🏼‍⚕️',
+                    level: 1000,
+                    points: 1000,
+                    x: 0,
+                    y: 0,
+                    skills: [
+                        new $gen_engine_item_skill_all().heal().defaults_patch(),
+                    ]
+                }),
+                id: 'hero-milis-1'
+            });
+        }
+        jin() {
+            return $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Jin',
+                    level: 3,
+                    points: 5,
+                    x: 1,
+                    y: 3,
+                }),
+                id: 'hero-jin-2'
+            });
+        }
+        mario() {
+            return $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    name: 'Бурь',
+                    icon: '🧙🏼‍♂️',
+                    level: 333,
+                    points: 544,
+                    attack_range: 2,
+                    x: 1,
+                    y: 2,
+                }),
+                id: 'hero-mario-3'
+            });
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_item_unit_all.prototype, "all", null);
+    $.$gen_engine_item_unit_all = $gen_engine_item_unit_all;
+})($ || ($ = {}));
+//gen/engine/item/unit/all/all.ts
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $gen_dev extends $.$gen_dev {
@@ -13977,7 +13973,8 @@ var $;
                 this.Login_labeler(),
                 this.Name_labeler(),
                 this.Email_labeler(),
-                this.Heroes_length_labeler()
+                this.Heroes_length_labeler(),
+                this.Logout()
             ];
         }
         login() {
@@ -14044,6 +14041,17 @@ var $;
             ];
             return obj;
         }
+        logout(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Logout() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Выйти";
+            obj.click = (next) => this.logout(next);
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -14072,6 +14080,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_user.prototype, "Heroes_length_labeler", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "logout", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Logout", null);
     $.$gen_app_user = $gen_app_user;
 })($ || ($ = {}));
 //gen/app/user/-view.tree/user.view.tree.ts
@@ -14093,6 +14107,10 @@ var $;
             }
             heroes_length() {
                 return '' + this.user().units().length;
+            }
+            logout(next) {
+                console.log('logout');
+                this.user().logout();
             }
         }
         $$.$gen_app_user = $gen_app_user;
@@ -14930,6 +14948,7 @@ var $;
         Battle_page() {
             const obj = new this.$.$gen_app_battle();
             obj.engine = () => this.engine();
+            obj.party_new = () => this.party();
             return obj;
         }
         Hero_page() {
@@ -15099,7 +15118,7 @@ var $;
     (function ($$) {
         class $gen_app extends $.$gen_app {
             party(next) {
-                return next ?? new this.$.$gen_engine_item_unit_all().all();
+                return this.user().units(next);
             }
             active_hero(next) {
                 return next ?? this.party()[0];

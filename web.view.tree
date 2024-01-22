@@ -1203,6 +1203,9 @@ $gen_app_user $mol_page
 		<= Heroes_length_labeler $mol_labeler
 			title \Кол-во героев
 			content / <= Heroes_length $mol_paragraph title <= heroes_length \0
+		<= Logout $mol_button_major
+			title \Выйти
+			click? <=> logout? null
 
 $mol_nav $mol_plugin
 	cycle? false
@@ -1321,7 +1324,7 @@ $gen_app $mol_page
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
-					- party_new <= party
+					party_new <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					party? <=> party?
