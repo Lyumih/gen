@@ -1057,12 +1057,14 @@ declare namespace $ {
     class $gen_engine_item extends $gen_engine_entity {
         defaults(): {
             id_root: string;
+            name: string;
+            icon: string;
             reference: string;
             type: string;
             part: string;
-            name: string;
             description: string;
             level: number;
+            points: number;
             x: number;
             y: number;
             speed: number;
@@ -1074,8 +1076,10 @@ declare namespace $ {
         type(next?: string): ReturnType<this["data"]>["type"];
         part(next?: string): ReturnType<this["data"]>["part"];
         name(next?: string): ReturnType<this["data"]>["name"];
+        icon(next?: string): ReturnType<this["data"]>["icon"];
         description(next?: string): ReturnType<this["data"]>["description"];
         level(next?: number): ReturnType<this["data"]>["level"];
+        points(next?: number): ReturnType<this["data"]>["points"];
         x(next?: number): ReturnType<this["data"]>["x"];
         y(next?: number): ReturnType<this["data"]>["y"];
         xy(): (ReturnType<this["data"]>["x"] | ReturnType<this["data"]>["y"])[];
@@ -1109,12 +1113,14 @@ declare namespace $ {
         defaults(): {
             use_plain: string;
             id_root: string;
+            name: string;
+            icon: string;
             reference: string;
             type: string;
             part: string;
-            name: string;
             description: string;
             level: number;
+            points: number;
             x: number;
             y: number;
             speed: number;
@@ -1147,31 +1153,34 @@ declare namespace $ {
 
 declare namespace $ {
     class $gen_engine_item_unit extends $gen_engine_item {
-        points(next?: number): number;
         defaults(): {
             health: number;
             attack: number;
+            icon: string;
             skills: {
                 use_plain: string;
                 id_root: string;
+                name: string;
+                icon: string;
                 reference: string;
                 type: string;
                 part: string;
-                name: string;
                 description: string;
                 level: number;
+                points: number;
                 x: number;
                 y: number;
                 speed: number;
                 attack_range: number;
             }[];
             id_root: string;
+            name: string;
             reference: string;
             type: string;
             part: string;
-            name: string;
             description: string;
             level: number;
+            points: number;
             x: number;
             y: number;
             speed: number;
@@ -3336,6 +3345,8 @@ declare namespace $ {
         Level(): $$.$mol_section;
         points(): string;
         Points_hero(): $$.$mol_text;
+        add_point_hero(next?: any): any;
+        Add_point_hero(): $mol_button_major;
         Hero_page(): $mol_page;
         get_equipment(id: any): any;
         equipment_unequip(id: any, next?: any): any;
@@ -3386,6 +3397,7 @@ declare namespace $.$$ {
         name(): string;
         level(): string;
         points(): string;
+        add_point_hero(next?: any): void;
         equipment_list(): readonly any[];
         get_equipment(id: string): $gen_engine_item_equipment | undefined;
         equipment_unequip(id: any, next?: any): void;

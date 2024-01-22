@@ -3459,12 +3459,14 @@ var $;
         defaults() {
             return {
                 id_root: '',
+                name: 'no name',
+                icon: '📦',
                 reference: '',
                 type: 'item',
                 part: 'part',
-                name: 'no name',
                 description: 'no description',
                 level: 0,
+                points: 0,
                 x: 0,
                 y: 0,
                 speed: 1,
@@ -3488,11 +3490,17 @@ var $;
         name(next) {
             return this.value('name', next);
         }
+        icon(next) {
+            return this.value('icon', next);
+        }
         description(next) {
             return this.value('description', next);
         }
         level(next) {
             return this.value('level', next);
+        }
+        points(next) {
+            return this.value('points', next);
         }
         x(next) {
             return this.value('x', next);
@@ -3662,16 +3670,13 @@ var $;
 var $;
 (function ($) {
     class $gen_engine_item_unit extends $gen_engine_item {
-        points(next) {
-            $mol_wire_solid();
-            return next ?? 0;
-        }
         defaults() {
             const skill = new $gen_engine_item_skill().defaults();
             return {
                 ...super.defaults(),
                 health: 20,
                 attack: 10,
+                icon: '🧙🏼‍♂️',
                 skills: []
             };
         }
@@ -3703,9 +3708,7 @@ var $;
         }
         skills(next) {
             const skills = next ?? [];
-            console.log('skills', next, skills[0]?.defaults_patch(), this);
             const value = this.value('skills', next?.map(skill => skill.defaults()));
-            console.log(value);
             return value.map(skill => $gen_engine_item_skill.make({
                 defaults_patch: () => ({
                     ...skill
@@ -3735,9 +3738,6 @@ var $;
             return this;
         }
     }
-    __decorate([
-        $mol_mem
-    ], $gen_engine_item_unit.prototype, "points", null);
     __decorate([
         $mol_mem
     ], $gen_engine_item_unit.prototype, "equipments", null);
@@ -11437,13 +11437,25 @@ var $;
             obj.text = () => this.points();
             return obj;
         }
+        add_point_hero(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Add_point_hero() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "➕";
+            obj.click = (next) => this.add_point_hero(next);
+            return obj;
+        }
         Hero_page() {
             const obj = new this.$.$mol_page();
             obj.title = () => "Характеристики";
             obj.body = () => [
                 this.Name(),
                 this.Level(),
-                this.Points_hero()
+                this.Points_hero(),
+                this.Add_point_hero()
             ];
             return obj;
         }
@@ -11665,6 +11677,12 @@ var $;
     ], $gen_app_hero.prototype, "Points_hero", null);
     __decorate([
         $mol_mem
+    ], $gen_app_hero.prototype, "add_point_hero", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Add_point_hero", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_hero.prototype, "Hero_page", null);
     __decorate([
         $mol_mem_key
@@ -11773,13 +11791,17 @@ var $;
                 return this.hero()?.id === id;
             }
             name() {
-                return `Имя: ${this.hero()?.name()}`;
+                return `${this.hero()?.icon()} ${this.hero()?.name()}`;
             }
             level() {
-                return `Уровень: ${this.hero()?.level()}`;
+                return `⭐️ ${this.hero()?.level()}`;
             }
             points() {
-                return `Очков: ${this.hero()?.points()}`;
+                return `💎 ${this.hero()?.points()}`;
+            }
+            add_point_hero(next) {
+                console.log('add hero points', this.hero());
+                this.hero()?.points((this.hero()?.points() || 0) + 1);
             }
             equipment_list() {
                 return this.hero()?.equipments()?.map(item => this.Equipment(item.id)) || [];

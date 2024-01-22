@@ -859,6 +859,9 @@ $gen_app_hero $mol_page
 						<= Name $mol_section title <= name \Имя:
 						<= Level $mol_section title <= level \Уровень:
 						<= Points_hero $mol_text text <= points \Очки пт:
+						<= Add_point_hero $mol_button_major
+							title \➕
+							click? <=> add_point_hero? null
 				<= Equipment_page $mol_page
 					title \Экипировка
 					body /
