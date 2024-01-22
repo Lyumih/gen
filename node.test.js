@@ -14458,12 +14458,14 @@ var $;
             ];
             return obj;
         }
-        name() {
+        name(next) {
+            if (next !== undefined)
+                return next;
             return "Имя";
         }
         Name() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.name();
+            const obj = new this.$.$mol_string();
+            obj.value = (next) => this.name(next);
             return obj;
         }
         Name_labeler() {
@@ -14529,6 +14531,9 @@ var $;
     ], $gen_app_user.prototype, "Login_labeler", null);
     __decorate([
         $mol_mem
+    ], $gen_app_user.prototype, "name", null);
+    __decorate([
+        $mol_mem
     ], $gen_app_user.prototype, "Name", null);
     __decorate([
         $mol_mem
@@ -14564,8 +14569,8 @@ var $;
             login() {
                 return this.user().login();
             }
-            name() {
-                return this.user().name();
+            name(next) {
+                return this.user().name(next);
             }
             email() {
                 return this.user().email();

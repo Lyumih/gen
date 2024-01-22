@@ -3973,8 +3973,8 @@ declare namespace $ {
         login(): string;
         Login(): $$.$mol_paragraph;
         Login_labeler(): $mol_labeler;
-        name(): string;
-        Name(): $$.$mol_paragraph;
+        name(next?: any): string;
+        Name(): $$.$mol_string;
         Name_labeler(): $mol_labeler;
         email(): string;
         Email(): $$.$mol_paragraph;
@@ -3990,7 +3990,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_user extends $.$gen_app_user {
         login(): string;
-        name(): string;
+        name(next?: string): string;
         email(): string;
         heroes_length(): string;
         logout(next?: any): void;

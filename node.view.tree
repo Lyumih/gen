@@ -1199,7 +1199,7 @@ $gen_app_user $mol_page
 			content / <= Login $mol_paragraph title <= login \sad
 		<= Name_labeler $mol_labeler
 			title \Имя
-			content / <= Name $mol_paragraph title <= name \Имя
+			content / <= Name $mol_string value? <=> name? \Имя
 		<= Email_labeler $mol_labeler
 			title \Email
 			content / <= Email $mol_paragraph title <= email \Email
