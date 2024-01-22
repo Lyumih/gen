@@ -5,7 +5,7 @@ $gen_app_item $mol_view
 	item $gen_engine_item
 	sub /
 		<= Card $mol_pop_over
-			Anchor <= Name $mol_text text <= name \
+			Anchor <= Icon $mol_text text <= icon \
 			bubble_content /
 				<= Type $mol_text text <= type_translate \
 				<= Level $mol_text text <= level \

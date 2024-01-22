@@ -61,7 +61,7 @@ namespace $.$$ {
 		}
 
 		skill_points(): string {
-			return `Очков умений: ${ this.hero()?.points() }`
+			return `💎 ${ this.hero()?.points() }`
 		}
 
 		skill_list(): readonly any[] {

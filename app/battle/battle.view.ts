@@ -19,7 +19,7 @@ namespace $.$$ {
 		}
 
 		turn(): string {
-			return `Ход: ${ this.battle().turn() }`
+			return `🕒 ${ this.battle().turn() }`
 		}
 
 		restart() {

@@ -12,7 +12,7 @@ $gen_app_hero $mol_page
 		<= Unit_page $mol_book2
 			pages /
 				<= Hero_page $mol_page
-					title \Характеристики
+					title \📶
 					body /
 						<= Name $mol_section title <= name \Имя:
 						<= Level $mol_section title <= level \Уровень:
@@ -21,7 +21,7 @@ $gen_app_hero $mol_page
 							title \➕
 							click? <=> add_point_hero? null
 				<= Equipment_page $mol_page
-					title \Экипировка
+					title \🪖
 					body /
 						<= Equipment_list $mol_row sub <= equipment_list /
 							<= Equipment*0 $mol_row sub /
@@ -29,7 +29,7 @@ $gen_app_hero $mol_page
 									item <= get_equipment* null
 									remove? <=> equipment_unequip*? null
 				<= Skill_page $mol_page
-					title \Умения
+					title \📚
 					body /
 						<= Points $mol_text text <= skill_points \Очков умений: 10
 						<= Skills $mol_row sub <= skill_list /
@@ -40,7 +40,7 @@ $gen_app_hero $mol_page
 									remove? <=> skill_unequip*? null
 									add_mode? <=> skill_add_mode*? null
 				<= Inventory_page $mol_page
-					title \Инвентарь
+					title \🎒
 					body /
 						<= Inventory_list $mol_row sub <= inventory_list /
 							<= Inventory_item*0 $mol_row sub /
@@ -49,7 +49,7 @@ $gen_app_hero $mol_page
 									add? <=> inventory_equip*? null
 									remove? <=> inventory_item_sell*? null
 				<= Shop_page $mol_page
-					title \Магазин
+					title \🧺
 					body /
 						<= Shop_list $mol_row sub <= shop_list /
 							<= Shop_item*0 $mol_row sub /

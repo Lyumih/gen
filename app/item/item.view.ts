@@ -22,9 +22,12 @@ namespace $.$$ {
 
 		@$mol_mem
 		name() {
-
-			$mol_wire_solid()
 			return this.item().name() + this.item().level()
+		}
+
+		@$mol_mem
+		icon() {
+			return this.item().icon()
 		}
 
 		@$mol_mem

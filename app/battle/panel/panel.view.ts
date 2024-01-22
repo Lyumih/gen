@@ -33,6 +33,10 @@ namespace $.$$ {
 			return `🪄 ${ this.unit().skills().find( skill => skill.id === id )?.name() }` ?? ''
 		}
 
+		skill_icon( id: any ): string {
+			return `🪄 ${ this.unit().skills().find( skill => skill.id === id )?.icon() }` ?? ''
+		}
+
 		unit_panel(): readonly any[] {
 			return [
 				this.Info(),

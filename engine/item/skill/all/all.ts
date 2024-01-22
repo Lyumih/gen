@@ -24,6 +24,7 @@ namespace $ {
 
 				defaults_patch: () => ( {
 					name: 'Хил',
+					icon: '⚕️',
 					description: 'Исцеляет на 10 здоровья',
 					use_plain: text,
 				} ),

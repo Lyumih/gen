@@ -17,6 +17,7 @@ namespace $ {
 			return $gen_engine_item_unit.make( {
 				defaults_patch: () => ( {
 					name: 'Milis',
+					icon: '👩🏼‍⚕️',
 					level: 1000,
 					points: 1000,
 					x: 0,
@@ -80,10 +81,11 @@ namespace $ {
 			return $gen_engine_item_unit.make( {
 				defaults_patch: () => ( {
 					name: 'Бурь',
+					icon: '🧙🏼‍♂️',
 					level: 333,
 					points: 544,
 					attack_range: 2,
-					x: 4,
+					x: 1,
 					y: 2,
 				} ),
 				id: 'hero-mario-3'

@@ -31,7 +31,8 @@ namespace $.$$ {
 			const [ id_x, id_y, id_unit ] = id.split( '_' )
 			const unit = this.units()
 				.find( unit => unit.id === id_unit )
-			const unit_text = unit ? `${ unit.name() + unit.id } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
+			// const unit_text = unit ? `${ unit.name() + unit.id } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
+			const unit_text = unit ? `${ unit.icon() + unit.name() } \n❤️${ unit.health() }\n⚔️${ unit.attack() }` : ''
 			return unit_text ?? ''
 		}
 

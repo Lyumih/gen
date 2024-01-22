@@ -29,4 +29,4 @@ $gen_app_battle_panel $mol_view
 						<= Skill*0 $mol_button_major
 							enabled? <= active?
 							click? <=> use_skill*? null
-							title <= skill_name* \
+							title <= skill_icon* \

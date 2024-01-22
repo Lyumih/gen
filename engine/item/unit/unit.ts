@@ -7,7 +7,7 @@ namespace $ {
 				...super.defaults(),
 				health: 20,
 				attack: 10,
-				icon: '🧙🏼‍♂️',
+				icon: '👤',
 				skills: [] as typeof skill[]
 			}
 		}
