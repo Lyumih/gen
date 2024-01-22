@@ -134,6 +134,7 @@
     "$gen_engine_item_equipment",
     "$gen_engine_item_prop",
     "$gen_engine_item_buff",
+    "$gen_engine_user",
     "$gen_engine_craft",
     "$mol_icon_telegram",
     "$mol_icon",
@@ -241,11 +242,13 @@
     "$gen_generator",
     "$gen_app_admin",
     "$gen_app_loot",
+    "$gen_app_user",
     "$mol_book2_catalog",
     "$mol_search",
     "$mol_nav",
     "$mol_icon_cross",
-    "$mol_match"
+    "$mol_match",
+    "$gen_engine_user_all"
   ],
   "dependencies": {
     "jsdom": "*",

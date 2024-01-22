@@ -1205,7 +1205,55 @@ declare namespace $ {
         shop(next?: $gen_engine_item[]): $gen_engine_item[];
         next_turn(): void;
         refill(): void;
-        duplicate(): $gen_engine_item_unit;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_user extends $gen_engine_entity {
+        defaults(): {
+            name: string;
+            login: string;
+            email: string;
+            role: string;
+            units: {
+                health: number;
+                attack: number;
+                icon: string;
+                skills: {
+                    use_plain: string;
+                    id_root: string;
+                    name: string;
+                    icon: string;
+                    reference: string;
+                    type: string;
+                    part: string;
+                    description: string;
+                    level: number;
+                    points: number;
+                    x: number;
+                    y: number;
+                    speed: number;
+                    attack_range: number;
+                }[];
+                id_root: string;
+                name: string;
+                reference: string;
+                type: string;
+                part: string;
+                description: string;
+                level: number;
+                points: number;
+                x: number;
+                y: number;
+                speed: number;
+                attack_range: number;
+            }[];
+        };
+        name(next?: string): ReturnType<this["data"]>["name"];
+        login(next?: string): ReturnType<this["data"]>["login"];
+        email(next?: string): ReturnType<this["data"]>["email"];
+        role(next?: string): ReturnType<this["data"]>["role"];
+        units(next?: $gen_engine_item_unit[]): $gen_engine_item_unit[];
     }
 }
 
@@ -3344,14 +3392,17 @@ declare namespace $ {
     class $gen_app_hero extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(): readonly $gen_engine_item_unit[];
+        party(next?: any): readonly $gen_engine_item_unit[];
         body(): readonly any[];
+        create_unit(next?: any): any;
+        Create_unit(): $mol_button_minor;
         is_active_hero(id: any): boolean;
         party_hero_name(id: any): string;
         party_hero_pick(id: any, next?: any): any;
         Party(id: any): $mol_button_minor;
         party_list(): readonly any[];
         Party_list(): $mol_row;
+        Party_page(): $mol_page;
         name(): string;
         Name(): $$.$mol_section;
         level(): string;
@@ -3402,6 +3453,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         party_list(): $mol_button_minor[];
+        create_unit(next?: any): void;
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_hero_name(id: string): string;
         party_hero_pick(id: string, next?: any): void;
@@ -3833,6 +3885,35 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $gen_app_user extends $mol_page {
+        title(): string;
+        user(next?: any): $gen_engine_user;
+        body(): readonly any[];
+        login(): string;
+        Login(): $$.$mol_paragraph;
+        Login_labeler(): $mol_labeler;
+        name(): string;
+        Name(): $$.$mol_paragraph;
+        Name_labeler(): $mol_labeler;
+        email(): string;
+        Email(): $$.$mol_paragraph;
+        Email_labeler(): $mol_labeler;
+        heroes_length(): string;
+        Heroes_length(): $$.$mol_paragraph;
+        Heroes_length_labeler(): $mol_labeler;
+    }
+}
+
+declare namespace $.$$ {
+    class $gen_app_user extends $.$gen_app_user {
+        login(): string;
+        name(): string;
+        email(): string;
+        heroes_length(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_nav extends $mol_plugin {
         cycle(next?: any): boolean;
         mod_ctrl(): boolean;
@@ -3988,7 +4069,8 @@ declare namespace $ {
     class $gen_app extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(): readonly $gen_engine_item_unit[];
+        party(next?: any): readonly $gen_engine_item_unit[];
+        user(next?: any): $gen_engine_user;
         craft(): $gen_engine_craft;
         tools(): readonly any[];
         body(): readonly any[];
@@ -4005,7 +4087,16 @@ declare namespace $ {
         Game_page(): $$.$gen_app_game;
         Hack_page(): $$.$gen_app_admin;
         Loot_page(): $$.$gen_app_loot;
+        User_page(): $$.$gen_app_user;
         Pages(): $$.$mol_book2_catalog;
+    }
+}
+
+declare namespace $ {
+    class $gen_engine_user_all extends $mol_object {
+        all(): $gen_engine_user[];
+        resource(): $gen_engine_user[];
+        misha(): $gen_engine_user;
     }
 }
 
@@ -4013,6 +4104,7 @@ declare namespace $.$$ {
     class $gen_app extends $.$gen_app {
         party(next?: $gen_engine_item_unit[]): readonly $gen_engine_item_unit[];
         active_hero(next?: any): $gen_engine_item_unit;
+        user(next?: $gen_engine_user): $gen_engine_user;
     }
 }
 

@@ -844,16 +844,23 @@ $gen_app_item_shop $gen_app_item
 $gen_app_hero $mol_page
 	title \🕵🏼‍♀️
 	engine $gen_engine
-	party /$gen_engine_item_unit
+	party? /$gen_engine_item_unit
 	body /
-		<= Party_list $mol_row sub <= party_list /
-			<= Party*0 $mol_button_minor
-				attr *
-					active <= is_active_hero* false
-				title <= party_hero_name* \Герой
-				click? <=> party_hero_pick*? null
 		<= Unit_page $mol_book2
 			pages /
+				<= Party_page $mol_page
+					title \🕵🏼‍♀️
+					tools /
+						<= Create_unit $mol_button_minor
+							title \➕
+							click? <=> create_unit? null
+					body /
+						<= Party_list $mol_row sub <= party_list /
+							<= Party*0 $mol_button_minor
+								attr *
+									active <= is_active_hero* false
+								title <= party_hero_name* \Герой
+								click? <=> party_hero_pick*? null
 				<= Hero_page $mol_page
 					title \📶
 					body /
@@ -1180,6 +1187,23 @@ $gen_app_loot $mol_page
 		<= New_item $mol_text text <= new_item \Новый предмет
 		<= History_item $mol_text text <= history_text \История предметов
 
+$gen_app_user $mol_page
+	title \⚙️
+	user? $gen_engine_user
+	body /
+		<= Login_labeler $mol_labeler
+			title \Логин
+			content / <= Login $mol_paragraph title <= login \sad
+		<= Name_labeler $mol_labeler
+			title \Имя
+			content / <= Name $mol_paragraph title <= name \Имя
+		<= Email_labeler $mol_labeler
+			title \Email
+			content / <= Email $mol_paragraph title <= email \Email
+		<= Heroes_length_labeler $mol_labeler
+			title \Кол-во героев
+			content / <= Heroes_length $mol_paragraph title <= heroes_length \0
+
 $mol_nav $mol_plugin
 	cycle? false
 	-
@@ -1280,9 +1304,10 @@ $mol_book2_catalog $mol_book2
 			<= Spread_close_icon $mol_icon_cross
 
 $gen_app $mol_page
-	title \Игра Gen v0.1. Герои, PoE, моды
+	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
 	engine $gen_engine
-	party /$gen_engine_item_unit
+	party? /$gen_engine_item_unit
+	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
 		<= Telegram $mol_link_source
@@ -1299,7 +1324,7 @@ $gen_app $mol_page
 					- party_new <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
-					party <= party
+					party? <=> party?
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
@@ -1308,3 +1333,5 @@ $gen_app $mol_page
 				game_page <= Game_page $gen_app_game engine <= engine
 				hack_page <= Hack_page $gen_app_admin engine <= engine
 				loot_page <= Loot_page $gen_app_loot engine <= engine
+				user_page <= User_page $gen_app_user
+					user? <=> user?

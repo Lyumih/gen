@@ -4219,7 +4219,6 @@ var $;
             battle.next_turn();
         }
         is_dead() {
-            $mol_wire_solid();
             return this.health() <= 0;
         }
         equipments(next) {
@@ -4253,10 +4252,6 @@ var $;
             this.health(undefined);
             this.attack(undefined);
         }
-        duplicate() {
-            const clone = new $gen_engine_item_unit;
-            return this;
-        }
     }
     __decorate([
         $mol_mem
@@ -4273,6 +4268,47 @@ var $;
     $.$gen_engine_item_unit = $gen_engine_item_unit;
 })($ || ($ = {}));
 //gen/engine/item/unit/unit.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_user extends $gen_engine_entity {
+        defaults() {
+            const unit = new $gen_engine_item_unit().defaults();
+            return {
+                ...super.defaults(),
+                name: 'no name',
+                login: 'no login',
+                email: 'no email',
+                role: 'user',
+                units: [],
+            };
+        }
+        name(next) {
+            return this.value('name', next);
+        }
+        login(next) {
+            return this.value('login', next);
+        }
+        email(next) {
+            return this.value('email', next);
+        }
+        role(next) {
+            return this.value('role', next);
+        }
+        units(next) {
+            const value = this.value('units', next?.map(unit => unit.defaults()));
+            return value.map(unit => $gen_engine_item_unit.make({
+                defaults_patch: () => ({
+                    ...unit
+                }),
+                id: 'unit-id-fix-me-from-user'
+            }));
+        }
+    }
+    $.$gen_engine_user = $gen_engine_user;
+})($ || ($ = {}));
+//gen/engine/user/user.ts
 ;
 "use strict";
 var $;
@@ -11821,14 +11857,26 @@ var $;
             const obj = new this.$.$gen_engine();
             return obj;
         }
-        party() {
+        party(next) {
+            if (next !== undefined)
+                return next;
             return [];
         }
         body() {
             return [
-                this.Party_list(),
                 this.Unit_page()
             ];
+        }
+        create_unit(next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Create_unit() {
+            const obj = new this.$.$mol_button_minor();
+            obj.title = () => "➕";
+            obj.click = (next) => this.create_unit(next);
+            return obj;
         }
         is_active_hero(id) {
             return false;
@@ -11858,6 +11906,17 @@ var $;
         Party_list() {
             const obj = new this.$.$mol_row();
             obj.sub = () => this.party_list();
+            return obj;
+        }
+        Party_page() {
+            const obj = new this.$.$mol_page();
+            obj.title = () => "🕵🏼‍♀️";
+            obj.tools = () => [
+                this.Create_unit()
+            ];
+            obj.body = () => [
+                this.Party_list()
+            ];
             return obj;
         }
         name() {
@@ -12099,6 +12158,7 @@ var $;
         Unit_page() {
             const obj = new this.$.$mol_book2();
             obj.pages = () => [
+                this.Party_page(),
                 this.Hero_page(),
                 this.Equipment_page(),
                 this.Skill_page(),
@@ -12112,6 +12172,15 @@ var $;
         $mol_mem
     ], $gen_app_hero.prototype, "engine", null);
     __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "party", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "create_unit", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Create_unit", null);
+    __decorate([
         $mol_mem_key
     ], $gen_app_hero.prototype, "party_hero_pick", null);
     __decorate([
@@ -12120,6 +12189,9 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Party_list", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_hero.prototype, "Party_page", null);
     __decorate([
         $mol_mem
     ], $gen_app_hero.prototype, "Name", null);
@@ -12229,6 +12301,11 @@ var $;
             party_list() {
                 return this.party().map(unit => this.Party(unit.id));
             }
+            create_unit(next) {
+                const unit = $gen_engine_item_unit.make({ id: 'new-unit-' + $mol_guid() });
+                console.log('create unit', unit);
+                this.party([...this.party(), unit]);
+            }
             get_party_hero(id) {
                 return this.party().find(unit => unit.id === id);
             }
@@ -12329,7 +12406,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("gen/app/hero/hero.view.css", "[gen_app_hero_party][active='true'] {\n\tborder: 2px solid greenyellow;\n\tborder-radius: 1rem;\n}");
+    $mol_style_attach("gen/app/hero/hero.view.css", "[gen_app_hero_party][active='true'] {\n\tborder: 2px solid greenyellow;\n\tborder-radius: 1rem;\n}\n\n[gen_app_hero_party_list] {\n\tflex-direction: column;\n}");
 })($ || ($ = {}));
 //gen/app/hero/-css/hero.view.css.ts
 ;
@@ -14290,6 +14367,147 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $gen_app_user extends $mol_page {
+        title() {
+            return "⚙️";
+        }
+        user(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$gen_engine_user();
+            return obj;
+        }
+        body() {
+            return [
+                this.Login_labeler(),
+                this.Name_labeler(),
+                this.Email_labeler(),
+                this.Heroes_length_labeler()
+            ];
+        }
+        login() {
+            return "sad";
+        }
+        Login() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.login();
+            return obj;
+        }
+        Login_labeler() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Логин";
+            obj.content = () => [
+                this.Login()
+            ];
+            return obj;
+        }
+        name() {
+            return "Имя";
+        }
+        Name() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.name();
+            return obj;
+        }
+        Name_labeler() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Имя";
+            obj.content = () => [
+                this.Name()
+            ];
+            return obj;
+        }
+        email() {
+            return "Email";
+        }
+        Email() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.email();
+            return obj;
+        }
+        Email_labeler() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Email";
+            obj.content = () => [
+                this.Email()
+            ];
+            return obj;
+        }
+        heroes_length() {
+            return "0";
+        }
+        Heroes_length() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.heroes_length();
+            return obj;
+        }
+        Heroes_length_labeler() {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Кол-во героев";
+            obj.content = () => [
+                this.Heroes_length()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "user", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Login", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Login_labeler", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Name", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Name_labeler", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Email", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Email_labeler", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Heroes_length", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app_user.prototype, "Heroes_length_labeler", null);
+    $.$gen_app_user = $gen_app_user;
+})($ || ($ = {}));
+//gen/app/user/-view.tree/user.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $gen_app_user extends $.$gen_app_user {
+            login() {
+                return this.user().login();
+            }
+            name() {
+                return this.user().name();
+            }
+            email() {
+                return this.user().email();
+            }
+            heroes_length() {
+                return '' + this.user().units().length;
+            }
+        }
+        $$.$gen_app_user = $gen_app_user;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//gen/app/user/user.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_nav extends $mol_plugin {
         cycle(next) {
             if (next !== undefined)
@@ -15067,14 +15285,22 @@ var $;
 (function ($) {
     class $gen_app extends $mol_page {
         title() {
-            return "Игра Gen v0.1. Герои, PoE, моды";
+            return "🧬Gen v0.1. Игра ~ Герои, PoE, моды";
         }
         engine() {
             const obj = new this.$.$gen_engine();
             return obj;
         }
-        party() {
+        party(next) {
+            if (next !== undefined)
+                return next;
             return [];
+        }
+        user(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$gen_engine_user();
+            return obj;
         }
         craft() {
             const obj = new this.$.$gen_engine_craft();
@@ -15114,7 +15340,7 @@ var $;
         Hero_page() {
             const obj = new this.$.$gen_app_hero();
             obj.engine = () => this.engine();
-            obj.party = () => this.party();
+            obj.party = (next) => this.party(next);
             return obj;
         }
         Talent_page() {
@@ -15155,6 +15381,11 @@ var $;
             obj.engine = () => this.engine();
             return obj;
         }
+        User_page() {
+            const obj = new this.$.$gen_app_user();
+            obj.user = (next) => this.user(next);
+            return obj;
+        }
         Pages() {
             const obj = new this.$.$mol_book2_catalog();
             obj.menu_title = () => "Меню";
@@ -15168,7 +15399,8 @@ var $;
                 dev_page: this.Dev_page(),
                 game_page: this.Game_page(),
                 hack_page: this.Hack_page(),
-                loot_page: this.Loot_page()
+                loot_page: this.Loot_page(),
+                user_page: this.User_page()
             });
             return obj;
         }
@@ -15176,6 +15408,12 @@ var $;
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "engine", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "party", null);
+    __decorate([
+        $mol_mem
+    ], $gen_app.prototype, "user", null);
     __decorate([
         $mol_mem
     ], $gen_app.prototype, "craft", null);
@@ -15220,10 +15458,44 @@ var $;
     ], $gen_app.prototype, "Loot_page", null);
     __decorate([
         $mol_mem
+    ], $gen_app.prototype, "User_page", null);
+    __decorate([
+        $mol_mem
     ], $gen_app.prototype, "Pages", null);
     $.$gen_app = $gen_app;
 })($ || ($ = {}));
 //gen/app/-view.tree/app.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $gen_engine_user_all extends $mol_object {
+        all() {
+            return this.resource();
+        }
+        resource() {
+            return [
+                this.misha()
+            ];
+        }
+        misha() {
+            return $gen_engine_user.make({
+                defaults_patch: () => ({
+                    name: 'Миша',
+                    login: 'misha',
+                    email: 'misha@ya.ru',
+                    role: 'user',
+                }),
+                id: 'misha-user',
+            });
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $gen_engine_user_all.prototype, "all", null);
+    $.$gen_engine_user_all = $gen_engine_user_all;
+})($ || ($ = {}));
+//gen/engine/user/all/all.ts
 ;
 "use strict";
 var $;
@@ -15237,10 +15509,16 @@ var $;
             active_hero(next) {
                 return next ?? this.party()[0];
             }
+            user(next) {
+                return next ?? new $gen_engine_user_all().misha();
+            }
         }
         __decorate([
             $mol_mem
         ], $gen_app.prototype, "party", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app.prototype, "user", null);
         $$.$gen_app = $gen_app;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
