@@ -1,0 +1,16 @@
+$gen_app_user $mol_page
+	title \⚙️
+	user? $gen_engine_user
+	body /
+		<= Login_labeler $mol_labeler
+			title \Логин
+			content / <= Login $mol_paragraph title <= login \sad
+		<= Name_labeler $mol_labeler
+			title \Имя
+			content / <= Name $mol_paragraph title <= name \Имя
+		<= Email_labeler $mol_labeler
+			title \Email
+			content / <= Email $mol_paragraph title <= email \Email
+		<= Heroes_length_labeler $mol_labeler
+			title \Кол-во героев
+			content / <= Heroes_length $mol_paragraph title <= heroes_length \0

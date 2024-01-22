@@ -44,7 +44,6 @@ namespace $ {
 		}
 
 		is_dead() {
-			$mol_wire_solid()
 			return this.health() <= 0
 		}
 
@@ -88,12 +87,6 @@ namespace $ {
 		refill() {
 			this.health( undefined )
 			this.attack( undefined )
-		}
-
-		duplicate(): $gen_engine_item_unit {
-			const clone = new $gen_engine_item_unit
-
-			return this
 		}
 
 	}

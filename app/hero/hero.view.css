@@ -2,3 +2,7 @@
 	border: 2px solid greenyellow;
 	border-radius: 1rem;
 }
+
+[gen_app_hero_party_list] {
+	flex-direction: column;
+}

@@ -1,16 +1,23 @@
 $gen_app_hero $mol_page
 	title \🕵🏼‍♀️
 	engine $gen_engine
-	party /$gen_engine_item_unit
+	party? /$gen_engine_item_unit
 	body /
-		<= Party_list $mol_row sub <= party_list /
-			<= Party*0 $mol_button_minor
-				attr *
-					active <= is_active_hero* false
-				title <= party_hero_name* \Герой
-				click? <=> party_hero_pick*? null
 		<= Unit_page $mol_book2
 			pages /
+				<= Party_page $mol_page
+					title \🕵🏼‍♀️
+					tools /
+						<= Create_unit $mol_button_minor
+							title \➕
+							click? <=> create_unit? null
+					body /
+						<= Party_list $mol_row sub <= party_list /
+							<= Party*0 $mol_button_minor
+								attr *
+									active <= is_active_hero* false
+								title <= party_hero_name* \Герой
+								click? <=> party_hero_pick*? null
 				<= Hero_page $mol_page
 					title \📶
 					body /

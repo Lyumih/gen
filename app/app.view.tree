@@ -1,7 +1,8 @@
 $gen_app $mol_page
-	title \Игра Gen v0.1. Герои, PoE, моды
+	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
 	engine $gen_engine
-	party /$gen_engine_item_unit
+	party? /$gen_engine_item_unit
+	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
 		<= Telegram $mol_link_source
@@ -18,7 +19,7 @@ $gen_app $mol_page
 					- party_new <= party
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
-					party <= party
+					party? <=> party?
 				talent_page <= Talent_page $gen_app_talent
 				craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
@@ -27,3 +28,5 @@ $gen_app $mol_page
 				game_page <= Game_page $gen_app_game engine <= engine
 				hack_page <= Hack_page $gen_app_admin engine <= engine
 				loot_page <= Loot_page $gen_app_loot engine <= engine
+				user_page <= User_page $gen_app_user
+					user? <=> user?

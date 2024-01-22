@@ -6,6 +6,12 @@ namespace $.$$ {
 			return this.party().map( unit => this.Party( unit.id ) )
 		}
 
+		create_unit( next?: any ) {
+			const unit = $gen_engine_item_unit.make( { id: 'new-unit-' + $mol_guid() } )
+			console.log( 'create unit', unit )
+			this.party( [ ...this.party(), unit ] )
+		}
+
 		get_party_hero( id: string ) {
 			return this.party().find( unit => unit.id === id )
 		}
