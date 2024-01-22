@@ -689,7 +689,7 @@ $gen_app_battle $mol_book2
 	engine $gen_engine
 	battle $gen_engine_battle
 	party /$gen_engine_item_unit
-	party_new /$gen_engine_item_unit
+	user? $gen_engine_user
 	active_unit? null
 	preview_unit? null
 	preview_cell? \
@@ -844,7 +844,7 @@ $gen_app_item_shop $gen_app_item
 $gen_app_hero $mol_page
 	title \🕵🏼‍♀️
 	engine $gen_engine
-	party? /$gen_engine_item_unit
+	user? $gen_engine_user
 	body /
 		<= Unit_page $mol_book2
 			pages /
@@ -953,72 +953,6 @@ $gen_app_talent $mol_page
 						click? <=> talent_click*? null
 					bubble_content /
 						<= Talent_description* $mol_paragraph title <= talent_description* \
-
-$gen_app_craft $mol_page
-	equipment $gen_engine_item_equipment
-	unit $gen_engine_item_unit
-	title \Крафт
-	body /
-		<= Points $mol_section title <= points_title \
-		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
-		<= Equipment_level $mol_paragraph title <= equipment_level \
-		<= Prop_stage $mol_section title \Этап 1. Свойства. Макс. 10 свойств 10ур
-		<= Prop_level_up $mol_button_major
-			title \Повысить уровень. 1пт
-			click? <=> prop_level_up? null
-		<= Prop_open $mol_button_major
-			title \Открыть свойство. 5пт
-			click? <=> prop_open? null
-		<= Prop_min_max $mol_expander
-			title \Максимизация базовых свойств
-			content /
-				<= Prop_level_down $mol_button_major
-					title \Понизить уровень. 5пт
-				<= Prop_fix $mol_button_major
-					title \Зафиксировать свойство. 50пт
-				<= Prop_unfix $mol_button_major
-					title \Открепить. 50пт
-				<= Prop_tier_up $mol_button_major
-					title \Повысить тир. 50пт
-				<= Prop_bless_reroll $mol_button_major
-					title \Перебросить благословение. 50пт
-				<= Prop_base_rerolll $mol_button_major
-					title \Перековать основу. 100пт
-				<= Prop_remove $mol_button_major
-					title \Удалить свойство. 10пт
-		<= Prop_list $mol_list rows <= prop_list /
-			<= Prop*0 $mol_row sub /
-				<= Prop_check* $mol_check_box
-				<= Prop_name* $mol_paragraph title <= prop_name* \Свойство 1. Атака + 5 (3-7 разброс)
-				<= Prop_level* $mol_paragraph title <= prop_level* \Уровень 1.
-				<= Prop_luck* $mol_paragraph title <= prop_luck* \Удачно: 3
-				<= Prop_bless* $mol_paragraph title <= prop_unluck* \Благословение: неудачно (-50% эффекта)
-				<= Prop_tier* $mol_paragraph title <= prop_tier* \Тир: 3
-		<= Luck_stage $mol_section title \Этап 2. Удачный скил. 50+ ур.
-		<= Luck_unlock $mol_button_major
-			title \Разблокировать удачный скил. 25пт
-		<= Luck_level_up $mol_button_major
-			title \Повысить уровень умения. 1пт
-		<= Luck_reroll $mol_button_major
-			title \Поменять реликвию. 100пт
-		<= Luck_chance $mol_paragraph title \Шанс при атаке: 1%
-		<= Luck_name $mol_paragraph title \Умение: Мощное исцеление. Уровень 1.
-		<= Relic_stage $mol_section title \Этап 3. Сила реликвии. 100+ ур
-		<= Relic_unlock $mol_button_major
-			title \Разблокировать реликвию. 25пт
-		<= Relic_level_up $mol_button_major
-			title \Поднять уровень реликвии. 1пт
-		<= Relic_reroll $mol_button_major
-			title \Поменять реликвию. 100пт
-		<= Relic_name $mol_paragraph
-			title \Холодная кровь. Ур. 1. Кровотечение также замораживает противника с шансом 1% (+1 за ур.).
-		<= Uniq_stage $mol_section title \Этап 4. Сетовый набор. 150+ ур.
-		<= Uniq_reroll $mol_button_major title \Сменить набор. 20пт
-		<= Uniq_name $mol_paragraph title \Набор крови. 3пр. 25% Шанс игнорировать сопротивление цели к кровотечению
-		<= Power $mol_section title \Этап 5. Максимальная мощь. 200+ ур.
-		<= Power_name $mol_paragraph title \Ваши физические атаки игорируют 100% сопр. врага с шансом 10%
-		<= Defence $mol_section title \Этап 5. Максимальная защита. 200+ ур.
-		<= Defence_name $mol_paragraph title \10% шанс избежать смертельного урона
 
 $gen_auction $mol_page
 	title \Аукцион
@@ -1312,7 +1246,6 @@ $mol_book2_catalog $mol_book2
 $gen_app $mol_page
 	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
 	engine $gen_engine
-	party? /$gen_engine_item_unit
 	user? $gen_engine_user
 	craft $gen_engine_craft
 	tools /
@@ -1330,12 +1263,12 @@ $gen_app $mol_page
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
-					party_new <= party
+					user? <=> user?
 				hero_page <= Hero_page $gen_app_hero
 					engine <= engine
-					party? <=> party?
+					user? <=> user?
 				talent_page <= Talent_page $gen_app_talent
-				craftt_page <= Craft_page $gen_app_craft
+				- craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
 				auction_page <= Auction $gen_auction
 				dev_page <= Dev_page $gen_dev

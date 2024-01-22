@@ -1369,6 +1369,7 @@ declare namespace $ {
         email(next?: string): ReturnType<this["data"]>["email"];
         role(next?: string): ReturnType<this["data"]>["role"];
         units(next?: $gen_engine_item_unit[]): $gen_engine_item_unit[];
+        add_unit(next?: any): void;
     }
 }
 
@@ -3206,7 +3207,7 @@ declare namespace $ {
         engine(): $gen_engine;
         battle(): $gen_engine_battle;
         party(): readonly $gen_engine_item_unit[];
-        party_new(): readonly $gen_engine_item_unit[];
+        user(next?: any): $gen_engine_user;
         active_unit(next?: any): any;
         preview_unit(next?: any): any;
         preview_cell(next?: any): string;
@@ -3262,6 +3263,7 @@ declare namespace $.$$ {
         end_battle(next?: any): void;
         turn(): string;
         restart(): void;
+        party_new(): readonly $gen_engine_item_unit[];
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_unit_name(id: string): string;
         party_list(): readonly any[];
@@ -3434,7 +3436,7 @@ declare namespace $ {
     class $gen_app_hero extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(next?: any): readonly $gen_engine_item_unit[];
+        user(next?: any): $gen_engine_user;
         body(): readonly any[];
         create_unit(next?: any): any;
         Create_unit(): $mol_button_minor;
@@ -3508,6 +3510,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $gen_app_hero extends $.$gen_app_hero {
         party_list(): $mol_row[];
+        party(next?: $gen_engine_item_unit[]): $gen_engine_item_unit[];
         create_unit(next?: any): void;
         get_party_hero(id: string): $gen_engine_item_unit | undefined;
         party_hero_name(id: string, next?: any): string;
@@ -3666,78 +3669,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $gen_app_craft extends $mol_page {
-        equipment(): $gen_engine_item_equipment;
-        unit(): $gen_engine_item_unit;
-        title(): string;
-        body(): readonly any[];
-        points_title(): string;
-        Points(): $$.$mol_section;
-        Equipment_title(): $$.$mol_section;
-        equipment_level(): string;
-        Equipment_level(): $$.$mol_paragraph;
-        Prop_stage(): $$.$mol_section;
-        prop_level_up(next?: any): any;
-        Prop_level_up(): $mol_button_major;
-        prop_open(next?: any): any;
-        Prop_open(): $mol_button_major;
-        Prop_level_down(): $mol_button_major;
-        Prop_fix(): $mol_button_major;
-        Prop_unfix(): $mol_button_major;
-        Prop_tier_up(): $mol_button_major;
-        Prop_bless_reroll(): $mol_button_major;
-        Prop_base_rerolll(): $mol_button_major;
-        Prop_remove(): $mol_button_major;
-        Prop_min_max(): $$.$mol_expander;
-        Prop_check(id: any): $mol_check_box;
-        prop_name(id: any): string;
-        Prop_name(id: any): $$.$mol_paragraph;
-        prop_level(id: any): string;
-        Prop_level(id: any): $$.$mol_paragraph;
-        prop_luck(id: any): string;
-        Prop_luck(id: any): $$.$mol_paragraph;
-        prop_unluck(id: any): string;
-        Prop_bless(id: any): $$.$mol_paragraph;
-        prop_tier(id: any): string;
-        Prop_tier(id: any): $$.$mol_paragraph;
-        Prop(id: any): $mol_row;
-        prop_list(): readonly any[];
-        Prop_list(): $$.$mol_list;
-        Luck_stage(): $$.$mol_section;
-        Luck_unlock(): $mol_button_major;
-        Luck_level_up(): $mol_button_major;
-        Luck_reroll(): $mol_button_major;
-        Luck_chance(): $$.$mol_paragraph;
-        Luck_name(): $$.$mol_paragraph;
-        Relic_stage(): $$.$mol_section;
-        Relic_unlock(): $mol_button_major;
-        Relic_level_up(): $mol_button_major;
-        Relic_reroll(): $mol_button_major;
-        Relic_name(): $$.$mol_paragraph;
-        Uniq_stage(): $$.$mol_section;
-        Uniq_reroll(): $mol_button_major;
-        Uniq_name(): $$.$mol_paragraph;
-        Power(): $$.$mol_section;
-        Power_name(): $$.$mol_paragraph;
-        Defence(): $$.$mol_section;
-        Defence_name(): $$.$mol_paragraph;
-    }
-}
-
-declare namespace $.$$ {
-    class $gen_app_craft extends $.$gen_app_craft {
-        equipment_level(): string;
-        unit(next?: $gen_engine_item_unit): $gen_engine_item_unit;
-        equipment(next?: $gen_engine_item_equipment): $gen_engine_item_equipment;
-        points_title(): string;
-        craft(next?: $gen_engine_craft): $gen_engine_craft;
-        prop_list(): readonly any[];
-        prop_open(next?: any): void;
-        prop_level_up(next?: any): void;
-    }
 }
 
 declare namespace $ {
@@ -4153,7 +4084,6 @@ declare namespace $ {
     class $gen_app extends $mol_page {
         title(): string;
         engine(): $gen_engine;
-        party(next?: any): readonly $gen_engine_item_unit[];
         user(next?: any): $gen_engine_user;
         craft(): $gen_engine_craft;
         tools(): readonly any[];
@@ -4166,8 +4096,6 @@ declare namespace $ {
         Battle_page(): $$.$gen_app_battle;
         Hero_page(): $$.$gen_app_hero;
         Talent_page(): $$.$gen_app_talent;
-        active_hero(next?: any): $gen_engine_item_unit;
-        Craft_page(): $$.$gen_app_craft;
         Auction(): $gen_auction;
         Dev_page(): $$.$gen_dev;
         Game_page(): $$.$gen_app_game;
