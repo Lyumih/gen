@@ -3053,7 +3053,7 @@ declare namespace $ {
         Action_end_turn(): $mol_button_major;
         Active_actions(): $mol_row;
         use_skill(id: any, next?: any): any;
-        skill_name(id: any): string;
+        skill_icon(id: any): string;
         Skill(id: any): $mol_button_major;
         skill_list(): readonly any[];
         Skill_list(): $mol_row;
@@ -3073,6 +3073,7 @@ declare namespace $.$$ {
         sub(): readonly any[];
         skill_list(): readonly any[];
         skill_name(id: any): string;
+        skill_icon(id: any): string;
         unit_panel(): readonly any[];
     }
 }
@@ -3329,12 +3330,13 @@ declare namespace $ {
         item(): $gen_engine_item;
         sub(): readonly any[];
         type(): string;
-        name(): string;
-        Name(): $$.$mol_text;
+        icon(): string;
+        Icon(): $$.$mol_text;
         type_translate(): string;
         Type(): $$.$mol_text;
         level(): string;
         Level(): $$.$mol_text;
+        name(): string;
         Name_bubble(): $$.$mol_text;
         description(): string;
         Desription(): $$.$mol_text;
@@ -3357,6 +3359,7 @@ declare namespace $.$$ {
         type_translate(): string;
         type(): string;
         name(): string;
+        icon(): string;
         level(): string;
         description(next?: string): string;
     }

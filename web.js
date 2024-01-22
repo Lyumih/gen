@@ -3675,7 +3675,7 @@ var $;
                 ...super.defaults(),
                 health: 20,
                 attack: 10,
-                icon: '🧙🏼‍♂️',
+                icon: '👤',
                 skills: []
             };
         }
@@ -9595,14 +9595,14 @@ var $;
                 return next;
             return null;
         }
-        skill_name(id) {
+        skill_icon(id) {
             return "";
         }
         Skill(id) {
             const obj = new this.$.$mol_button_major();
             obj.enabled = (next) => this.active();
             obj.click = (next) => this.use_skill(id, next);
-            obj.title = () => this.skill_name(id);
+            obj.title = () => this.skill_icon(id);
             return obj;
         }
         skill_list() {
@@ -9737,6 +9737,9 @@ var $;
             }
             skill_name(id) {
                 return `🪄 ${this.unit().skills().find(skill => skill.id === id)?.name()}` ?? '';
+            }
+            skill_icon(id) {
+                return `🪄 ${this.unit().skills().find(skill => skill.id === id)?.icon()}` ?? '';
             }
             unit_panel() {
                 return [
@@ -9945,7 +9948,7 @@ var $;
                 const [id_x, id_y, id_unit] = id.split('_');
                 const unit = this.units()
                     .find(unit => unit.id === id_unit);
-                const unit_text = unit ? `${unit.name() + unit.id} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
+                const unit_text = unit ? `${unit.icon() + unit.name()} \n❤️${unit.health()}\n⚔️${unit.attack()}` : '';
                 return unit_text ?? '';
             }
             is_active(id, next) {
@@ -10476,6 +10479,7 @@ var $;
             return $gen_engine_item_skill.make({
                 defaults_patch: () => ({
                     name: 'Хил',
+                    icon: '⚕️',
                     description: 'Исцеляет на 10 здоровья',
                     use_plain: text,
                 }),
@@ -10601,6 +10605,7 @@ var $;
             return $gen_engine_item_unit.make({
                 defaults_patch: () => ({
                     name: 'Milis',
+                    icon: '👩🏼‍⚕️',
                     level: 1000,
                     points: 1000,
                     x: 0,
@@ -10628,10 +10633,11 @@ var $;
             return $gen_engine_item_unit.make({
                 defaults_patch: () => ({
                     name: 'Бурь',
+                    icon: '🧙🏼‍♂️',
                     level: 333,
                     points: 544,
                     attack_range: 2,
-                    x: 4,
+                    x: 1,
                     y: 2,
                 }),
                 id: 'hero-mario-3'
@@ -10667,7 +10673,7 @@ var $;
                 this.battle_status('');
             }
             turn() {
-                return `Ход: ${this.battle().turn()}`;
+                return `🕒 ${this.battle().turn()}`;
             }
             restart() {
                 this.battle().turn(0);
@@ -11083,12 +11089,12 @@ var $;
         type() {
             return "";
         }
-        name() {
+        icon() {
             return "";
         }
-        Name() {
+        Icon() {
             const obj = new this.$.$mol_text();
-            obj.text = () => this.name();
+            obj.text = () => this.icon();
             return obj;
         }
         type_translate() {
@@ -11106,6 +11112,9 @@ var $;
             const obj = new this.$.$mol_text();
             obj.text = () => this.level();
             return obj;
+        }
+        name() {
+            return "";
         }
         Name_bubble() {
             const obj = new this.$.$mol_text();
@@ -11170,7 +11179,7 @@ var $;
         }
         Card() {
             const obj = new this.$.$mol_pop_over();
-            obj.Anchor = () => this.Name();
+            obj.Anchor = () => this.Icon();
             obj.bubble_content = () => [
                 this.Type(),
                 this.Level(),
@@ -11186,7 +11195,7 @@ var $;
     ], $gen_app_item.prototype, "item", null);
     __decorate([
         $mol_mem
-    ], $gen_app_item.prototype, "Name", null);
+    ], $gen_app_item.prototype, "Icon", null);
     __decorate([
         $mol_mem
     ], $gen_app_item.prototype, "Type", null);
@@ -11249,8 +11258,10 @@ var $;
                 return this.item().type();
             }
             name() {
-                $mol_wire_solid();
                 return this.item().name() + this.item().level();
+            }
+            icon() {
+                return this.item().icon();
             }
             level() {
                 return `Ур. ${this.item().level()}`;
@@ -11266,6 +11277,9 @@ var $;
         __decorate([
             $mol_mem
         ], $gen_app_item.prototype, "name", null);
+        __decorate([
+            $mol_mem
+        ], $gen_app_item.prototype, "icon", null);
         __decorate([
             $mol_mem
         ], $gen_app_item.prototype, "level", null);
@@ -11446,7 +11460,7 @@ var $;
         }
         Hero_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Характеристики";
+            obj.title = () => "📶";
             obj.body = () => [
                 this.Name(),
                 this.Level(),
@@ -11488,7 +11502,7 @@ var $;
         }
         Equipment_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Экипировка";
+            obj.title = () => "🪖";
             obj.body = () => [
                 this.Equipment_list()
             ];
@@ -11547,7 +11561,7 @@ var $;
         }
         Skill_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Умения";
+            obj.title = () => "📚";
             obj.body = () => [
                 this.Points(),
                 this.Skills()
@@ -11593,7 +11607,7 @@ var $;
         }
         Inventory_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Инвентарь";
+            obj.title = () => "🎒";
             obj.body = () => [
                 this.Inventory_list()
             ];
@@ -11632,7 +11646,7 @@ var $;
         }
         Shop_page() {
             const obj = new this.$.$mol_page();
-            obj.title = () => "Магазин";
+            obj.title = () => "🧺";
             obj.body = () => [
                 this.Shop_list()
             ];
@@ -11808,7 +11822,7 @@ var $;
                 this.engine().hero_unequip(id);
             }
             skill_points() {
-                return `Очков умений: ${this.hero()?.points()}`;
+                return `💎 ${this.hero()?.points()}`;
             }
             skill_list() {
                 return this.hero()?.skills()?.map(skill => this.Skill(skill.id)) || [];
