@@ -17,7 +17,7 @@ $gen_app_hero $mol_page
 						<= Name $mol_section title <= name \Имя:
 						<= Level $mol_section title <= level \Уровень:
 						<= Points_hero $mol_text text <= points \Очки пт:
-						<= Add_point_hero $mol_button_major
+						<= Add_point_hero $mol_button_minor
 							title \➕
 							click? <=> add_point_hero? null
 				<= Equipment_page $mol_page
@@ -39,6 +39,9 @@ $gen_app_hero $mol_page
 									add <= skill_level_up*? null
 									remove? <=> skill_unequip*? null
 									add_mode? <=> skill_add_mode*? null
+								<= Skill_level_up* $mol_button_minor
+									title \➕
+									click? <=> skill_level_up*? null
 				<= Inventory_page $mol_page
 					title \🎒
 					body /

@@ -64,8 +64,16 @@ namespace $ {
 			return this.value( 'level', next )
 		}
 
+		icon_level() {
+			return '⭐' + this.level()
+		}
+
 		points( next?: number ) {
 			return this.value( 'points', next )
+		}
+
+		icon_points() {
+			return '💎' + this.points()
 		}
 
 		x( next?: number ) {
@@ -88,8 +96,16 @@ namespace $ {
 			return this.value( 'speed', next )
 		}
 
+		icon_speed() {
+			return '👟' + this.speed()
+		}
+
 		attack_range( next?: number ) {
 			return this.value( 'attack_range', next )
+		}
+
+		icon_attack_range() {
+			return '🏹' + this.attack_range()
 		}
 
 		move( x: number, y: number ) {

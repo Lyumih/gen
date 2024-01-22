@@ -17,7 +17,7 @@ namespace $ {
 
 		heal() {
 			const text = `
-				source.health( source.health() + 10 )
+				source.health( source.health() + 10 + this.level() * 2 )
 				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
 			`
 			return $gen_engine_item_skill.make( {
@@ -27,6 +27,7 @@ namespace $ {
 					icon: '⚕️',
 					description: 'Исцеляет на 10 здоровья',
 					use_plain: text,
+					level: 3,
 				} ),
 				id: 'skill-heal-1',
 			} )

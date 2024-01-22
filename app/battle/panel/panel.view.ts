@@ -42,7 +42,7 @@ namespace $.$$ {
 		}
 
 		skill_hint( id: any ): string {
-			return `${ this.get_skill( id )?.name() }\n${ this.get_skill( id )?.description() }`
+			return `${ this.get_skill( id )?.icon_name() }\n${ this.get_skill( id )?.icon_level() }\n${ this.get_skill( id )?.description() }`
 		}
 
 		unit_panel(): readonly any[] {

@@ -17,8 +17,16 @@ namespace $ {
 			return this.value( 'health', next )
 		}
 
+		icon_health() {
+			return '❤️' + this.health()
+		}
+
 		attack( next?: number ) {
 			return this.value( 'attack', next )
+		}
+
+		icon_attack() {
+			return '🗡️' + this.attack()
 		}
 
 		use_attack( targets: $gen_engine_item_unit[], battle: $gen_engine_battle ) {

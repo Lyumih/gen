@@ -73,7 +73,8 @@ namespace $.$$ {
 		}
 
 		skill_level_up( id: string, next?: any ) {
-			this.engine().skill_level_up( id )
+			console.log( 'skill_level_up', id )
+			this.get_skill( id )?.level( ( this.get_skill( id )?.level() || 0 ) + 1 )
 		}
 
 		skill_mode( id: any ): string {
