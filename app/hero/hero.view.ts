@@ -33,15 +33,20 @@ namespace $.$$ {
 		}
 
 		name(): string {
-			return `Имя: ${ this.hero()?.name() }`
+			return `${ this.hero()?.icon() } ${ this.hero()?.name() }`
 		}
 
 		level(): string {
-			return `Уровень: ${ this.hero()?.level() }`
+			return `⭐️ ${ this.hero()?.level() }`
 		}
 
 		points(): string {
-			return `Очков: ${ this.hero()?.points() }`
+			return `💎 ${ this.hero()?.points() }`
+		}
+
+		add_point_hero( next?: any ) {
+			console.log( 'add hero points', this.hero() )
+			this.hero()?.points( ( this.hero()?.points() || 0 ) + 1 )
 		}
 
 		equipment_list(): readonly any[] {
