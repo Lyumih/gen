@@ -32,3 +32,16 @@ $gen_app $mol_page
 				loot_page <= Loot_page $gen_app_loot engine <= engine
 				user_page <= User_page $gen_app_user
 					user? <=> user?
+				kop <= Kop_page $mol_page
+					body /
+						<= User $mol_dump_value
+							value <= user
+							expanded? true
+						<= User_name $mol_string value? <=> user_name? \
+						<= Add_unit $mol_button_minor click? <=> add_unit? null
+						<= Remove_unit $mol_button_minor click? <=> remove_unit? null
+						- <= Units $mol_dump_value
+							value <= units
+							expanded? true
+						<= Units_list $mol_list rows <= unit_list /
+							<= Unit_name*0 $mol_string value? <=> unit_name*? \

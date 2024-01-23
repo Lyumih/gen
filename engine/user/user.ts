@@ -10,7 +10,7 @@ namespace $ {
 				login: 'no login',
 				email: 'no email',
 				role: 'user',
-				units: [] as typeof unit[],
+				units_data: [] as typeof unit[],
 			}
 		}
 
@@ -34,18 +34,36 @@ namespace $ {
 			return this.value( 'role', next )
 		}
 
-		units( next?: $gen_engine_item_unit[] ): $gen_engine_item_unit[] {
-			const value = this.value( 'units', next?.map( unit => unit.defaults() ) )
-			return value.map( unit => $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
-					...unit
-				} ),
-				id: 'unit-' + $mol_guid(),
-			} ) )
+		units_data( next?: ReturnType<this[ 'defaults' ]>[ 'units_data' ] ) {
+			return this.value( 'units_data', next )
 		}
 
-		add_unit( next?: any ) {
-			this.units( [ ...this.units(), next ] )
+		units() {
+			return this.units_data().map( unit => $gen_engine_item_unit.make( {
+				defaults_patch: () => ( {
+					...unit
+				} )
+			} ) )
+			// const value = this.value( 'units', next?.map( unit => unit.data() ) )
+			// return value.map( unit => $gen_engine_item_unit.make( {
+			// 	defaults_patch: () => ( {
+			// 		...unit
+			// 	} ),
+			// 	id: 'unit-' + $mol_guid(),
+			// } ) )
+		}
+
+		// add_unit( next: ReturnType<this[ 'defaults' ]>[ 'units_data' ] ) {
+		add_unit( next: any ) {
+			this.units_data( [ ...this.units_data(), next ] )
+		}
+
+		remove_unit( id: string ) {
+			this.units_data( this.units_data().filter( unit => unit.id_root !== id ) )
+		}
+
+		remove_first() {
+			this.units_data( this.units_data().slice( 1 ) )
 		}
 
 	}

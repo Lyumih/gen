@@ -7,8 +7,8 @@ namespace $.$$ {
 		}
 
 		@$mol_mem
-		party( next?: $gen_engine_item_unit[] ): $gen_engine_item_unit[] {
-			return this.user().units( next )
+		party(): $gen_engine_item_unit[] {
+			return this.user().units()
 		}
 
 		create_unit( next?: any ) {
@@ -22,7 +22,7 @@ namespace $.$$ {
 				id: 'new-unit-'
 			} )
 			console.log( 'create unit', unit )
-			this.user().add_unit( unit.defaults_patch() )
+			this.user().add_unit( unit.data() )
 			// this.party( [ ...this.party(), unit ] )
 			// console.log( this.party() )
 		}
