@@ -8,7 +8,7 @@ namespace $ {
 				health: 20,
 				attack: 10,
 				icon: '👤',
-				skills: [] as typeof skill[]
+				skills_data: [] as typeof skill[]
 			}
 		}
 
@@ -53,15 +53,20 @@ namespace $ {
 			return next ?? []
 		}
 
-		skills( next?: $gen_engine_item_skill[] ): $gen_engine_item_skill[] {
-			const skills = next ?? []
-			const value = this.value( 'skills', next?.map( skill => skill.defaults() ) )
-			return value.map( skill => $gen_engine_item_skill.make( {
+		skills_data( next?: ReturnType<this[ 'defaults' ]>[ 'skills_data' ] ) {
+			return this.value( 'skills_data', next )
+		}
+
+		skills(): $gen_engine_item_skill[] {
+			return this.skills_data().map( skill => $gen_engine_item_skill.make( {
 				defaults_patch: () => ( {
 					...skill
-				} ),
-				id: 'restored-skill-heal'
+				} )
 			} ) )
+		}
+
+		add_skill( next: ReturnType<this[ 'defaults' ]>[ 'skills_data' ][ 0 ] ) {
+			this.skills_data( [ ...this.skills_data(), next ] )
 		}
 
 		@$mol_mem

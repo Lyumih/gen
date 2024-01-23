@@ -54,7 +54,7 @@ namespace $ {
 		}
 
 		// add_unit( next: ReturnType<this[ 'defaults' ]>[ 'units_data' ] ) {
-		add_unit( next: any ) {
+		add_unit( next: ReturnType<this[ 'defaults' ]>[ 'units_data' ][ 0 ] ) {
 			this.units_data( [ ...this.units_data(), next ] )
 		}
 

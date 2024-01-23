@@ -22,7 +22,7 @@ namespace $ {
 					points: 1000,
 					x: 0,
 					y: 0,
-					skills: [
+					skills_data: [
 						new $gen_engine_item_skill_all().heal().defaults_patch() as any,
 					]
 				} ),
