@@ -1,7 +1,7 @@
 $gen_app $mol_page
 	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
 	- engine $gen_engine
-	user? $gen_engine_user
+	- user? $gen_engine_user
 	- craft $gen_engine_craft
 	tools /
 		<= Debug_user $mol_paragraph title <= debug_user \
@@ -12,7 +12,7 @@ $gen_app $mol_page
 			Icon <= Telegram_icon $mol_icon_telegram
 			uri \https://github.com/Lyumih/gen
 		<= Sources $mol_link_source uri \https://github.com/Lyumih/gen
-	body /
+	- body /
 		<= Pages $mol_book2_catalog
 			menu_title \🧬
 			param \page
@@ -22,7 +22,7 @@ $gen_app $mol_page
 					engine <= engine
 					user? <=> user?
 				- hero_page <= Hero_page $gen_app_hero
-					engine <= engine
+					- engine <= engine
 					user? <=> user?
 				- talent_page <= Talent_page $gen_app_talent
 				- craftt_page <= Craft_page $gen_app_craft

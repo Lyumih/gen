@@ -2,7 +2,7 @@ namespace $ {
 
 	export class $gen_engine_entity extends $mol_object {
 		constructor(
-			readonly id = 'no-base-id-entity'
+			readonly id = 'no-id-entity'
 			// readonly id: string
 		) { super() }
 
@@ -32,9 +32,10 @@ namespace $ {
 		// 	return data
 		// }
 
-		static defaults() {
-
-			return {}
+		static factory() {
+			// const entity = new this( 'entity-factory' )
+			// return entity.defaults()
+			return new this( 'entity-factory' ).defaults()
 		}
 
 		@$mol_mem_key

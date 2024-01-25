@@ -24,11 +24,12 @@ namespace $.$$ {
 			// // 	id: 'new-unit-'
 			// // } )
 			// // console.log( 'create unit', unit )
-			// this.user().add_unit( {
-			// 	...default_unit,
-			// 	id_root: 'new-unit-' + name + '-' + $mol_guid( 4 ),
-			// 	name
-			// } )
+			this.user().add_unit( {
+				// ...default_unit,
+				...$gen_engine_item_unit.factory() as any,
+				// id_root: 'new-unit-' + name + '-' + $mol_guid( 4 ),
+				// name
+			} )
 			// this.party( [ ...this.party(), unit ] )
 			// console.log( this.party() )
 		}

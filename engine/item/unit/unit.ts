@@ -65,7 +65,7 @@ namespace $ {
 
 		@$mol_mem
 		equipments( next?: $gen_engine_item_equipment[] ) {
-			$mol_wire_solid()
+			// $mol_wire_solid()
 			return next ?? []
 		}
 
@@ -87,19 +87,19 @@ namespace $ {
 
 		@$mol_mem
 		buffs( next?: $gen_engine_item_buff[] ): $gen_engine_item_buff[] {
-			$mol_wire_solid()
+			// $mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		inventory( next?: $gen_engine_item[] ): $gen_engine_item[] {
-			$mol_wire_solid()
+			// $mol_wire_solid()
 			return next ?? []
 		}
 
 		@$mol_mem
 		shop( next?: $gen_engine_item[] ): $gen_engine_item[] {
-			$mol_wire_solid()
+			// $mol_wire_solid()
 			return next ?? []
 		}
 

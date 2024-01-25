@@ -4,6 +4,7 @@ namespace $ {
 		defaults() {
 
 			// const unit = new $gen_engine_item_unit().defaults()
+			// const unit = $gen_engine_item_unit.defaults()
 			return {
 				...super.defaults(),
 				id_root: 'id-root-user',
@@ -11,9 +12,11 @@ namespace $ {
 				login: 'no login',
 				email: 'no email',
 				role: 'user',
-				units_data: [],
+				units_data: [] as ReturnType<$gen_engine_item_unit[ 'defaults' ]>[],
 			}
 		}
+
+
 
 		logout() {
 			console.log( 'Пользователь вышел' )
@@ -49,7 +52,8 @@ namespace $ {
 			// 		...unit
 			// 	} )
 			// } ) )
-			return [] as ReturnType<this[ 'defaults' ]>[ 'units_data' ]
+			// return [] as ReturnType<this[ 'defaults' ]>[ 'units_data' ]
+			return [] as $gen_engine_item_unit[]
 			// const value = this.value( 'units', next?.map( unit => unit.data() ) )
 			// return value.map( unit => $gen_engine_item_unit.make( {
 			// 	defaults_patch: () => ( {

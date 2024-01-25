@@ -37,7 +37,7 @@ namespace $.$$ {
 
 		@$mol_mem
 		description( next?: string ): string {
-			$mol_wire_solid()
+			// $mol_wire_solid()
 			return next ?? this.item().description() ? `${ this.item().description() }` : ''
 		}
 
