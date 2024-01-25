@@ -1,5 +1,5 @@
 $gen_app_loot $mol_page
-	title \Лут
+	title \🎁
 	engine $gen_engine
 	body /
 		<= Generate $mol_button_major

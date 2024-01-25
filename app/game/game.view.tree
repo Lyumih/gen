@@ -1,5 +1,5 @@
 $gen_app_game $mol_page
-	title \Генератор битвы
+	title \🚧
 	engine $gen_engine
 	body /
 		<= Hero_level $mol_labeler

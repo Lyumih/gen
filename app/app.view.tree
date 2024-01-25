@@ -13,8 +13,9 @@ $gen_app $mol_page
 		<= Sources $mol_link_source uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2_catalog
-			menu_title \Меню
+			menu_title \🧬
 			param \page
+			menu_filter_enabled false
 			spreads *
 				battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
@@ -33,6 +34,7 @@ $gen_app $mol_page
 				user_page <= User_page $gen_app_user
 					user? <=> user?
 				kop <= Kop_page $mol_page
+					title \👾
 					body /
 						<= User $mol_dump_value
 							value <= user

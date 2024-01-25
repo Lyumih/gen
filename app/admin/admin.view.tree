@@ -1,5 +1,5 @@
 $gen_app_admin $mol_page 
-	title \Хак панель
+	title \☢️
 	engine $gen_engine
 	body /
 		<= Win $mol_button_major

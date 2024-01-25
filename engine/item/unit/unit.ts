@@ -1,10 +1,26 @@
 namespace $ {
 	export class $gen_engine_item_unit extends $gen_engine_item {
 
-		defaults() {
+		// defaults() {
+		// 	const skill = new $gen_engine_item_skill().defaults()
+		// 	return {
+		// 		...super.defaults(),
+		// 		health: 20,
+		// 		attack: 10,
+		// 		icon: '👤',
+		// 		skills_data: [] as typeof skill[]
+		// 	}
+		// }
+
+		data( data?: {
+			health: number
+			attack: number
+			icon: string
+			skills_data: $gen_engine_item_skill[]
+		} ) {
 			const skill = new $gen_engine_item_skill().defaults()
-			return {
-				...super.defaults(),
+
+			return $mol_state_local.value( this.id, data ) ?? {
 				health: 20,
 				attack: 10,
 				icon: '👤',

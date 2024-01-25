@@ -21,9 +21,14 @@ namespace $ {
 		// }
 
 
-		@$mol_mem
-		data( data = {} ) {
-			return data
+		// @$mol_mem
+		// data( data = {} ) {
+		// 	return data
+		// }
+
+		static defaults() {
+
+			return {}
 		}
 
 		@$mol_mem_key

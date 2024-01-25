@@ -1,5 +1,5 @@
 $gen_auction $mol_page
-	title \Аукцион
+	title \⚖️
 	body /
 		<= Donat $mol_paragraph title \Монет: 532
 		<= Hero2 $mol_paragraph title \Вася. Ур. 5
