@@ -5,7 +5,7 @@ $gen_app $mol_page
 	craft $gen_engine_craft
 	tools /
 		<= Clear_storage $mol_button_minor
-			title \d
+			title \♻️
 			click? <=> clear_storage? null
 		<= Telegram $mol_link_source
 			Icon <= Telegram_icon $mol_icon_telegram
