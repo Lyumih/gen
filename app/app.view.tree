@@ -1,9 +1,10 @@
 $gen_app $mol_page
 	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
-	engine $gen_engine
+	- engine $gen_engine
 	user? $gen_engine_user
-	craft $gen_engine_craft
+	- craft $gen_engine_craft
 	tools /
+		<= Debug_user $mol_paragraph title <= debug_user \
 		<= Clear_storage $mol_button_minor
 			title \♻️
 			click? <=> clear_storage? null
@@ -17,23 +18,23 @@ $gen_app $mol_page
 			param \page
 			menu_filter_enabled false
 			spreads *
-				battle_page <= Battle_page $gen_app_battle 
+				- battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
 					user? <=> user?
-				hero_page <= Hero_page $gen_app_hero
+				- hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					user? <=> user?
-				talent_page <= Talent_page $gen_app_talent
+				- talent_page <= Talent_page $gen_app_talent
 				- craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
-				auction_page <= Auction $gen_auction
-				dev_page <= Dev_page $gen_dev
-				game_page <= Game_page $gen_app_game engine <= engine
-				hack_page <= Hack_page $gen_app_admin engine <= engine
-				loot_page <= Loot_page $gen_app_loot engine <= engine
+				- auction_page <= Auction $gen_auction
+				- dev_page <= Dev_page $gen_dev
+				- game_page <= Game_page $gen_app_game engine <= engine
+				- hack_page <= Hack_page $gen_app_admin engine <= engine
+				- loot_page <= Loot_page $gen_app_loot engine <= engine
 				user_page <= User_page $gen_app_user
 					user? <=> user?
-				kop <= Kop_page $mol_page
+				- kop <= Kop_page $mol_page
 					title \👾
 					body /
 						<= User $mol_dump_value

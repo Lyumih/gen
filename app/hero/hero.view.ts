@@ -12,19 +12,23 @@ namespace $.$$ {
 		}
 
 		create_unit( next?: any ) {
-			console.log( $gen_engine_fake.random_name() )
 			const name = $gen_engine_fake.random_name()
-			const default_unit = new $gen_engine_item_unit().defaults()
-			const unit = $gen_engine_item_unit.make( {
-				defaults: () => ( {
-					...default_unit,
-					name,
-					level: 5,
-				} ),
-				id: 'new-unit-'
-			} )
-			console.log( 'create unit', unit )
-			this.user().add_unit( unit.data() )
+			console.log( 'create unit', name )
+			// const default_unit = new $gen_engine_item_unit().defaults()
+			// // const unit = $gen_engine_item_unit.make( {
+			// // 	defaults: () => ( {
+			// // 		...default_unit,
+			// // 		name,
+			// // 		level: 5,
+			// // 	} ),
+			// // 	id: 'new-unit-'
+			// // } )
+			// // console.log( 'create unit', unit )
+			// this.user().add_unit( {
+			// 	...default_unit,
+			// 	id_root: 'new-unit-' + name + '-' + $mol_guid( 4 ),
+			// 	name
+			// } )
 			// this.party( [ ...this.party(), unit ] )
 			// console.log( this.party() )
 		}

@@ -13,18 +13,19 @@ namespace $ {
 		}
 
 		misha() {
-			const user = new $gen_engine_user().defaults()
+			// const user = new $gen_engine_user( '123' ).defaults()
 			return $gen_engine_user.make( {
 				defaults: () => ( {
-					...user,
+					// ...user,
+					id_root: 'id-root-user-misha',
 					name: 'Миша',
 					login: 'misha',
 					email: 'misha@ya.ru',
 					role: 'user',
 					units_data: [
-						new $gen_engine_item_unit_all().milis().data(),
-						new $gen_engine_item_unit_all().mario().data(),
-						new $gen_engine_item_unit_all().jin().data(),
+						// new $gen_engine_item_unit_all().milis().data(),
+						// new $gen_engine_item_unit_all().mario().data(),
+						// new $gen_engine_item_unit_all().jin().data(),
 					],
 				} ),
 				id: 'misha-user',

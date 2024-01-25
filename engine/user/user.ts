@@ -3,19 +3,24 @@ namespace $ {
 
 		defaults() {
 
-			const unit = new $gen_engine_item_unit().defaults()
+			// const unit = new $gen_engine_item_unit().defaults()
 			return {
 				...super.defaults(),
+				id_root: 'id-root-user',
 				name: 'no name',
 				login: 'no login',
 				email: 'no email',
 				role: 'user',
-				units_data: [] as typeof unit[],
+				units_data: [],
 			}
 		}
 
 		logout() {
 			console.log( 'Пользователь вышел' )
+		}
+
+		id_root( next?: string ) {
+			return this.value( 'id_root', next )
 		}
 
 		name( next?: string ) {
@@ -39,11 +44,12 @@ namespace $ {
 		}
 
 		units() {
-			return this.units_data().map( unit => $gen_engine_item_unit.make( {
-				defaults: () => ( {
-					...unit
-				} )
-			} ) )
+			// return this.units_data().map( unit => $gen_engine_item_unit.make( {
+			// 	defaults: () => ( {
+			// 		...unit
+			// 	} )
+			// } ) )
+			return [] as ReturnType<this[ 'defaults' ]>[ 'units_data' ]
 			// const value = this.value( 'units', next?.map( unit => unit.data() ) )
 			// return value.map( unit => $gen_engine_item_unit.make( {
 			// 	defaults_patch: () => ( {
@@ -59,7 +65,7 @@ namespace $ {
 		}
 
 		remove_unit( id: string ) {
-			this.units_data( this.units_data().filter( unit => unit.id_root !== id ) )
+			// this.units_data( this.units_data().filter( unit => unit.id_root !== id ) )
 		}
 
 		remove_first() {
