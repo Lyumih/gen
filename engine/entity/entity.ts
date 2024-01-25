@@ -2,13 +2,13 @@ namespace $ {
 
 	export class $gen_engine_entity extends $mol_object {
 		constructor(
-			readonly id = 'no-base-id'
+			readonly id = 'no-base-id-entity'
 			// readonly id: string
 		) { super() }
 
-		// defaults() {
-		// 	return {}
-		// }
+		defaults() {
+			return {}
+		}
 
 		// defaults_patch() {
 		// 	return {} as Partial<ReturnType<this[ 'defaults' ]>>
@@ -19,6 +19,12 @@ namespace $ {
 		// 	return this.$.$mol_state_local.value( this.id, data ) as ReturnType<this[ 'defaults' ]>
 		// 		?? { ...this.defaults(), ...this.defaults_patch() }
 		// }
+
+		@$mol_mem
+		data( data?: ReturnType<this[ 'defaults' ]> ): ReturnType<this[ 'defaults' ]> {
+			return this.$.$mol_state_local.value( this.id, data ) as ReturnType<this[ 'defaults' ]>
+				?? { ...this.defaults() }
+		}
 
 
 		// @$mol_mem

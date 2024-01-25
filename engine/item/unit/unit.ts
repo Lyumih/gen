@@ -1,32 +1,32 @@
 namespace $ {
 	export class $gen_engine_item_unit extends $gen_engine_item {
 
-		// defaults() {
-		// 	const skill = new $gen_engine_item_skill().defaults()
-		// 	return {
-		// 		...super.defaults(),
-		// 		health: 20,
-		// 		attack: 10,
-		// 		icon: '👤',
-		// 		skills_data: [] as typeof skill[]
-		// 	}
-		// }
-
-		data( data?: {
-			health: number
-			attack: number
-			icon: string
-			skills_data: $gen_engine_item_skill[]
-		} ) {
+		defaults() {
 			const skill = new $gen_engine_item_skill().defaults()
-
-			return $mol_state_local.value( this.id, data ) ?? {
+			return {
+				...super.defaults(),
 				health: 20,
 				attack: 10,
 				icon: '👤',
 				skills_data: [] as typeof skill[]
 			}
 		}
+
+		// data( data?: {
+		// 	health: number
+		// 	attack: number
+		// 	icon: string
+		// 	skills_data: $gen_engine_item_skill[]
+		// } ) {
+		// 	const skill = new $gen_engine_item_skill().defaults()
+
+		// 	return $mol_state_local.value( this.id, data ) ?? {
+		// 		health: 20,
+		// 		attack: 10,
+		// 		icon: '👤',
+		// 		skills_data: [] as typeof skill[]
+		// 	}
+		// }
 
 
 		health( next?: number ) {
@@ -75,7 +75,7 @@ namespace $ {
 
 		skills(): $gen_engine_item_skill[] {
 			return this.skills_data().map( skill => $gen_engine_item_skill.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
 					...skill
 				} )
 			} ) )

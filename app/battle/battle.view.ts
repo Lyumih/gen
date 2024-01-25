@@ -54,15 +54,15 @@ namespace $.$$ {
 			const party = this.party_new().filter( unit => this.party_new_checked( unit.id ) )
 			const unit = this.party_new()[ 0 ]
 			const new_unit = $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
 					...unit.defaults(),
 					name: 'copy'
 				} ),
 
 			} )
 			return party.map( unit => $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
-					...unit.defaults_patch(),
+				defaults: () => ( {
+					...unit.defaults(),
 				} ),
 				id: 'copy-' + unit.id
 			} ) )

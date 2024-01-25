@@ -7,13 +7,14 @@ namespace $ {
 		}
 
 		resource() {
-			// const talent = new $gen_engine_item_talent()
+			const talent = new $gen_engine_item_talent().defaults()
 			// talent.data( {
 			// 	name: 'test',
 			// } )
 			return [
 				$gen_engine_item_talent.make( {
-					defaults_patch: () => ( {
+					defaults: () => ( {
+						...talent,
 						name: 'ХП',
 						description: 'ХП + 1'
 					} ),
@@ -25,8 +26,8 @@ namespace $ {
 					// } )
 				} ),
 				$gen_engine_item_talent.make( {
-					defaults_patch: () => ( {
-						name: 'Защ',
+					defaults: () => ( {
+						...talent,
 						description: 'Защита +1'
 					} ),
 					id: 'tal-2'

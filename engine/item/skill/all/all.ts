@@ -20,9 +20,10 @@ namespace $ {
 				source.health( source.health() + 10 + this.level() * 2 )
 				battle.log(source.icon_name() + ''+ ' исцеляется на 10 здоровья' )
 			`
+			const skill = new $gen_engine_item_skill().defaults()
 			return $gen_engine_item_skill.make( {
-
-				defaults_patch: () => ( {
+				defaults: () => ( {
+					...skill,
 					name: 'Хил',
 					icon: '⚕️',
 					description: 'Исцеляет на 10 здоровья',

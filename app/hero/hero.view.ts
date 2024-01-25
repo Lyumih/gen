@@ -14,8 +14,10 @@ namespace $.$$ {
 		create_unit( next?: any ) {
 			console.log( $gen_engine_fake.random_name() )
 			const name = $gen_engine_fake.random_name()
+			const default_unit = new $gen_engine_item_unit().defaults()
 			const unit = $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
+					...default_unit,
 					name,
 					level: 5,
 				} ),

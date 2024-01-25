@@ -14,8 +14,10 @@ namespace $ {
 		}
 
 		milis() {
+			const unit = new $gen_engine_item_unit().defaults()
 			return $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
+					...unit,
 					name: 'Milis',
 					icon: '👩🏼‍⚕️',
 					level: 1000,
@@ -23,7 +25,7 @@ namespace $ {
 					x: 0,
 					y: 0,
 					skills_data: [
-						new $gen_engine_item_skill_all().heal().defaults_patch() as any,
+						new $gen_engine_item_skill_all().heal().data() as any,
 					]
 				} ),
 				id: 'hero-milis-1'
@@ -53,8 +55,10 @@ namespace $ {
 		 * Навешивает баф "мем"
 		 */
 		jin() {
+			const unit = new $gen_engine_item_unit().defaults()
 			return $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
+					...unit,
 					name: 'Jin',
 					level: 3,
 					points: 5,
@@ -78,8 +82,10 @@ namespace $ {
 		}
 
 		mario() {
+			const unit = new $gen_engine_item_unit().defaults()
 			return $gen_engine_item_unit.make( {
-				defaults_patch: () => ( {
+				defaults: () => ( {
+					...unit,
 					name: 'Бурь',
 					icon: '🧙🏼‍♂️',
 					level: 333,
