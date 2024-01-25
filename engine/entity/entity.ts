@@ -6,18 +6,24 @@ namespace $ {
 			// readonly id: string
 		) { super() }
 
-		defaults() {
-			return {}
-		}
+		// defaults() {
+		// 	return {}
+		// }
 
-		defaults_patch() {
-			return {} as Partial<ReturnType<this[ 'defaults' ]>>
-		}
+		// defaults_patch() {
+		// 	return {} as Partial<ReturnType<this[ 'defaults' ]>>
+		// }
+
+		// @$mol_mem
+		// data( data?: ReturnType<this[ 'defaults' ]> ): ReturnType<this[ 'defaults' ]> {
+		// 	return this.$.$mol_state_local.value( this.id, data ) as ReturnType<this[ 'defaults' ]>
+		// 		?? { ...this.defaults(), ...this.defaults_patch() }
+		// }
+
 
 		@$mol_mem
-		data( data?: ReturnType<this[ 'defaults' ]> ): ReturnType<this[ 'defaults' ]> {
-			return this.$.$mol_state_local.value( this.id, data ) as ReturnType<this[ 'defaults' ]>
-				?? { ...this.defaults(), ...this.defaults_patch() }
+		data( data = {} ) {
+			return data
 		}
 
 		@$mol_mem_key
