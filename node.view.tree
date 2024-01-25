@@ -34,6 +34,13 @@ $mol_page $mol_view
 			dom_name \footer
 			sub <= foot /$mol_view
 
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit +Infinity
+	row_width 0
+	sub / <= title
+
 $mol_speck $mol_view
 	attr *
 		^
@@ -131,12 +138,26 @@ $mol_link_source $mol_link
 	sub /
 		<= Icon $mol_icon_script_text
 
-$mol_book2 $mol_scroll
-	menu_title \
-	sub <= pages /$mol_view
-	minimal_width 0
-	Placeholder $mol_view
-	Gap* $mol_view title \
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
 
 $mol_hotkey $mol_plugin
 	event *
@@ -181,583 +202,37 @@ $mol_string $mol_view
 			mod_ctrl <= submit_with_ctrl false
 			key * enter?event <=> submit?event null
 
-$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
-$mol_number $mol_view
-	precision_view <= precision 1
-	precision_change <= precision 1
-	value_min -Infinity
-	value_max +Infinity
-	value? +NaN
-	enabled true
-	sub /
-		<= String $mol_string
-			- \ we don't want native number controls in mobile devices
-			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
-			type <= type \tel
-			value? <=> value_string? \
-			hint <= hint \ 
-			enabled <= string_enabled <= enabled
-			submit? <=> submit? null
-		<= Dec $mol_button_minor
-			event_click? <=> event_dec? null
-			enabled <= dec_enabled <= enabled
-			sub / <= dec_icon $mol_icon_minus
-		<= Inc $mol_button_minor
-			event_click? <=> event_inc? null
-			enabled <= inc_enabled <= enabled
-			sub / <= inc_icon $mol_icon_plus
-
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
-
 $mol_button_major $mol_button_typed
 	attr *
 		^
 		mol_theme \$mol_theme_accent
 
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked? false
-		aria-checked <= aria_checked \false
-		role <= aria_role \checkbox
-	sub /$mol_view_content
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
-
-$mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
-
-$mol_check_box $mol_check
-	Icon $mol_icon_tick
-
-$mol_row $mol_view
-
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 7
-	width_limit +Infinity
-	row_width 0
-	sub / <= title
-
-$mol_section $mol_list
-	level 1
-	rows /
-		<= Head $mol_view
-			sub <= head /
-				<= Title $mol_paragraph
-					dom_name <= title_dom_name \h1
-					title <= title
-				<= Tools $mol_view sub <= tools /
-		<= Content $mol_list
-			rows <= content /
-
-$mol_stack $mol_view
-
-$mol_dimmer $mol_paragraph
-	haystack \
-	needle \
-	sub <= parts /$mol_view_content
-	Low* $mol_paragraph
-		sub /
-			<= string* \
-	High* $mol_paragraph
-		sub /
-			<= string* \
-
-$mol_text_code_token $mol_dimmer
-	attr *
-		^
-		mol_text_code_token_type <= type \
-
-$mol_text_code_token_link $mol_text_code_token
-	dom_name \a
-	type \code-link
-	attr *
-		^
-		href <= uri \
-		target \_blank
-
-$mol_text_code_row $mol_paragraph
-	text \
-	minimal_height 24
-	numb_showed true
-	syntax null
-	uri_resolve* \
-	Numb $mol_view
-		sub /
-			<= numb 0
-	Token* $mol_text_code_token
-		type <= token_type* \
-		haystack <= token_text* \
-		needle <= highlight \
-	Token_link* $mol_text_code_token_link
-		haystack <= token_text* \
-		needle <= highlight \
-		uri <= token_uri* \
-	find_pos* null
-
-$mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
-
-$mol_icon_clipboard_outline $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3M7,7H17V5H19V19H5V5H7V7Z
-
-$mol_button_copy $mol_button_minor
-	blobs /$mol_blob
-		<= text_blob? $mol_blob /
-			/BlobPart <= text <= title
-			* type \text/plain
-		<= html_blob? $mol_blob /
-			/BlobPart <= html \
-			* type \text/html
-	data *
-	sub /
-		<= Icon $mol_icon_clipboard_outline
-		<= title \
-
-
-$mol_text_code $mol_stack
-	attr *
-		^
-		mol_text_code_sidebar_showed <= sidebar_showed false
-	text \
-	text_lines /string
-	find_pos* null
-	uri_base \
-	sub /
-		<= Rows $mol_list
-			render_visible_only <= render_visible_only false
-			rows <= rows /
-				<= Row*0 $mol_text_code_row
-					numb_showed <= sidebar_showed
-					numb <= row_numb* 0
-					text <= row_text* \
-					syntax <= syntax null
-					uri_resolve* <= uri_resolve* \
-					highlight <= highlight \
-		<= Copy $mol_button_copy
-			hint @ \Copy whole code
-			text <= text_export \
-
-$mol_float $mol_view
-	style *
-		^
-		minHeight \auto
-
-$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
-
-$mol_check_expand $mol_check
-	Icon $mol_icon_chevron
-	level 0
-	style *
-		^
-		paddingLeft <= level_style \0px
-	checked? <=> expanded? false
-	enabled <= expandable false
-
-$mol_grid $mol_view
-	row_height 32
-	row_ids /string[]
-	row_id* null
-	col_ids /
-	records *
-	record* null
-	hierarchy null
-	hierarchy_col \
-	minimal_width 0
-	-
-	sub /
-		<= Head
-		<= Table $mol_grid_table
-			sub <= rows /$mol_view
-	Head $mol_grid_row
-		cells <= head_cells /$mol_view
-	Row* $mol_grid_row
-		minimal_height <= row_height
-		minimal_width <= minimal_width
-		cells <= cells* /$mol_view
-	-
-	Cell* $mol_view
-	cell* null
-	Cell_text* $mol_grid_cell
-		sub <= cell_content_text* <= cell_content* /$mol_view_content
-	Cell_number* $mol_grid_number
-		sub <= cell_content_number* <= cell_content* /$mol_view_content
-	Col_head* $mol_float
-		dom_name \th
-		sub <= col_head_content* /$mol_view_content
-	Cell_branch* $mol_check_expand
-		level <= cell_level* 0
-		label <= cell_content* /$mol_view_content
-		expanded? <=> cell_expanded*? false
-	Cell_content* /
-		<= Cell_dimmer* $mol_dimmer
-			needle <= needle \
-			haystack <= cell_value* \
-
-$mol_grid_table $mol_list
-	- dom_name \table
-
-$mol_grid_row $mol_view
-	- dom_name \tr
-	sub <= cells /$mol_view
-
-$mol_grid_cell $mol_view
-	- dom_name \td
-	minimal_height 40
-
-$mol_grid_number $mol_grid_cell
-
-$mol_image $mol_view
-	dom_name \img
-	field *
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
-		decoding <= decoding \async
-		crossOrigin <= cors null
-	attr *
-		^
-		width <= natural_width? 0
-		height <= natural_height? 0
-	event *
-		load? <=> load? null
-	minimal_width 16
-	minimal_height 16
-
-$mol_link_iconed $mol_link
-	sub /
-		<= Icon $mol_image
-			uri <= icon \
-			title \
-	content /
-		<= title <= uri
-	host \
-
-$mol_embed_native $mol_scroll
-	uri? \
-	dom_name \object
-	window null
-	attr *
-		^
-		data <= uri
-		type <= mime \
-	sub /
-		<= Fallback $mol_link
-			uri <= uri
-			sub /
-				<= title \
-	message *
-		hashchange? <=> uri_change? null
-
-$mol_icon_youtube $mol_icon path \M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z
-
-$mol_frame $mol_embed_native
-	dom_name \iframe
-	attr *
-		^
-		data null
-		type null
-		src <= uri? \about:config
-		srcdoc <= html null
-		allow <= allow \
-		- allowfullscreen <=
-	fullscreen true
-	accelerometer true
-	autoplay true
-	encription true
-	gyroscope true
-	pip true
-	clipboard_read true
-	clipboard_write true
-
-$mol_embed_youtube $mol_check
-	uri \
-	video_preview \
-	video_id \
-	checked? <=> active? false
-	sub /
-		<= Image $mol_image
-			title <= title \
-			uri <= video_preview \
-		<= Hint $mol_icon_youtube
-		<= Frame $mol_frame
-			title <= title \
-			uri <= video_embed \
-
-
-$mol_embed_any $mol_view
-	Image $mol_image
-		title <= title \
-		uri <= uri \
-	Object $mol_embed_native
-		title <= title \
-		uri <= uri \
-	Youtube $mol_embed_youtube
-		title <= title \
-		uri <= uri \
-
-$mol_text $mol_list
-	uri_base \
-	text \
-	param \
-	flow_tokens /
-	auto /
-		<= auto_scroll null
-	- \Blocks
-	Paragraph* $mol_paragraph
-		sub <= block_content* /
-	Quote* $mol_text
-		uri_resolve* <= uri_resolve* \
-		text <= quote_text* \
-		highlight <= highlight \
-		auto_scroll null
-	List* $mol_text_list
-		uri_resolve* <= uri_resolve* \
-		type <= list_type* \-
-		text <= list_text* \
-		highlight <= highlight \
-	item_index* 0
-	Header* $mol_text_header
-		minimal_height 40
-		level <= header_level* 1
-		content <= block_content* /
-		arg <= header_arg* *
-	Pre* $mol_text_code
-		text <= pre_text* \
-		highlight <= highlight \
-		uri_resolve* <= uri_resolve* \
-		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
-	Cut* $mol_view dom_name \hr
-	- \Table
-	Table* $mol_grid
-		head_cells <= table_head_cells* /
-		rows <= table_rows* /
-	Table_row* $mol_grid_row
-		cells <= table_cells* /
-	Table_cell* $mol_text
-		auto_scroll null
-		highlight <= highlight \
-		uri_resolve* <= uri_resolve* \
-		text <= table_cell_text* \
-	- \Grid
-	Grid* $mol_grid
-		rows <= grid_rows* /
-	Grid_row* $mol_grid_row
-		cells <= grid_cells* /
-	Grid_cell* $mol_text
-		auto_scroll null
-		highlight <= highlight \
-		uri_resolve* <= uri_resolve* \
-		text <= grid_cell_text* \
-	- \Lines
-	String* $mol_dimmer
-		dom_name \span
-		needle <= highlight \
-		haystack <= line_text* \
-	Span* $mol_text_span
-		dom_name \span
-		type <= line_type* \
-		sub <= line_content* /
-	Code_line* $mol_text_code_row
-		numb_showed false
-		highlight <= highlight \
-		text <= line_text* \
-		uri_resolve* <= uri_resolve* \
-		syntax <= code_syntax null
-	Link* $mol_link_iconed
-		uri <= link_uri* \
-		content <= line_content* /
-	Link_http* $mol_link_iconed
-		uri <= link_uri* \
-		content / <= link_host* \
-	Embed* $mol_embed_any
-		uri <= link_uri* \
-		title <= line_text* \
-
-$mol_text_header $mol_paragraph
-	level 1
-	sub /
-		<= Link $mol_link
-			arg <= arg *
-			hint @ \Permalink to this section
-			sub <= content /
-
-$mol_text_span $mol_paragraph
-	dom_name \span
-	attr *
-		^
-		mol_text_type <= type \
-
-$gen_app_battle_panel $mol_view
-	unit $gen_engine_item_unit
-	active? false
-	preview_cell \
-	sub /
-		<= Empty_panel $mol_section title \
-		<= Unit_panel $mol_view
-			sub <= unit_panel /
-				<= Info $mol_row sub /
-					<= Name $mol_paragraph title <= name \
-					<= Health $mol_paragraph title <= health \
-					<= Attack $mol_paragraph title <= attack \
-					<= Speed $mol_paragraph title <= speed \
-					<= Range $mol_paragraph title <= range \
-				<= Panel_actions $mol_view sub /
-					<= Active_actions $mol_row sub /
-						<= Action_move $mol_button_major
-							title \👟
-							enabled? <= move_enabled? null
-							click? <=> use_move? null
-						<= Action_attack $mol_button_major
-							title \⚔️
-							enabled? <= attack_enabled? null
-							click? <=> use_attack? null
-						<= Action_end_turn $mol_button_major
-							title \⏳
-							click? <=> end_turn? null
-					<= Skill_list $mol_row sub <= skill_list /
-						<= Skill*0 $mol_button_major
-							enabled? <= active?
-							click? <=> use_skill*? null
-							title <= skill_icon* \
-							hint <= skill_hint* \
-
-$gen_app_battle_field $mol_view
-	units /$gen_engine_item_unit
-	max_x 20
-	max_y 20
-	active_unit? null
-	preview_unit? null
-	preview_cell? \
-	sub /
-		<= X $mol_list rows <= x_list /
-			<= Y*0 $mol_row sub <= y_list* /
-				<= Cell*0_0 $mol_view
-					attr *
-						speed <= is_speed_range*? true
-						preview <= is_preview*? true
-						attack <= is_attack_range*? true
-					event *
-						click? <=> cell_click*? null
-					sub /
-						<= Cell_unit_list* $mol_view sub <= cell_unit_list* /
-							<= Unit* $mol_button_major
-								attr *
-									active <= is_active*? false
-								title <= cell_unit_name* \
-
-$mol_text_list $mol_text
-	auto_scroll null
-	attr *
-		^
-		mol_text_list_type <= type \
-	Paragraph* $mol_text_list_item
-		index <= item_index*
-		sub <= block_content*
-
-$mol_text_list_item $mol_paragraph
-	attr *
-		^
-		mol_text_list_item_index <= index 0
-
-$gen_app_battle $mol_book2
-	title \Битва
-	engine $gen_engine
-	battle $gen_engine_battle
-	party /$gen_engine_item_unit
+$gen_app_user $mol_page
+	title \⚙️
 	user? $gen_engine_user
-	active_unit? null
-	preview_unit? null
-	preview_cell? \
-	battle_status? \
-	pages <= pages_list /
-		<= Party_page $mol_page
-			title \⚔️
-			body /
-				<= Field_x_labeler $mol_labeler
-					title \Поле Х ячеек
-					content / <= Field_x $mol_number value? <=> field_max_x? 10
-				<= Field_y_labeler $mol_labeler
-					title \Поле Y ячеек
-					content / <= Field_y $mol_number value? <=> field_max_y? 10
-				<= Start_battle $mol_button_major
-					title \⚔️
-					click? <=> start_battle? null
-				<= Party_list $mol_row sub <= party_list /
-					<= Party*0 $mol_row sub /
-						<= Party_unit* $mol_check_box
-							title <= party_unit_name* \Герой
-							checked? <=> party_new_checked*? true
-		<= History_page $mol_page
-			title \🪶
-			body /
-				<= History_label $mol_section title \🪶
-				<= History $mol_text text <= history \
-		- <= Units_page $mol_page
-			title \Юниты
-			body /
-				<= Unit_battle_list $mol_list rows <= unit_battle_list /
-					<= Unit*0 $gen_app_battle_unit
-						unit <= source* null
-						target_checked? <=> target_checked*? false
-						use_attack? <=> use_attack*? null
-						use_skill? <=> use_skill*? null
-		<= Battle_page $mol_page
-			title \⚔️
-			tools /
-				<= Turn $mol_section title <= turn \Ход: 0
-				<= End_battle $mol_button_major
-					title \🏳️
-					click? <=> end_battle? null
-			foot /
-				<= Panels $mol_list rows /
-					<= Panel_preview $gen_app_battle_panel
-						unit <= preview_unit?
-					<= Panel $gen_app_battle_panel
-						active? true
-						preview_cell? <= preview_cell?
-						move_enabled? <= move_enabled? true
-						attack_enabled? <= attack_enabled? true
-						unit <= active_unit? null
-						end_turn? <=> end_turn? null
-						use_move? <=> move? null
-						use_attack? <=> use_attack? null
-						use_skill*? <=> use_skill*? null
-			body /
-				<= Debug $mol_paragraph title <= debug \Debug
-				<= Field $gen_app_battle_field
-					max_x? <= field_max_x?
-					max_y? <= field_max_y?
-					units <= party
-					active_unit? <=> active_unit?
-					preview_unit? <=> preview_unit?
-					preview_cell? <= preview_cell?
-					cell_click? <=> cell_click? null
-				<= End $mol_paragraph title <= end \
+	body /
+		<= Login_labeler $mol_labeler
+			title \Логин
+			content / <= Login $mol_paragraph title <= login \sad
+		<= Name_labeler $mol_labeler
+			title \Имя
+			content / <= Name $mol_string value? <=> name? \Имя
+		<= Email_labeler $mol_labeler
+			title \Email
+			content / <= Email $mol_paragraph title <= email \Email
+		<= Heroes_length_labeler $mol_labeler
+			title \Кол-во героев
+			content / <= Heroes_length $mol_paragraph title <= heroes_length \0
+		<= Logout $mol_button_major
+			title \Выйти
+			click? <=> logout? null
+
+$mol_book2 $mol_scroll
+	menu_title \
+	sub <= pages /$mol_view
+	minimal_width 0
+	Placeholder $mol_view
+	Gap* $mol_view title \
 
 $mol_pop $mol_view
 	showed? false
@@ -783,367 +258,6 @@ $mol_pop_bubble $mol_view
 		mol_pop_align <= align \
 		tabindex 0
 
-$mol_pop_over $mol_pop
-	showed <= hovered? false
-	attr *
-		^
-		tabindex 0
-	event *
-		^
-		mouseenter?event <=> event_show?event null
-		mouseleave?event <=> event_hide?event null
-
-$gen_app_item $mol_view
-	attr *
-		^
-		type <= type \
-	item $gen_engine_item
-	sub /
-		<= Card $mol_pop_over
-			Anchor <= Icon $mol_text text <= icon \
-			bubble_content /
-				<= Type $mol_text text <= type_translate \
-				<= Level $mol_text text <= level \
-				<= Name_bubble $mol_text text <= name \
-				<= Desription $mol_text text <= description \
-				- <= Modes_list $mol_list rows <= modes_list /
-					<= Mode*0 $mol_row sub /
-						<= Mode_name* $mol_text text <= mode_name* \123
-				<= Actions_list $mol_list rows /
-					<= Move_row $mol_row sub /
-						<= Add $mol_button_major
-							title <= add_title \+
-							click? <=> add? null
-						<= Remove $mol_button_major
-							title <= remove_title \-
-							click? <=> remove? null
-						<= Other_actions $mol_view
-
-$gen_app_item_equipment $gen_app_item
-	Add null
-	remove_title \Снять
-
-$gen_app_item_skill $gen_app_item
-	item $gen_engine_item_skill
-	add_mode? null
-	add_title \+ ур
-	remove_title \Снять
-	- Other_actions <= Add_mode $mol_button_major
-		title \Добавить мод
-		enabled false
-		click? <=> add_mode?
-
-$gen_app_item_inventory $gen_app_item
-	add_title \Использовать
-	remove_title \Продать
-
-$gen_app_item_shop $gen_app_item
-	Remove null
-	add_title \Купить
-
-$gen_app_hero $mol_page
-	title \🕵🏼‍♀️
-	engine $gen_engine
-	user? $gen_engine_user
-	body /
-		<= Unit_page $mol_book2
-			pages /
-				<= Party_page $mol_page
-					title \🕵🏼‍♀️
-					tools /
-						<= Create_unit $mol_button_minor
-							title \➕
-							click? <=> create_unit? null
-					body /
-						<= Party_list $mol_row sub <= party_list /
-							<= Party*0 $mol_row sub /
-								<= Party_name* $mol_button_minor
-									attr *
-										active <= is_active_hero* false
-									title <= party_hero_name*? \Герой
-									click? <=> party_hero_pick*? null
-								<= Party_name_input* $mol_string
-									value? <=> party_hero_name*?
-				<= Hero_page $mol_page
-					title \📶
-					body /
-						<= Name $mol_section title <= name \Имя:
-						<= Level $mol_section title <= level \Уровень:
-						<= Points_hero $mol_text text <= points \Очки пт:
-						<= Add_point_hero $mol_button_minor
-							title \➕
-							click? <=> add_point_hero? null
-				<= Equipment_page $mol_page
-					title \🪖
-					body /
-						<= Equipment_list $mol_row sub <= equipment_list /
-							<= Equipment*0 $mol_row sub /
-								<= Equipment_card* $gen_app_item_equipment
-									item <= get_equipment* null
-									remove? <=> equipment_unequip*? null
-				<= Skill_page $mol_page
-					title \📚
-					body /
-						<= Points $mol_text text <= skill_points \Очков умений: 10
-						<= Skills $mol_row sub <= skill_list /
-							<= Skill*0 $mol_row sub /
-								<= Skill_card* $gen_app_item_skill
-									item <= get_skill* null
-									add <= skill_level_up*? null
-									remove? <=> skill_unequip*? null
-									add_mode? <=> skill_add_mode*? null
-								<= Skill_level_up* $mol_button_minor
-									title \➕
-									click? <=> skill_level_up*? null
-				<= Inventory_page $mol_page
-					title \🎒
-					body /
-						<= Inventory_list $mol_row sub <= inventory_list /
-							<= Inventory_item*0 $mol_row sub /
-								<= Inventory_card* $gen_app_item_inventory
-									item <= get_inventory_item* null
-									add? <=> inventory_equip*? null
-									remove? <=> inventory_item_sell*? null
-				<= Shop_page $mol_page
-					title \🧺
-					body /
-						<= Shop_list $mol_row sub <= shop_list /
-							<= Shop_item*0 $mol_row sub /
-								<= Shop_card* $gen_app_item_shop
-									item <= get_shop_item* null
-									add? <=> shop_item_bue*? null
-
-$mol_expander $mol_list
-	rows /
-		<= Label $mol_view
-			sub /
-				<= Trigger $mol_check_expand
-					checked? <=> expanded? false
-					expandable <= expandable true
-					label <= label /
-						<= title
-				<= Tools null
-		<= Content $mol_list
-			rows <= content /
-
-- Дерево талантов.
-- Таланты генерируются случайно. Область открытых талантов +5.
-$gen_app_talent $mol_page
-	title \Дерево талантов
-	body /
-		<= Talent_count $mol_section title <= talent_count \Талантов 23
-		<= Stats_expander $mol_expander
-			title \Статистика
-			content /
-				<= Content $mol_text text <= stats \
-		<= Talent_labeler $mol_labeler 
-			title \Поиск по талантам
-			content /
-				<= Talent_search $mol_string
-					hint \Атака
-					value? <=> talent_search? \
-		<= X $mol_list rows <= x_list /
-			<= Y*0 $mol_row sub <= y_list* /
-				<= Talent*0_0 $mol_pop_over
-					Anchor <= Talent_cell* $mol_button_minor
-						attr *
-							status <= status* \ 
-							search <= is_search* false
-						title <= talent_short_name* \Атака
-						click? <=> talent_click*? null
-					bubble_content /
-						<= Talent_description* $mol_paragraph title <= talent_description* \
-
-$gen_auction $mol_page
-	title \Аукцион
-	body /
-		<= Donat $mol_paragraph title \Монет: 532
-		<= Hero2 $mol_paragraph title \Вася. Ур. 5
-		<= Sell_hero $mol_button_major
-			title \Выставить на аукцион героя
-		<= Hero_list $mol_list rows /
-			<= Hero_card*0 $mol_row sub /
-				<= Hero* $mol_paragraph title \Марио . Ур. 5
-				<= Buy_hero* $mol_button_major
-					title \Купить героя за 100 у.е. руб 
-
-$mol_textarea $mol_stack
-	attr *
-		^
-		mol_textarea_clickable <= clickable? false
-		mol_textarea_sidebar_showed <= sidebar_showed false
-	event *
-		keydown?event <=> press?event null
-		pointermove?event <=> hover?event null
-	sub /
-		<= Edit $mol_textarea_edit
-			value? <=> value? \
-			hint <= hint \ 
-			enabled <= enabled true
-			spellcheck <= spellcheck true
-			length_max <= length_max +Infinity
-			selection? <=> selection? /number
-			bring => bring
-			submit? <=> submit? null
-			submit_with_ctrl <= submit_with_ctrl true
-		<= View $mol_text_code
-			text <= value
-			render_visible_only false
-			row_numb* <= row_numb* 0
-			sidebar_showed <= sidebar_showed
-			highlight <= highlight \
-	symbols_alt *
-		comma \<
-		period \>
-		dash \−
-		equals \≈
-		graveAccent \́
-		forwardSlash \÷
-		E \€
-		V \✔
-		X \×
-		C \©
-		P \§
-		H \₽
-		key0 \°
-		key8 \•
-		key2 \@
-		key3 \#
-		key4 \$
-		key6 \^
-		key7 \&
-		bracketOpen \[
-		bracketClose \]
-		slashBack \|
-	symbols_alt_ctrl *
-		space \ 
-	symbols_alt_shift *
-		V \✅
-		X \❌
-		O \⭕
-		key1 \❗
-		key4 \💲
-		key7 \❓
-		comma \«
-		period \»
-		semicolon \“
-		quoteSingle \”
-		dash \—
-		equals \≠
-		graveAccent \̱
-		bracketOpen \{
-		bracketClose \}
-
-$mol_textarea_edit $mol_string
-	dom_name \textarea
-	enter \enter
-	field *
-		^
-		scrollTop 0
-
-- Добавить сохранение умений локально
-- Список всех умений - это реальный список умений с их логикой
-$gen_dev $mol_page
-	title \Разработка умения
-	hero $gen_engine_item_unit
-	enemy $gen_engine_item_unit
-	skills $gen_engine_item_skill_all
-	body /
-		<= Instruction $mol_expander
-			title \Инструкция
-			content /
-				<= Example $mol_text_code text \
-					\source: $gen_engine_item_unit - Источник
-					\target: $gen_engine_item_unit[] - возможные цели
-					\targets[ 0 ] - враг
-					\* Пример 1. Хил себя на 100 *
-					\source.health( source.health() + 100 )
-					\
-					\* Пример 2. Удар х4 *
-					\targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 ) \\ Сильная атака х4
-		<= All_skills $mol_expander 
-			title \Все умения
-			content /
-				<= All_skills_list $mol_list rows <= all_skill_list /
-					<= Skill*0 $mol_list rows /
-						<= Skill_name* $mol_section title <= skill_name* \Skill name
-						<= Skill_code* $mol_text_code text <= skill_code* \Skill code
-		<= Container $mol_list rows /
-			<= Name_labeler $mol_labeler
-				title \Имя нового умения
-				content / <= Name $mol_string value? <=> name? \Мега-сильный удар с хилом
-			<= Code_labeler $mol_labeler
-				title \Код нового умения
-				content / <= Code $mol_textarea value? <=> code? \
-					\source.health( source.health() + 100 )
-					\targets[ 0 ].health( targets[ 0 ].health() - source.attack() * 4 )
-			<= Test $mol_button_major
-				title \Тестировать
-				click? <=> test? null
-			- <= Hero $gen_app_battle_unit
-				unit <= hero
-				target <= enemy
-			- <= Enemy $gen_app_battle_unit
-				unit <= enemy
-				target <= hero
-
-$gen_app_game $mol_page
-	title \Генератор битвы
-	engine $gen_engine
-	body /
-		<= Hero_level $mol_labeler
-			title \Ваш уровень героев
-			content / 
-				<= Hero_level_value $mol_number
-					value? <=> hero_level? 20
-		<= Generate $mol_button_major
-			title \Сгенерировать
-			click? <=> generate? null
-		<= Result $mol_text
-			code_sidebar_showed false
-			text <= result \
-
-$gen_app_admin $mol_page 
-	title \Хак панель
-	engine $gen_engine
-	body /
-		<= Win $mol_button_major
-			title \Победить (хак)
-			click? <=> make_win? null
-		<= Add_skill $mol_button_minor 
-			title \Добавить уменее
-			click? <=> add_hero_skill? null
-
-$gen_app_loot $mol_page
-	title \Лут
-	engine $gen_engine
-	body /
-		<= Generate $mol_button_major
-			title \Получить предмет
-			click? <=> generate_item? null
-		<= New_item $mol_text text <= new_item \Новый предмет
-		<= History_item $mol_text text <= history_text \История предметов
-
-$gen_app_user $mol_page
-	title \⚙️
-	user? $gen_engine_user
-	body /
-		<= Login_labeler $mol_labeler
-			title \Логин
-			content / <= Login $mol_paragraph title <= login \sad
-		<= Name_labeler $mol_labeler
-			title \Имя
-			content / <= Name $mol_string value? <=> name? \Имя
-		<= Email_labeler $mol_labeler
-			title \Email
-			content / <= Email $mol_paragraph title <= email \Email
-		<= Heroes_length_labeler $mol_labeler
-			title \Кол-во героев
-			content / <= Heroes_length $mol_paragraph title <= heroes_length \0
-		<= Logout $mol_button_major
-			title \Выйти
-			click? <=> logout? null
-
 $mol_nav $mol_plugin
 	cycle? false
 	-
@@ -1166,6 +280,17 @@ $mol_nav $mol_plugin
 		keydown?event <=> event_key?event null
 
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_dimmer $mol_paragraph
+	haystack \
+	needle \
+	sub <= parts /$mol_view_content
+	Low* $mol_paragraph
+		sub /
+			<= string* \
+	High* $mol_paragraph
+		sub /
+			<= string* \
 
 $mol_search $mol_pop
 	query? \
@@ -1245,12 +370,13 @@ $mol_book2_catalog $mol_book2
 
 $gen_app $mol_page
 	title \🧬Gen v0.1. Игра ~ Герои, PoE, моды
-	engine $gen_engine
+	- engine $gen_engine
 	user? $gen_engine_user
-	craft $gen_engine_craft
+	- craft $gen_engine_craft
 	tools /
+		<= Debug_user $mol_paragraph title <= debug_user \
 		<= Clear_storage $mol_button_minor
-			title \d
+			title \♻️
 			click? <=> clear_storage? null
 		<= Telegram $mol_link_source
 			Icon <= Telegram_icon $mol_icon_telegram
@@ -1258,22 +384,37 @@ $gen_app $mol_page
 		<= Sources $mol_link_source uri \https://github.com/Lyumih/gen
 	body /
 		<= Pages $mol_book2_catalog
-			menu_title \Меню
+			menu_title \🧬
 			param \page
+			menu_filter_enabled false
 			spreads *
-				battle_page <= Battle_page $gen_app_battle 
+				- battle_page <= Battle_page $gen_app_battle 
 					engine <= engine
 					user? <=> user?
-				hero_page <= Hero_page $gen_app_hero
+				- hero_page <= Hero_page $gen_app_hero
 					engine <= engine
 					user? <=> user?
-				talent_page <= Talent_page $gen_app_talent
+				- talent_page <= Talent_page $gen_app_talent
 				- craftt_page <= Craft_page $gen_app_craft
 					unit <= active_hero? $gen_engine_item_unit
-				auction_page <= Auction $gen_auction
-				dev_page <= Dev_page $gen_dev
-				game_page <= Game_page $gen_app_game engine <= engine
-				hack_page <= Hack_page $gen_app_admin engine <= engine
-				loot_page <= Loot_page $gen_app_loot engine <= engine
+				- auction_page <= Auction $gen_auction
+				- dev_page <= Dev_page $gen_dev
+				- game_page <= Game_page $gen_app_game engine <= engine
+				- hack_page <= Hack_page $gen_app_admin engine <= engine
+				- loot_page <= Loot_page $gen_app_loot engine <= engine
 				user_page <= User_page $gen_app_user
 					user? <=> user?
+				- kop <= Kop_page $mol_page
+					title \👾
+					body /
+						<= User $mol_dump_value
+							value <= user
+							expanded? true
+						<= User_name $mol_string value? <=> user_name? \
+						<= Add_unit $mol_button_minor click? <=> add_unit? null
+						<= Remove_unit $mol_button_minor click? <=> remove_unit? null
+						- <= Units $mol_dump_value
+							value <= units
+							expanded? true
+						<= Units_list $mol_list rows <= unit_list /
+							<= Unit_name*0 $mol_string value? <=> unit_name*? \

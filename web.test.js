@@ -1152,6 +1152,25 @@ var $;
 ;
 "use strict";
 var $;
+(function ($) {
+    function $mol_promise() {
+        let done;
+        let fail;
+        const promise = new Promise((d, f) => {
+            done = d;
+            fail = f;
+        });
+        return Object.assign(promise, {
+            done,
+            fail,
+        });
+    }
+    $.$mol_promise = $mol_promise;
+})($ || ($ = {}));
+//mol/promise/promise/promise.ts
+;
+"use strict";
+var $;
 (function ($_1) {
     $mol_test_mocks.push($ => {
         $.$mol_after_timeout = $mol_after_mock_timeout;
@@ -1176,6 +1195,24 @@ var $;
     });
 })($ || ($ = {}));
 //mol/wire/sync/sync.test.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_wait_timeout_async(timeout) {
+        const promise = $mol_promise();
+        const task = new this.$mol_after_timeout(timeout, () => promise.done());
+        return Object.assign(promise, {
+            destructor: () => task.destructor()
+        });
+    }
+    $.$mol_wait_timeout_async = $mol_wait_timeout_async;
+    function $mol_wait_timeout(timeout) {
+        return this.$mol_wire_sync(this).$mol_wait_timeout_async(timeout);
+    }
+    $.$mol_wait_timeout = $mol_wait_timeout;
+})($ || ($ = {}));
+//mol/wait/timeout/timeout.ts
 ;
 "use strict";
 var $;
@@ -3475,93 +3512,10 @@ var $;
 //mol/view/tree/tree.ts
 ;
 "use strict";
-var $;
-(function ($) {
-    const engine = new $gen_engine;
-    let seed = 0;
-    engine.uuid = () => {
-        seed += 1;
-        return seed.toString();
-    };
-    $mol_test({
-        'engine seed 1'() {
-            $mol_assert_equal(engine.seed(), '1');
-        },
-        'engine add hero skill'() {
-            $mol_assert_equal(engine.hero().skills.length, 2);
-            engine.add_hero_skill();
-            $mol_assert_equal(engine.hero().skills.length, 3);
-        },
-        'engine skill level up'() {
-            const skill = engine.hero_skills()[0];
-            $mol_assert_equal(skill.level, 1);
-            engine.skill_level_up(skill.id);
-            $mol_assert_equal(skill.level, 2);
-            $mol_assert_equal(engine.all_skills().length, 3);
-        },
-        'shop sell'() {
-            const item_id = engine.shop()[0].id;
-            $mol_assert_equal(engine.shop().length, engine.inventory().length, 2);
-            engine.shop_buy(item_id);
-            $mol_assert_equal(engine.shop().length, 1);
-            $mol_assert_equal(engine.inventory().length, 3);
-            engine.inventory_sell(item_id);
-            $mol_assert_equal(engine.shop().length, engine.inventory().length, 2);
-        },
-        'hero equip'() {
-            const item_id = engine.hero_equipments()[0].id;
-            $mol_assert_equal(engine.hero().equip.length, engine.inventory().length, 2);
-            engine.hero_unequip(item_id);
-            $mol_assert_equal(engine.hero().equip.length, 1);
-            $mol_assert_equal(engine.inventory().length, 3);
-            engine.inventory_equip(item_id);
-            $mol_assert_equal(engine.hero().equip.length, engine.inventory().length, 2);
-        }
-    });
-})($ || ($ = {}));
 //gen/engine/engine.test.ts
 ;
 "use strict";
-//gen/engine/item/skill/skill.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    const battle = new $gen_engine_battle;
-    const hero = new $gen_engine_item_unit;
-    const enemy = new $gen_engine_item_unit;
-    battle.init_unit(hero);
-    battle.init_unit(enemy);
-    const skill = new $gen_engine_item_skill;
-    $mol_test({
-        'add log'() {
-            $mol_assert_equal(battle.history().length, 0);
-            battle.history(['test']);
-            battle.log('test me');
-            $mol_assert_equal(battle.history().length, 2);
-        },
-        'battle next turn'() {
-            $mol_assert_equal(battle.turn(), 0);
-            battle.next_turn();
-            battle.next_turn();
-            $mol_assert_equal(battle.turn(), 2);
-        },
-        'hero/enemy attack turn'() {
-            hero.use_attack([enemy], battle);
-            enemy.use_attack([hero], battle);
-            $mol_assert_equal(battle.turn(), 4);
-        },
-        'hero/enemy use skill turn'() {
-            hero.use_skill([enemy], skill, battle);
-            enemy.use_skill([enemy], skill, battle);
-            $mol_assert_equal(battle.turn(), 6);
-        },
-    });
-})($ || ($ = {}));
-//gen/engine/battle/batlle.test.ts
-;
-"use strict";
-//gen/engine/craft/craft.test.ts
+//gen/engine/user/user.test.ts
 ;
 "use strict";
 var $;
@@ -3995,90 +3949,5 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/dimmer/dimmer.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        '$mol_syntax2_md_flow'() {
-            const check = (input, right) => {
-                const tokens = [];
-                $mol_syntax2_md_flow.tokenize(input, (...token) => tokens.push(token));
-                $mol_assert_like(tokens, right);
-            };
-            check('Hello,\nWorld..\r\n\r\n\nof Love!', [
-                ['block', 'Hello,\n', ['Hello,', '\n'], 0],
-                ['block', 'World..\r\n\r\n\n', ['World..', '\r\n\r\n\n'], 7],
-                ['block', 'of Love!', ['of Love!', ''], 19],
-            ]);
-            check('# Header1\n\nHello!\n\n## Header2', [
-                ['header', '# Header1\n\n', ['#', ' ', 'Header1', '\n\n'], 0],
-                ['block', 'Hello!\n\n', ['Hello!', '\n\n'], 11],
-                ['header', '## Header2', ['##', ' ', 'Header2', ''], 19],
-            ]);
-            check('```\nstart()\n```\n\n```jam.js\nrestart()\n```\n\nHello!\n\n```\nstop()\n```', [
-                ['code', '```\nstart()\n```\n\n', ['```', '', 'start()\n', '```', '\n\n'], 0],
-                ['code', '```jam.js\nrestart()\n```\n\n', ['```', 'jam.js', 'restart()\n', '```', '\n\n'], 17],
-                ['block', 'Hello!\n\n', ['Hello!', '\n\n'], 42],
-                ['code', '```\nstop()\n```', ['```', '', 'stop()\n', '```', ''], 50],
-            ]);
-            check('| header1 | header2\n|----|----\n| Cell11 | Cell12\n| Cell21 | Cell22\n\n| Cell11 | Cell12\n| Cell21 | Cell22\n', [
-                ['table', '| header1 | header2\n|----|----\n| Cell11 | Cell12\n| Cell21 | Cell22\n\n', ['| header1 | header2\n|----|----\n| Cell11 | Cell12\n| Cell21 | Cell22\n', '\n'], 0],
-                ['table', '| Cell11 | Cell12\n| Cell21 | Cell22\n', ['| Cell11 | Cell12\n| Cell21 | Cell22\n', ''], 68],
-            ]);
-        },
-    });
-})($ || ($ = {}));
-//mol/syntax2/md/md.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        'null by default'() {
-            const key = String(Math.random());
-            $mol_assert_equal($mol_state_session.value(key), null);
-        },
-        'storing'() {
-            const key = String(Math.random());
-            $mol_state_session.value(key, '$mol_state_session_test');
-            $mol_assert_equal($mol_state_session.value(key), '$mol_state_session_test');
-            $mol_state_session.value(key, null);
-            $mol_assert_equal($mol_state_session.value(key), null);
-        },
-    });
-})($ || ($ = {}));
-//mol/state/session/session.test.ts
-;
-"use strict";
-var $;
-(function ($) {
-    const point = new $gen_engine_point;
-    const make = (x, y) => {
-        const point = new $gen_engine_point;
-        point.x(x);
-        point.y(y);
-        return point;
-    };
-    const nearest = [
-        make(-1, 1), make(-1, 0), make(-1, 1),
-        make(0, -1), make(0, 0), make(0, 1),
-        make(1, -1), make(1, 0), make(1, 1),
-    ];
-    $mol_test({
-        "point 0 0"() {
-            $mol_assert_equal(point.x(), point.y(), 0, 0);
-        },
-        "point range"() {
-        },
-        "point in range "() {
-            $mol_assert_equal(point.in_range({ x: 0, y: 0 }), true);
-            $mol_assert_equal(point.in_range({ x: 1, y: 1 }), true);
-            $mol_assert_equal(point.in_range({ x: -2, y: -2 }), false);
-            $mol_assert_equal(point.in_range_hor({ x: 0, y: 0 }), true);
-        },
-    });
-})($ || ($ = {}));
-//gen/engine/point/point.test.ts
 
 //# sourceMappingURL=web.test.js.map
