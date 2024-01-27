@@ -1,5 +1,20 @@
 namespace $ {
 
+
+	/**
+	* $gen_engine_entity - основной класс модели
+	* - Зачем нужна data()??
+	* - Зачем нужна factory()??
+	* - Зачем нужна defaults()??
+	* Как создавать модель? 
+	* - Переопределить defaults(){} ??
+	* - Зачем нужна data()??
+	* - Переопределить static factory(Partial<D{...}>) ??
+	* Как создать экземпляр?
+	* $gen_engine_entity_class.factory(Partial<D{...}>)
+	* Как получить дату по умолчанию?
+	* Как выводить типы?
+	*/
 	export class $gen_engine_entity extends $mol_object {
 		constructor(
 			readonly id = 'no-id-entity'

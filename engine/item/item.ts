@@ -23,6 +23,10 @@ namespace $ {
 			}
 		}
 
+		factory() {
+
+		}
+
 		id_root( next?: string ) {
 			return this.value( 'id_root', next )
 		}
