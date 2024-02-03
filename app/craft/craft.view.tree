@@ -1,7 +1,7 @@
 $gen_app_craft $mol_page
 	equipment $gen_engine_item_equipment
 	unit $gen_engine_item_unit
-	title \Крафт
+	title \⚒️
 	body /
 		<= Points $mol_section title <= points_title \
 		<= Equipment_title $mol_section title \Снаряжение: Броня. Тип: лёгкая. Ур. 1
