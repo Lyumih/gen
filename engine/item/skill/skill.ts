@@ -12,6 +12,7 @@ namespace $ {
 			}
 		}
 
+		/** Метод для использования данного умения. используется дальше eval */
 		use_plain( next?: string ) {
 			return this.value( 'use_plain', next )
 		}
